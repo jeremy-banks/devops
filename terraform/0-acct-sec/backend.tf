@@ -4,6 +4,7 @@ provider "aws" {
 
 terraform {
   backend "s3" {
+    profile        = "prod"
     bucket         = "jeremy-banks-devops-demo-tfstate"
     key            = "0-acct-sec"
     region         = "us-west-2"
