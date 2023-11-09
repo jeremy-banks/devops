@@ -2,13 +2,13 @@ terraform {
   backend "s3" {
     profile        = "nonprod"
     bucket         = "jeremy-banks-devops-demo-tfstate"
-    key            = "aws/nonprod/iam-roles-and-policies"
+    key            = "aws/nonprod/encryption"
     region         = "us-west-2"
     dynamodb_table = "jeremy-banks-devops-demo-tflock"
     encrypt        = true
     insecure       = false
   }
-  
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -25,6 +25,19 @@ terraform {
 provider "aws" {
   profile = var.deployment_environment
   region  = var.region_primary
+
+  default_tags {
+    tags = merge(
+      local.default_tags_map,
+      local.iam_access_management_tag_map
+    )
+  }
+}
+
+provider "aws" {
+  profile = var.deployment_environment
+  region  = var.region_secondary
+  alias  = "dr"
 
   default_tags {
     tags = merge(

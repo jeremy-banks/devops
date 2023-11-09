@@ -8,9 +8,7 @@ terraform {
     encrypt        = true
     insecure       = false
   }
-}
 
-terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
