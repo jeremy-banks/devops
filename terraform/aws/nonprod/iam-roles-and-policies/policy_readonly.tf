@@ -1,8 +1,8 @@
+# it is not safe to use AWS managed ReadOnly policy, so we copy the contents of it and comment out only the needed actions
 # https://us-east-1.console.aws.amazon.com/iamv2/home?region=us-east-2#/policies/details/arn%3Aaws%3Aiam%3A%3Aaws%3Apolicy%2FReadOnlyAccess
 # arn:aws:iam::aws:policy/ReadOnlyAccess
 resource "aws_iam_policy" "allow_readonly" {
   name        = "${local.resource_name_stub}-allow-readonly"
-  description = "allow readonly"
 
   policy = jsonencode({
     Version = "2012-10-17",

@@ -1,11 +1,24 @@
 resource "aws_iam_policy" "permission_boundary" {
   name        = "${local.resource_name_stub}-permission-boundary"
-  description = "Deny all actions in unused regions"
 
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
+      # allow global actions
       {
+        Sid       = "AllowGlobalActions",
+        Effect    = "Allow",
+        Action    = [
+          "cloudfront:*",
+          "iam:*",
+          "route53:*",
+          "support:*",
+        ],
+        Resource  = "*",
+      },
+
+      {
+        # allow regional actions in permitted regions
         Sid       = "AllowNonGlobalActionsInPermittedRegions",
         Effect    = "Allow",
         NotAction = [
@@ -24,18 +37,9 @@ resource "aws_iam_policy" "permission_boundary" {
           }
         }
       },
+
       {
-        Sid       = "AllowGlobalActions",
-        Effect    = "Allow",
-        Action    = [
-          "cloudfront:*",
-          "iam:*",
-          "route53:*",
-          "support:*",
-        ],
-        Resource  = "*",
-      },
-      {
+        # allow actions on tagged infra
         Sid       = "AllowActionsOnTaggedInfra",
         Effect    = "Allow",
         Action    = "*",
