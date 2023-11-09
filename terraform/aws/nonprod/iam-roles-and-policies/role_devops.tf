@@ -18,6 +18,4 @@ module "role_devops" {
   #   "arn:aws:iam::aws:policy/ReadOnlyAccess"
   # ]
   # number_of_role_policy_arns = 1
-
-  # role_permissions_boundary_arn = later
 }

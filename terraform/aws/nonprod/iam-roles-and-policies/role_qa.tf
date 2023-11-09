@@ -14,10 +14,10 @@ module "role_qa" {
 
   attach_admin_policy = false
 
+  role_permissions_boundary_arn = aws_iam_policy.permission_boundary.arn
+
   # role_policy_arns = [
   #   "arn:aws:iam::aws:policy/ReadOnlyAccess"
   # ]
   # number_of_role_policy_arns = 1
-
-  # role_permissions_boundary_arn = later
 }

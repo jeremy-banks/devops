@@ -2,7 +2,7 @@ terraform {
   backend "s3" {
     profile        = "nonprod"
     bucket         = "jeremy-banks-devops-demo-tfstate"
-    key            = "0-acct-sec/nonprod"
+    key            = "aws/nonprod/account-config"
     region         = "us-west-2"
     dynamodb_table = "jeremy-banks-devops-demo-tflock"
     encrypt        = true
@@ -25,14 +25,13 @@ terraform {
 }
 
 provider "aws" {
-  profile = var.environment
-  region  = var.region
+  profile = var.deployment_environment
+  region  = var.region_primary
 
   default_tags {
-    tags = {
-      "${var.provisioned_by_iac_tag}" = "true"
-      "environment" = var.environment
-      "name" = var.name
-    }
+    tags = merge(
+      local.default_tags_map,
+      local.iam_access_management_tag_map
+    )
   }
 }

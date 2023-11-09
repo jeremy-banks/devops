@@ -14,6 +14,7 @@ module "role_dev" {
 
   attach_admin_policy = false
 
+  role_permissions_boundary_arn = aws_iam_policy.permission_boundary.arn
   # role_policy_arns = [
   #   "arn:aws:iam::aws:policy/ReadOnlyAccess"
   # ]

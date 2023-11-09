@@ -31,7 +31,7 @@ provider "aws" {
   default_tags {
     tags = merge(
       local.default_tags_map,
-      local.iam_access_management_tag
+      local.iam_access_management_tag_map
     )
   }
 }
