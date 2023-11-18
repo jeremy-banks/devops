@@ -1,25 +1,34 @@
-# resource "aws_acm_certificate" "example" {
-#   domain_name       = "example.com"
-#   validation_method = "DNS"
+module "acm_wildcard_cert" {
+  source  = "terraform-aws-modules/acm/aws"
+  version = "5.0.0"
 
-#   tags = {
-#     Environment = "production"
-#   }
+  domain_name = local.domain_name
+  subject_alternative_names = ["*.${local.domain_name}"]
 
-#   lifecycle {
-#     create_before_destroy = true
-#   }
-# }
+  create_route53_records  = false
+  validation_method       = "DNS"
+  validation_record_fqdns = module.acm_dns_records.validation_route53_record_fqdns
+}
 
-# resource "aws_route53_record" "example" {
-#   name    = aws_acm_certificate.example.domain_validation_options[0].resource_record_name
-#   type    = aws_acm_certificate.example.domain_validation_options[0].resource_record_type
-#   zone_id = "<YOUR_ROUTE53_ZONE_ID>"
-#   records = [aws_acm_certificate.example.domain_validation_options[0].resource_record_value]
-#   ttl     = 60
-# }
+data "aws_route53_zone" "selected" {
+  name         = "${local.domain_name}."
+  private_zone = false
 
-# resource "aws_acm_certificate_validation" "example" {
-#   certificate_arn         = aws_acm_certificate.example.arn
-#   validation_record_fqdns = [aws_route53_record.example.fqdn]
-# }
+  providers = { aws = aws.r53 }
+}
+
+module "acm_dns_records" {
+  source  = "terraform-aws-modules/acm/aws"
+  version = "5.0.0"
+
+  providers = { aws = aws.r53 }
+
+  create_certificate          = false
+  create_route53_records_only = true
+  validation_method           = "DNS"
+
+  zone_id               = local.zone_id
+  distinct_domain_names = module.acm_wildcard_cert.distinct_domain_names
+
+  acm_certificate_domain_validation_options = module.acm_wildcard_cert.acm_certificate_domain_validation_options
+}

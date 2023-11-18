@@ -47,6 +47,8 @@ variable "iam_access_management_tag_key" {
 }
 
 locals {
+  domain_name = "jbdevopsdemo.com"
+
   default_tags_map = {
     "company" = var.company_name
     "environment" = var.deployment_environment
