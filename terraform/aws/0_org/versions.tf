@@ -2,7 +2,7 @@ terraform {
   backend "s3" {
     profile        = "nonprod"
     bucket         = "jeremy-banks-devops-demo-tfstate"
-    key            = "aws/nonprod/account-config"
+    key            = "aws/0_org"
     region         = "us-west-2"
     dynamodb_table = "jeremy-banks-devops-demo-tflock"
     encrypt        = true
