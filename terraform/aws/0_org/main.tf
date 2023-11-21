@@ -17,6 +17,21 @@ resource "aws_organizations_account" "iam" {
   role_name                   = "admin"
 }
 
+module "iam_assumable_roles" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-roles"
+  version = "5.32.0"
+
+  trusted_role_arns = [
+     "arn:aws:iam::${aws_organizations_account.iam.id}:root",
+  ]
+
+  create_admin_role = true
+  create_poweruser_role = false
+  create_readonly_role  = true
+
+  max_session_duration = 43200
+}
+
 resource "aws_organizations_account" "r53" {
   name  = "${local.resource_name_stub}-r53"
   email = "${var.company_email_prefix}+${local.resource_name_stub}-r53@${var.company_email_domain}"
