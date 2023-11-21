@@ -1,19 +1,37 @@
 variable "company_name" {
   description = "name or abbreviation of the team"
   type        = string
-  default     = "company"
+  default     = "jeremy"
+}
+
+variable "company_email_prefix" {
+  description = "name or abbreviation of the team"
+  type        = string
+  default     = "workjeremyb"
+}
+
+variable "company_email_domain" {
+  description = "name or abbreviation of the team"
+  type        = string
+  default     = "gmail.com"
+}
+
+variable "company_domain" {
+  description = "name or abbreviation of the team"
+  type        = string
+  default     = "jbdevopsdemo.com"
 }
 
 variable "team_name" {
   description = "name or abbreviation of the team"
   type        = string
-  default     = "team"
+  default     = "devops"
 }
 
 variable "project_name" {
   description = "name or abbreviation of the project"
   type        = string
-  default     = "project"
+  default     = "demo"
 }
 
 variable "deployment_environment" {
@@ -47,8 +65,6 @@ variable "iam_access_management_tag_key" {
 }
 
 locals {
-  domain_name = "jbdevopsdemo.com"
-
   default_tags_map = {
     "company" = var.company_name
     "environment" = var.deployment_environment
@@ -56,6 +72,8 @@ locals {
     "team" = var.team_name
     "tool" = "terraform"
   }
+
+  company_email = "${var.company_email_prefix}@${var.company_email_domain}"
 
   iam_access_management_tag_key = var.iam_access_management_tag_key
   iam_access_management_tag_value = "${var.company_name}-${var.team_name}-${var.project_name}-${var.deployment_environment}"
@@ -66,5 +84,6 @@ locals {
   team_name_trimmed = length(var.team_name) > local.trimmed_length ? substr(var.team_name, 0, local.trimmed_length) : var.team_name
   project_name_trimmed = length(var.project_name) > local.trimmed_length ? substr(var.project_name, 0, local.trimmed_length) : var.project_name
 
-  resource_name_stub = "${local.company_name_trimmed}-${local.team_name_trimmed}-${local.project_name_trimmed}-${var.deployment_environment}"
+  resource_name_stub = "${local.company_name_trimmed}-${local.team_name_trimmed}-${local.project_name_trimmed}"
+  resource_name_env_stub = "${local.company_name_trimmed}-${local.team_name_trimmed}-${local.project_name_trimmed}-${var.deployment_environment}"
 }

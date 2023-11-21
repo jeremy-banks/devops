@@ -1,5 +1,34 @@
 data "aws_organizations_organization" "current" {}
 
+#admin
+module "iam_group_admin" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-policies"
+  version = "5.32.0"
+
+  name = "admin"
+  custom_group_policy_arns = [aws_iam_policy.iam_group_devops_assume_role_policy.arn]
+}
+
+resource "aws_iam_policy" "iam_group_admin_assume_role_policy" {
+  name        = "AssumeRolePolicyForAdmin"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = "sts:AssumeRole",
+        Effect = "Allow",
+        Resource = ["arn:aws:iam::*:role/admin"],
+        Condition = {
+          StringEquals = {
+            "aws:PrincipalOrgID" = data.aws_organizations_organization.current.id,
+          }
+        }
+      }
+    ]
+  })
+}
+
 #devops
 module "iam_group_devops" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-policies"

@@ -27,7 +27,55 @@ module "iam_assumable_roles" {
 
   create_admin_role = true
   create_poweruser_role = false
-  create_readonly_role  = true
+  create_readonly_role  = false
+
+  max_session_duration = 43200
+}
+
+module "iam_assumable_role_devops" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
+  version = "5.32.0"
+
+  create_role = true
+
+  role_name = "devops"
+  attach_admin_policy = true
+
+  trusted_role_arns = [
+     "arn:aws:iam::${aws_organizations_account.iam.id}:root",
+  ]
+
+  max_session_duration = 43200
+}
+
+module "iam_assumable_role_automation" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
+  version = "5.32.0"
+
+  create_role = true
+
+  role_name = "automation"
+  attach_admin_policy = true
+
+  trusted_role_arns = [
+     "arn:aws:iam::${aws_organizations_account.iam.id}:root",
+  ]
+
+  max_session_duration = 43200
+}
+
+module "iam_assumable_role_billing" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
+  version = "5.32.0"
+
+  create_role = true
+  
+  role_name = "billing"
+  attach_readonly_policy = true
+
+  trusted_role_arns = [
+     "arn:aws:iam::${aws_organizations_account.iam.id}:root",
+  ]
 
   max_session_duration = 43200
 }

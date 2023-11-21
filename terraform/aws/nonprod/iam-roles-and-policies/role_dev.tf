@@ -1,46 +1,46 @@
-module "role_dev" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.30.1"
+# module "role_dev" {
+#   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
+#   version = "5.30.1"
 
-  create_role = true
+#   create_role = true
 
-  role_name = "${local.resource_name_stub}-dev"
+#   role_name = "${local.resource_name_stub}-dev"
 
-  trusted_role_arns = [
-    "arn:aws:iam::${var.identity_account_number}:root"
-  ]
+#   trusted_role_arns = [
+#     "arn:aws:iam::${var.identity_account_number}:root"
+#   ]
 
-  role_requires_mfa = true
+#   role_requires_mfa = true
 
-  attach_admin_policy = false
+#   attach_admin_policy = false
 
-  role_permissions_boundary_arn = aws_iam_policy.permission_boundary.arn
+#   role_permissions_boundary_arn = aws_iam_policy.permission_boundary.arn
 
-  custom_role_policy_arns = [
-    aws_iam_policy.allow_readonly.arn,
-    aws_iam_policy.role_dev.arn
-  ]
-  number_of_custom_role_policy_arns = 2
-}
+#   custom_role_policy_arns = [
+#     aws_iam_policy.allow_readonly.arn,
+#     aws_iam_policy.role_dev.arn
+#   ]
+#   number_of_custom_role_policy_arns = 2
+# }
 
-resource "aws_iam_policy" "role_dev" {
-  name        = "${local.resource_name_stub}-role-dev"
+# resource "aws_iam_policy" "role_dev" {
+#   name        = "${local.resource_name_stub}-role-dev"
 
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Effect    = "Allow",
-        Action = [
-          "acm-pca:Describe*",
-          "acm-pca:Get*",
-          "acm-pca:List*",
-          "acm:Describe*",
-          "acm:Get*",
-          "acm:List*",
-        ],
-        Resource = "*",
-      }
-    ]
-  })
-}
+#   policy = jsonencode({
+#     Version = "2012-10-17",
+#     Statement = [
+#       {
+#         Effect    = "Allow",
+#         Action = [
+#           "acm-pca:Describe*",
+#           "acm-pca:Get*",
+#           "acm-pca:List*",
+#           "acm:Describe*",
+#           "acm:Get*",
+#           "acm:List*",
+#         ],
+#         Resource = "*",
+#       }
+#     ]
+#   })
+# }
