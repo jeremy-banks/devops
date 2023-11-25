@@ -46,6 +46,7 @@ module "iam_assumable_role_devops" {
   ]
 
   max_session_duration = 43200
+  role_requires_mfa = false
 }
 
 module "iam_assumable_role_automation" {
@@ -62,6 +63,7 @@ module "iam_assumable_role_automation" {
   ]
 
   max_session_duration = 43200
+  role_requires_mfa = false
 }
 
 module "iam_assumable_role_billing" {
@@ -78,6 +80,7 @@ module "iam_assumable_role_billing" {
   ]
 
   max_session_duration = 43200
+  role_requires_mfa = false
 }
 
 resource "aws_organizations_account" "r53" {
