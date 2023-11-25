@@ -1,12 +1,12 @@
 terraform {
   backend "s3" {
-    profile        = "nonprod"
-    bucket         = "jeremy-banks-devops-demo-tfstate"
-    key            = "aws/1_iam"
-    region         = "us-west-2"
-    dynamodb_table = "jeremy-banks-devops-demo-tflock"
-    encrypt        = true
-    insecure       = false
+    assume_role     = { role_arn = "arn:aws:iam::782331566564:role/devops" }
+    bucket          = "jeremy-banks-devops-demo-tfstate"
+    key             = "aws/1_iam"
+    region          = "us-west-2"
+    dynamodb_table  = "jeremy-banks-devops-demo-tflock"
+    encrypt         = true
+    insecure        = false
   }
   
   required_providers {
@@ -23,8 +23,8 @@ terraform {
 }
 
 provider "aws" {
-  profile = var.deployment_environment
   region  = var.region_primary
+  assume_role { role_arn = "arn:aws:iam::782331566564:role/devops" }
 
   default_tags {
     tags = merge(
