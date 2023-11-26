@@ -52,16 +52,16 @@ variable "region_secondary" {
   default     = "us-west-2"
 }
 
-variable "identity_account_number" {
-  description = "id of the aws account which holds the iam users that will assume these roles"
-  type        = string
-  default     = "782331566564"
-}
-
 variable "iam_access_management_tag_key" {
   description = "iam_access_management_tag key"
   type        = string
   default     = "iam_access_management"
+}
+
+variable "ACCOUNT_NUMBER_LIMIT_EXCEEDED" {
+  description = "max number of accounts default is 10"
+  type        = string
+  default     = "25"
 }
 
 locals {
@@ -75,15 +75,15 @@ locals {
 
   company_email = "${var.company_email_prefix}@${var.company_email_domain}"
 
-  iam_access_management_tag_key = var.iam_access_management_tag_key
-  iam_access_management_tag_value = "${var.company_name}-${var.team_name}-${var.project_name}-${var.deployment_environment}"
-  iam_access_management_tag_map = { "${local.iam_access_management_tag_key}" = "${local.iam_access_management_tag_value}" }
-
   trimmed_length = 8
   company_name_trimmed = length(var.company_name) > local.trimmed_length ? substr(var.company_name, 0, local.trimmed_length) : var.company_name
   team_name_trimmed = length(var.team_name) > local.trimmed_length ? substr(var.team_name, 0, local.trimmed_length) : var.team_name
   project_name_trimmed = length(var.project_name) > local.trimmed_length ? substr(var.project_name, 0, local.trimmed_length) : var.project_name
 
   resource_name_stub = "${local.company_name_trimmed}-${local.team_name_trimmed}-${local.project_name_trimmed}"
-  resource_name_env_stub = "${local.company_name_trimmed}-${local.team_name_trimmed}-${local.project_name_trimmed}-${var.deployment_environment}"
+  resource_name_env_stub = "${local.resource_name_stub}-${var.deployment_environment}"
+
+  iam_access_management_tag_key = var.iam_access_management_tag_key
+  iam_access_management_tag_value = "${local.resource_name_stub}"
+  iam_access_management_tag_map = { "${local.iam_access_management_tag_key}" = "${local.iam_access_management_tag_value}" }
 }

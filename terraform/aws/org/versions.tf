@@ -1,14 +1,14 @@
 terraform {
   backend "s3" {
-    profile        = "nonprod"
-    bucket         = "jeremy-banks-devops-demo-tfstate"
-    key            = "aws/2_r53"
-    region         = "us-west-2"
-    dynamodb_table = "jeremy-banks-devops-demo-tflock"
-    encrypt        = true
-    insecure       = false
+    profile         = "automation"
+    bucket          = "jeremy-banks-devops-demo-tfstate"
+    key             = "aws/org"
+    region          = "us-west-2"
+    dynamodb_table  = "jeremy-banks-devops-demo-tflock"
+    encrypt         = true
+    insecure        = false
   }
-  
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -23,7 +23,7 @@ terraform {
 }
 
 provider "aws" {
-  profile = var.deployment_environment
+  profile = "automation"
   region  = var.region_primary
 
   default_tags {

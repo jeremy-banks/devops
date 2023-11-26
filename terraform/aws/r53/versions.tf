@@ -2,7 +2,7 @@ terraform {
   backend "s3" {
     assume_role     = { role_arn = "arn:aws:iam::782331566564:role/devops" }
     bucket          = "jeremy-banks-devops-demo-tfstate"
-    key             = "aws/1_iam"
+    key             = "aws/2_r53"
     region          = "us-west-2"
     dynamodb_table  = "jeremy-banks-devops-demo-tflock"
     encrypt         = true

@@ -1,47 +1,39 @@
 # Devops
 
 ## Description
-AWS resources required to host an EKS cluster.
+Codebase for provisioning managed kubernetes (k8s) using infrastructure as code.
+
+### Features
+- terraform modules version locked
+- mozilla sops protects secrets in code using kms
+
+#### AWS
+- Code written following AWS Prescriptive Guidance Security Reference Architecture https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture/org-management.html
+- MFA enforced org-wide
+
+#### Azure
+tbd
+
+#### GCP
+tbd
+
+### Goals
+- Add Azure code for AKS
+- Add GCP code for GKS
+
+### Known Issues
+tbd
 
 ## Prerequisites
+
+### AWS
 - AWS cli 2.13.26
 - Terraform v1.6.1
 - eksctl
 - kubectl
-- terraform backend resources (s3 bucket, dynamodb, and cmk)
+- terraform state backend resources (s3 bucket, dynamodb, and cmk)
 
-This demo uses a single aws account, an IAM role with admin rights, and an IAM user with the rights to assume that role. Since this is just a demo, nonprod and prod share the same account and are separated by region.
-
-## Tools
-
-### Terraform
-
-#### Repo Layout
-1. 0-acct-sec
-..* Cost savings by disabling Unlimited credits for burstable instance types
-..* EBS volume encryption at rest enabled by default
-..* S3 public access blocked by account
-..* IAM Groups and Policies
-2. Undefined
-..* Undefined
-
-Security
-  Account Settings
-      EBS encryption
-      S3 public disabled
-      Default burstable credit specification: standard
-  IAM Groups and Policies
-  ACM
-  KMS
-
-Ancillary
-  R53
-  S3 flow logs
-  S3 alb logs
-IAM Users
-VPC
-Storage
-  RDS
-  S3
-
-### EKS
+### Initial Setup
+1. Create single AWS account to be the Org root
+1. Create "automation" user in the Org root account with AdministratorAccess
+1. Create access keypair for the "automation" user and use it to deploy aws/org to create additional AWS OUs and Accounts

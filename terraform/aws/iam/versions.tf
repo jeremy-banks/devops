@@ -1,14 +1,14 @@
 terraform {
   backend "s3" {
-    assume_role     = { role_arn = "arn:aws:iam::782331566564:role/devops" }
+    profile         = "automation"
     bucket          = "jeremy-banks-devops-demo-tfstate"
-    key             = "aws/0_org"
+    key             = "aws/iam"
     region          = "us-west-2"
     dynamodb_table  = "jeremy-banks-devops-demo-tflock"
     encrypt         = true
     insecure        = false
   }
-
+  
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -23,8 +23,8 @@ terraform {
 }
 
 provider "aws" {
+  profile = "automation"
   region  = var.region_primary
-  assume_role { role_arn = "arn:aws:iam::782331566564:role/devops" }
 
   default_tags {
     tags = merge(
