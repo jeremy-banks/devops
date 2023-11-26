@@ -2,13 +2,13 @@ terraform {
   backend "s3" {
     profile         = "automation"
     bucket          = "jeremy-banks-devops-demo-tfstate"
-    key             = "aws/org"
+    key             = "aws/iam-groups"
     region          = "us-west-2"
     dynamodb_table  = "jeremy-banks-devops-demo-tflock"
     encrypt         = true
     insecure        = false
   }
-
+  
   required_providers {
     aws = {
       source  = "hashicorp/aws"
