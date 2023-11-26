@@ -4,12 +4,14 @@
 Codebase for provisioning managed kubernetes (k8s) using infrastructure as code.
 
 ### Features
-- terraform modules version locked
-- mozilla sops protects secrets in code using kms
+- Terraform modules all version locked
+- Mozilla SOPS protects secrets in code using kms
 
 #### AWS
 - Code written following AWS Prescriptive Guidance Security Reference Architecture https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture/org-management.html
-- MFA enforced org-wide
+- Resources are protected by Permission Boundary using tags
+- MFA enforced organization-wide
+- DNS logs sent to CloudWatch Log Group and S3 (cross-regional replication, glacier)
 
 #### Azure
 tbd
@@ -34,6 +36,9 @@ tbd
 - terraform state backend resources (s3 bucket, dynamodb, and cmk)
 
 ### Initial Setup
-1. Create single AWS account to be the Org root
-1. Create "automation" user in the Org root account with AdministratorAccess
-1. Create access keypair for the "automation" user and use it to deploy aws/org to create additional AWS OUs and Accounts
+1. Create single AWS Account to be the Organization root
+1. Create non-Console IAM user "automation", attach AdministratorAccess, and create an Access Key
+1. Deploy aws/org-ou-account-management to create additional AWS OUs and Accounts
+1. Update the variables.tf account_numbers map with the newly created Account numbers
+1. Deploy aws/org-iam-groups-and-roles
+1. Deploy aws/network-r53

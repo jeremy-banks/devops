@@ -64,6 +64,20 @@ variable "ACCOUNT_NUMBER_LIMIT_EXCEEDED" {
   default     = "25"
 }
 
+variable "account_numbers" {
+  description = "max number of accounts default is 10"
+  type        = map(number)
+  default     = {
+    org               = "782331566564"
+    network           = "373226670881"
+    shared-services   = "898444532447"
+    log-archive       = "145810376262"
+    security-tooling  = "427272690860"
+    project1-nonprod  = "841957403114"
+    project-prod      = "170370546750"
+  }
+}
+
 locals {
   default_tags_map = {
     "company" = var.company_name
