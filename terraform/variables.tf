@@ -1,13 +1,13 @@
 variable "company_name" {
   description = "name or abbreviation of the team"
   type        = string
-  default     = "jeremy"
+  default     = "jeremyb"
 }
 
 variable "company_email_prefix" {
   description = "name or abbreviation of the team"
   type        = string
-  default     = "workjeremyb"
+  default     = "workjeremy.b"
 }
 
 variable "company_email_domain" {
@@ -40,16 +40,31 @@ variable "deployment_environment" {
   default     = "nonprod"
 }
 
-variable "region_primary" {
-  description = "region to be used for all resources"
+variable "cli_profile_name" {
+  description = "aws profile name to be used"
   type        = string
-  default     = "us-east-1"
+  default     = "automation"
 }
 
-variable "region_secondary" {
-  description = "region to be used for backup/standby/dr"
-  type        = string
-  default     = "us-west-2"
+variable "region" {
+  description = "regions for the infrastructure"
+  type        = map(string)
+  default     = {
+    primary   = "us-west-2"
+    failover  = "us-east-1"
+  }
+}
+
+variable "assumable_role_name" {
+  description = ""
+  type        = map(string)
+  default     = {
+    superadmin = "superadmin"
+    admin = "admin"
+    automation = "automation"
+    poweruser = "poweruser"
+    readonly = "readonly"
+  }
 }
 
 variable "iam_access_management_tag_key" {
@@ -64,18 +79,24 @@ variable "ACCOUNT_NUMBER_LIMIT_EXCEEDED" {
   default     = "25"
 }
 
-variable "account_numbers" {
+variable "account_id" {
   description = "max number of accounts default is 10"
   type        = map(number)
   default     = {
     org               = "782331566564"
-    network           = "373226670881"
-    shared-services   = "898444532447"
-    log-archive       = "145810376262"
-    security-tooling  = "427272690860"
-    project1-nonprod  = "841957403114"
-    project-prod      = "170370546750"
+    network           = "178506067734"
+    shared_services   = "222478945688"
+    log_archive       = "346143406940"
+    security_tooling  = "419416376566"
+    # project1_nonprod  = "123456789012"
+    # project_prod      = "123456789012"
   }
+}
+
+variable "provider_role_name" {
+  description = ""
+  type        = string
+  default     = "admin"
 }
 
 locals {
@@ -100,4 +121,6 @@ locals {
   iam_access_management_tag_key = var.iam_access_management_tag_key
   iam_access_management_tag_value = "${local.resource_name_stub}"
   iam_access_management_tag_map = { "${local.iam_access_management_tag_key}" = "${local.iam_access_management_tag_value}" }
+
+  default_tags = merge(local.default_tags_map, local.iam_access_management_tag_map)
 }
