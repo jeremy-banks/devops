@@ -59,11 +59,11 @@ variable "assumable_role_name" {
   description = ""
   type        = map(string)
   default     = {
-    superadmin = "superadmin"
-    admin = "admin"
-    automation = "automation"
-    poweruser = "poweruser"
-    readonly = "readonly"
+    superadmin  = "superadmin"
+    admin       = "admin"
+    automation  = "automation"
+    poweruser   = "poweruser"
+    readonly    = "readonly"
   }
 }
 
@@ -101,11 +101,11 @@ variable "provider_role_name" {
 
 locals {
   default_tags_map = {
-    "company" = var.company_name
+    "company"     = var.company_name
     "environment" = var.deployment_environment
-    "project" = var.project_name
-    "team" = var.team_name
-    "tool" = "terraform"
+    "project"     = var.project_name
+    "team"        = var.team_name
+    "tool"        = "terraform"
   }
 
   company_email = "${var.company_email_prefix}@${var.company_email_domain}"

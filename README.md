@@ -42,7 +42,7 @@ Codebase for provisioning managed kubernetes (k8s) in AWS using only terraform, 
 1. Deploy terraform/aws/org-ou-account-management to create additional AWS Organization Units and Accounts
 1. Update the terraform/variables.tf account_numbers map with the newly created Account numbers
 1. ### YOU ARE HERE
-1. Deploy terraform/aws/org-iam-groups-and-roles
+1. Deploy terraform/aws/iam-groups-and-roles
 1. 
 1. 
 1. 
