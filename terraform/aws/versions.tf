@@ -57,7 +57,7 @@ provider "aws" {
   alias = "network"
   profile = var.cli_profile_name
   region  = var.region.primary
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.network}:role/${var.provider_role_name}" }
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.network}:role/${local.provider_role_name}" }
   default_tags { tags = local.default_tags }
 }
 
@@ -65,7 +65,7 @@ provider "aws" {
   alias = "network_failover"
   profile = var.cli_profile_name
   region  = var.region.failover
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.network}:role/${var.provider_role_name}" }
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.network}:role/${local.provider_role_name}" }
   default_tags { tags = local.default_tags }
 }
 
@@ -73,7 +73,7 @@ provider "aws" {
   alias = "shared_services"
   profile = var.cli_profile_name
   region  = var.region.primary
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.shared_services}:role/${var.provider_role_name}" }
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.shared_services}:role/${local.provider_role_name}" }
   default_tags { tags = local.default_tags }
 }
 
@@ -81,7 +81,7 @@ provider "aws" {
   alias = "shared_services_failover"
   profile = var.cli_profile_name
   region  = var.region.failover
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.shared_services}:role/${var.provider_role_name}" }
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.shared_services}:role/${local.provider_role_name}" }
   default_tags { tags = local.default_tags }
 }
 
@@ -89,7 +89,7 @@ provider "aws" {
   alias = "log_archive"
   profile = var.cli_profile_name
   region  = var.region.primary
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.log_archive}:role/${var.provider_role_name}" }
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.log_archive}:role/${local.provider_role_name}" }
   default_tags { tags = local.default_tags }
 }
 
@@ -97,7 +97,7 @@ provider "aws" {
   alias = "log_archive_failover"
   profile = var.cli_profile_name
   region  = var.region.failover
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.log_archive}:role/${var.provider_role_name}" }
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.log_archive}:role/${local.provider_role_name}" }
   default_tags { tags = local.default_tags }
 }
 
@@ -105,7 +105,7 @@ provider "aws" {
   alias = "security_tooling"
   profile = var.cli_profile_name
   region  = var.region.primary
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.security_tooling}:role/${var.provider_role_name}" }
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.security_tooling}:role/${local.provider_role_name}" }
   default_tags { tags = local.default_tags }
 }
 
@@ -113,7 +113,7 @@ provider "aws" {
   alias = "security_tooling_failover"
   profile = var.cli_profile_name
   region  = var.region.failover
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.security_tooling}:role/${var.provider_role_name}" }
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.security_tooling}:role/${local.provider_role_name}" }
   default_tags { tags = local.default_tags }
 }
 
@@ -121,7 +121,7 @@ provider "aws" {
   alias = "project_nonprod"
   profile = var.cli_profile_name
   region  = var.region.primary
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.project_nonprod}:role/${var.provider_role_name}" }
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.project_nonprod}:role/${local.provider_role_name}" }
   default_tags { tags = local.default_tags }
 }
 
@@ -129,7 +129,7 @@ provider "aws" {
   alias = "project_nonprod_failover"
   profile = var.cli_profile_name
   region  = var.region.failover
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.project_nonprod}:role/${var.provider_role_name}" }
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.project_nonprod}:role/${local.provider_role_name}" }
   default_tags { tags = local.default_tags }
 }
 
@@ -137,7 +137,7 @@ provider "aws" {
   alias = "project_prod"
   profile = var.cli_profile_name
   region  = var.region.primary
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.project_prod}:role/${var.provider_role_name}" }
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.project_prod}:role/${local.provider_role_name}" }
   default_tags { tags = local.default_tags }
 }
 
@@ -145,6 +145,6 @@ provider "aws" {
   alias = "project_prod_failover"
   profile = var.cli_profile_name
   region  = var.region.failover
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.project_prod}:role/${var.provider_role_name}" }
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.project_prod}:role/${local.provider_role_name}" }
   default_tags { tags = local.default_tags }
 }

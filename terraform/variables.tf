@@ -55,16 +55,35 @@ variable "region" {
   }
 }
 
+variable "assumable_roles_name" {
+  description = ""
+  type        = map(string)
+  default     = {
+    admin       = "admin"
+    poweruser   = "poweruser"
+    readonly    = "readonly"
+  }
+}
+
 variable "assumable_role_name" {
   description = ""
   type        = map(string)
   default     = {
     superadmin  = "superadmin"
-    admin       = "admin"
     automation  = "automation"
-    poweruser   = "poweruser"
-    readonly    = "readonly"
   }
+}
+
+variable "provider_role_name_default" {
+  description = ""
+  type        = string
+  default     = "admin"
+}
+
+variable "provider_role_name_substitute" {
+  description = ""
+  type        = string
+  default     = ""
 }
 
 variable "iam_access_management_tag_key" {
@@ -93,12 +112,6 @@ variable "account_id" {
   }
 }
 
-variable "provider_role_name" {
-  description = ""
-  type        = string
-  default     = "admin"
-}
-
 locals {
   default_tags_map = {
     "company"     = var.company_name
@@ -123,4 +136,6 @@ locals {
   iam_access_management_tag_map = { "${local.iam_access_management_tag_key}" = "${local.iam_access_management_tag_value}" }
 
   default_tags = merge(local.default_tags_map, local.iam_access_management_tag_map)
+
+  provider_role_name = var.provider_role_name_substitute != "" ? var.provider_role_name_substitute : var.provider_role_name_default
 }

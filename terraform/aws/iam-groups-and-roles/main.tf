@@ -30,7 +30,7 @@ module "iam_group_admin" {
 
   providers = { aws = aws.shared_services }
 
-  name = var.assumable_role_name.admin
+  name = var.assumable_roles_name.admin
 
   attach_iam_self_management_policy = true
   enable_mfa_enforcement = true
@@ -52,7 +52,7 @@ data "aws_iam_policy_document" "iam_group_admin_assume_role_policy" {
     sid = "AllowAssumeRoleAdminInOrg"
     effect = "Allow"
     actions = ["sts:AssumeRole"]
-    resources = ["arn:aws:iam::*:role/${var.assumable_role_name.admin}"]
+    resources = ["arn:aws:iam::*:role/${var.assumable_roles_name.admin}"]
     condition {
       test     = "StringEquals"
       variable = "aws:PrincipalOrgID"
@@ -251,13 +251,13 @@ module "iam_assumable_roles_security_tooling" {
   ]
 
   create_admin_role = true
-  admin_role_name   = var.assumable_role_name.admin
+  admin_role_name   = var.assumable_roles_name.admin
 
   create_poweruser_role = true
-  poweruser_role_name   = var.assumable_role_name.poweruser
+  poweruser_role_name   = var.assumable_roles_name.poweruser
 
   create_readonly_role        = true
-  readonly_role_name          = var.assumable_role_name.readonly
+  readonly_role_name          = var.assumable_roles_name.readonly
   readonly_role_requires_mfa  = false
   
   max_session_duration = 43200
@@ -275,13 +275,13 @@ module "iam_assumable_roles_log_archive" {
   ]
 
   create_admin_role = true
-  admin_role_name   = var.assumable_role_name.admin
+  admin_role_name   = var.assumable_roles_name.admin
 
   create_poweruser_role = true
-  poweruser_role_name   = var.assumable_role_name.poweruser
+  poweruser_role_name   = var.assumable_roles_name.poweruser
 
   create_readonly_role        = true
-  readonly_role_name          = var.assumable_role_name.readonly
+  readonly_role_name          = var.assumable_roles_name.readonly
   readonly_role_requires_mfa  = false
 
   max_session_duration = 43200
@@ -299,13 +299,13 @@ module "iam_assumable_roles_network" {
   ]
 
   create_admin_role = true
-  admin_role_name   = var.assumable_role_name.admin
+  admin_role_name   = var.assumable_roles_name.admin
 
   create_poweruser_role = true
-  poweruser_role_name   = var.assumable_role_name.poweruser
+  poweruser_role_name   = var.assumable_roles_name.poweruser
 
   create_readonly_role        = true
-  readonly_role_name          = var.assumable_role_name.readonly
+  readonly_role_name          = var.assumable_roles_name.readonly
   readonly_role_requires_mfa  = false
 
   max_session_duration = 43200
@@ -323,13 +323,13 @@ module "iam_assumable_roles_shared_services" {
   ]
 
   create_admin_role = true
-  admin_role_name   = var.assumable_role_name.admin
+  admin_role_name   = var.assumable_roles_name.admin
 
   create_poweruser_role = true
-  poweruser_role_name   = var.assumable_role_name.poweruser
+  poweruser_role_name   = var.assumable_roles_name.poweruser
 
   create_readonly_role        = true
-  readonly_role_name          = var.assumable_role_name.readonly
+  readonly_role_name          = var.assumable_roles_name.readonly
   readonly_role_requires_mfa  = false
 
   max_session_duration = 43200
