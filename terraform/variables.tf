@@ -40,10 +40,16 @@ variable "deployment_environment" {
   default     = "nonprod"
 }
 
-variable "cli_profile_name" {
+variable "cli_profile_name_default" {
   description = "aws profile name to be used"
   type        = string
   default     = "automation"
+}
+
+variable "cli_profile_name_substitute" {
+  description = "aws profile name to be used"
+  type        = string
+  default     = ""
 }
 
 variable "region" {
@@ -137,5 +143,6 @@ locals {
 
   default_tags = merge(local.default_tags_map, local.iam_access_management_tag_map)
 
+  cli_profile_name = var.cli_profile_name_substitute != "" ? var.cli_profile_name_substitute : var.cli_profile_name_default
   provider_role_name = var.provider_role_name_substitute != "" ? var.provider_role_name_substitute : var.provider_role_name_default
 }

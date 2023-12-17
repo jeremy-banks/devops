@@ -1,12 +1,6 @@
 # users
-module "iam_user_superadmin" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-user"
-  version = "5.32.0"
-
-  name = var.assumable_role_name.superadmin
-
-  create_iam_user_login_profile = false
-  create_iam_access_key         = true
+data "aws_iam_user" "superadmin" {
+  user_name = var.assumable_role_name.superadmin
 }
 
 module "iam_user_automation" {
