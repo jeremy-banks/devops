@@ -83,7 +83,7 @@ variable "assumable_role_name" {
 variable "provider_role_name_default" {
   description = ""
   type        = string
-  default     = "admin"
+  default     = "automation"
 }
 
 variable "provider_role_name_substitute" {
@@ -113,8 +113,8 @@ variable "account_id" {
     shared_services   = "222478945688"
     log_archive       = "346143406940"
     security_tooling  = "419416376566"
-    # project1_nonprod  = "123456789012"
-    # project_prod      = "123456789012"
+    project_demo_nonprod  = "798972386916"
+    project_demo_prod     = "945273545397"
   }
 }
 
@@ -134,8 +134,10 @@ locals {
   team_name_trimmed = length(var.team_name) > local.trimmed_length ? substr(var.team_name, 0, local.trimmed_length) : var.team_name
   project_name_trimmed = length(var.project_name) > local.trimmed_length ? substr(var.project_name, 0, local.trimmed_length) : var.project_name
 
-  resource_name_stub = "${local.company_name_trimmed}-${local.team_name_trimmed}-${local.project_name_trimmed}"
+  resource_name_stub = "${var.company_name}-${var.team_name}-${var.project_name}"
   resource_name_env_stub = "${local.resource_name_stub}-${var.deployment_environment}"
+  resource_name_stub_trimmed = "${local.company_name_trimmed}-${local.team_name_trimmed}-${local.project_name_trimmed}"
+  resource_name_env_stub_trimmed = "${local.company_name_trimmed}-${local.team_name_trimmed}-${local.project_name_trimmed}-${var.deployment_environment}"
 
   iam_access_management_tag_key = var.iam_access_management_tag_key
   iam_access_management_tag_value = "${local.resource_name_stub}"

@@ -118,33 +118,33 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias = "project_nonprod"
+  alias = "project_demo_nonprod"
   profile = local.cli_profile_name
   region  = var.region.primary
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.project_nonprod}:role/${local.provider_role_name}" }
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.project_demo_nonprod}:role/${local.provider_role_name}" }
   default_tags { tags = local.default_tags }
 }
 
 provider "aws" {
-  alias = "project_nonprod_failover"
+  alias = "project_demo_nonprod_failover"
   profile = local.cli_profile_name
   region  = var.region.failover
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.project_nonprod}:role/${local.provider_role_name}" }
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.project_demo_nonprod}:role/${local.provider_role_name}" }
   default_tags { tags = local.default_tags }
 }
 
 provider "aws" {
-  alias = "project_prod"
+  alias = "project_demo_prod"
   profile = local.cli_profile_name
   region  = var.region.primary
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.project_prod}:role/${local.provider_role_name}" }
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.project_demo_prod}:role/${local.provider_role_name}" }
   default_tags { tags = local.default_tags }
 }
 
 provider "aws" {
-  alias = "project_prod_failover"
+  alias = "project_demo_prod_failover"
   profile = local.cli_profile_name
   region  = var.region.failover
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.project_prod}:role/${local.provider_role_name}" }
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.project_demo_prod}:role/${local.provider_role_name}" }
   default_tags { tags = local.default_tags }
 }
