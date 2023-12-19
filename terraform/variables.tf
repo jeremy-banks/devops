@@ -19,7 +19,7 @@ variable "company_email_domain" {
 variable "company_domain" {
   description = "name or abbreviation of the team"
   type        = string
-  default     = "jbdevopsdemo.com"
+  default     = "outerplanes.org"
 }
 
 variable "team_name" {
