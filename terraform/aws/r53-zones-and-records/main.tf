@@ -1,5 +1,5 @@
 # zone
-module "route53" {
+module "r53_zone_company_domain" {
   source  = "terraform-aws-modules/route53/aws//modules/zones"
   version = "2.11.0"
 

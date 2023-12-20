@@ -53,3 +53,29 @@ Codebase for provisioning managed kubernetes (k8s) in AWS using only terraform, 
   1. Update terraform/variables.tf to add sops logic
 1. Deploy terraform/aws/network-r53
 
+## To Do
+tgw
+client vpn
+
+vpc
+vpc attachment
+
+acm
+kms
+
+iam roles
+
+eks
+
+helm nginx
+
+aws backup multi-az
+rds multi-az
+s3 multi-az
+
+eks auotscaling by cpu
+eks autoscaling by sessions
+
+trigger a DR event
+
+centralized logging with compression and glacier archive

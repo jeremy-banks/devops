@@ -118,6 +118,16 @@ variable "account_id" {
   }
 }
 
+variable "vpc_prefixes" {
+  description = "max number of accounts default is 10"
+  type        = map(string)
+  default     = {
+    clientvpn = ""
+    project_demo = ""
+  }
+}
+
+
 locals {
   default_tags_map = {
     "company"     = var.company_name
