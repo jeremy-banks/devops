@@ -61,6 +61,21 @@ variable "region" {
   }
 }
 
+variable "availability_zones" {
+  description = "specific AZs to use to lower latency"
+  type        = map(list(string))
+  default     = {
+    primary = [
+      "usw2-az1",
+      "usw2-az3",
+    ]
+    failover = [
+      "use1-az2",
+      "use1-az4",
+    ]
+  }
+}
+
 variable "assumable_roles_name" {
   description = ""
   type        = map(string)
@@ -119,14 +134,36 @@ variable "account_id" {
 }
 
 variable "vpc_prefixes" {
-  description = "max number of accounts default is 10"
-  type        = map(string)
+  type        = map(map(string))
   default     = {
-    clientvpn = ""
-    project_demo = ""
+    # example = "192.168"
+    clientvpn = {
+      primary = "10.41."
+      failover = ""
+    }
+    project_demo_nonprod = {
+      primary = "10.42."
+      failover = "10.43."
+    }
+    project_demo_prod = {
+      primary = "10.44."
+      failover = "10.45."
+    }
   }
 }
 
+variable "vpc_suffixes" {
+  type        = map(string)
+  default     = {
+    subnet_public_a = "128.0/20"
+    subnet_public_b = "144.0/20"
+    subnet_private_a = "0.0/18"
+    subnet_private_b = "64.0/18"
+    # remaining
+    # 160.0/19
+    # 192.0/18
+  }
+}
 
 locals {
   default_tags_map = {

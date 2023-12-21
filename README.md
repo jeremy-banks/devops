@@ -11,6 +11,7 @@ Codebase for provisioning managed kubernetes (k8s) in AWS using only terraform, 
   - Prescriptive Guidance Security Reference Architecture https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture/org-management.html
   - Best practices for multi-account management https://docs.aws.amazon.com/organizations/latest/userguide/orgs_best-practices.html
   - Building a Scalable and Secure Multi-VPC AWS Network Infrastructure https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/welcome.html
+  - Latencies between AWS availability zones https://www.flashgrid.io/news/latencies-between-aws-availability-zones-what-are-they-and-how-to-minimize-them
 - Resources are protected by Permission Boundary using tags
 - MFA enforced organization-wide
 
@@ -41,11 +42,11 @@ Codebase for provisioning managed kubernetes (k8s) in AWS using only terraform, 
 1. Create AWS Account to be Organization root
 1. Create non-Console IAM user named "superadmin" with AdministratorAccess and create an Access Key/Secret to be used in AWS CLI profile named "superadmin"
 1. Deploy terraform/aws/org-ou-account-management to create additional AWS Organization Units and Accounts
-1. Update the terraform/variables.tf account_numbers map with the newly created Account numbers
+1. Update the terraform/variables.tf account_numbers map with the newly created Account ID numbers
 1. Deploy terraform/aws/iam-groups-and-roles, and create a new AWS CLI profile named "automation" with output of terraform
+1. Update the terraform/variables.tf company_domain variable and deploy terraform/aws/r53-zones-and-records
 1. ### YOU ARE HERE
 
-1. Deploy terraform/aws/
 1. Comment out provider_role_name variable in terraform/aws/org-iam-groups-and-roles/terraform.tfvars
 1. Deploy terraform/aws/terraform-framework to create resources for terraform
   1. Migrate tfstate to s3 *
@@ -54,16 +55,12 @@ Codebase for provisioning managed kubernetes (k8s) in AWS using only terraform, 
 1. Deploy terraform/aws/network-r53
 
 ## To Do
-tgw
-client vpn
-
-vpc
-vpc attachment
-
 acm
 kms
 
 iam roles
+
+vpc
 
 eks
 
@@ -79,3 +76,7 @@ eks autoscaling by sessions
 trigger a DR event
 
 centralized logging with compression and glacier archive
+
+tgw
+vpc attachment
+client vpn
