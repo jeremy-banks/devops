@@ -167,6 +167,8 @@ module "vpc_primary" {
   external_nat_ip_ids = aws_eip.vpc_nat_primary[*].id
 
   name = "${local.resource_name_env_stub}-vpc-primary"
+  public_subnet_suffix = "pub"
+  private_subnet_suffix = "pvt"
   cidr = "${var.vpc_prefixes.project_demo_nonprod.primary}0.0/16"
 
   azs = var.availability_zones.primary
@@ -178,6 +180,108 @@ module "vpc_primary" {
     "${var.vpc_prefixes.project_demo_nonprod.primary}${var.vpc_suffixes.subnet_private_a}",
     "${var.vpc_prefixes.project_demo_nonprod.primary}${var.vpc_suffixes.subnet_private_b}",
   ]
+
+  public_subnet_tags = { "kubernetes.io/role/elb" = 1 }
+  private_subnet_tags = { "kubernetes.io/role/internal-elb" = 1 }
+  vpc_tags = {
+    "${local.resource_name_env_stub}-cluster-primary-blue"   = "shared"
+    "${local.resource_name_env_stub}-cluster-primary-green"  = "shared"
+  }
+
+  manage_default_security_group = false #never use default security groups
+
+  enable_dns_hostnames = true
+  enable_dns_support   = true
+
+  enable_dhcp_options = true
+  dhcp_options_domain_name_servers = concat(["${var.vpc_prefixes.project_demo_nonprod.primary}0.2"], local.vpc_domain_name_servers)
+  dhcp_options_ntp_servers = local.vpc_ntp_servers
+}
+
+module "vpc_primary_main_sg" {
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "5.1.0"
+
+  providers = { aws = aws.project_demo_nonprod }
+
+  name        = "${local.resource_name_env_stub}-main"
+  description = "main security group for ${local.resource_name_env_stub}"
+  vpc_id      = module.vpc_primary.vpc_id
+
+  ingress_with_self = [
+    {
+      rule = "all-all"
+      description = "allow ingress from self"
+    },
+  ]
+
+  egress_with_self = [
+    {
+      rule = "all-all"
+      description = "allow egress to self"
+    },
+  ]
+
+  egress_with_cidr_blocks = [
+    {
+      from_port   = -1
+      to_port     = -1
+      protocol    = -1
+      description = "allow internet"
+      cidr_blocks = "0.0.0.0/0"
+    },
+  ]
+}
+
+module "vpc_primary_endpoints" {
+  source = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
+  version = "5.4.0"
+
+  providers = { aws = aws.project_demo_nonprod }
+
+  vpc_id             = module.vpc_primary.vpc_id
+  security_group_ids = [module.vpc_primary_main_sg.security_group_id]
+
+  endpoints = {
+    s3 = {
+      # interface endpoint
+      service             = "s3"
+      service_type  = "Gateway"
+      # private_dns_enabled = true
+      # security_group_ids  = [module.vpc_primary_main_sg.security_group_id]
+      subnet_ids = module.vpc_primary.private_subnets
+      route_table_ids = flatten([module.vpc_primary.private_route_table_ids, module.vpc_primary.public_route_table_ids])
+      tags                = { Name = "${local.resource_name_env_stub}-s3-vpc-endpoint-primary" }
+    },
+    rds = {
+      # interface endpoint
+      service             = "rds"
+      # service_type  = "Gateway"
+      private_dns_enabled = true
+      # security_group_ids  = [module.vpc_primary_main_sg.security_group_id]
+      subnet_ids = module.vpc_primary.private_subnets
+      # route_table_ids = flatten([module.vpc_primary.private_route_table_ids, module.vpc_primary.public_route_table_ids])
+      tags                = { Name = "${local.resource_name_env_stub}-rds-endpoint-primary" }
+    },
+    # dynamodb = {
+    #   # gateway endpoint
+    #   service         = "dynamodb"
+    #   route_table_ids = ["rt-12322456", "rt-43433343", "rt-11223344"]
+    #   tags            = { Name = "dynamodb-vpc-endpoint" }
+    # },
+    # sns = {
+    #   service    = "sns"
+    #   subnet_ids = ["subnet-12345678", "subnet-87654321"]
+    #   tags       = { Name = "sns-vpc-endpoint" }
+    # },
+    # sqs = {
+    #   service             = "sqs"
+    #   private_dns_enabled = true
+    #   security_group_ids  = ["sg-987654321"]
+    #   subnet_ids          = ["subnet-12345678", "subnet-87654321"]
+    #   tags                = { Name = "sqs-vpc-endpoint" }
+    # },
+  }
 }
 
 resource "aws_eip" "vpc_nat_failover" {
@@ -200,6 +304,8 @@ module "vpc_failover" {
   external_nat_ip_ids = aws_eip.vpc_nat_failover[*].id
 
   name = "${local.resource_name_env_stub}-vpc-failover"
+  public_subnet_suffix = "pub"
+  private_subnet_suffix = "pvt"
   cidr = "${var.vpc_prefixes.project_demo_nonprod.failover}0.0/16"
 
   azs = var.availability_zones.failover
@@ -211,6 +317,109 @@ module "vpc_failover" {
     "${var.vpc_prefixes.project_demo_nonprod.failover}${var.vpc_suffixes.subnet_private_a}",
     "${var.vpc_prefixes.project_demo_nonprod.failover}${var.vpc_suffixes.subnet_private_b}",
   ]
+
+  public_subnet_tags = { "kubernetes.io/role/elb" = 1 }
+  private_subnet_tags = { "kubernetes.io/role/internal-elb" = 1 }
+  vpc_tags = {
+    "${local.resource_name_env_stub}-cluster-failover-blue"   = "shared"
+    "${local.resource_name_env_stub}-cluster-failover-green"  = "shared"
+  }
+
+  manage_default_security_group = false #never use default security groups
+
+  enable_dns_hostnames = true
+  enable_dns_support   = true
+
+  enable_dhcp_options = true
+  dhcp_options_domain_name_servers = concat(["${var.vpc_prefixes.project_demo_nonprod.failover}0.2"], local.vpc_domain_name_servers)
+  dhcp_options_ntp_servers = local.vpc_ntp_servers
+}
+
+
+module "vpc_failover_main_sg" {
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "5.1.0"
+
+  providers = { aws = aws.project_demo_nonprod_failover }
+
+  name        = "${local.resource_name_env_stub}-main"
+  description = "main security group for ${local.resource_name_env_stub}"
+  vpc_id      = module.vpc_failover.vpc_id
+
+  ingress_with_self = [
+    {
+      rule = "all-all"
+      description = "allow ingress from self"
+    },
+  ]
+
+  egress_with_self = [
+    {
+      rule = "all-all"
+      description = "allow egress to self"
+    },
+  ]
+
+  egress_with_cidr_blocks = [
+    {
+      from_port   = -1
+      to_port     = -1
+      protocol    = -1
+      description = "allow internet"
+      cidr_blocks = "0.0.0.0/0"
+    },
+  ]
+}
+
+module "vpc_failover_endpoints" {
+  source = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
+  version = "5.4.0"
+
+  providers = { aws = aws.project_demo_nonprod_failover }
+
+  vpc_id             = module.vpc_failover.vpc_id
+  security_group_ids = [module.vpc_failover_main_sg.security_group_id]
+
+  endpoints = {
+    s3 = {
+      # interface endpoint
+      service             = "s3"
+      service_type  = "Gateway"
+      # private_dns_enabled = true
+      # security_group_ids  = [module.vpc_failover_main_sg.security_group_id]
+      subnet_ids = module.vpc_failover.private_subnets
+      route_table_ids = flatten([module.vpc_failover.private_route_table_ids, module.vpc_failover.public_route_table_ids])
+      tags                = { Name = "${local.resource_name_env_stub}-s3-vpc-endpoint-failover" }
+    },
+    rds = {
+      # interface endpoint
+      service             = "rds"
+      # service_type  = "Gateway"
+      private_dns_enabled = true
+      # security_group_ids  = [module.vpc_failover_main_sg.security_group_id]
+      subnet_ids = module.vpc_failover.private_subnets
+      # route_table_ids = flatten([module.vpc_failover.private_route_table_ids, module.vpc_failover.public_route_table_ids])
+      tags                = { Name = "${local.resource_name_env_stub}-rds-endpoint-failover" }
+    },
+    # dynamodb = {
+    #   # gateway endpoint
+    #   service         = "dynamodb"
+    #   route_table_ids = ["rt-12322456", "rt-43433343", "rt-11223344"]
+    #   tags            = { Name = "dynamodb-vpc-endpoint" }
+    # },
+    # sns = {
+    #   service    = "sns"
+    #   subnet_ids = ["subnet-12345678", "subnet-87654321"]
+    #   tags       = { Name = "sns-vpc-endpoint" }
+    # },
+    # sqs = {
+    #   service             = "sqs"
+    #   private_dns_enabled = true
+    #   security_group_ids  = ["sg-987654321"]
+    #   subnet_ids          = ["subnet-12345678", "subnet-87654321"]
+    #   tags                = { Name = "sqs-vpc-endpoint" }
+    # },
+  }
 }
 
 #iam

@@ -120,9 +120,8 @@ variable "ACCOUNT_NUMBER_LIMIT_EXCEEDED" {
 }
 
 variable "account_id" {
-  description = "max number of accounts default is 10"
-  type        = map(number)
-  default     = {
+  type    = map(number)
+  default = {
     org               = "782331566564"
     network           = "178506067734"
     shared_services   = "222478945688"
@@ -134,8 +133,8 @@ variable "account_id" {
 }
 
 variable "vpc_prefixes" {
-  type        = map(map(string))
-  default     = {
+  type    = map(map(string))
+  default = {
     # example = "192.168"
     clientvpn = {
       primary = "10.41."
@@ -153,8 +152,8 @@ variable "vpc_prefixes" {
 }
 
 variable "vpc_suffixes" {
-  type        = map(string)
-  default     = {
+  type    = map(string)
+  default = {
     subnet_public_a = "128.0/20"
     subnet_public_b = "144.0/20"
     subnet_private_a = "0.0/18"
@@ -163,6 +162,20 @@ variable "vpc_suffixes" {
     # 160.0/19
     # 192.0/18
   }
+}
+
+variable "public_dns" {
+  type  = map(string)
+  default = {
+    aws = "169.254.169.253"
+    google = "8.8.8.8"
+    azure = "4.2.2.1"
+  }
+}
+
+variable "ntp_server" {
+  type  = string
+  default = "169.254.169.123"
 }
 
 locals {
@@ -194,4 +207,7 @@ locals {
 
   cli_profile_name = var.cli_profile_name_substitute != "" ? var.cli_profile_name_substitute : var.cli_profile_name_default
   provider_role_name = var.provider_role_name_substitute != "" ? var.provider_role_name_substitute : var.provider_role_name_default
+
+  vpc_domain_name_servers = [var.public_dns.google, var.public_dns.azure]
+  vpc_ntp_servers = [var.ntp_server]
 }
