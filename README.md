@@ -55,12 +55,13 @@ Codebase for provisioning managed kubernetes (k8s) in AWS using only terraform, 
 1. Deploy terraform/aws/network-r53
 
 ## To Do
-acm
-kms
+client vpn
+tgw
+vpc attachment
+
+alb sec group with cool way of allowing ingress
 
 iam roles
-
-vpc
 
 eks
 
@@ -76,7 +77,3 @@ eks autoscaling by sessions
 trigger a DR event
 
 centralized logging with compression and glacier archive
-
-tgw
-vpc attachment
-client vpn

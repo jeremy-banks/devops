@@ -178,6 +178,11 @@ variable "ntp_server" {
   default = "169.254.169.123"
 }
 
+variable "ipv_to_allow_substitute"{
+  type  = string
+  default = ""
+}
+
 locals {
   default_tags_map = {
     "company"     = var.company_name
@@ -210,4 +215,6 @@ locals {
 
   vpc_domain_name_servers = [var.public_dns.google, var.public_dns.azure]
   vpc_ntp_servers = [var.ntp_server]
+
+  application_load_balancer_allow_list = "foo"
 }
