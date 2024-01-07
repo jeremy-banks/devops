@@ -1,8 +1,160 @@
-# kms
+#iam
+data "aws_iam_policy_document" "iam_role_eks_cluster" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "ec2:CreateTags"
+    ]
+    resources = ["arn:aws:ec2:*:*:instance/*"]
+    condition {
+      test     = "StringLike"
+      variable = "aws:TagKeys"
+      values = ["kubernetes.io/cluster/*"]
+    }
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "ec2:DescribeInstances",
+      "ec2:DescribeNetworkInterfaces",
+      "ec2:DescribeVpcs",
+      "ec2:DescribeDhcpOptions",
+      "kms:DescribeKey",
+    ]
+    resources = ["*"]
+  }
+}
+
+module "iam_policy_eks_cluster" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version = "5.33.0"
+  providers = { aws = aws.project_demo_nonprod }
+
+  name        = "eks-cluster"
+  path        = "/"
+
+  policy = data.aws_iam_policy_document.iam_role_eks_cluster.json
+}
+
+module "iam_role_eks_cluster" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
+  version = "5.33.0"
+  providers = { aws = aws.project_demo_nonprod }
+
+  trusted_role_services = [
+    "eks.amazonaws.com"
+  ]
+
+  create_role = true
+
+  role_name  = "eks-cluster"
+  role_requires_mfa = false
+
+  custom_role_policy_arns = [
+    module.iam_policy_eks_cluster.arn
+  ]
+}
+
+data "aws_iam_policy_document" "iam_role_eks_cluster_services" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "ec2:DescribeInstances",
+      "ec2:DescribeNetworkInterfaces",
+      "ec2:DescribeVpcs",
+      "ec2:DescribeDhcpOptions",
+      "kms:DescribeKey",
+    ]
+    resources = ["*"]
+  }
+}
+
+module "iam_policy_eks_cluster_services" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version = "5.33.0"
+  providers = { aws = aws.project_demo_nonprod }
+
+  name        = "eks-cluster-services"
+  path        = "/"
+
+  policy = data.aws_iam_policy_document.iam_role_eks_cluster_services.json
+}
+
+module "iam_role_eks_cluster_services_node" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
+  version = "5.33.0"
+  providers = { aws = aws.project_demo_nonprod }
+
+  create_instance_profile = true
+  trusted_role_services = [
+    "ec2.amazonaws.com"
+  ]
+
+  create_role = true
+
+  role_name  = "eks-cluster-services-node"
+  role_requires_mfa = false
+
+  custom_role_policy_arns = [
+    "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
+    "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
+    "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
+    module.iam_policy_eks_cluster_services.arn
+  ]
+}
+
+data "aws_iam_policy_document" "iam_role_eks_worker_node" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "ec2:DescribeInstances",
+      "ec2:DescribeNetworkInterfaces",
+      "ec2:DescribeVpcs",
+      "ec2:DescribeDhcpOptions",
+      "kms:DescribeKey",
+    ]
+    resources = ["*"]
+  }
+}
+
+module "iam_policy_eks_worker_node" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version = "5.33.0"
+  providers = { aws = aws.project_demo_nonprod }
+
+  name        = "eks-worker-node"
+  path        = "/"
+
+  policy = data.aws_iam_policy_document.iam_role_eks_worker_node.json
+}
+
+module "iam_role_eks_worker_node" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
+  version = "5.33.0"
+  providers = { aws = aws.project_demo_nonprod }
+
+  create_instance_profile = true
+  trusted_role_services = [
+    "ec2.amazonaws.com"
+  ]
+
+  create_role = true
+
+  role_name  = "eks-worker-node"
+  role_requires_mfa = false
+
+  custom_role_policy_arns = [
+    "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
+    "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
+    "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
+    module.iam_policy_eks_worker_node.arn
+  ]
+}
+
+#kms
 module "kms_primary" {
   source  = "terraform-aws-modules/kms/aws"
   version = "2.1.0"
-
   providers = { aws = aws.project_demo_nonprod }
 
   deletion_window_in_days = 30
@@ -19,7 +171,6 @@ module "kms_primary" {
 module "kms_failover" {
   source  = "terraform-aws-modules/kms/aws"
   version = "2.1.0"
-
   providers = { aws = aws.project_demo_nonprod_failover }
 
   deletion_window_in_days = 30
@@ -112,7 +263,6 @@ data "aws_iam_policy_document" "kms"  {
 module "acm_wildcard_cert_primary" {
   source  = "terraform-aws-modules/acm/aws"
   version = "5.0.0"
-
   providers = { aws = aws.project_demo_nonprod }
 
   domain_name = var.company_domain
@@ -124,16 +274,15 @@ module "acm_wildcard_cert_primary" {
 }
 
 data "aws_route53_zone" "company_domain" {
+  provider = aws.network
+
   name         = "${var.company_domain}"
   private_zone = false
-
-  provider = aws.network
 }
 
 module "acm_dns_records_primary" {
   source  = "terraform-aws-modules/acm/aws"
   version = "5.0.0"
-
   providers = { aws = aws.network }
 
   create_certificate          = false
@@ -160,7 +309,6 @@ resource "aws_eip" "vpc_nat_primary" {
 module "vpc_primary" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.4.0"
-
   providers = { aws = aws.project_demo_nonprod }
 
   reuse_nat_ips = true
@@ -201,10 +349,11 @@ module "vpc_primary" {
   dhcp_options_ntp_servers = local.vpc_ntp_servers
 }
 
+#vpc security groups
+
 module "vpc_main_sg_primary" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.1.0"
-
   providers = { aws = aws.project_demo_nonprod }
 
   name        = "${local.resource_name_env_stub}-main"
@@ -258,7 +407,6 @@ module "vpc_main_sg_primary" {
 module "vpc_alb_sg_primary" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.1.0"
-
   providers = { aws = aws.project_demo_nonprod }
 
   name  = "${local.resource_name_env_stub}-alb"
@@ -309,10 +457,10 @@ module "vpc_alb_sg_primary" {
   ]
 }
 
+#vpc endpoints
 module "vpc_endpoints_primary" {
   source = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
   version = "5.4.0"
-
   providers = { aws = aws.project_demo_nonprod }
 
   vpc_id             = module.vpc_primary.vpc_id
@@ -360,6 +508,7 @@ module "vpc_endpoints_primary" {
   }
 }
 
+#vpc tgw attachment
 data "aws_ec2_transit_gateway" "primary" {
   provider = aws.project_demo_nonprod
 
@@ -381,3 +530,4 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_primary" {
   transit_gateway_id = data.aws_ec2_transit_gateway.primary.id
   vpc_id             = module.vpc_primary.vpc_id
 }
+

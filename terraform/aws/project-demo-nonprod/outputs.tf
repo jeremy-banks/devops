@@ -1,39 +1,54 @@
-output "vpc_id_primary" {
+output "iam_role_eks_cluster" {
+  description = "The ID of the VPC"
+  value       = module.iam_role_eks_cluster.iam_role_arn
+}
+
+output "iam_role_eks_cluster_services" {
+  description = "The ID of the VPC"
+  value       = module.iam_role_eks_cluster_services_node.iam_role_arn
+}
+
+output "iam_role_eks_worker_node" {
+  description = "The ID of the VPC"
+  value       = module.iam_role_eks_worker_node.iam_role_arn
+}
+
+output "primary_vpc_id" {
   description = "The ID of the VPC"
   value       = module.vpc_primary.vpc_id
 }
 
-output "public_subnets_primary" {
+output "primary_public_subnets" {
   description = "List of IDs of public subnets"
   value       = module.vpc_primary.public_subnets
 }
 
-output "private_subnets_primary" {
+output "primary_private_subnets" {
   description = "List of IDs of private subnets"
   value       = module.vpc_primary.private_subnets
 }
 
-output "nat_public_ips_primary" {
+output "primary_nat_public_ips" {
   description = "List of public Elastic IPs created for AWS NAT Gateway"
   value = aws_eip.vpc_nat_primary[*].public_ip
 }
 
-output "security_group_id_main_primary" {
+output "primary_security_group_id_main" {
   description = "The ID of the security group created for general use"
   value       = module.vpc_main_sg_primary.security_group_id
 }
 
-output "security_group_id_alb_primary" {
+output "primary_security_group_id_alb" {
   description = "The ID of the security group created for application load balancers"
   value       = module.vpc_alb_sg_primary.security_group_id
 }
 
-output "acm_arn_primary" {
+output "primary_acm_arn" {
   description = "The ARN of the certificate"
   value       = module.acm_wildcard_cert_primary.acm_certificate_arn
 }
 
-output "kms_arn_primary" {
+output "primary_kms_arn" {
   description = "The ARN of the key"
   value       = module.kms_primary.key_arn
 }
