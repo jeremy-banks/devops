@@ -45,7 +45,12 @@ Codebase for provisioning managed kubernetes (k8s) in AWS using only terraform, 
 1. Update the terraform/variables.tf account_numbers map with the newly created Account ID numbers
 1. Deploy terraform/aws/iam-groups-and-roles, and create a new AWS CLI profile named "automation" with output of terraform
 1. Update the terraform/variables.tf company_domain variable and deploy terraform/aws/r53-zones-and-records
+1. Deploy terraform/aws/transit-gateway
+
 1. ### YOU ARE HERE
+
+1. Deploy terraform/aws/project-demo-nonprod
+1. Deploy terraform/aws/project-demo-prod
 
 1. Comment out provider_role_name variable in terraform/aws/org-iam-groups-and-roles/terraform.tfvars
 1. Deploy terraform/aws/terraform-framework to create resources for terraform
@@ -55,7 +60,6 @@ Codebase for provisioning managed kubernetes (k8s) in AWS using only terraform, 
 1. Deploy terraform/aws/network-r53
 
 ## To Do
-client vpn
 tgw
 vpc attachment
 
@@ -77,3 +81,5 @@ eks autoscaling by sessions
 trigger a DR event
 
 centralized logging with compression and glacier archive
+
+client vpn
