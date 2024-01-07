@@ -8,11 +8,9 @@ resource "aws_organizations_organization" "org" {
   feature_set = "ALL"
 }
 
-data "aws_caller_identity" "current" {}
+resource "aws_ram_sharing_with_organization" "enable" {}
 
-output "account_id_org" {
-  value = data.aws_caller_identity.current.account_id
-}
+data "aws_caller_identity" "current" {}
 
 #https://github.com/hashicorp/terraform-provider-aws/issues/14731
 # resource "aws_servicequotas_service_quota" "ACCOUNT_NUMBER_LIMIT_EXCEEDED" {
@@ -47,10 +45,6 @@ resource "aws_organizations_account" "security_tooling" {
   role_name                   = var.assumable_role_name.superadmin
 }
 
-output "account_id_security_tooling" {
-  value = aws_organizations_account.security_tooling.id
-}
-
 resource "aws_organizations_account" "log_archive" {
   name  = "${local.resource_name_stub}-log-archive"
   email = "${var.company_email_prefix}+${local.resource_name_stub}-log-archive@${var.company_email_domain}"
@@ -60,10 +54,6 @@ resource "aws_organizations_account" "log_archive" {
   iam_user_access_to_billing  = "ALLOW"
   parent_id                   = aws_organizations_organizational_unit.security.id
   role_name                   = var.assumable_role_name.superadmin
-}
-
-output "account_id_log_archive" {
-  value = aws_organizations_account.log_archive.id
 }
 
 resource "aws_organizations_account" "network" {
@@ -77,10 +67,6 @@ resource "aws_organizations_account" "network" {
   role_name                   = var.assumable_role_name.superadmin
 }
 
-output "account_id_network" {
-  value = aws_organizations_account.network.id
-}
-
 resource "aws_organizations_account" "shared_services" {
   name  = "${local.resource_name_stub}-shared-services"
   email = "${var.company_email_prefix}+${local.resource_name_stub}-shared-services@${var.company_email_domain}"
@@ -90,8 +76,4 @@ resource "aws_organizations_account" "shared_services" {
   iam_user_access_to_billing  = "ALLOW"
   parent_id                   = aws_organizations_organizational_unit.infrastructure.id
   role_name                   = var.assumable_role_name.superadmin
-}
-
-output "account_id_shared_services" {
-  value = aws_organizations_account.shared_services.id
 }

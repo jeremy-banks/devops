@@ -169,16 +169,16 @@ module "vpc_primary" {
   name = "${local.resource_name_env_stub}-vpc-primary"
   public_subnet_suffix = "pub"
   private_subnet_suffix = "pvt"
-  cidr = "${var.vpc_prefixes.project_demo_nonprod.primary}0.0/16"
+  cidr = "${var.vpc_prefixes.project_demo_nonprod.primary}.0.0/16"
 
   azs = var.availability_zones.primary
   public_subnets = [
-    "${var.vpc_prefixes.project_demo_nonprod.primary}${var.vpc_suffixes.subnet_public_a}",
-    "${var.vpc_prefixes.project_demo_nonprod.primary}${var.vpc_suffixes.subnet_public_b}",
+    "${var.vpc_prefixes.project_demo_nonprod.primary}.${var.vpc_suffixes.subnet_public_a}",
+    "${var.vpc_prefixes.project_demo_nonprod.primary}.${var.vpc_suffixes.subnet_public_b}",
   ]
   private_subnets = [
-    "${var.vpc_prefixes.project_demo_nonprod.primary}${var.vpc_suffixes.subnet_private_a}",
-    "${var.vpc_prefixes.project_demo_nonprod.primary}${var.vpc_suffixes.subnet_private_b}",
+    "${var.vpc_prefixes.project_demo_nonprod.primary}.${var.vpc_suffixes.subnet_private_a}",
+    "${var.vpc_prefixes.project_demo_nonprod.primary}.${var.vpc_suffixes.subnet_private_b}",
   ]
 
   public_subnet_tags = { "kubernetes.io/role/elb" = 1 }
@@ -197,7 +197,7 @@ module "vpc_primary" {
   enable_dns_support   = true
 
   enable_dhcp_options = true
-  dhcp_options_domain_name_servers = concat(["${var.vpc_prefixes.project_demo_nonprod.primary}0.2"], local.vpc_domain_name_servers)
+  dhcp_options_domain_name_servers = concat(["${var.vpc_prefixes.project_demo_nonprod.primary}.0.2"], local.vpc_domain_name_servers)
   dhcp_options_ntp_servers = local.vpc_ntp_servers
 }
 

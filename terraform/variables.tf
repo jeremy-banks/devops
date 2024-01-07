@@ -132,21 +132,29 @@ variable "account_id" {
   }
 }
 
+variable "tgw_asn" {
+  type  = map(number)
+  default = {
+    primary = 65434
+    failover = 65433
+  }
+}
+
 variable "vpc_prefixes" {
   type    = map(map(string))
   default = {
     # example = "192.168"
-    clientvpn = {
-      primary = "10.41."
+    network_tgw = {
+      primary = "10.41"
       failover = ""
     }
     project_demo_nonprod = {
-      primary = "10.42."
-      failover = "10.43."
+      primary = "10.42"
+      failover = "10.43"
     }
     project_demo_prod = {
-      primary = "10.44."
-      failover = "10.45."
+      primary = "10.44"
+      failover = "10.45"
     }
   }
 }
@@ -213,7 +221,7 @@ locals {
   cli_profile_name = var.cli_profile_name_substitute != "" ? var.cli_profile_name_substitute : var.cli_profile_name_default
   provider_role_name = var.provider_role_name_substitute != "" ? var.provider_role_name_substitute : var.provider_role_name_default
 
-  vpc_domain_name_servers = [var.public_dns.google, var.public_dns.azure]
+  vpc_domain_name_servers = [var.public_dns.aws, var.public_dns.google, var.public_dns.azure]
   vpc_ntp_servers = [var.ntp_server]
 
   application_load_balancer_allow_list = "foo"
