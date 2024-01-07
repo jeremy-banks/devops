@@ -3,7 +3,6 @@ data "aws_organizations_organization" "current" {}
 module "tgw_primary" {
   source  = "terraform-aws-modules/transit-gateway/aws"
   version = "2.12.1"
-
   providers = { aws = aws.network }
 
   name = "${local.resource_name_env_stub}-tgw-primary"
@@ -20,7 +19,6 @@ module "tgw_primary" {
 module "tgw_failover" {
   source  = "terraform-aws-modules/transit-gateway/aws"
   version = "2.12.1"
-
   providers = { aws = aws.network_failover }
 
   name = "${local.resource_name_env_stub}-tgw-failover"
@@ -49,5 +47,6 @@ resource "aws_ec2_transit_gateway_peering_attachment" "tgw_peering" {
 
 resource "aws_ec2_transit_gateway_peering_attachment_accepter" "tgw_peering" {
   provider = aws.network
+  
   transit_gateway_attachment_id = aws_ec2_transit_gateway_peering_attachment.tgw_peering.id
 }

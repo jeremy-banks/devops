@@ -1,7 +1,6 @@
 module "iam_assumable_roles_project_demo_nonprod" {
   source = "terraform-aws-modules/iam/aws//modules/iam-assumable-roles"
   version = "5.32.0"
-
   providers = { aws = aws.project_demo_nonprod }
 
   trusted_role_arns = [
@@ -25,7 +24,6 @@ module "iam_assumable_roles_project_demo_nonprod" {
 module "iam_assumable_role_automation_project_demo_nonprod" {
   source = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "5.32.0"
-
   providers = { aws = aws.project_demo_nonprod }
 
   trusted_role_arns = [
@@ -45,7 +43,6 @@ module "iam_assumable_role_automation_project_demo_nonprod" {
 module "iam_assumable_roles_project_demo_prod" {
   source = "terraform-aws-modules/iam/aws//modules/iam-assumable-roles"
   version = "5.32.0"
-
   providers = { aws = aws.project_demo_prod }
 
   trusted_role_arns = [
@@ -69,7 +66,6 @@ module "iam_assumable_roles_project_demo_prod" {
 module "iam_assumable_role_automation_project_demo_prod" {
   source = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "5.32.0"
-
   providers = { aws = aws.project_demo_prod }
 
   trusted_role_arns = [

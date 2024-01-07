@@ -2,7 +2,6 @@
 module "r53_zone_company_domain" {
   source  = "terraform-aws-modules/route53/aws//modules/zones"
   version = "2.11.0"
-
   providers = { aws = aws.network }
 
   zones = {
@@ -23,8 +22,6 @@ module "r53_zone_company_domain" {
 #   deletion_window_in_days = 30
 # }
 
-
-
 # module "project1_dns_logs_kms_replica" {
 #   source  = "terraform-aws-modules/kms/aws"
 #   version = "2.1.0"
@@ -38,4 +35,3 @@ module "r53_zone_company_domain" {
 #   enable_key_rotation = true
 
 # }
-

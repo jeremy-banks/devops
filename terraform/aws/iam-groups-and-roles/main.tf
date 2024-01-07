@@ -6,7 +6,6 @@ data "aws_iam_user" "superadmin" {
 module "iam_user_automation" {
   source = "terraform-aws-modules/iam/aws//modules/iam-user"
   version = "5.32.0"
-
   providers = { aws = aws.shared_services }
 
   name = var.assumable_role_name.automation
@@ -21,7 +20,6 @@ data "aws_organizations_organization" "current" {}
 module "iam_group_admin" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-policies"
   version = "5.32.0"
-
   providers = { aws = aws.shared_services }
 
   name = var.assumable_roles_name.admin
@@ -58,7 +56,6 @@ data "aws_iam_policy_document" "iam_group_admin_assume_role_policy" {
 module "iam_group_devops" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-policies"
   version = "5.32.0"
-
   providers = { aws = aws.shared_services }
 
   name = "devops"
@@ -93,7 +90,6 @@ data "aws_iam_policy_document" "iam_group_devops_assume_role_policy" {
 module "iam_group_dev" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-policies"
   version = "5.32.0"
-
   providers = { aws = aws.shared_services }
   
   name = "dev"
@@ -128,7 +124,6 @@ data "aws_iam_policy_document" "iam_group_dev_assume_role_policy" {
 module "iam_group_ops" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-policies"
   version = "5.32.0"
-
   providers = { aws = aws.shared_services }
   
   name = "ops"
@@ -163,7 +158,6 @@ data "aws_iam_policy_document" "iam_group_ops_assume_role_policy" {
 module "iam_group_qa" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-policies"
   version = "5.32.0"
-
   providers = { aws = aws.shared_services }
   
   name = "qa"
@@ -198,7 +192,6 @@ data "aws_iam_policy_document" "iam_group_qa_assume_role_policy" {
 module "iam_group_billing" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-policies"
   version = "5.32.0"
-
   providers = { aws = aws.shared_services }
   
   name = "billing"
@@ -236,7 +229,6 @@ data "aws_iam_policy_document" "iam_group_billing_assume_role_policy" {
 module "iam_assumable_roles_security_tooling" {
   source = "terraform-aws-modules/iam/aws//modules/iam-assumable-roles"
   version = "5.32.0"
-
   providers = { aws = aws.security_tooling }
 
   trusted_role_arns = [
@@ -260,7 +252,6 @@ module "iam_assumable_roles_security_tooling" {
 module "iam_assumable_roles_log_archive" {
   source = "terraform-aws-modules/iam/aws//modules/iam-assumable-roles"
   version = "5.32.0"
-
   providers = { aws = aws.log_archive }
 
   trusted_role_arns = [
@@ -284,7 +275,6 @@ module "iam_assumable_roles_log_archive" {
 module "iam_assumable_roles_network" {
   source = "terraform-aws-modules/iam/aws//modules/iam-assumable-roles"
   version = "5.32.0"
-
   providers = { aws = aws.network }
 
   trusted_role_arns = [
@@ -308,7 +298,6 @@ module "iam_assumable_roles_network" {
 module "iam_assumable_roles_shared_services" {
   source = "terraform-aws-modules/iam/aws//modules/iam-assumable-roles"
   version = "5.32.0"
-
   providers = { aws = aws.shared_services }
 
   trusted_role_arns = [
@@ -332,7 +321,6 @@ module "iam_assumable_roles_shared_services" {
 module "iam_assumable_role_automation_security_tooling" {
   source = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "5.32.0"
-
   providers = { aws = aws.security_tooling }
 
   trusted_role_arns = [
@@ -352,7 +340,6 @@ module "iam_assumable_role_automation_security_tooling" {
 module "iam_assumable_role_automation_log_archive" {
   source = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "5.32.0"
-
   providers = { aws = aws.log_archive }
 
   trusted_role_arns = [
@@ -372,7 +359,6 @@ module "iam_assumable_role_automation_log_archive" {
 module "iam_assumable_role_automation_network" {
   source = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "5.32.0"
-
   providers = { aws = aws.network }
 
   trusted_role_arns = [
@@ -392,7 +378,6 @@ module "iam_assumable_role_automation_network" {
 module "iam_assumable_role_automation_shared_services" {
   source = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "5.32.0"
-
   providers = { aws = aws.shared_services }
 
   trusted_role_arns = [
