@@ -144,17 +144,17 @@ variable "vpc_prefixes" {
   type    = map(map(string))
   default = {
     # example = "192.168"
-    network_tgw = {
+    shared_vpc = {
       primary = "10.41"
-      failover = ""
+      failover = "10.42"
     }
     project_demo_nonprod = {
-      primary = "10.42"
-      failover = "10.43"
+      primary = "10.43"
+      failover = "10.44"
     }
     project_demo_prod = {
-      primary = "10.44"
-      failover = "10.45"
+      primary = "10.45"
+      failover = "10.46"
     }
   }
 }

@@ -21,6 +21,8 @@ Codebase for provisioning managed kubernetes (k8s) in AWS using only terraform, 
   - EBS volume encryption
   - S3 buckets never public
   - Disable unlimited burstable instance credits
+  - delete all default VPCs in all regions of every account
+- multi-region enterprise AD with multi-region client vpn
 - Implement backend tfstate and lock
 
 ## Known Issues
@@ -45,7 +47,7 @@ Codebase for provisioning managed kubernetes (k8s) in AWS using only terraform, 
 1. Update the terraform/variables.tf account_numbers map with the newly created Account ID numbers
 1. Deploy terraform/aws/iam-groups-and-roles, and create a new AWS CLI profile named "automation" with output of terraform
 1. Update the terraform/variables.tf company_domain variable and deploy terraform/aws/r53-zones-and-records
-1. Deploy terraform/aws/transit-gateway
+1. Deploy terraform/aws/tgw-and-shared-vpc
 1. Deploy terraform/aws/project-demo-nonprod
 ### You are here
 1. Deploy terraform/aws/project-demo-prod
@@ -54,8 +56,6 @@ Codebase for provisioning managed kubernetes (k8s) in AWS using only terraform, 
 1. Deploy nginx
 
 ## To Do
-client vpn
-
 alb sec group with cool way of allowing ingress
 
 eks
@@ -73,3 +73,10 @@ trigger a DR event
 
 centralized logging with compression and glacier archive
 
+#
+vpc
+dr vpc
+attach both to tgw
+ram both
+directory using vpc
+multi-region
