@@ -270,25 +270,11 @@ module "vpc_endpoints_primary" {
 }
 
 #vpc tgw attachment
-data "aws_ec2_transit_gateway" "primary" {
-  provider = aws.network
-
-  filter {
-    name   = "options.amazon-side-asn"
-    values = [var.tgw_asn.primary]
-  }
-
-  filter {
-    name   = "state"
-    values = ["available"]
-  }
-}
-
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_primary" {
   provider = aws.network
 
   subnet_ids         = module.vpc_primary.private_subnets
-  transit_gateway_id = data.aws_ec2_transit_gateway.primary.id
+  transit_gateway_id = module.tgw_primary.ec2_transit_gateway_id
   vpc_id             = module.vpc_primary.vpc_id
 }
 
@@ -504,25 +490,11 @@ module "vpc_endpoints_failover" {
 }
 
 #vpc tgw attachment
-data "aws_ec2_transit_gateway" "failover" {
-  provider = aws.network_failover
-
-  filter {
-    name   = "options.amazon-side-asn"
-    values = [var.tgw_asn.failover]
-  }
-
-  filter {
-    name   = "state"
-    values = ["available"]
-  }
-}
-
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_failover" {
   provider = aws.network_failover
 
   subnet_ids         = module.vpc_failover.private_subnets
-  transit_gateway_id = data.aws_ec2_transit_gateway.failover.id
+  transit_gateway_id = module.tgw_failover.ec2_transit_gateway_id
   vpc_id             = module.vpc_failover.vpc_id
 }
 

@@ -40,6 +40,12 @@ variable "deployment_environment" {
   default     = "nonprod"
 }
 
+variable "owner_email" {
+  description = "point of escalation for ownership"
+  type        = string
+  default     = ""
+}
+
 variable "cli_profile_name_default" {
   description = "aws profile name to be used"
   type        = string
@@ -58,6 +64,8 @@ variable "region" {
   default     = {
     primary   = "us-west-2"
     failover  = "us-east-1"
+    primary_short   = "usw2"
+    failover_short  = "use1"
   }
 }
 
@@ -192,15 +200,8 @@ variable "ipv_to_allow_substitute"{
 }
 
 locals {
-  default_tags_map = {
-    "company"     = var.company_name
-    "environment" = var.deployment_environment
-    "project"     = var.project_name
-    "team"        = var.team_name
-    "tool"        = "terraform"
-  }
-
   company_email = "${var.company_email_prefix}@${var.company_email_domain}"
+  owner_email = var.owner_email != "" ? var.owner_email : local.company_email
 
   trimmed_length = 8
   company_name_trimmed = length(var.company_name) > local.trimmed_length ? substr(var.company_name, 0, local.trimmed_length) : var.company_name
@@ -210,7 +211,7 @@ locals {
   resource_name_stub = "${var.company_name}-${var.team_name}-${var.project_name}"
   resource_name_env_stub = "${local.resource_name_stub}-${var.deployment_environment}"
   resource_name_stub_trimmed = "${local.company_name_trimmed}-${local.team_name_trimmed}-${local.project_name_trimmed}"
-  resource_name_env_stub_trimmed = "${local.company_name_trimmed}-${local.team_name_trimmed}-${local.project_name_trimmed}-${var.deployment_environment}"
+  resource_name_env_stub_trimmed = "${local.resource_name_stub_trimmed}-${var.deployment_environment}"
 
   iam_access_management_tag_key = var.iam_access_management_tag_key
   iam_access_management_tag_value = "${local.resource_name_stub}"
@@ -225,4 +226,13 @@ locals {
   vpc_ntp_servers = [var.ntp_server]
 
   application_load_balancer_allow_list = "foo"
+
+  default_tags_map = {
+    "company"     = var.company_name #Microsoft
+    "team"        = var.team_name #Blue
+    "project"     = var.project_name #Windows
+    "environment" = var.deployment_environment #prod|nonprod
+    "owner_email" = local.owner_email
+    "tool"        = "terraform"
+  }
 }
