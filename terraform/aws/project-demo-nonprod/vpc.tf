@@ -4,7 +4,7 @@ resource "aws_eip" "vpc_nat_primary" {
 
   count = 2
   domain = "vpc"
-  tags = { "Name" = "${local.resource_name_env_stub}-primary-${count.index}" }
+  tags = { "Name" = "${local.resource_name_stub_env}-primary-${count.index}" }
 
   # lifecycle { prevent_destroy = true } # YOU NEVER WANT TO DELETE THESE
 }
@@ -17,7 +17,7 @@ module "vpc_primary" {
   reuse_nat_ips = true
   external_nat_ip_ids = aws_eip.vpc_nat_primary[*].id
 
-  name = "${local.resource_name_env_stub}-vpc-primary"
+  name = "${local.resource_name_stub_env}-vpc-primary"
   public_subnet_suffix = "pub"
   private_subnet_suffix = "pvt"
   cidr = "${var.vpc_prefixes.project_demo_nonprod.primary}.0.0/16"
@@ -35,13 +35,13 @@ module "vpc_primary" {
   public_subnet_tags = { "kubernetes.io/role/elb" = 1 }
   private_subnet_tags = { "kubernetes.io/role/internal-elb" = 1 }
   vpc_tags = {
-    "${local.resource_name_env_stub}-cluster-primary-blue"   = "shared"
-    "${local.resource_name_env_stub}-cluster-primary-green"  = "shared"
+    "${local.resource_name_stub_env}-cluster-primary-blue"   = "shared"
+    "${local.resource_name_stub_env}-cluster-primary-green"  = "shared"
     "k8s.io/cluster-autoscaler/enabled" = "true"
-    "k8s.io/cluster-autoscaler/${local.resource_name_env_stub}-cluster-primary-blue" = "shared"
-    "k8s.io/cluster-autoscaler/${local.resource_name_env_stub}-cluster-primary-green" = "shared"
-    "kubernetes.io/cluster/${local.resource_name_env_stub}-cluster-primary-blue" = "shared"
-    "kubernetes.io/cluster/${local.resource_name_env_stub}-cluster-primary-green" = "shared"
+    "k8s.io/cluster-autoscaler/${local.resource_name_stub_env}-cluster-primary-blue" = "shared"
+    "k8s.io/cluster-autoscaler/${local.resource_name_stub_env}-cluster-primary-green" = "shared"
+    "kubernetes.io/cluster/${local.resource_name_stub_env}-cluster-primary-blue" = "shared"
+    "kubernetes.io/cluster/${local.resource_name_stub_env}-cluster-primary-green" = "shared"
   }
 
   manage_default_security_group = true
@@ -63,9 +63,9 @@ module "vpc_main_sg_primary" {
   version = "5.1.0"
   providers = { aws = aws.project_demo_nonprod }
 
-  name        = "${local.resource_name_env_stub}-main"
+  name        = "${local.resource_name_stub_env}-main"
   use_name_prefix = false
-  description = "main security group for ${local.resource_name_env_stub}"
+  description = "main security group for ${local.resource_name_stub_env}"
   vpc_id      = module.vpc_primary.vpc_id
 
   ingress_with_self = [
@@ -116,9 +116,9 @@ module "vpc_alb_sg_primary" {
   version = "5.1.0"
   providers = { aws = aws.project_demo_nonprod }
 
-  name  = "${local.resource_name_env_stub}-alb"
+  name  = "${local.resource_name_stub_env}-alb"
   use_name_prefix = false
-  description = "load balancer security group for ${local.resource_name_env_stub}"
+  description = "load balancer security group for ${local.resource_name_stub_env}"
   vpc_id  = module.vpc_primary.vpc_id
 
   ingress_with_self = [
@@ -182,7 +182,7 @@ module "vpc_endpoints_primary" {
       # security_group_ids  = [module.vpc_main_sg_primary.security_group_id]
       subnet_ids = module.vpc_primary.private_subnets
       route_table_ids = flatten([module.vpc_primary.private_route_table_ids, module.vpc_primary.public_route_table_ids])
-      tags                = { Name = "${local.resource_name_env_stub}-s3-vpc-endpoint-primary" }
+      tags                = { Name = "${local.resource_name_stub_env}-s3-vpc-endpoint-primary" }
     },
     rds = {
       # interface endpoint
@@ -192,7 +192,7 @@ module "vpc_endpoints_primary" {
       # security_group_ids  = [module.vpc_main_sg_primary.security_group_id]
       subnet_ids = module.vpc_primary.private_subnets
       # route_table_ids = flatten([module.vpc_primary.private_route_table_ids, module.vpc_primary.public_route_table_ids])
-      tags                = { Name = "${local.resource_name_env_stub}-rds-endpoint-primary" }
+      tags                = { Name = "${local.resource_name_stub_env}-rds-endpoint-primary" }
     },
     # dynamodb = {
     #   # gateway endpoint
@@ -243,7 +243,7 @@ resource "aws_eip" "vpc_nat_failover" {
 
   count = 2
   domain = "vpc"
-  tags = { "Name" = "${local.resource_name_env_stub}-failover-${count.index}" }
+  tags = { "Name" = "${local.resource_name_stub_env}-failover-${count.index}" }
 
   # lifecycle { prevent_destroy = true } # YOU NEVER WANT TO DELETE THESE
 }
@@ -256,7 +256,7 @@ module "vpc_failover" {
   reuse_nat_ips = true
   external_nat_ip_ids = aws_eip.vpc_nat_failover[*].id
 
-  name = "${local.resource_name_env_stub}-vpc-failover"
+  name = "${local.resource_name_stub_env}-vpc-failover"
   public_subnet_suffix = "pub"
   private_subnet_suffix = "pvt"
   cidr = "${var.vpc_prefixes.project_demo_nonprod.failover}.0.0/16"
@@ -274,13 +274,13 @@ module "vpc_failover" {
   public_subnet_tags = { "kubernetes.io/role/elb" = 1 }
   private_subnet_tags = { "kubernetes.io/role/internal-elb" = 1 }
   vpc_tags = {
-    "${local.resource_name_env_stub}-cluster-failover-blue"   = "shared"
-    "${local.resource_name_env_stub}-cluster-failover-green"  = "shared"
+    "${local.resource_name_stub_env}-cluster-failover-blue"   = "shared"
+    "${local.resource_name_stub_env}-cluster-failover-green"  = "shared"
     "k8s.io/cluster-autoscaler/enabled" = "true"
-    "k8s.io/cluster-autoscaler/${local.resource_name_env_stub}-cluster-failover-blue" = "shared"
-    "k8s.io/cluster-autoscaler/${local.resource_name_env_stub}-cluster-failover-green" = "shared"
-    "kubernetes.io/cluster/${local.resource_name_env_stub}-cluster-failover-blue" = "shared"
-    "kubernetes.io/cluster/${local.resource_name_env_stub}-cluster-failover-green" = "shared"
+    "k8s.io/cluster-autoscaler/${local.resource_name_stub_env}-cluster-failover-blue" = "shared"
+    "k8s.io/cluster-autoscaler/${local.resource_name_stub_env}-cluster-failover-green" = "shared"
+    "kubernetes.io/cluster/${local.resource_name_stub_env}-cluster-failover-blue" = "shared"
+    "kubernetes.io/cluster/${local.resource_name_stub_env}-cluster-failover-green" = "shared"
   }
 
   manage_default_security_group = true
@@ -302,9 +302,9 @@ module "vpc_main_sg_failover" {
   version = "5.1.0"
   providers = { aws = aws.project_demo_nonprod_failover }
 
-  name        = "${local.resource_name_env_stub}-main"
+  name        = "${local.resource_name_stub_env}-main"
   use_name_prefix = false
-  description = "main security group for ${local.resource_name_env_stub}"
+  description = "main security group for ${local.resource_name_stub_env}"
   vpc_id      = module.vpc_failover.vpc_id
 
   ingress_with_self = [
@@ -355,9 +355,9 @@ module "vpc_alb_sg_failover" {
   version = "5.1.0"
   providers = { aws = aws.project_demo_nonprod_failover }
 
-  name  = "${local.resource_name_env_stub}-alb"
+  name  = "${local.resource_name_stub_env}-alb"
   use_name_prefix = false
-  description = "load balancer security group for ${local.resource_name_env_stub}"
+  description = "load balancer security group for ${local.resource_name_stub_env}"
   vpc_id  = module.vpc_failover.vpc_id
 
   ingress_with_self = [
@@ -421,7 +421,7 @@ module "vpc_endpoints_failover" {
       # security_group_ids  = [module.vpc_main_sg_primary.security_group_id]
       subnet_ids = module.vpc_failover.private_subnets
       route_table_ids = flatten([module.vpc_failover.private_route_table_ids, module.vpc_failover.public_route_table_ids])
-      tags                = { Name = "${local.resource_name_env_stub}-s3-vpc-endpoint-failover" }
+      tags                = { Name = "${local.resource_name_stub_env}-s3-vpc-endpoint-failover" }
     },
     rds = {
       # interface endpoint
@@ -431,7 +431,7 @@ module "vpc_endpoints_failover" {
       # security_group_ids  = [module.vpc_main_sg_primary.security_group_id]
       subnet_ids = module.vpc_failover.private_subnets
       # route_table_ids = flatten([module.vpc_primary.private_route_table_ids, module.vpc_primary.public_route_table_ids])
-      tags                = { Name = "${local.resource_name_env_stub}-rds-endpoint-failover" }
+      tags                = { Name = "${local.resource_name_stub_env}-rds-endpoint-failover" }
     },
     # dynamodb = {
     #   # gateway endpoint

@@ -208,16 +208,17 @@ locals {
   team_name_trimmed = length(var.team_name) > local.trimmed_length ? substr(var.team_name, 0, local.trimmed_length) : var.team_name
   project_name_trimmed = length(var.project_name) > local.trimmed_length ? substr(var.project_name, 0, local.trimmed_length) : var.project_name
 
+/*
+remove all vowels except for first character of each word
+replace spaces with dashes
+truncate each input by local.trimmed_length
+lowercase
+*/
+
   resource_name_stub = "${var.company_name}-${var.team_name}-${var.project_name}"
-  resource_name_env_stub = "${local.resource_name_stub}-${var.deployment_environment}"
+  resource_name_stub_env = "${local.resource_name_stub}-${var.deployment_environment}"
   resource_name_stub_trimmed = "${local.company_name_trimmed}-${local.team_name_trimmed}-${local.project_name_trimmed}"
-  resource_name_env_stub_trimmed = "${local.resource_name_stub_trimmed}-${var.deployment_environment}"
-
-  iam_access_management_tag_key = var.iam_access_management_tag_key
-  iam_access_management_tag_value = "${local.resource_name_stub}"
-  iam_access_management_tag_map = { "${local.iam_access_management_tag_key}" = "${local.iam_access_management_tag_value}" }
-
-  default_tags = merge(local.default_tags_map, local.iam_access_management_tag_map)
+  resource_name_stub_env_trimmed = "${local.resource_name_stub_trimmed}-${var.deployment_environment}"
 
   cli_profile_name = var.cli_profile_name_substitute != "" ? var.cli_profile_name_substitute : var.cli_profile_name_default
   provider_role_name = var.provider_role_name_substitute != "" ? var.provider_role_name_substitute : var.provider_role_name_default
@@ -227,6 +228,10 @@ locals {
 
   application_load_balancer_allow_list = "foo"
 
+  iam_access_management_tag_key = var.iam_access_management_tag_key
+  iam_access_management_tag_value = "${local.resource_name_stub}"
+  iam_access_management_tag_map = { "${local.iam_access_management_tag_key}" = "${local.iam_access_management_tag_value}" }
+
   default_tags_map = {
     "company"     = var.company_name #Microsoft
     "team"        = var.team_name #Blue
@@ -235,4 +240,6 @@ locals {
     "owner_email" = local.owner_email
     "tool"        = "terraform"
   }
+
+  default_tags = merge(local.default_tags_map, local.iam_access_management_tag_map)
 }

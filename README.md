@@ -42,14 +42,22 @@ Codebase for provisioning managed kubernetes (k8s) in AWS using only terraform, 
 
 ## Initial Setup
 1. Create AWS Account to be Organization root
-1. Create non-Console IAM user named "superadmin" with AdministratorAccess and create an Access Key/Secret to be used in AWS CLI profile named "superadmin"
+1. Create non-Console IAM user named "superadmin" with AdministratorAccess
+1. Create an Access Key/Secret to be used in AWS CLI profile named "superadmin"
 1. Deploy terraform/aws/org-ou-account-management to create additional AWS Organization Units and Accounts
-1. Update the terraform/variables.tf account_numbers map with the newly created Account ID numbers
-1. Deploy terraform/aws/iam-groups-and-roles, and create a new AWS CLI profile named "automation" with output of terraform
-1. Update the terraform/variables.tf company_domain variable and deploy terraform/aws/r53-zones-and-records
+1. Update the terraform/variables.tf account_numbers map with the output Account ID numbers
+1. Deploy terraform/aws/iam-groups-and-roles
+1. Create a new AWS CLI profile named "automation" with output of terraform
+1. Update the terraform/variables.tf company_domain variable
+1. Deploy terraform/aws/r53-zones-and-records
+1. Update your domain registrar with the output nameservers
 1. Deploy terraform/aws/tgw-and-shared-vpc
-1. Deploy terraform/aws/project-demo-nonprod
 ### You are here
+
+enterprise ad
+client vpn
+
+1. Deploy terraform/aws/project-demo-nonprod
 1. Deploy terraform/aws/project-demo-prod
 1. Deploy EKS cluster
 1. Deploy cluster-services
@@ -72,6 +80,11 @@ eks autoscaling by sessions
 trigger a DR event
 
 centralized logging with compression and glacier archive
+
+cni for network
+externaldns for r53 updates
+load balancer controller for managing ALBs
+cluster autoscaler for scaling
 
 #
 vpc
