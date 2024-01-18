@@ -151,7 +151,6 @@ variable "tgw_asn" {
 variable "vpc_prefixes" {
   type    = map(map(string))
   default = {
-    # example = "192.168"
     shared_vpc = {
       primary = "10.41"
       failover = "10.42"

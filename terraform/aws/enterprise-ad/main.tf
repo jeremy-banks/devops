@@ -49,7 +49,10 @@ resource "aws_route53_record" "corp_ad" {
   name    = "corp.${var.company_domain}"
   type    = "A"
   ttl     = 300
-  records = aws_directory_service_directory.ad_primary.dns_ip_addresses
+  records = concat(
+    tolist(aws_directory_service_directory.ad_primary.dns_ip_addresses),
+    tolist(data.aws_directory_service_directory.ad_failover.dns_ip_addresses)
+  )
 }
 
 #failover
@@ -84,4 +87,10 @@ resource "aws_directory_service_region" "ad_failover" {
     vpc_id     = data.aws_vpc.shared_failover.id
     subnet_ids = [data.aws_subnet.shared_a_failover.id, data.aws_subnet.shared_b_failover.id]
   }
+}
+
+data "aws_directory_service_directory" "ad_failover" {
+  provider = aws.shared_services_failover
+
+  directory_id = split(",", aws_directory_service_region.ad_failover.id)[0]
 }
