@@ -25,9 +25,8 @@ resource "aws_directory_service_directory" "ad_primary" {
 
   name        = "corp.${var.company_domain}"
   short_name  = "CORP"
-  alias       = "${var.company_name}"
+  alias       = "${var.company_name}-ad"
   password    = "tempSuperSecretPassword123"
-  # size     = "Enterprise" # Ensure it's Enterprise for multi-region support
   type        = "MicrosoftAD"
   edition     = "Enterprise"
   vpc_settings {
