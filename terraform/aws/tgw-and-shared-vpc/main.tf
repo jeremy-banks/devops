@@ -129,6 +129,16 @@ module "vpc_main_sg_primary" {
     },
   ]
 
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = -1
+      to_port     = -1
+      protocol    = -1
+      description = "allow ingress from client-vpn"
+      cidr_blocks = "${var.vpc_prefixes.client_vpn.primary}.0.0/16"
+    },
+  ]
+
   number_of_computed_ingress_with_source_security_group_id = 1
   computed_ingress_with_source_security_group_id = [
     {
@@ -179,6 +189,16 @@ module "vpc_alb_sg_primary" {
     {
       rule = "all-all"
       description = "allow ingress from self"
+    },
+  ]
+
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = -1
+      to_port     = -1
+      protocol    = -1
+      description = "allow ingress from client-vpn"
+      cidr_blocks = "${var.vpc_prefixes.client_vpn.primary}.0.0/16"
     },
   ]
 
@@ -349,6 +369,16 @@ module "vpc_main_sg_failover" {
     },
   ]
 
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = -1
+      to_port     = -1
+      protocol    = -1
+      description = "allow ingress from client-vpn"
+      cidr_blocks = "${var.vpc_prefixes.client_vpn.failover}.0.0/16"
+    },
+  ]
+
   number_of_computed_ingress_with_source_security_group_id = 1
   computed_ingress_with_source_security_group_id = [
     {
@@ -399,6 +429,16 @@ module "vpc_alb_sg_failover" {
     {
       rule = "all-all"
       description = "allow ingress from self"
+    },
+  ]
+
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = -1
+      to_port     = -1
+      protocol    = -1
+      description = "allow ingress from client-vpn"
+      cidr_blocks = "${var.vpc_prefixes.client_vpn.failover}.0.0/16"
     },
   ]
 

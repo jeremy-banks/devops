@@ -2,8 +2,10 @@
 resource "aws_ec2_client_vpn_endpoint" "client_vpn_primary" {
   provider = aws.network
 
-  server_certificate_arn = module.acm_wildcard_cert_primary.acm_certificate_arn
-  client_cidr_block      = "${var.vpc_prefixes.client_vpn.primary}.0.0/16"
+  server_certificate_arn  = module.acm_wildcard_cert_primary.acm_certificate_arn
+  client_cidr_block       = "${var.vpc_prefixes.client_vpn.primary}.0.0/16"
+  vpc_id                  = data.aws_vpc.shared_primary.id
+  security_group_ids      = [module.client_vpn_sg_primary.security_group_id]
 
   authentication_options {
     type                       = "certificate-authentication"
@@ -21,12 +23,57 @@ resource "aws_ec2_client_vpn_endpoint" "client_vpn_primary" {
   }
 }
 
-# data "aws_vpc" "shared_primary" {
-#   provider = aws.shared_services
+module "client_vpn_sg_primary" {
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "5.1.0"
+  providers = { aws = aws.network }
 
-#   cidr_block = "${var.vpc_prefixes.shared_vpc.primary}.0.0/16"
-#   state = "available"
-# }
+  name        = "${local.resource_name_stub_env}-client-vpn-primary"
+  use_name_prefix = false
+  description = "main security group for client-vpn"
+  vpc_id      = data.aws_vpc.shared_primary.id
+
+  ingress_with_self = [
+    {
+      rule = "all-all"
+      description = "allow ingress from self"
+    },
+  ]
+
+  egress_with_self = [
+    {
+      rule = "all-all"
+      description = "allow egress to self"
+    },
+  ]
+
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = -1
+      to_port     = -1
+      protocol    = -1
+      description = "allow ingress from aws"
+      cidr_blocks = "10.0.0.0/8"
+    },
+  ]
+
+  egress_with_cidr_blocks = [
+    {
+      from_port   = -1
+      to_port     = -1
+      protocol    = -1
+      description = "allow egress to internet"
+      cidr_blocks = "0.0.0.0/0"
+    },
+  ]
+}
+
+data "aws_vpc" "shared_primary" {
+  provider = aws.shared_services
+
+  cidr_block = "${var.vpc_prefixes.shared_vpc.primary}.0.0/16"
+  state = "available"
+}
 
 data "aws_subnet" "shared_a_primary" {
   provider = aws.shared_services
@@ -62,6 +109,8 @@ resource "aws_ec2_client_vpn_endpoint" "client_vpn_failover" {
 
   server_certificate_arn = module.acm_wildcard_cert_failover.acm_certificate_arn
   client_cidr_block      = "${var.vpc_prefixes.client_vpn.failover}.0.0/16"
+  vpc_id                  = data.aws_vpc.shared_failover.id
+  security_group_ids      = [module.client_vpn_sg_failover.security_group_id]
 
   authentication_options {
     type                       = "certificate-authentication"
@@ -79,12 +128,57 @@ resource "aws_ec2_client_vpn_endpoint" "client_vpn_failover" {
   }
 }
 
-# data "aws_vpc" "shared_failover" {
-#   provider = aws.shared_services_failover
+module "client_vpn_sg_failover" {
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "5.1.0"
+  providers = { aws = aws.network_failover }
 
-#   cidr_block = "${var.vpc_prefixes.shared_vpc.failover}.0.0/16"
-#   state = "available"
-# }
+  name        = "${local.resource_name_stub_env}-client-vpn-failover"
+  use_name_prefix = false
+  description = "main security group for client-vpn"
+  vpc_id      = data.aws_vpc.shared_failover.id
+
+  ingress_with_self = [
+    {
+      rule = "all-all"
+      description = "allow ingress from self"
+    },
+  ]
+
+  egress_with_self = [
+    {
+      rule = "all-all"
+      description = "allow egress to self"
+    },
+  ]
+
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = -1
+      to_port     = -1
+      protocol    = -1
+      description = "allow ingress from aws"
+      cidr_blocks = "10.0.0.0/8"
+    },
+  ]
+
+  egress_with_cidr_blocks = [
+    {
+      from_port   = -1
+      to_port     = -1
+      protocol    = -1
+      description = "allow egress to internet"
+      cidr_blocks = "0.0.0.0/0"
+    },
+  ]
+}
+
+data "aws_vpc" "shared_failover" {
+  provider = aws.shared_services_failover
+
+  cidr_block = "${var.vpc_prefixes.shared_vpc.failover}.0.0/16"
+  state = "available"
+}
 
 data "aws_subnet" "shared_a_failover" {
   provider = aws.shared_services_failover
