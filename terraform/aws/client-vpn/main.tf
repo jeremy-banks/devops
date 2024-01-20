@@ -23,6 +23,32 @@ resource "aws_ec2_client_vpn_endpoint" "client_vpn_primary" {
   }
 }
 
+data "aws_ec2_managed_prefix_list" "route53_healthchecks_uw1" {
+  provider = aws.network_uw1
+
+  name = "com.amazonaws.us-west-1.route53-healthchecks"
+}
+
+data "aws_ec2_managed_prefix_list" "route53_healthchecks_uw2" {
+  provider = aws.network_uw2
+
+  name = "com.amazonaws.us-west-2.route53-healthchecks"
+}
+
+data "aws_ec2_managed_prefix_list" "route53_healthchecks_ue1" {
+  provider = aws.network_ue1
+
+  name = "com.amazonaws.us-east-1.route53-healthchecks"
+}
+
+locals {
+  route53_healthcheck_ips = join(",", sort(distinct([for s in concat(
+    tolist(data.aws_ec2_managed_prefix_list.route53_healthchecks_uw1.entries),
+    tolist(data.aws_ec2_managed_prefix_list.route53_healthchecks_uw2.entries),
+    tolist(data.aws_ec2_managed_prefix_list.route53_healthchecks_ue1.entries),
+  ) : s.cidr])))
+}
+
 module "client_vpn_sg_primary" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.1.0"
@@ -40,20 +66,27 @@ module "client_vpn_sg_primary" {
     },
   ]
 
-  egress_with_self = [
-    {
-      rule = "all-all"
-      description = "allow egress to self"
-    },
-  ]
-
   ingress_with_cidr_blocks = [
     {
       from_port   = -1
       to_port     = -1
       protocol    = -1
-      description = "allow ingress from aws"
+      description = "allow aws"
       cidr_blocks = "10.0.0.0/8"
+    },
+    {
+      from_port = 443
+      to_port   = 443
+      protocol  = "tcp"
+      description = "allow route53 healthchecks"
+      cidr_blocks = local.route53_healthcheck_ips
+    },
+  ]
+
+  egress_with_self = [
+    {
+      rule = "all-all"
+      description = "allow self"
     },
   ]
 
@@ -62,7 +95,7 @@ module "client_vpn_sg_primary" {
       from_port   = -1
       to_port     = -1
       protocol    = -1
-      description = "allow egress to internet"
+      description = "allow internet"
       cidr_blocks = "0.0.0.0/0"
     },
   ]
@@ -145,13 +178,6 @@ module "client_vpn_sg_failover" {
     },
   ]
 
-  egress_with_self = [
-    {
-      rule = "all-all"
-      description = "allow egress to self"
-    },
-  ]
-
   ingress_with_cidr_blocks = [
     {
       from_port   = -1
@@ -159,6 +185,13 @@ module "client_vpn_sg_failover" {
       protocol    = -1
       description = "allow ingress from aws"
       cidr_blocks = "10.0.0.0/8"
+    },
+  ]
+
+  egress_with_self = [
+    {
+      rule = "all-all"
+      description = "allow egress to self"
     },
   ]
 
@@ -209,6 +242,46 @@ resource "aws_ec2_client_vpn_network_association" "shared_b_failover" {
 }
 
 #dns
+resource "aws_route53_health_check" "client_vpn_primary" {
+  provider = aws.network
+
+  fqdn              = replace(aws_ec2_client_vpn_endpoint.client_vpn_primary.dns_name, "/.*\\.cvpn-endpoint/", "healthcheck.cvpn-endpoint")
+  port              = 443
+  type              = "TCP"
+  failure_threshold = "3"
+  request_interval  = "30"
+  measure_latency   = true
+  regions           = [
+    "us-east-1",
+    "us-west-1",
+    "us-west-2",
+  ]
+
+  tags = {
+    Name = "${local.resource_name_stub_env}-client-vpn-healthcheck-primary"
+  }
+}
+
+resource "aws_route53_health_check" "client_vpn_failover" {
+  provider = aws.network_failover
+  
+  fqdn              = replace(aws_ec2_client_vpn_endpoint.client_vpn_failover.dns_name, "/.*\\.cvpn-endpoint/", "healthcheck.cvpn-endpoint")
+  port              = 443
+  type              = "TCP"
+  failure_threshold = "3"
+  request_interval  = "30"
+  measure_latency   = true
+  regions           = [
+    "us-east-1",
+    "us-west-1",
+    "us-west-2",
+  ]
+
+  tags = {
+    Name = "${local.resource_name_stub_env}-client-vpn-healthcheck-failover"
+  }
+}
+
 module "client_vpn_records" {
   source  = "terraform-aws-modules/route53/aws//modules/records"
   version = "2.11.0"
@@ -220,7 +293,7 @@ module "client_vpn_records" {
     {
       name = "*.vpn"
       type = "CNAME"
-      ttl  = 300
+      ttl  = 600
       records = [
         "vpn.${var.company_domain}",
       ]
@@ -229,7 +302,8 @@ module "client_vpn_records" {
       name = "vpn"
       type = "CNAME"
       set_identifier = "vpn-primary"
-      ttl  = 300
+      # health_check_id = aws_route53_health_check.client_vpn_primary.id
+      ttl  = 600
       records = [
         "${aws_ec2_client_vpn_endpoint.client_vpn_primary.dns_name}",
       ]
@@ -241,7 +315,8 @@ module "client_vpn_records" {
       name = "vpn"
       type = "CNAME"
       set_identifier = "vpn-failover"
-      ttl  = 300
+      # health_check_id = aws_route53_health_check.client_vpn_failover.id
+      ttl  = 600
       records = [
         "${aws_ec2_client_vpn_endpoint.client_vpn_failover.dns_name}",
       ]
