@@ -207,3 +207,47 @@ resource "aws_ec2_client_vpn_network_association" "shared_b_failover" {
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.client_vpn_failover.id
   subnet_id              = data.aws_subnet.shared_b_failover.id
 }
+
+#dns
+module "client_vpn_records" {
+  source  = "terraform-aws-modules/route53/aws//modules/records"
+  version = "2.11.0"
+  providers = { aws = aws.network }
+
+  zone_name = var.company_domain
+
+  records = [
+    {
+      name = "*.vpn"
+      type = "CNAME"
+      ttl  = 300
+      records = [
+        "vpn.${var.company_domain}",
+      ]
+    },
+    {
+      name = "vpn"
+      type = "CNAME"
+      set_identifier = "vpn-primary"
+      ttl  = 300
+      records = [
+        "${aws_ec2_client_vpn_endpoint.client_vpn_primary.dns_name}",
+      ]
+      latency_routing_policy = {
+        region = var.region.primary
+      }
+    },
+    {
+      name = "vpn"
+      type = "CNAME"
+      set_identifier = "vpn-failover"
+      ttl  = 300
+      records = [
+        "${aws_ec2_client_vpn_endpoint.client_vpn_failover.dns_name}",
+      ]
+      latency_routing_policy = {
+        region = var.region.failover
+      }
+    },
+  ]
+}
