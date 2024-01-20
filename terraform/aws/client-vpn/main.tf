@@ -5,7 +5,10 @@ resource "aws_ec2_client_vpn_endpoint" "client_vpn_primary" {
   server_certificate_arn  = module.acm_wildcard_cert_primary.acm_certificate_arn
   client_cidr_block       = "${var.vpc_prefixes.client_vpn.primary}.0.0/16"
   vpc_id                  = data.aws_vpc.shared_primary.id
-  security_group_ids      = [module.client_vpn_sg_primary.security_group_id]
+  security_group_ids      = [
+    module.client_vpn_endpoint_sg_primary.security_group_id,
+    module.client_vpn_endpoint_r53_healthcheck_sg_primary.security_group_id,
+  ]
 
   authentication_options {
     type                       = "certificate-authentication"
@@ -49,54 +52,108 @@ locals {
   ) : s.cidr])))
 }
 
-module "client_vpn_sg_primary" {
+module "client_vpn_endpoint_sg_primary" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.1.0"
   providers = { aws = aws.network }
 
-  name        = "${local.resource_name_stub_env}-client-vpn-primary"
+  name        = "${local.resource_name_stub_env}-client-vpn-endpoint-primary"
   use_name_prefix = false
-  description = "main security group for client-vpn"
+  description = "main sg for client-vpn endpoint"
   vpc_id      = data.aws_vpc.shared_primary.id
 
-  ingress_with_self = [
-    {
-      rule = "all-all"
-      description = "allow ingress from self"
-    },
-  ]
+  # computed_ingress_with_self = [
+  #     {
+  #       from_port   = -1
+  #       to_port     = -1
+  #       protocol    = -1
+  #       description = "allow self"
+  #       self        = true
+  #     },      
+  #   ]
+  # number_of_computed_ingress_with_self = 1
 
-  ingress_with_cidr_blocks = [
+  # computed_ingress_with_cidr_blocks = [
+  #   {
+  #     from_port   = -1
+  #     to_port     = -1
+  #     protocol    = -1
+  #     description = "allow aws"
+  #     cidr_blocks = "10.0.0.0/8"
+  #   },    
+  # ]
+  # number_of_computed_ingress_with_cidr_blocks = 1
+
+  # ingress_prefix_list_ids = [data.aws_ec2_managed_prefix_list.route53_healthchecks_uw2.id]
+  # computed_ingress_with_prefix_list_ids = [
+  #   {
+  #     from_port = 443
+  #     to_port   = 443
+  #     protocol  = "tcp"
+  #     description = "allow route53 healthchecks"
+  #     prefix_list_ids  = [data.aws_ec2_managed_prefix_list.route53_healthchecks_uw2.id]
+  #   },
+  # ]
+  # number_of_computed_ingress_with_prefix_list_ids = 1
+
+  # ingress_with_cidr_blocks = [
+  #   {
+  #     from_port   = -1
+  #     to_port     = -1
+  #     protocol    = -1
+  #     description = "allow aws"
+  #     cidr_blocks = "10.0.0.0/8"
+  #   },
+  # ]
+
+  computed_egress_with_self = [
     {
       from_port   = -1
       to_port     = -1
       protocol    = -1
-      description = "allow aws"
-      cidr_blocks = "10.0.0.0/8"
-    },
-    {
-      from_port = 443
-      to_port   = 443
-      protocol  = "tcp"
-      description = "allow route53 healthchecks"
-      cidr_blocks = local.route53_healthcheck_ips
-    },
-  ]
-
-  egress_with_self = [
-    {
-      rule = "all-all"
       description = "allow self"
-    },
+      self        = true
+    },    
   ]
+  number_of_computed_egress_with_self = 1
 
-  egress_with_cidr_blocks = [
+  computed_egress_with_cidr_blocks = [
     {
       from_port   = -1
       to_port     = -1
       protocol    = -1
       description = "allow internet"
       cidr_blocks = "0.0.0.0/0"
+    },
+  ]
+  number_of_computed_egress_with_cidr_blocks = 1
+}
+
+module "client_vpn_endpoint_r53_healthcheck_sg_primary" {
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "5.1.0"
+  providers = { aws = aws.network }
+
+  name        = "${local.resource_name_stub_env}-client-vpn-endpoint-r53-healthcheck-primary"
+  use_name_prefix = false
+  description = "r53 healthcheck sg for client-vpn endpoint"
+  vpc_id      = data.aws_vpc.shared_primary.id
+
+  ingress_prefix_list_ids = [data.aws_ec2_managed_prefix_list.route53_healthchecks_uw2.id]
+  ingress_with_prefix_list_ids = [
+    {
+      from_port = 443
+      to_port   = 443
+      protocol  = "tcp"
+    },
+  ]
+
+  egress_prefix_list_ids = [data.aws_ec2_managed_prefix_list.route53_healthchecks_uw2.id]
+  egress_with_prefix_list_ids = [
+    {
+      from_port = 443
+      to_port   = 443
+      protocol  = "tcp"
     },
   ]
 }
@@ -143,7 +200,10 @@ resource "aws_ec2_client_vpn_endpoint" "client_vpn_failover" {
   server_certificate_arn = module.acm_wildcard_cert_failover.acm_certificate_arn
   client_cidr_block      = "${var.vpc_prefixes.client_vpn.failover}.0.0/16"
   vpc_id                  = data.aws_vpc.shared_failover.id
-  security_group_ids      = [module.client_vpn_sg_failover.security_group_id]
+  security_group_ids      = [
+    module.client_vpn_endpoint_sg_failover.security_group_id,
+    module.client_vpn_endpoint_r53_healthcheck_sg_failover.security_group_id,
+  ]
 
   authentication_options {
     type                       = "certificate-authentication"
@@ -161,14 +221,14 @@ resource "aws_ec2_client_vpn_endpoint" "client_vpn_failover" {
   }
 }
 
-module "client_vpn_sg_failover" {
+module "client_vpn_endpoint_sg_failover" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.1.0"
   providers = { aws = aws.network_failover }
 
-  name        = "${local.resource_name_stub_env}-client-vpn-failover"
+  name        = "${local.resource_name_stub_env}-client-vpn-endpoint-failover"
   use_name_prefix = false
-  description = "main security group for client-vpn"
+  description = "main sg for client-vpn endpoint"
   vpc_id      = data.aws_vpc.shared_failover.id
 
   ingress_with_self = [
@@ -202,6 +262,35 @@ module "client_vpn_sg_failover" {
       protocol    = -1
       description = "allow egress to internet"
       cidr_blocks = "0.0.0.0/0"
+    },
+  ]
+}
+
+module "client_vpn_endpoint_r53_healthcheck_sg_failover" {
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "5.1.0"
+  providers = { aws = aws.network_failover }
+
+  name        = "${local.resource_name_stub_env}-client-vpn-endpoint-r53-healthcheck-failover"
+  use_name_prefix = false
+  description = "r53 healthcheck sg for client-vpn endpoint"
+  vpc_id      = data.aws_vpc.shared_failover.id
+
+  ingress_prefix_list_ids = [data.aws_ec2_managed_prefix_list.route53_healthchecks_ue1.id]
+  ingress_with_prefix_list_ids = [
+    {
+      from_port = 443
+      to_port   = 443
+      protocol  = "tcp"
+    },
+  ]
+
+  egress_prefix_list_ids = [data.aws_ec2_managed_prefix_list.route53_healthchecks_ue1.id]
+  egress_with_prefix_list_ids = [
+    {
+      from_port = 443
+      to_port   = 443
+      protocol  = "tcp"
     },
   ]
 }
@@ -248,9 +337,6 @@ resource "aws_route53_health_check" "client_vpn_primary" {
   fqdn              = replace(aws_ec2_client_vpn_endpoint.client_vpn_primary.dns_name, "/.*\\.cvpn-endpoint/", "healthcheck.cvpn-endpoint")
   port              = 443
   type              = "TCP"
-  failure_threshold = "3"
-  request_interval  = "30"
-  measure_latency   = true
   regions           = [
     "us-east-1",
     "us-west-1",
@@ -268,9 +354,6 @@ resource "aws_route53_health_check" "client_vpn_failover" {
   fqdn              = replace(aws_ec2_client_vpn_endpoint.client_vpn_failover.dns_name, "/.*\\.cvpn-endpoint/", "healthcheck.cvpn-endpoint")
   port              = 443
   type              = "TCP"
-  failure_threshold = "3"
-  request_interval  = "30"
-  measure_latency   = true
   regions           = [
     "us-east-1",
     "us-west-1",
@@ -302,7 +385,7 @@ module "client_vpn_records" {
       name = "vpn"
       type = "CNAME"
       set_identifier = "vpn-primary"
-      # health_check_id = aws_route53_health_check.client_vpn_primary.id
+      health_check_id = aws_route53_health_check.client_vpn_primary.id
       ttl  = 600
       records = [
         "${aws_ec2_client_vpn_endpoint.client_vpn_primary.dns_name}",
@@ -315,7 +398,7 @@ module "client_vpn_records" {
       name = "vpn"
       type = "CNAME"
       set_identifier = "vpn-failover"
-      # health_check_id = aws_route53_health_check.client_vpn_failover.id
+      health_check_id = aws_route53_health_check.client_vpn_failover.id
       ttl  = 600
       records = [
         "${aws_ec2_client_vpn_endpoint.client_vpn_failover.dns_name}",
