@@ -68,8 +68,11 @@ module "vpc_primary" {
   version = "5.4.0"
   providers = { aws = aws.network }
 
+  enable_nat_gateway = true
   reuse_nat_ips = true
+  one_nat_gateway_per_az = true
   external_nat_ip_ids = aws_eip.vpc_nat_primary[*].id
+  external_nat_ips = aws_eip.vpc_nat_primary[*].public_ip
 
   name = "${local.resource_name_stub_env}-vpc-primary"
   public_subnet_suffix = "pub"
