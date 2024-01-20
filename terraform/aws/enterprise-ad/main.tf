@@ -35,6 +35,25 @@ resource "aws_directory_service_directory" "ad_primary" {
   }
 }
 
+data "aws_caller_identity" "network" {
+  provider = aws.network
+}
+
+resource "aws_directory_service_shared_directory" "ad_primary" {
+  provider = aws.shared_services
+  
+  directory_id = aws_directory_service_directory.ad_primary.id
+  target {
+    id = data.aws_caller_identity.network.account_id
+  }
+}
+
+resource "aws_directory_service_shared_directory_accepter" "network_primary" {
+  provider = aws.network
+
+  shared_directory_id = aws_directory_service_shared_directory.ad_primary.shared_directory_id
+}
+
 data "aws_route53_zone" "company_domain" {
   provider  = aws.network
 
@@ -92,4 +111,23 @@ data "aws_directory_service_directory" "ad_failover" {
   provider = aws.shared_services_failover
 
   directory_id = split(",", aws_directory_service_region.ad_failover.id)[0]
+}
+
+data "aws_caller_identity" "network_failover" {
+  provider = aws.network_failover
+}
+
+resource "aws_directory_service_shared_directory" "ad_failover" {
+  provider = aws.shared_services_failover
+  
+  directory_id = aws_directory_service_directory.ad_primary.id
+  target {
+    id = data.aws_caller_identity.network_failover.account_id
+  }
+}
+
+resource "aws_directory_service_shared_directory_accepter" "network_failover" {
+  provider = aws.network_failover
+
+  shared_directory_id = aws_directory_service_shared_directory.ad_failover.shared_directory_id
 }
