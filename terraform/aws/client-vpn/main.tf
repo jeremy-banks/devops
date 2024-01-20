@@ -26,12 +26,6 @@ resource "aws_ec2_client_vpn_endpoint" "client_vpn_primary" {
   }
 }
 
-data "aws_ec2_managed_prefix_list" "route53_healthchecks_uw1" {
-  provider = aws.network_uw1
-
-  name = "com.amazonaws.us-west-1.route53-healthchecks"
-}
-
 data "aws_ec2_managed_prefix_list" "route53_healthchecks_uw2" {
   provider = aws.network_uw2
 
@@ -44,14 +38,6 @@ data "aws_ec2_managed_prefix_list" "route53_healthchecks_ue1" {
   name = "com.amazonaws.us-east-1.route53-healthchecks"
 }
 
-locals {
-  route53_healthcheck_ips = join(",", sort(distinct([for s in concat(
-    tolist(data.aws_ec2_managed_prefix_list.route53_healthchecks_uw1.entries),
-    tolist(data.aws_ec2_managed_prefix_list.route53_healthchecks_uw2.entries),
-    tolist(data.aws_ec2_managed_prefix_list.route53_healthchecks_ue1.entries),
-  ) : s.cidr])))
-}
-
 module "client_vpn_endpoint_sg_primary" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.1.0"
@@ -62,49 +48,27 @@ module "client_vpn_endpoint_sg_primary" {
   description = "main sg for client-vpn endpoint"
   vpc_id      = data.aws_vpc.shared_primary.id
 
-  # computed_ingress_with_self = [
-  #     {
-  #       from_port   = -1
-  #       to_port     = -1
-  #       protocol    = -1
-  #       description = "allow self"
-  #       self        = true
-  #     },      
-  #   ]
-  # number_of_computed_ingress_with_self = 1
+  computed_ingress_with_self = [
+      {
+        from_port   = -1
+        to_port     = -1
+        protocol    = -1
+        description = "allow self"
+        self        = true
+      },      
+    ]
+  number_of_computed_ingress_with_self = 1
 
-  # computed_ingress_with_cidr_blocks = [
-  #   {
-  #     from_port   = -1
-  #     to_port     = -1
-  #     protocol    = -1
-  #     description = "allow aws"
-  #     cidr_blocks = "10.0.0.0/8"
-  #   },    
-  # ]
-  # number_of_computed_ingress_with_cidr_blocks = 1
-
-  # ingress_prefix_list_ids = [data.aws_ec2_managed_prefix_list.route53_healthchecks_uw2.id]
-  # computed_ingress_with_prefix_list_ids = [
-  #   {
-  #     from_port = 443
-  #     to_port   = 443
-  #     protocol  = "tcp"
-  #     description = "allow route53 healthchecks"
-  #     prefix_list_ids  = [data.aws_ec2_managed_prefix_list.route53_healthchecks_uw2.id]
-  #   },
-  # ]
-  # number_of_computed_ingress_with_prefix_list_ids = 1
-
-  # ingress_with_cidr_blocks = [
-  #   {
-  #     from_port   = -1
-  #     to_port     = -1
-  #     protocol    = -1
-  #     description = "allow aws"
-  #     cidr_blocks = "10.0.0.0/8"
-  #   },
-  # ]
+  computed_ingress_with_cidr_blocks = [
+    {
+      from_port   = -1
+      to_port     = -1
+      protocol    = -1
+      description = "allow aws"
+      cidr_blocks = "10.0.0.0/8"
+    },    
+  ]
+  number_of_computed_ingress_with_cidr_blocks = 1
 
   computed_egress_with_self = [
     {
@@ -231,39 +195,49 @@ module "client_vpn_endpoint_sg_failover" {
   description = "main sg for client-vpn endpoint"
   vpc_id      = data.aws_vpc.shared_failover.id
 
-  ingress_with_self = [
-    {
-      rule = "all-all"
-      description = "allow ingress from self"
-    },
-  ]
+  computed_ingress_with_self = [
+      {
+        from_port   = -1
+        to_port     = -1
+        protocol    = -1
+        description = "allow self"
+        self        = true
+      },      
+    ]
+  number_of_computed_ingress_with_self = 1
 
-  ingress_with_cidr_blocks = [
+  computed_ingress_with_cidr_blocks = [
     {
       from_port   = -1
       to_port     = -1
       protocol    = -1
-      description = "allow ingress from aws"
+      description = "allow aws"
       cidr_blocks = "10.0.0.0/8"
-    },
+    },    
   ]
+  number_of_computed_ingress_with_cidr_blocks = 1
 
-  egress_with_self = [
-    {
-      rule = "all-all"
-      description = "allow egress to self"
-    },
-  ]
-
-  egress_with_cidr_blocks = [
+  computed_egress_with_self = [
     {
       from_port   = -1
       to_port     = -1
       protocol    = -1
-      description = "allow egress to internet"
+      description = "allow self"
+      self        = true
+    },    
+  ]
+  number_of_computed_egress_with_self = 1
+
+  computed_egress_with_cidr_blocks = [
+    {
+      from_port   = -1
+      to_port     = -1
+      protocol    = -1
+      description = "allow internet"
       cidr_blocks = "0.0.0.0/0"
     },
   ]
+  number_of_computed_egress_with_cidr_blocks = 1
 }
 
 module "client_vpn_endpoint_r53_healthcheck_sg_failover" {
