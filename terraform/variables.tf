@@ -155,6 +155,10 @@ variable "vpc_prefixes" {
       primary = "10.41"
       failover = "10.42"
     }
+    client_vpn = {
+      primary = "10.51"
+      failover = "10.52"
+    }
     project_demo_nonprod = {
       primary = "10.43"
       failover = "10.44"
