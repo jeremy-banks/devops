@@ -316,8 +316,11 @@ module "vpc_failover" {
   version = "5.4.0"
   providers = { aws = aws.network_failover }
 
+  enable_nat_gateway = true
   reuse_nat_ips = true
+  one_nat_gateway_per_az = true
   external_nat_ip_ids = aws_eip.vpc_nat_failover[*].id
+  external_nat_ips = aws_eip.vpc_nat_failover[*].public_ip
 
   name = "${local.resource_name_stub_env}-vpc-failover"
   public_subnet_suffix = "pub"
