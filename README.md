@@ -30,34 +30,34 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
 ## Initial Setup
 1. Create AWS Account to be Organization root
 1. Create non-Console IAM user named "superadmin" with AdministratorAccess
-  1. Create an Access Key/Secret to be used in AWS CLI profile named "superadmin"
-  1. Update the terraform/variables.tf company_domain variable
+   1. Create an Access Key/Secret to be used in AWS CLI profile named "superadmin"
+   1. Update the terraform/variables.tf company_domain variable
 1. Deploy terraform/aws/org-ou-account-management to create additional AWS Organization Units and Accounts
-  1. Update the terraform/variables.tf account_numbers map with the output Account ID numbers
+   1. Update the terraform/variables.tf account_numbers map with the output Account ID numbers
 1. Deploy terraform/aws/iam-groups-and-roles
-  1. Create a new AWS CLI profile named "automation" with output of terraform
+   1. Create a new AWS CLI profile named "automation" with output of terraform
 1. Deploy terraform/aws/r53-zones-and-records
-  1. Update your domain registrar with the output nameservers
+   1. Update your domain registrar with the output nameservers
 1. Deploy terraform/aws/tgw-and-shared-vpc
 1. Deploy terraform/aws/enterprise-ad
-  1. Updated the terraform/variables.tf shared_ad_directory_id string with the output Directory ID
+   1. Updated the terraform/variables.tf shared_ad_directory_id string with the output Directory ID
 1. Deploy terraform/aws/client-vpn
 1. Deploy terraform/aws/project-demo-nonprod
 ### You are here
 <!-- 1. Deploy terraform/aws/project-demo-prod -->
 1. Deploy EKS cluster via eksctl
 1. Deploy cluster-services via helm
-  1. CNI
-  1. externalDNS
-  1. ALB controller
-  1. Cluster Autoscaler Horiz + Vert
+   1. CNI
+   1. externalDNS
+   1. ALB controller
+   1. Cluster Autoscaler Horiz + Vert
 1. Deploy nginx via helm
-  1. Basic welcome page
+   1. Basic welcome page
 
 ## To-Do
-- move desired R53 healthcheck locations to a var and local design
+- move desired R53 healthcheck source locations to a var and local design
 - Share the Shared Directory to all OUs except workloads
-- Update directory AD and client VPN so groups in AD manage network access  to AWS environments
+- Update directory AD and client VPN so groups in AD manage network access to AWS environments
 - Add Windows Server 2019 cheap instance to Directory for AD administration
 - Create truncated resource stub for those few resources with limited characters in names
   - remove all vowels except for first character of each word
