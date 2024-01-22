@@ -68,11 +68,11 @@ resource "aws_route53_record" "corp_ad" {
   name    = "corp.${var.company_domain}"
   type    = "A"
   ttl     = 300
-  # records = concat(
-  #   tolist(aws_directory_service_directory.ad_primary.dns_ip_addresses),
-  #   tolist(data.aws_directory_service_directory.ad_failover.dns_ip_addresses)
-  # )
-  records = aws_directory_service_directory.ad_primary.dns_ip_addresses
+  records = concat(
+    tolist(aws_directory_service_directory.ad_primary.dns_ip_addresses),
+    tolist(data.aws_directory_service_directory.ad_failover.dns_ip_addresses)
+  )
+  # records = aws_directory_service_directory.ad_primary.dns_ip_addresses
 }
 
 #failover
@@ -98,7 +98,7 @@ data "aws_subnet" "shared_b_failover" {
 }
 
 resource "aws_directory_service_region" "ad_failover" {
-  provider = aws.org_failover
+  provider = aws.org
 
   directory_id = aws_directory_service_directory.ad_primary.id
   region_name  = var.region.failover
@@ -115,21 +115,18 @@ data "aws_directory_service_directory" "ad_failover" {
   directory_id = split(",", aws_directory_service_region.ad_failover.id)[0]
 }
 
-# data "aws_caller_identity" "network_failover" {
-#   provider = aws.network_failover
-# }
-
-# resource "aws_directory_service_shared_directory" "ad_failover" {
-#   provider = aws.shared_services_failover
+resource "aws_directory_service_shared_directory" "ad_failover" {
+  provider = aws.org_failover
   
-#   directory_id = aws_directory_service_directory.ad_primary.id
-#   target {
-#     id = data.aws_caller_identity.network_failover.account_id
-#   }
-# }
+  for_each = { 
+    for account in data.aws_organizations_organization.org.non_master_accounts : 
+      account.id => account 
+      if account.status == "ACTIVE" 
+  }
 
-# resource "aws_directory_service_shared_directory_accepter" "network_failover" {
-#   provider = aws.network_failover
-
-#   shared_directory_id = aws_directory_service_shared_directory.ad_failover.shared_directory_id
-# }
+  directory_id = aws_directory_service_directory.ad_primary.id
+  target {
+    id = each.value.id
+  }
+  method = "ORGANIZATIONS"
+}
