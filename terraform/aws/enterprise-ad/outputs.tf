@@ -22,7 +22,7 @@ output "ad_directory_id" {
 #   value = values(aws_directory_service_shared_directory.ad_primary)[*].shared_directory_id #gives directory numbers
 # }
 
-output "ad_account_id_shared_directory_map" {
+output "ad_shared_directory_ids" {
   value = { 
     for idx, key in keys(aws_directory_service_shared_directory.ad_primary) : 
       element(split("/", key), 1) => 
