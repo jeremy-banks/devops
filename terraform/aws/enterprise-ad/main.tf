@@ -1,27 +1,27 @@
 #primary
 data "aws_vpc" "shared_primary" {
-  provider = aws.shared_services
+  provider = aws.org
 
   cidr_block = "${var.vpc_prefixes.shared_vpc.primary}.0.0/16"
   state = "available"
 }
 
 data "aws_subnet" "shared_a_primary" {
-  provider = aws.shared_services
+  provider = aws.org
 
   cidr_block = "${var.vpc_prefixes.shared_vpc.primary}.${var.vpc_suffixes.subnet_private_a}"
   state = "available"
 }
 
 data "aws_subnet" "shared_b_primary" {
-  provider = aws.shared_services
+  provider = aws.org
 
   cidr_block = "${var.vpc_prefixes.shared_vpc.primary}.${var.vpc_suffixes.subnet_private_b}"
   state = "available"
 }
 
 resource "aws_directory_service_directory" "ad_primary" {
-  provider = aws.shared_services
+  provider = aws.org
 
   name        = "corp.${var.company_domain}"
   short_name  = "CORP"
@@ -35,23 +35,24 @@ resource "aws_directory_service_directory" "ad_primary" {
   }
 }
 
-data "aws_caller_identity" "network" {
-  provider = aws.network
+data "aws_organizations_organization" "org" {
+  provider = aws.org
 }
 
 resource "aws_directory_service_shared_directory" "ad_primary" {
-  provider = aws.shared_services
-  
+  provider = aws.org
+
+  for_each = { 
+    for account in data.aws_organizations_organization.org.non_master_accounts : 
+      account.id => account 
+      if account.status == "ACTIVE" 
+  }
+
   directory_id = aws_directory_service_directory.ad_primary.id
   target {
-    id = data.aws_caller_identity.network.account_id
+    id = each.value.id
   }
-}
-
-resource "aws_directory_service_shared_directory_accepter" "network_primary" {
-  provider = aws.network
-
-  shared_directory_id = aws_directory_service_shared_directory.ad_primary.shared_directory_id
+  method = "ORGANIZATIONS"
 }
 
 data "aws_route53_zone" "company_domain" {
@@ -67,36 +68,37 @@ resource "aws_route53_record" "corp_ad" {
   name    = "corp.${var.company_domain}"
   type    = "A"
   ttl     = 300
-  records = concat(
-    tolist(aws_directory_service_directory.ad_primary.dns_ip_addresses),
-    tolist(data.aws_directory_service_directory.ad_failover.dns_ip_addresses)
-  )
+  # records = concat(
+  #   tolist(aws_directory_service_directory.ad_primary.dns_ip_addresses),
+  #   tolist(data.aws_directory_service_directory.ad_failover.dns_ip_addresses)
+  # )
+  records = aws_directory_service_directory.ad_primary.dns_ip_addresses
 }
 
 #failover
 data "aws_vpc" "shared_failover" {
-  provider = aws.shared_services_failover
+  provider = aws.org_failover
 
   cidr_block = "${var.vpc_prefixes.shared_vpc.failover}.0.0/16"
   state = "available"
 }
 
 data "aws_subnet" "shared_a_failover" {
-  provider = aws.shared_services_failover
+  provider = aws.org_failover
 
   cidr_block = "${var.vpc_prefixes.shared_vpc.failover}.${var.vpc_suffixes.subnet_private_a}"
   state = "available"
 }
 
 data "aws_subnet" "shared_b_failover" {
-  provider = aws.shared_services_failover
+  provider = aws.org_failover
 
   cidr_block = "${var.vpc_prefixes.shared_vpc.failover}.${var.vpc_suffixes.subnet_private_b}"
   state = "available"
 }
 
 resource "aws_directory_service_region" "ad_failover" {
-  provider = aws.shared_services
+  provider = aws.org_failover
 
   directory_id = aws_directory_service_directory.ad_primary.id
   region_name  = var.region.failover
@@ -108,26 +110,26 @@ resource "aws_directory_service_region" "ad_failover" {
 }
 
 data "aws_directory_service_directory" "ad_failover" {
-  provider = aws.shared_services_failover
+  provider = aws.org_failover
 
   directory_id = split(",", aws_directory_service_region.ad_failover.id)[0]
 }
 
-data "aws_caller_identity" "network_failover" {
-  provider = aws.network_failover
-}
+# data "aws_caller_identity" "network_failover" {
+#   provider = aws.network_failover
+# }
 
-resource "aws_directory_service_shared_directory" "ad_failover" {
-  provider = aws.shared_services_failover
+# resource "aws_directory_service_shared_directory" "ad_failover" {
+#   provider = aws.shared_services_failover
   
-  directory_id = aws_directory_service_directory.ad_primary.id
-  target {
-    id = data.aws_caller_identity.network_failover.account_id
-  }
-}
+#   directory_id = aws_directory_service_directory.ad_primary.id
+#   target {
+#     id = data.aws_caller_identity.network_failover.account_id
+#   }
+# }
 
-resource "aws_directory_service_shared_directory_accepter" "network_failover" {
-  provider = aws.network_failover
+# resource "aws_directory_service_shared_directory_accepter" "network_failover" {
+#   provider = aws.network_failover
 
-  shared_directory_id = aws_directory_service_shared_directory.ad_failover.shared_directory_id
-}
+#   shared_directory_id = aws_directory_service_shared_directory.ad_failover.shared_directory_id
+# }

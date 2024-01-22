@@ -15,6 +15,11 @@ resource "aws_ec2_client_vpn_endpoint" "client_vpn_primary" {
     root_certificate_chain_arn = module.acm_wildcard_cert_primary.acm_certificate_arn
   }
 
+  # authentication_options {
+  #   type                = "directory-service-authentication"
+  #   active_directory_id = var.shared_ad_directory_id
+  # }
+
   connection_log_options {
     enabled               = false
     # cloudwatch_log_group  = aws_cloudwatch_log_group.lg.name
@@ -26,16 +31,16 @@ resource "aws_ec2_client_vpn_endpoint" "client_vpn_primary" {
   }
 }
 
-data "aws_ec2_managed_prefix_list" "route53_healthchecks_uw2" {
-  provider = aws.network_uw2
+data "aws_ec2_managed_prefix_list" "route53_healthchecks_primary" {
+  provider = aws.network
 
-  name = "com.amazonaws.us-west-2.route53-healthchecks"
+  name = "com.amazonaws.${var.region.primary}.route53-healthchecks"
 }
 
-data "aws_ec2_managed_prefix_list" "route53_healthchecks_ue1" {
-  provider = aws.network_ue1
+data "aws_ec2_managed_prefix_list" "route53_healthchecks_failover" {
+  provider = aws.network_failover
 
-  name = "com.amazonaws.us-east-1.route53-healthchecks"
+  name = "com.amazonaws.${var.region.failover}.route53-healthchecks"
 }
 
 module "client_vpn_endpoint_sg_primary" {
@@ -103,7 +108,7 @@ module "client_vpn_endpoint_r53_healthcheck_sg_primary" {
   description = "r53 healthcheck sg for client-vpn endpoint"
   vpc_id      = data.aws_vpc.shared_primary.id
 
-  ingress_prefix_list_ids = [data.aws_ec2_managed_prefix_list.route53_healthchecks_uw2.id]
+  ingress_prefix_list_ids = [data.aws_ec2_managed_prefix_list.route53_healthchecks_primary.id]
   ingress_with_prefix_list_ids = [
     {
       from_port = 443
@@ -112,7 +117,7 @@ module "client_vpn_endpoint_r53_healthcheck_sg_primary" {
     },
   ]
 
-  egress_prefix_list_ids = [data.aws_ec2_managed_prefix_list.route53_healthchecks_uw2.id]
+  egress_prefix_list_ids = [data.aws_ec2_managed_prefix_list.route53_healthchecks_primary.id]
   egress_with_prefix_list_ids = [
     {
       from_port = 443
@@ -173,6 +178,11 @@ resource "aws_ec2_client_vpn_endpoint" "client_vpn_failover" {
     type                       = "certificate-authentication"
     root_certificate_chain_arn = module.acm_wildcard_cert_failover.acm_certificate_arn
   }
+
+  # authentication_options {
+  #   type                = "directory-service-authentication"
+  #   active_directory_id = var.shared_ad_directory_id
+  # }
 
   connection_log_options {
     enabled               = false
@@ -250,7 +260,7 @@ module "client_vpn_endpoint_r53_healthcheck_sg_failover" {
   description = "r53 healthcheck sg for client-vpn endpoint"
   vpc_id      = data.aws_vpc.shared_failover.id
 
-  ingress_prefix_list_ids = [data.aws_ec2_managed_prefix_list.route53_healthchecks_ue1.id]
+  ingress_prefix_list_ids = [data.aws_ec2_managed_prefix_list.route53_healthchecks_failover.id]
   ingress_with_prefix_list_ids = [
     {
       from_port = 443
@@ -259,7 +269,7 @@ module "client_vpn_endpoint_r53_healthcheck_sg_failover" {
     },
   ]
 
-  egress_prefix_list_ids = [data.aws_ec2_managed_prefix_list.route53_healthchecks_ue1.id]
+  egress_prefix_list_ids = [data.aws_ec2_managed_prefix_list.route53_healthchecks_failover.id]
   egress_with_prefix_list_ids = [
     {
       from_port = 443
@@ -311,6 +321,7 @@ resource "aws_route53_health_check" "client_vpn_primary" {
   fqdn              = replace(aws_ec2_client_vpn_endpoint.client_vpn_primary.dns_name, "/.*\\.cvpn-endpoint/", "healthcheck.cvpn-endpoint")
   port              = 443
   type              = "TCP"
+  request_interval  = "30"
   regions           = [
     "us-east-1",
     "us-west-1",
@@ -328,6 +339,7 @@ resource "aws_route53_health_check" "client_vpn_failover" {
   fqdn              = replace(aws_ec2_client_vpn_endpoint.client_vpn_failover.dns_name, "/.*\\.cvpn-endpoint/", "healthcheck.cvpn-endpoint")
   port              = 443
   type              = "TCP"
+  request_interval  = "30"
   regions           = [
     "us-east-1",
     "us-west-1",

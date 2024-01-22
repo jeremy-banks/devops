@@ -3,6 +3,7 @@ resource "aws_organizations_organization" "org" {
     "cloudtrail.amazonaws.com",
     "config-multiaccountsetup.amazonaws.com",
     "config.amazonaws.com",
+    "ds.amazonaws.com", #enterprise active directory
     "ram.amazonaws.com",
   ]
 

@@ -202,6 +202,11 @@ variable "ipv_to_allow_substitute"{
   default = ""
 }
 
+variable "shared_ad_directory_id" {
+  type  = string
+  default = "d-9267b730f4"
+}
+
 locals {
   company_email = "${var.company_email_prefix}@${var.company_email_domain}"
   owner_email = var.owner_email != "" ? var.owner_email : local.company_email
@@ -210,13 +215,6 @@ locals {
   company_name_trimmed = length(var.company_name) > local.trimmed_length ? substr(var.company_name, 0, local.trimmed_length) : var.company_name
   team_name_trimmed = length(var.team_name) > local.trimmed_length ? substr(var.team_name, 0, local.trimmed_length) : var.team_name
   project_name_trimmed = length(var.project_name) > local.trimmed_length ? substr(var.project_name, 0, local.trimmed_length) : var.project_name
-
-/*
-remove all vowels except for first character of each word
-replace spaces with dashes
-truncate each input by local.trimmed_length
-lowercase
-*/
 
   resource_name_stub = "${var.company_name}-${var.team_name}-${var.project_name}"
   resource_name_stub_env = "${local.resource_name_stub}-${var.deployment_environment}"
