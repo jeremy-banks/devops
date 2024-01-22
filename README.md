@@ -33,14 +33,15 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
    1. Create an Access Key/Secret to be used in AWS CLI profile named "superadmin"
    1. Update the terraform/variables.tf company_domain variable
 1. Deploy terraform/aws/org-ou-account-management to create additional AWS Organization Units and Accounts
-   1. Update the terraform/variables.tf account_numbers map with the output Account ID numbers
+   1. Update the terraform/variables.tf account_numbers map with the output
 1. Deploy terraform/aws/iam-groups-and-roles
-   1. Create a new AWS CLI profile named "automation" with output of terraform
+   1. Create a new AWS CLI profile named "automation" with output
 1. Deploy terraform/aws/r53-zones-and-records
    1. Update your domain registrar with the output nameservers
 1. Deploy terraform/aws/tgw-and-shared-vpc
 1. Deploy terraform/aws/enterprise-ad
-   1. Updated the terraform/variables.tf shared_ad_directory_id string with the output Directory ID
+   1. This deployment can take up to 2 hours and may fail several times due to AWS throttling, keep running plan and apply until complete
+   1. Update the terraform/variables.tf ad_directory_id string and ad_shared_directory_ids map with the output
 1. Deploy terraform/aws/client-vpn
 1. Deploy terraform/aws/project-demo-nonprod
 ### You are here
