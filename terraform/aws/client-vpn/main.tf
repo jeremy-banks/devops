@@ -4,6 +4,7 @@ resource "aws_ec2_client_vpn_endpoint" "client_vpn_primary" {
 
   server_certificate_arn  = module.acm_wildcard_cert_primary.acm_certificate_arn
   client_cidr_block       = "${var.vpc_prefixes.client_vpn.primary}.0.0/16"
+  transport_protocol      = "tcp"
   vpc_id                  = data.aws_vpc.shared_primary.id
   security_group_ids      = [
     module.client_vpn_endpoint_sg_primary.security_group_id,
@@ -65,13 +66,21 @@ module "client_vpn_endpoint_sg_primary" {
   number_of_computed_ingress_with_self = 1
 
   computed_ingress_with_cidr_blocks = [
+    # {
+    #   from_port   = -1
+    #   to_port     = -1
+    #   protocol    = -1
+    #   description = "allow aws"
+    #   cidr_blocks = "10.0.0.0/8"
+    # },    
     {
       from_port   = -1
       to_port     = -1
       protocol    = -1
-      description = "allow aws"
-      cidr_blocks = "10.0.0.0/8"
+      description = "allow internet"
+      cidr_blocks = "0.0.0.0/0"
     },    
+
   ]
   number_of_computed_ingress_with_cidr_blocks = 1
 
@@ -168,8 +177,9 @@ resource "aws_ec2_client_vpn_endpoint" "client_vpn_failover" {
 
   server_certificate_arn = module.acm_wildcard_cert_failover.acm_certificate_arn
   client_cidr_block      = "${var.vpc_prefixes.client_vpn.failover}.0.0/16"
-  vpc_id                  = data.aws_vpc.shared_failover.id
-  security_group_ids      = [
+  vpc_id                 = data.aws_vpc.shared_failover.id
+  transport_protocol     = "tcp"
+  security_group_ids     = [
     module.client_vpn_endpoint_sg_failover.security_group_id,
     module.client_vpn_endpoint_r53_healthcheck_sg_failover.security_group_id,
   ]
@@ -322,6 +332,7 @@ resource "aws_route53_health_check" "client_vpn_primary" {
   port              = 443
   type              = "TCP"
   request_interval  = "30"
+  measure_latency   = true
   regions           = [
     "us-east-1",
     "us-west-1",
@@ -340,6 +351,7 @@ resource "aws_route53_health_check" "client_vpn_failover" {
   port              = 443
   type              = "TCP"
   request_interval  = "30"
+  measure_latency   = true
   regions           = [
     "us-east-1",
     "us-west-1",
