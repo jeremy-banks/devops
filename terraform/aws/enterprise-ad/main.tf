@@ -130,3 +130,22 @@ resource "aws_directory_service_shared_directory" "ad_failover" {
   }
   method = "ORGANIZATIONS"
 }
+
+#ad connector
+resource "aws_directory_service_directory" "connector_network" {
+  provider = aws.network
+
+  name     = "corp.${var.company_domain}"
+  password = "tempSuperSecretPassword123"
+  size     = "Small"
+  type     = "ADConnector"
+
+  connect_settings {
+    customer_dns_ips  = aws_directory_service_directory.ad_primary.dns_ip_addresses
+    customer_username = "Admin"
+    vpc_id     = data.aws_vpc.shared_primary.id
+    subnet_ids = [data.aws_subnet.shared_a_primary.id, data.aws_subnet.shared_b_primary.id]
+  }
+}
+
+
