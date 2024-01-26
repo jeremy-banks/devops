@@ -202,9 +202,24 @@ variable "ipv_to_allow_substitute"{
   default = ""
 }
 
-variable "shared_ad_directory_id" {
+variable "ad_directory_admin_password" {
   type  = string
-  default = "d-9267b730f4"
+  default = "tempSuperSecretPassword123"
+}
+
+variable "ad_directory_id" {
+  type  = string
+  default = "d-9267b67174"
+}
+
+variable "ad_directory_id_connector_network" {
+  type  = string
+  default = "d-9267b670d5"
+}
+
+variable "ad_directory_id_connector_network_failover" {
+  type  = string
+  default = "d-9067f50e74"
 }
 
 locals {

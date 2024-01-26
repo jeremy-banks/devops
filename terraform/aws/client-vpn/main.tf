@@ -1,4 +1,8 @@
 #primary
+data "aws_caller_identity" "network" {
+  provider = aws.network
+}
+
 resource "aws_ec2_client_vpn_endpoint" "client_vpn_primary" {
   provider = aws.network
 
@@ -16,10 +20,10 @@ resource "aws_ec2_client_vpn_endpoint" "client_vpn_primary" {
     root_certificate_chain_arn = module.acm_wildcard_cert_primary.acm_certificate_arn
   }
 
-  # authentication_options {
-  #   type                = "directory-service-authentication"
-  #   active_directory_id = var.shared_ad_directory_id
-  # }
+  authentication_options {
+    type                = "directory-service-authentication"
+    active_directory_id = var.ad_directory_id_connector_network
+  }
 
   connection_log_options {
     enabled               = false
@@ -66,13 +70,6 @@ module "client_vpn_endpoint_sg_primary" {
   number_of_computed_ingress_with_self = 1
 
   computed_ingress_with_cidr_blocks = [
-    # {
-    #   from_port   = -1
-    #   to_port     = -1
-    #   protocol    = -1
-    #   description = "allow aws"
-    #   cidr_blocks = "10.0.0.0/8"
-    # },    
     {
       from_port   = -1
       to_port     = -1
@@ -80,7 +77,6 @@ module "client_vpn_endpoint_sg_primary" {
       description = "allow internet"
       cidr_blocks = "0.0.0.0/0"
     },    
-
   ]
   number_of_computed_ingress_with_cidr_blocks = 1
 
@@ -189,10 +185,10 @@ resource "aws_ec2_client_vpn_endpoint" "client_vpn_failover" {
     root_certificate_chain_arn = module.acm_wildcard_cert_failover.acm_certificate_arn
   }
 
-  # authentication_options {
-  #   type                = "directory-service-authentication"
-  #   active_directory_id = var.shared_ad_directory_id
-  # }
+  authentication_options {
+    type                = "directory-service-authentication"
+    active_directory_id = var.ad_directory_id_connector_network_failover
+  }
 
   connection_log_options {
     enabled               = false
@@ -231,8 +227,8 @@ module "client_vpn_endpoint_sg_failover" {
       from_port   = -1
       to_port     = -1
       protocol    = -1
-      description = "allow aws"
-      cidr_blocks = "10.0.0.0/8"
+      description = "allow internet"
+      cidr_blocks = "0.0.0.0/0"
     },    
   ]
   number_of_computed_ingress_with_cidr_blocks = 1

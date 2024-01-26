@@ -13,19 +13,3 @@ output "ad_security_group_id_failover" {
 output "ad_directory_id" {
   value = aws_directory_service_directory.ad_primary.id
 }
-
-# output "foo" {
-#   value = [for k in keys(aws_directory_service_shared_directory.ad_primary) : element(split("/", k), 1)] #gives account numbers
-# }
-
-# output "bar" {
-#   value = values(aws_directory_service_shared_directory.ad_primary)[*].shared_directory_id #gives directory numbers
-# }
-
-output "ad_shared_directory_ids" {
-  value = { 
-    for idx, key in keys(aws_directory_service_shared_directory.ad_primary) : 
-      element(split("/", key), 1) => 
-      values(aws_directory_service_shared_directory.ad_primary)[idx].shared_directory_id 
-  }
-}

@@ -41,11 +41,11 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
 1. Deploy terraform/aws/tgw-and-shared-vpc
 1. Deploy terraform/aws/enterprise-ad
    1. This deployment can take up to 2 hours and may fail several times due to AWS throttling, keep running plan and apply until complete
-   1. Update the terraform/variables.tf ad_directory_id string and ad_shared_directory_ids map with the output
+   1. Update the terraform/variables.tf ad_directory_id string, ad_directory_id_connector_network string, and ad_directory_id_connector_network_failover string with the output
 1. Deploy terraform/aws/client-vpn
 1. Deploy terraform/aws/project-demo-nonprod
-### You are here
-<!-- 1. Deploy terraform/aws/project-demo-prod -->
+1. YOU ARE HERE
+1. Deploy terraform/aws/project-demo-prod
 1. Deploy EKS cluster via eksctl
 1. Deploy cluster-services via helm
    1. CNI
@@ -57,7 +57,6 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
 
 ## To-Do
 - move desired R53 healthcheck source locations to a var and local design
-- Share the Shared Directory to all OUs except workloads
 - Update directory AD and client VPN so groups in AD manage network access to AWS environments
 - Add Windows Server 2019 cheap instance to Directory for AD administration
 - Create truncated resource stub for those few resources with limited characters in names
