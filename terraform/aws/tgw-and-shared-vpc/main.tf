@@ -110,7 +110,7 @@ module "vpc_primary" {
   enable_dns_support   = true
 
   enable_dhcp_options = true
-  dhcp_options_domain_name_servers = concat(["${var.vpc_prefixes.shared_vpc.primary}.0.2"], local.vpc_domain_name_servers)
+  dhcp_options_domain_name_servers = ["${var.vpc_prefixes.shared_vpc.primary}.0.2"]
   dhcp_options_ntp_servers = local.vpc_ntp_servers
 }
 
@@ -353,7 +353,7 @@ module "vpc_failover" {
   enable_dns_support   = true
 
   enable_dhcp_options = true
-  dhcp_options_domain_name_servers = concat(["${var.vpc_prefixes.shared_vpc.failover}.0.2"], local.vpc_domain_name_servers)
+  dhcp_options_domain_name_servers = ["${var.vpc_prefixes.shared_vpc.failover}.0.2"]
   dhcp_options_ntp_servers = local.vpc_ntp_servers
 }
 
