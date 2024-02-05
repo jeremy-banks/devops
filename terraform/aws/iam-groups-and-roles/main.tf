@@ -1,6 +1,28 @@
+data "aws_organizations_organization" "current" {}
+
 # users
-data "aws_iam_user" "superadmin" {
-  user_name = var.assumable_role_name.superadmin
+data "aws_iam_policy_document" "iam_user_automation" {
+  statement {
+    sid = "AllowAssumeRoleAutomationInOrg"
+    effect = "Allow"
+    actions = ["sts:AssumeRole"]
+    resources = ["arn:aws:iam::*:role/${var.assumable_role_name.automation}"]
+    condition {
+      test     = "StringEquals"
+      variable = "aws:PrincipalOrgID"
+      values = [data.aws_organizations_organization.current.id]
+    }
+  }
+}
+
+module "iam_user_automation_policy" {
+  source = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version = "5.32.0"
+  providers = { aws = aws.shared_services }
+
+  name = "automation"
+
+  policy = data.aws_iam_policy_document.iam_user_automation.json
 }
 
 module "iam_user_automation" {
@@ -12,11 +34,10 @@ module "iam_user_automation" {
 
   create_iam_user_login_profile = false
   create_iam_access_key         = true
+  policy_arns                   = [module.iam_user_automation_policy.arn]
 }
 
 # groups
-data "aws_organizations_organization" "current" {}
-
 module "iam_group_admin" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-policies"
   version = "5.32.0"
@@ -318,6 +339,48 @@ module "iam_assumable_roles_shared_services" {
   max_session_duration = 43200
 }
 
+# role automation
+data "aws_iam_policy_document" "iam_assumable_role_automation_policy" {
+  statement {
+    sid = "AllowS3"
+    effect = "Allow"
+    actions = ["s3:*"]
+    resources = [
+      "arn:aws:s3:::${local.resource_name_stub_env}-tfstate",
+      "arn:aws:s3:::${local.resource_name_stub_env}-tfstate/*",
+    ]
+  }
+}
+
+module "iam_assumable_role_automation_policy" {
+  source = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version = "5.32.0"
+  providers = { aws = aws.org }
+
+  name = "automation"
+
+  policy = data.aws_iam_policy_document.iam_assumable_role_automation_policy.json
+}
+
+module "iam_assumable_role_automation" {
+  source = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
+  version = "5.32.0"
+  providers = { aws = aws.org }
+
+  trusted_role_arns = [
+     "arn:aws:iam::${var.account_id.shared_services}:root",
+  ]
+
+  create_role = true
+  
+  role_name = "automation"
+
+  role_requires_mfa = false
+  max_session_duration = 43200
+
+  custom_role_policy_arns = [module.iam_assumable_role_automation_policy.arn]
+}
+
 module "iam_assumable_role_automation_security_tooling" {
   source = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "5.32.0"
@@ -394,7 +457,7 @@ module "iam_assumable_role_automation_shared_services" {
   max_session_duration = 43200
 }
 
-
+#role billing
 module "iam_assumable_role_billing_org" {
   source = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "5.32.0"

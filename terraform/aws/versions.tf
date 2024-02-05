@@ -1,37 +1,11 @@
 terraform {
-  # backend "s3" {
-  #   profile         = ""
-  #   bucket          = ""
-  #   key             = ""
-  #   region          = ""
-  #   dynamodb_table  = ""
-  #   encrypt         = true
-  #   insecure        = false
-  # }
-  
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.22.0"
-    }
-
-    shell = {
-      source = "scottwinkler/shell"
-      version = "1.7.10"
-    }
-
-    sops = {
-      source = "carlpett/sops"
-      version = "1.0.0"
+      version = "5.35.0"
     }
   }
 }
-
-# provider "sops" {}
-
-# data "sops_file" "secrets" {
-#   source_file = "secrets.yaml"
-# }
 
 provider "aws" {
   profile = local.cli_profile_name

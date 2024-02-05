@@ -29,13 +29,22 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
 
 ## Initial Setup
 1. Create AWS Account to be Organization root
-1. Create non-Console IAM user named "superadmin" with AdministratorAccess
+1. Create non-Console IAM user named "superadmin" and attach AdministratorAccess policy
    1. Create an Access Key/Secret to be used in AWS CLI profile named "superadmin"
-   1. Update the terraform/variables.tf company_domain variable
+   1. Update the terraform/variables.tf with your unique information
+      1. company_name (Microsoft)
+      1. company_email_prefix (billg)
+      1. company_email_domain (microsoft.com)
+      1. company_domain (windows.com)
+      1. team_name (Blue)
+      1. project_name (Windows 13)
+1. Deploy terraform/aws/tfstate-backend
+   1. Update the terraform/aws/*/backend.tf files with the s3 bucket name from terraform output (find . -type f -name "backend.tf")
 1. Deploy terraform/aws/org-ou-account-management to create additional AWS Organization Units and Accounts
    1. Update the terraform/variables.tf account_numbers map with the output
+   1. Update the terraform/aws/*/backend.tf files assume_role with the account id of the org root
 1. Deploy terraform/aws/iam-groups-and-roles
-   1. Create a new AWS CLI profile named "automation" with output
+   1. Create a new AWS CLI profile named "automation" with terraform output (terraform output -json)
 1. Deploy terraform/aws/r53-zones-and-records
    1. Update your domain registrar with the output nameservers
 1. Deploy terraform/aws/tgw-and-shared-vpc
@@ -74,7 +83,7 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
   - CPU
   - Sessions
 - Triggering a DR event
-- Implement backend tfstate and lock
+- Implement backend tfstate lock with dynamodb
 - Mozilla Secrets OPerationS (SOPS) protects secrets in code using Key Management System (KMS) Customer Managed Key (CMK)
 - Centralized logging with compression and glacier archive
   - DNS logs sent to CloudWatch Log Group and S3 (with cross-regional replication and glacier)

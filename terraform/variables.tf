@@ -1,37 +1,37 @@
 variable "company_name" {
   description = "name or abbreviation of the team"
   type        = string
-  default     = "jeremyb"
+  default     = "microsoft"
 }
 
 variable "company_email_prefix" {
   description = "name or abbreviation of the team"
   type        = string
-  default     = "workjeremy.b"
+  default     = "billg"
 }
 
 variable "company_email_domain" {
   description = "name or abbreviation of the team"
   type        = string
-  default     = "gmail.com"
+  default     = "microsoft.com"
 }
 
 variable "company_domain" {
   description = "name or abbreviation of the team"
   type        = string
-  default     = "outerplanes.org"
+  default     = "windows.com"
 }
 
 variable "team_name" {
   description = "name or abbreviation of the team"
   type        = string
-  default     = "devops"
+  default     = "blue"
 }
 
 variable "project_name" {
   description = "name or abbreviation of the project"
   type        = string
-  default     = "demo"
+  default     = "windows12"
 }
 
 variable "deployment_environment" {
@@ -130,13 +130,13 @@ variable "ACCOUNT_NUMBER_LIMIT_EXCEEDED" {
 variable "account_id" {
   type    = map(number)
   default = {
-    org               = "782331566564"
-    network           = "178506067734"
-    shared_services   = "222478945688"
-    log_archive       = "346143406940"
-    security_tooling  = "419416376566"
-    project_demo_nonprod  = "798972386916"
-    project_demo_prod     = "945273545397"
+    log_archive       = ""
+    network           = ""
+    org               = ""
+    project_demo_nonprod  = ""
+    project_demo_prod     = ""
+    security_tooling  = ""
+    shared_services   = ""
   }
 }
 
@@ -183,15 +183,6 @@ variable "vpc_suffixes" {
   }
 }
 
-variable "public_dns" {
-  type  = map(string)
-  default = {
-    aws = "169.254.169.253"
-    google = "8.8.8.8"
-    azure = "4.2.2.1"
-  }
-}
-
 variable "ntp_server" {
   type  = string
   default = "169.254.169.123"
@@ -207,19 +198,14 @@ variable "ad_directory_admin_password" {
   default = "tempSuperSecretPassword123"
 }
 
-variable "ad_directory_id" {
-  type  = string
-  default = "d-9267b67174"
-}
-
 variable "ad_directory_id_connector_network" {
   type  = string
-  default = "d-9267b670d5"
+  default = ""
 }
 
 variable "ad_directory_id_connector_network_failover" {
   type  = string
-  default = "d-9067f50e74"
+  default = ""
 }
 
 locals {
@@ -239,7 +225,6 @@ locals {
   cli_profile_name = var.cli_profile_name_substitute != "" ? var.cli_profile_name_substitute : var.cli_profile_name_default
   provider_role_name = var.provider_role_name_substitute != "" ? var.provider_role_name_substitute : var.provider_role_name_default
 
-  vpc_domain_name_servers = [var.public_dns.aws, var.public_dns.google, var.public_dns.azure]
   vpc_ntp_servers = [var.ntp_server]
 
   application_load_balancer_allow_list = "foo"

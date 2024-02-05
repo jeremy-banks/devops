@@ -9,7 +9,7 @@ resource "aws_organizations_account" "project1_nonprod" {
   role_name                   = var.assumable_role_name.superadmin
 }
 
-output "project1_nonprod_account_id" {
+output "account_id_project1_nonprod" {
   value = aws_organizations_account.project1_nonprod.id
 }
 
@@ -24,6 +24,6 @@ resource "aws_organizations_account" "project1_prod" {
   role_name                   = var.assumable_role_name.superadmin
 }
 
-output "project1_prod_account_id" {
+output "account_id_project1_prod" {
   value = aws_organizations_account.project1_prod.id
 }
