@@ -7,7 +7,7 @@ variable "company_name" {
 variable "company_email_prefix" {
   description = "name or abbreviation of the team"
   type        = string
-  default     = "workjeremy.b"
+  default     = "w.orkjeremyb"
 }
 
 variable "company_email_domain" {
@@ -130,13 +130,13 @@ variable "ACCOUNT_NUMBER_LIMIT_EXCEEDED" {
 variable "account_id" {
   type    = map(number)
   default = {
-    org               = "782331566564"
-    network           = "178506067734"
-    shared_services   = "222478945688"
-    log_archive       = "346143406940"
-    security_tooling  = "419416376566"
-    project_demo_nonprod  = "798972386916"
-    project_demo_prod     = "945273545397"
+    log_archive       = "381491930299"
+    network           = "851725249786"
+    org               = "992382439092"
+    project_demo_nonprod  = "992382523713"
+    project_demo_prod     = "471112602874"
+    security_tooling  = "992382627834"
+    shared_services   = "339712850407"
   }
 }
 
