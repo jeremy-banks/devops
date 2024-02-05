@@ -1,37 +1,37 @@
 variable "company_name" {
   description = "name or abbreviation of the team"
   type        = string
-  default     = "jeremyb"
+  default     = "microsoft"
 }
 
 variable "company_email_prefix" {
   description = "name or abbreviation of the team"
   type        = string
-  default     = "w.orkjeremyb"
+  default     = "billg"
 }
 
 variable "company_email_domain" {
   description = "name or abbreviation of the team"
   type        = string
-  default     = "gmail.com"
+  default     = "microsoft.com"
 }
 
 variable "company_domain" {
   description = "name or abbreviation of the team"
   type        = string
-  default     = "outerplanes.org"
+  default     = "windows.com"
 }
 
 variable "team_name" {
   description = "name or abbreviation of the team"
   type        = string
-  default     = "devops"
+  default     = "blue"
 }
 
 variable "project_name" {
   description = "name or abbreviation of the project"
   type        = string
-  default     = "demo"
+  default     = "windows12"
 }
 
 variable "deployment_environment" {
@@ -130,13 +130,13 @@ variable "ACCOUNT_NUMBER_LIMIT_EXCEEDED" {
 variable "account_id" {
   type    = map(number)
   default = {
-    log_archive       = "381491930299"
-    network           = "851725249786"
-    org               = "992382439092"
-    project_demo_nonprod  = "992382523713"
-    project_demo_prod     = "471112602874"
-    security_tooling  = "992382627834"
-    shared_services   = "339712850407"
+    log_archive       = ""
+    network           = ""
+    org               = ""
+    project_demo_nonprod  = ""
+    project_demo_prod     = ""
+    security_tooling  = ""
+    shared_services   = ""
   }
 }
 
@@ -198,19 +198,14 @@ variable "ad_directory_admin_password" {
   default = "tempSuperSecretPassword123"
 }
 
-variable "ad_directory_id" {
-  type  = string
-  default = "d-9267b67174"
-}
-
 variable "ad_directory_id_connector_network" {
   type  = string
-  default = "d-9267b670d5"
+  default = ""
 }
 
 variable "ad_directory_id_connector_network_failover" {
   type  = string
-  default = "d-9067f50e74"
+  default = ""
 }
 
 locals {

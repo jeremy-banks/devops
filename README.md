@@ -42,6 +42,7 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
    1. Update the terraform/aws/*/backend.tf files with the s3 bucket name from terraform output (find . -type f -name "backend.tf")
 1. Deploy terraform/aws/org-ou-account-management to create additional AWS Organization Units and Accounts
    1. Update the terraform/variables.tf account_numbers map with the output
+   1. Update the terraform/aws/*/backend.tf files assume_role with the account id of the org root
 1. Deploy terraform/aws/iam-groups-and-roles
    1. Create a new AWS CLI profile named "automation" with terraform output (terraform output -json)
 1. Deploy terraform/aws/r53-zones-and-records
@@ -82,7 +83,7 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
   - CPU
   - Sessions
 - Triggering a DR event
-- Implement backend tfstate and lock
+- Implement backend tfstate lock with dynamodb
 - Mozilla Secrets OPerationS (SOPS) protects secrets in code using Key Management System (KMS) Customer Managed Key (CMK)
 - Centralized logging with compression and glacier archive
   - DNS logs sent to CloudWatch Log Group and S3 (with cross-regional replication and glacier)

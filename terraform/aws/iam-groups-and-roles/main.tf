@@ -1,18 +1,6 @@
-# users
-# data "aws_iam_policy_document" "iam_user_automation" {
-#   statement {
-#     sid = "AllowAssumeRoleAdminInOrg"
-#     effect = "Allow"
-#     actions = ["sts:AssumeRole"]
-#     resources = ["arn:aws:iam::*:role/${var.assumable_roles_name.admin}"]
-#     condition {
-#       test     = "StringEquals"
-#       variable = "aws:PrincipalOrgID"
-#       values = [data.aws_organizations_organization.current.id]
-#     }
-#   }
-# }
+data "aws_organizations_organization" "current" {}
 
+# users
 data "aws_iam_policy_document" "iam_user_automation" {
   statement {
     sid = "AllowAssumeRoleAutomationInOrg"
@@ -50,8 +38,6 @@ module "iam_user_automation" {
 }
 
 # groups
-data "aws_organizations_organization" "current" {}
-
 module "iam_group_admin" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-policies"
   version = "5.32.0"
@@ -355,23 +341,6 @@ module "iam_assumable_roles_shared_services" {
 
 # role automation
 data "aws_iam_policy_document" "iam_assumable_role_automation_policy" {
-  # statement {
-  #   sid = "AllowKMS"
-  #   effect = "Allow"
-  #   actions   = [
-  #     "kms:Decrypt",
-  #     "kms:DescribeKey",
-  #     "kms:Encrypt",
-  #     "kms:GenerateDataKey*",
-  #     "kms:ReEncrypt*",
-  #   ]
-  #   resources = [
-  #     "arn:aws:kms:us-west-2:992382439092:key/mrk-cc4f5a4bd7b642d18f850c44100f3dc0",
-  #     "arn:aws:kms:us-west-2:992382439092:key/mrk-cc4f5a4bd7b642d18f850c44100f3dc0"
-  #     "arn:aws:iam::*:role/${var.assumable_role_name.automation}"
-  #   ]
-  # }
-
   statement {
     sid = "AllowS3"
     effect = "Allow"
@@ -380,13 +349,6 @@ data "aws_iam_policy_document" "iam_assumable_role_automation_policy" {
       "arn:aws:s3:::${local.resource_name_stub_env}-tfstate",
       "arn:aws:s3:::${local.resource_name_stub_env}-tfstate/*",
     ]
-  }
-
-  statement {
-    sid = "AllowAll"
-    effect = "Allow"
-    actions = ["*"]
-    resources = ["*"]
   }
 }
 
