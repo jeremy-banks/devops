@@ -23,9 +23,9 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
 - Terraform v1.6.1
 <!-- - SOPS 3.8.1  https://github.com/getsops/sops/releases/tag/v3.8.1 -->
 - eksctl 0.173.0
-- kubectl x.x.x
-- Terraform state and SOPS backend resources (S3 bucket, DynamoDB, and CMK)
-  Terraform should _use_ entirely separate infrastructure from what Terraform _manages_, eg best practice is to provision Terraform backend resources in a completely separate AWS Org and Account
+- kubectl v1.29.2
+<!-- - Terraform state and SOPS backend resources (S3 bucket, DynamoDB, and CMK)
+  Terraform should _use_ entirely separate infrastructure from what Terraform _manages_, eg best practice is to provision Terraform backend resources in a completely separate AWS Org and Account -->
 
 ## Initial Setup
 1. Create AWS Account to be Organization root
@@ -53,9 +53,11 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
    1. Update the terraform/variables.tf ad_directory_id string, ad_directory_id_connector_network string, and ad_directory_id_connector_network_failover string with the output
 1. Deploy terraform/aws/client-vpn
 1. Deploy terraform/aws/project-demo-nonprod
-1. YOU ARE HERE
-1. Deploy terraform/aws/project-demo-prod
+<!-- 1. Deploy terraform/aws/project-demo-prod -->
 1. Deploy EKS cluster via eksctl
+   1. eksctl create cluster -f eksctl/dev-blue.yaml
+   1. eksctl delete cluster -f eksctl/dev-blue.yaml
+<!-- 1. YOU ARE HERE -->
 1. Deploy cluster-services via helm
    1. CNI
    1. externalDNS
