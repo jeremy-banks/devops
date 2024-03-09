@@ -21,8 +21,8 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
 ## Prerequisites
 - AWS cli 2.13.26
 - Terraform v1.6.1
-- SOPS 3.8.1  https://github.com/getsops/sops/releases/tag/v3.8.1
-- eksctl x.x.x
+<!-- - SOPS 3.8.1  https://github.com/getsops/sops/releases/tag/v3.8.1 -->
+- eksctl 0.173.0
 - kubectl x.x.x
 - Terraform state and SOPS backend resources (S3 bucket, DynamoDB, and CMK)
   Terraform should _use_ entirely separate infrastructure from what Terraform _manages_, eg best practice is to provision Terraform backend resources in a completely separate AWS Org and Account
