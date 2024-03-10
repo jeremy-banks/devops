@@ -1,0 +1,14 @@
+apiVersion: v2
+name: cluster-services
+description: A Helm chart for Kubernetes to deploy AWS cluster services
+version: 0.1.0
+dependencies:
+  - name: aws-ebs-csi-driver
+    version: 2.28.1
+    repository: https://kubernetes-sigs.github.io/aws-ebs-csi-driver
+  # - name: cluster-autoscaler
+  #   version: 9.35.0
+  #   repository: https://kubernetes.github.io/autoscaler
+  # - name: aws-load-balancer-controller
+  #   version: 1.7.1
+  #   repository: https://aws.github.io/eks-charts
