@@ -1,31 +1,23 @@
-# global:
-#   tolerations:
-#     - key: "role"
-#       operator: "Equal"
-#       value: cluster-services
-#       effect: "NoSchedule"
+aws-ebs-csi-driver:
+  controller.region: us-west-2
+  controller.nodeSelector: &cluster-services cluster-services
+  enableVolumeResizing: true
+  node.tolerateAllTaints: true
 
-clusterName: &clusterName "dev-blue"
-
-# aws-ebs-csi-driver:
-#   # EBS CSI Driver specific configurations
-#   enableVolumeScheduling: true
-#   enableVolumeResizing: true
-#   enableVolumeSnapshot: true
+cluster-autoscaler:
+  autoDiscovery:
+    clusterName: &clusterName blue
+  nodeSelector:
+    role: *cluster-services
+  tolerations:
+    - key: "role"
+      operator: "Equal"
+      value: *cluster-services
+      effect: "NoSchedule"
+  replicaCount: 2
 
 # aws-load-balancer-controller:
 #   # Load Balancer Controller specific configurations
 #   clusterName: your-cluster-name
 #   region: your-region
 #   vpcId: your-vpc-id
-
-cluster-autoscaler:
-  autoDiscovery:
-    clusterName: *clusterName
-  nodeSelector:
-    role: cluster-services
-  tolerations:
-    - key: "role"
-      operator: "Equal"
-      value: cluster-services
-      effect: "NoSchedule"
