@@ -38,13 +38,13 @@ module "vpc_primary" {
   public_subnet_tags = { "kubernetes.io/role/elb" = 1 }
   private_subnet_tags = { "kubernetes.io/role/internal-elb" = 1 }
   vpc_tags = {
-    "${local.resource_name_stub_env}-cluster-primary-blue"   = "shared"
-    "${local.resource_name_stub_env}-cluster-primary-green"  = "shared"
+    "blue"   = "shared"
+    "green"  = "shared"
+    "kubernetes.io/cluster/blue" = "shared"
+    "kubernetes.io/cluster/green" = "shared"
     "k8s.io/cluster-autoscaler/enabled" = "true"
-    "k8s.io/cluster-autoscaler/${local.resource_name_stub_env}-cluster-primary-blue" = "shared"
-    "k8s.io/cluster-autoscaler/${local.resource_name_stub_env}-cluster-primary-green" = "shared"
-    "kubernetes.io/cluster/${local.resource_name_stub_env}-cluster-primary-blue" = "shared"
-    "kubernetes.io/cluster/${local.resource_name_stub_env}-cluster-primary-green" = "shared"
+    "k8s.io/cluster-autoscaler/blue" = "shared"
+    "k8s.io/cluster-autoscaler/green" = "shared"
   }
 
   manage_default_security_group = true
