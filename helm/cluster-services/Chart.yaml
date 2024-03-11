@@ -9,6 +9,6 @@ dependencies:
   - name: cluster-autoscaler
     version: 9.35.0
     repository: https://kubernetes.github.io/autoscaler
-  # - name: aws-load-balancer-controller
-  #   version: 1.7.1
-  #   repository: https://aws.github.io/eks-charts
+  - name: aws-load-balancer-controller
+    version: 1.7.1
+    repository: https://aws.github.io/eks-charts

@@ -5,5 +5,8 @@ dependencies:
 - name: cluster-autoscaler
   repository: https://kubernetes.github.io/autoscaler
   version: 9.35.0
-digest: sha256:80e96d943b05129c916dedc904504292162a6bf744fbad6ffd11ce897b97986c
-generated: "2024-03-10T18:03:23.1086366-07:00"
+- name: aws-load-balancer-controller
+  repository: https://aws.github.io/eks-charts
+  version: 1.7.1
+digest: sha256:bbec26bf31e071f5a11cd33c26e9580a752151a69ba484679da9ba85e279c987
+generated: "2024-03-11T00:11:38.5625188-07:00"
