@@ -2,42 +2,50 @@ apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 
 metadata:
-  name: dev-blue
+  name: blue
   region: us-west-2
   version: "1.29"
 
 vpc:
+  id: vpc-0393e1a05766d6cea
   subnets:
     private:
-      us-west-2a: { id: subnet-06b39a3293aae56a7 }
-      us-west-2b: { id: subnet-00251a1358bc64917 }
+      private-one: { id: subnet-00251a1358bc64917 }
+      private-two: { id: subnet-06b39a3293aae56a7 }
+
+managedNodeGroups:
+  - name: general
+    instanceType: t3a.medium
+    minSize: 3
+    desiredCapacity: 3
+    privateNetworking: true
 
 nodeGroups:
-  - name: ng-cluster-services
-    labels: {role: cluster-services}
+  - name: cluster-services-green
+    labels:
+      role: &clusterServices cluster-services
     taints:
-      - key: "role"
-        value: "cluster-services"
-        effect: NoSchedule
+      - key: *clusterServices
+        value: "true"
+        effect: "NoSchedule"
     instanceType: t3a.medium
-    desiredCapacity: 2
+    minSize: 3
+    desiredCapacity: 3
     privateNetworking: true
     iam:
       withAddonPolicies:
+        appMesh: true
+        appMeshPreview: true
+        autoScaler: true
+        awsLoadBalancerController: true
+        certManager: true
+        cloudWatch: true
+        ebs: true
+        efs: true
+        externalDNS: true
+        fsx: true
         imageBuilder: true
-
-
-  - name: ng-workload
-    labels: {role: workloads}
-    taints:
-      - key: "role"
-        value: "workloads"
-        effect: NoSchedule
-    instanceType: t3a.medium
-    desiredCapacity: 2
-    privateNetworking: true
-
-
+        xRay: true
 
 # iam_role_eks_cluster = "arn:aws:iam::590183850531:role/eks-cluster"
 # iam_role_eks_cluster_services = "arn:aws:iam::590183850531:role/eks-cluster-services-node"

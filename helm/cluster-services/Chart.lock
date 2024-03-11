@@ -2,5 +2,8 @@ dependencies:
 - name: aws-ebs-csi-driver
   repository: https://kubernetes-sigs.github.io/aws-ebs-csi-driver
   version: 2.28.1
-digest: sha256:f7f8386f50441a1db2407162bb9c265df8f36a525096313cc888395763414947
-generated: "2024-03-09T19:34:15.1172003-08:00"
+- name: cluster-autoscaler
+  repository: https://kubernetes.github.io/autoscaler
+  version: 9.35.0
+digest: sha256:80e96d943b05129c916dedc904504292162a6bf744fbad6ffd11ce897b97986c
+generated: "2024-03-10T18:03:23.1086366-07:00"

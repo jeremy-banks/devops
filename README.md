@@ -55,8 +55,10 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
 1. Deploy terraform/aws/project-demo-nonprod
 <!-- 1. Deploy terraform/aws/project-demo-prod -->
 1. Deploy EKS cluster via eksctl
-   1. eksctl create cluster -f eksctl/dev-blue.yaml
-   1. eksctl delete cluster -f eksctl/dev-blue.yaml
+   1. eksctl create cluster -f eksctl/blue.yaml
+   1. eksctl delete cluster --name blue
+   1. eksctl create nodegroup --cluster blue --name=general
+   1. eksctl delete nodegroup --cluster blue --name=general
 <!-- 1. YOU ARE HERE -->
 1. Deploy cluster-services via helm
    1. CNI
