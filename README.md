@@ -19,9 +19,9 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
   - Latencies between AWS availability zones https://www.flashgrid.io/news/latencies-between-aws-availability-zones-what-are-they-and-how-to-minimize-them
 
 ## Prerequisites
-- AWS cli 2.13.26
-- Terraform v1.6.1
-<!-- - SOPS 3.8.1  https://github.com/getsops/sops/releases/tag/v3.8.1 -->
+- AWS cli 2.17.48
+- Terraform v1.9.5
+<!-- - SOPS 3.8.1 -->
 - eksctl 0.173.0
 - kubectl v1.29.2
 <!-- - Terraform state and SOPS backend resources (S3 bucket, DynamoDB, and CMK)
@@ -39,7 +39,11 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
       1. team_name (Blue)
       1. project_name (Windows 13)
 1. Deploy terraform/aws/tfstate-backend
-   1. Update the terraform/aws/*/backend.tf files with the s3 bucket name from terraform output (find . -type f -name "backend.tf")
+   1. Update the terraform/aws/*/backend.tf files with:
+      1. org root account id   find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDORGACCOUNTID/123456789012/g' {} +
+      1. bucket:  find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDS3BUCKETNAME/tfstate-bucket-name/g' {} +
+      1. dynamodb table:  find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDDYNAMODBTABLE/dynamodb-tfstate-lock/g' {} +
+      <!-- 1. dynamodb table lock -->
 1. Deploy terraform/aws/org-ou-account-management to create additional AWS Organization Units and Accounts
    1. Update the terraform/variables.tf account_numbers map with the output
    1. Update the terraform/aws/*/backend.tf files assume_role with the account id of the org root

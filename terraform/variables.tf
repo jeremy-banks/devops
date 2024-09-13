@@ -1,25 +1,25 @@
 variable "company_name" {
   description = "name or abbreviation of the team"
   type        = string
-  default     = "microsoft"
+  default     = "supercoolcompany"
 }
 
 variable "company_email_prefix" {
   description = "name or abbreviation of the team"
   type        = string
-  default     = "billg"
+  default     = "workjeremyb+k8s2"
 }
 
 variable "company_email_domain" {
   description = "name or abbreviation of the team"
   type        = string
-  default     = "microsoft.com"
+  default     = "gmail.com"
 }
 
 variable "company_domain" {
   description = "name or abbreviation of the team"
   type        = string
-  default     = "windows.com"
+  default     = "supercoolwebsite.com"
 }
 
 variable "team_name" {
@@ -130,13 +130,13 @@ variable "ACCOUNT_NUMBER_LIMIT_EXCEEDED" {
 variable "account_id" {
   type    = map(number)
   default = {
-    log_archive       = ""
-    network           = ""
-    org               = ""
-    project_demo_nonprod  = ""
-    project_demo_prod     = ""
-    security_tooling  = ""
-    shared_services   = ""
+    log_archive       = 0
+    network           = 0
+    org               = 0
+    project_demo_nonprod  = 0
+    project_demo_prod     = 0
+    security_tooling  = 0
+    shared_services   = 0
   }
 }
 

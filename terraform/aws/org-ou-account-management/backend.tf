@@ -1,10 +1,10 @@
 # terraform {
 #   backend "s3" {
 #     profile         = "superadmin"
-#     bucket          = ""
+#     bucket          = "TFSTATEBACKENDS3BUCKETNAME"
 #     key             = "org-ou-account-management"
 #     region          = "us-west-2"
-#     # dynamodb_table  = ""
+#     dynamodb_table  = "TFSTATEBACKENDDYNAMODBTABLE"
 #     encrypt         = true
 #     insecure        = false
 #   }
