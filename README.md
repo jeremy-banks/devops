@@ -38,17 +38,18 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
       1. company_domain (windows.com)
       1. team_name (Blue)
       1. project_name (Windows 13)
-1. Deploy terraform/aws/tfstate-backend
+<!-- 1. Deploy terraform/aws/tfstate-backend
    1. Update the terraform/aws/*/backend.tf files with:
       1. org root account id   find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDORGACCOUNTID/123456789012/g' {} +
       1. bucket:  find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDS3BUCKETNAME/tfstate-bucket-name/g' {} +
-      1. dynamodb table:  find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDDYNAMODBTABLE/dynamodb-tfstate-lock/g' {} +
-      <!-- 1. dynamodb table lock -->
+      1. dynamodb table:  find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDDYNAMODBTABLE/dynamodb-tfstate-lock/g' {} + -->
 1. Deploy terraform/aws/org-ou-account-management to create additional AWS Organization Units and Accounts
    1. Update the terraform/variables.tf account_numbers map with the output
-   1. Update the terraform/aws/*/backend.tf files assume_role with the account id of the org root
 1. Deploy terraform/aws/iam-groups-and-roles
-   1. Create a new AWS CLI profile named "automation" with terraform output (terraform output -json)
+   1. Create a new AWS CLI profile named "automation" with terraform output
+   ```sh
+   terraform output -json
+   aws configure --profile automation
 1. Deploy terraform/aws/r53-zones-and-records
    1. Update your domain registrar with the output nameservers
 1. Deploy terraform/aws/tgw-and-shared-vpc
