@@ -31,6 +31,8 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
 1. Create AWS Account to be Organization root
 1. Create non-Console IAM user named "superadmin" and attach AdministratorAccess policy
    1. Create an Access Key/Secret to be used in AWS CLI profile named "superadmin"
+      ```sh
+      aws configure --profile superadmin
    1. Update the terraform/variables.tf with your unique information
       1. company_name (Microsoft)
       1. company_email_prefix (billg)
@@ -39,8 +41,9 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
       1. team_name (Blue)
       1. project_name (Windows 13)
 <!-- 1. Deploy terraform/aws/tfstate-backend
-   1. Update the terraform/aws/*/backend.tf files with:
-      1. org root account id   find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDORGACCOUNTID/123456789012/g' {} +
+   1. Update the terraform/aws/*/backend.tf files
+      ```sh
+      org root account id   find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDORGACCOUNTID/123456789012/g' {} +
       1. bucket:  find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDS3BUCKETNAME/tfstate-bucket-name/g' {} +
       1. dynamodb table:  find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDDYNAMODBTABLE/dynamodb-tfstate-lock/g' {} + -->
 1. Deploy terraform/aws/org-ou-account-management to create additional AWS Organization Units and Accounts

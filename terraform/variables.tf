@@ -7,19 +7,19 @@ variable "company_name" {
 variable "company_email_prefix" {
   description = "name or abbreviation of the team"
   type        = string
-  default     = "workjeremyb+k8s2"
+  default     = "billg"
 }
 
 variable "company_email_domain" {
   description = "name or abbreviation of the team"
   type        = string
-  default     = "gmail.com"
+  default     = "microsoft.com"
 }
 
 variable "company_domain" {
   description = "name or abbreviation of the team"
   type        = string
-  default     = "supercoolwebsite.com"
+  default     = "microsoft.com"
 }
 
 variable "team_name" {
