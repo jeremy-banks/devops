@@ -18,6 +18,17 @@ module "s3_primary" {
     }
   }
 
+  lifecycle_rule = [
+    {
+      id      = "intelligent-tier"
+      enabled = true
+      abort_incomplete_multipart_upload_days = 7
+
+      transition = [ { storage_class = "INTELLIGENT_TIERING" } ]
+      noncurrent_version_transition = [ { storage_class = "INTELLIGENT_TIERING" } ]
+    }
+  ]
+
   versioning = {
     enabled = true
   }
@@ -27,7 +38,7 @@ module "s3_primary" {
 
     rules = [
       {
-        id     = "everything"
+        id     = "replicate-everything"
         status = "Enabled"
 
         delete_marker_replication = true
@@ -157,6 +168,17 @@ module "s3_failover" {
       bucket_key_enabled = true
     }
   }
+
+  lifecycle_rule = [
+    {
+      id      = "intelligent-tier"
+      enabled = true
+      abort_incomplete_multipart_upload_days = 7
+
+      transition = [ { storage_class = "INTELLIGENT_TIERING" } ]
+      noncurrent_version_transition = [ { storage_class = "INTELLIGENT_TIERING" } ]
+    }
+  ]
 
   versioning = {
     enabled = true
