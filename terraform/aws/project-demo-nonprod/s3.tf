@@ -16,10 +16,115 @@ module "s3_primary" {
       }
     }
   }
+
+  versioning = {
+    enabled = true
+  }
+
+  replication_configuration = {
+    role = module.iam_role_s3_primary_to_failover.iam_role_arn
+
+    rules = [
+      {
+        id     = "everything"
+        status = "Enabled"
+
+        delete_marker_replication = true
+
+        source_selection_criteria = {
+          # replica_modifications = {
+          #   status = "Enabled"
+          # }
+          sse_kms_encrypted_objects = {
+            enabled = true
+          }
+        }
+
+        destination = {
+          bucket        = module.s3_failover.s3_bucket_arn
+          storage_class = "INTELLIGENT_TIERING"
+          replica_kms_key_id = module.kms_failover.key_arn
+        }
+      },
+    ]
+  }
+
+  # attach_deny_insecure_transport_policy    = true
+  # attach_require_latest_tls_policy         = true
+  # attach_deny_incorrect_encryption_headers = true
+  # attach_deny_incorrect_kms_key_sse        = true
+  # allowed_kms_key_arn                      = module.kms_primary.key_arn
+  # attach_deny_unencrypted_object_uploads   = true
+}
+
+#iam policy for data transfer
+module "iam_policy_s3_primary_to_failover" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version = "5.44.0"
+  providers = { aws = aws.project_demo_nonprod }
+
+  name  = "s3-primary-to-failover"
+
+  policy = <<EOF
+{
+   "Version":"2012-10-17",
+   "Statement":[
+      {
+         "Effect":"Allow",
+         "Action":[
+            "s3:GetReplicationConfiguration",
+            "s3:ListBucket"
+         ],
+         "Resource":[
+            "arn:aws:s3:::${module.s3_primary.s3_bucket_arn}"
+         ]
+      },
+      {
+         "Effect":"Allow",
+         "Action":[
+            "s3:GetObjectVersionForReplication",
+            "s3:GetObjectVersionAcl",
+            "s3:GetObjectVersionTagging"
+         ],
+         "Resource":[
+            "arn:aws:s3:::${module.s3_primary.s3_bucket_arn}/*"
+         ]
+      },
+      {
+         "Effect":"Allow",
+         "Action":[
+            "s3:ReplicateObject",
+            "s3:ReplicateDelete",
+            "s3:ReplicateTags"
+         ],
+         "Resource":"arn:aws:s3:::${module.s3_failover.s3_bucket_arn}/*"
+      }
+   ]
+}
+EOF
 }
 
 #iam role for data transfer
+module "iam_role_s3_primary_to_failover" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
+  version = "5.44.0"
+  providers = { aws = aws.project_demo_nonprod }
 
+  trusted_role_services = [
+    "s3.amazonaws.com",
+    "batchoperations.s3.amazonaws.com"
+  ]
+
+  create_role = true
+
+  role_name = "s3-primary-to-failover"
+  role_requires_mfa = false
+  attach_admin_policy = false
+
+  custom_role_policy_arns = [
+    module.iam_policy_s3_primary_to_failover.arn
+  ]
+}
 
 #failover bucket
 module "s3_failover" {
@@ -39,4 +144,15 @@ module "s3_failover" {
       }
     }
   }
+
+  versioning = {
+    enabled = true
+  }
+
+  # attach_deny_insecure_transport_policy    = true
+  # attach_require_latest_tls_policy         = true
+  # attach_deny_incorrect_encryption_headers = true
+  # attach_deny_incorrect_kms_key_sse        = true
+  # allowed_kms_key_arn                      = module.kms_failover.key_arn
+  # attach_deny_unencrypted_object_uploads   = true
 }
