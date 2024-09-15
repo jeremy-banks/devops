@@ -29,12 +29,10 @@ module "s3_primary" {
     }
   ]
 
-  versioning = {
-    enabled = true
-  }
+  versioning = { enabled = true }
 
   replication_configuration = {
-    role = module.iam_role_s3_primary_to_failover.iam_role_arn
+    role = module.iam_role_s3_primary_replicate_to_failover.iam_role_arn
 
     rules = [
       {
@@ -70,12 +68,12 @@ module "s3_primary" {
 }
 
 #iam policy for data transfer
-module "iam_policy_s3_primary_to_failover" {
+module "iam_policy_s3_primary_replicate_to_failover" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version = "5.44.0"
   providers = { aws = aws.project_demo_nonprod }
 
-  name  = "s3-primary-to-failover"
+  name  = "s3-primary-replicate-to-failover"
 
   policy = <<EOF
 {
@@ -128,7 +126,7 @@ EOF
 }
 
 #iam role for data transfer
-module "iam_role_s3_primary_to_failover" {
+module "iam_role_s3_primary_replicate_to_failover" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "5.44.0"
   providers = { aws = aws.project_demo_nonprod }
@@ -140,12 +138,12 @@ module "iam_role_s3_primary_to_failover" {
 
   create_role = true
 
-  role_name = "s3-primary-to-failover"
+  role_name = "s3-primary-replicate-to-failover"
   role_requires_mfa = false
   attach_admin_policy = false
 
   custom_role_policy_arns = [
-    module.iam_policy_s3_primary_to_failover.arn
+    module.iam_policy_s3_primary_replicate_to_failover.arn
   ]
 }
 
@@ -180,9 +178,7 @@ module "s3_failover" {
     }
   ]
 
-  versioning = {
-    enabled = true
-  }
+  versioning = { enabled = true }
 
   attach_deny_insecure_transport_policy    = true
   attach_require_latest_tls_policy         = true
