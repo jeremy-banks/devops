@@ -1,0 +1,12 @@
+dependencies:
+- name: aws-ebs-csi-driver
+  repository: https://kubernetes-sigs.github.io/aws-ebs-csi-driver
+  version: 2.28.1
+- name: cluster-autoscaler
+  repository: https://kubernetes.github.io/autoscaler
+  version: 9.35.0
+- name: aws-load-balancer-controller
+  repository: https://aws.github.io/eks-charts
+  version: 1.7.1
+digest: sha256:bbec26bf31e071f5a11cd33c26e9580a752151a69ba484679da9ba85e279c987
+generated: "2024-03-11T00:11:38.5625188-07:00"

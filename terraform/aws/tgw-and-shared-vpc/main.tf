@@ -1,5 +1,7 @@
 #tgw
-data "aws_organizations_organization" "current" {}
+data "aws_organizations_organization" "current" {
+  provider = aws.network
+}
 
 module "tgw_primary" {
   source  = "terraform-aws-modules/transit-gateway/aws"

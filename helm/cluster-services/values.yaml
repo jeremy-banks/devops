@@ -1,0 +1,32 @@
+aws-ebs-csi-driver:
+  controller.region: &region us-west-2
+  controller.nodeSelector: &cluster-services cluster-services
+  enableVolumeResizing: true
+  node.tolerateAllTaints: true
+
+cluster-autoscaler:
+  autoDiscovery:
+    clusterName: &clusterName blue
+  nodeSelector:
+    role: *cluster-services
+  tolerations:
+    - key: "role"
+      operator: "Equal"
+      value: *cluster-services
+      effect: "NoSchedule"
+  replicaCount: 2
+
+aws-load-balancer-controller:
+  clusterName: *clusterName
+  nodeSelector:
+    role: *cluster-services
+  tolerations:
+    - key: "role"
+      operator: "Equal"
+      value: *cluster-services
+      effect: "NoSchedule"
+  # region: *region
+  # VpcId: vpc-0393e1a05766d6cea
+  # ingressClassParams:
+  #   create: true
+  # createIngressClassResource: true

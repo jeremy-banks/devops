@@ -1,0 +1,69 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: blue
+  region: us-west-2
+  version: "1.29"
+
+vpc:
+  id: vpc-0393e1a05766d6cea
+  subnets:
+    private:
+      private-one: { id: subnet-00251a1358bc64917 }
+      private-two: { id: subnet-06b39a3293aae56a7 }
+
+managedNodeGroups:
+  - name: general
+    instanceType: t3a.medium
+    minSize: 3
+    desiredCapacity: 3
+    privateNetworking: true
+
+nodeGroups:
+  - name: cluster-services-green
+    labels:
+      role: &clusterServices cluster-services
+    taints:
+      - key: *clusterServices
+        value: "true"
+        effect: "NoSchedule"
+    instanceType: t3a.medium
+    minSize: 3
+    desiredCapacity: 3
+    privateNetworking: true
+    iam:
+      withAddonPolicies:
+        appMesh: true
+        appMeshPreview: true
+        autoScaler: true
+        awsLoadBalancerController: true
+        certManager: true
+        cloudWatch: true
+        ebs: true
+        efs: true
+        externalDNS: true
+        fsx: true
+        imageBuilder: true
+        xRay: true
+
+# iam_role_eks_cluster = "arn:aws:iam::590183850531:role/eks-cluster"
+# iam_role_eks_cluster_services = "arn:aws:iam::590183850531:role/eks-cluster-services-node"
+# iam_role_eks_worker_node = "arn:aws:iam::590183850531:role/eks-worker-node"
+# primary_acm_arn = "arn:aws:acm:us-west-2:590183850531:certificate/73e8f658-2d7d-4d7d-9126-835c12936d97"
+# primary_kms_arn = "arn:aws:kms:us-west-2:590183850531:key/mrk-df2778282a2f48618cf44582266a6f66"
+# primary_nat_public_ips = [
+#   "35.84.221.198",
+#   "44.228.111.176",
+# ]
+# primary_private_subnets = [
+#   "subnet-00251a1358bc64917",
+#   "subnet-06b39a3293aae56a7",
+# ]
+# primary_public_subnets = [
+#   "subnet-06f8d4e262474b1a3",
+#   "subnet-0cc18a18387cdd2f8",
+# ]
+# primary_security_group_id_alb = "sg-0ab5acee226592822"
+# primary_security_group_id_main = "sg-0a7465558842d3379"
+# primary_vpc_id = "vpc-0393e1a05766d6cea"

@@ -13,22 +13,22 @@ data "aws_iam_policy_document" "kms"  {
     resources = ["*"]
   }
 
-  statement {
-    sid    = "AllowUseOfKey"
-    effect = "Allow"
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.org.account_id}:role/automation"]
-    }
-    actions   = [
-      "kms:Decrypt",
-      "kms:DescribeKey",
-      "kms:Encrypt",
-      "kms:GenerateDataKey*",
-      "kms:ReEncrypt*",
-    ]
-    resources = ["*"]
-  }
+  # statement {
+  #   sid    = "AllowUseOfKey"
+  #   effect = "Allow"
+  #   principals {
+  #     type        = "AWS"
+  #     identifiers = ["arn:aws:iam::${data.aws_caller_identity.org.account_id}:role/automation"]
+  #   }
+  #   actions   = [
+  #     "kms:Decrypt",
+  #     "kms:DescribeKey",
+  #     "kms:Encrypt",
+  #     "kms:GenerateDataKey*",
+  #     "kms:ReEncrypt*",
+  #   ]
+  #   resources = ["*"]
+  # }
 }
 
 module "kms_primary" {

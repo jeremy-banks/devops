@@ -19,18 +19,20 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
   - Latencies between AWS availability zones https://www.flashgrid.io/news/latencies-between-aws-availability-zones-what-are-they-and-how-to-minimize-them
 
 ## Prerequisites
-- AWS cli 2.13.26
-- Terraform v1.6.1
-- SOPS 3.8.1  https://github.com/getsops/sops/releases/tag/v3.8.1
-- eksctl x.x.x
-- kubectl x.x.x
-- Terraform state and SOPS backend resources (S3 bucket, DynamoDB, and CMK)
-  Terraform should _use_ entirely separate infrastructure from what Terraform _manages_, eg best practice is to provision Terraform backend resources in a completely separate AWS Org and Account
+- AWS cli 2.17.48
+- Terraform v1.9.5
+<!-- - SOPS 3.8.1 -->
+- eksctl 0.173.0
+- kubectl v1.29.2
+<!-- - Terraform state and SOPS backend resources (S3 bucket, DynamoDB, and CMK)
+  Terraform should _use_ entirely separate infrastructure from what Terraform _manages_, eg best practice is to provision Terraform backend resources in a completely separate AWS Org and Account -->
 
 ## Initial Setup
 1. Create AWS Account to be Organization root
 1. Create non-Console IAM user named "superadmin" and attach AdministratorAccess policy
    1. Create an Access Key/Secret to be used in AWS CLI profile named "superadmin"
+      ```sh
+      aws configure --profile superadmin
    1. Update the terraform/variables.tf with your unique information
       1. company_name (Microsoft)
       1. company_email_prefix (billg)
@@ -38,13 +40,19 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
       1. company_domain (windows.com)
       1. team_name (Blue)
       1. project_name (Windows 13)
-1. Deploy terraform/aws/tfstate-backend
-   1. Update the terraform/aws/*/backend.tf files with the s3 bucket name from terraform output (find . -type f -name "backend.tf")
+<!-- 1. Deploy terraform/aws/tfstate-backend
+   1. Update the terraform/aws/*/backend.tf files
+      ```sh
+      org root account id   find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDORGACCOUNTID/123456789012/g' {} +
+      1. bucket:  find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDS3BUCKETNAME/tfstate-bucket-name/g' {} +
+      1. dynamodb table:  find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDDYNAMODBTABLE/dynamodb-tfstate-lock/g' {} + -->
 1. Deploy terraform/aws/org-ou-account-management to create additional AWS Organization Units and Accounts
    1. Update the terraform/variables.tf account_numbers map with the output
-   1. Update the terraform/aws/*/backend.tf files assume_role with the account id of the org root
 1. Deploy terraform/aws/iam-groups-and-roles
-   1. Create a new AWS CLI profile named "automation" with terraform output (terraform output -json)
+   1. Create a new AWS CLI profile named "automation" with terraform output
+   ```sh
+   terraform output -json
+   aws configure --profile automation
 1. Deploy terraform/aws/r53-zones-and-records
    1. Update your domain registrar with the output nameservers
 1. Deploy terraform/aws/tgw-and-shared-vpc
@@ -53,9 +61,13 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
    1. Update the terraform/variables.tf ad_directory_id string, ad_directory_id_connector_network string, and ad_directory_id_connector_network_failover string with the output
 1. Deploy terraform/aws/client-vpn
 1. Deploy terraform/aws/project-demo-nonprod
-1. YOU ARE HERE
-1. Deploy terraform/aws/project-demo-prod
+<!-- 1. Deploy terraform/aws/project-demo-prod -->
 1. Deploy EKS cluster via eksctl
+   1. eksctl create cluster -f eksctl/blue.yaml
+   1. eksctl delete cluster --name blue
+   1. eksctl create nodegroup --cluster blue --name=general
+   1. eksctl delete nodegroup --cluster blue --name=general
+<!-- 1. YOU ARE HERE -->
 1. Deploy cluster-services via helm
    1. CNI
    1. externalDNS

@@ -1,6 +1,6 @@
 resource "aws_organizations_account" "project1_nonprod" {
   name  = "${local.resource_name_stub}-project1-nonprod"
-  email = "${var.company_email_prefix}+${local.resource_name_stub}-project1-nonprod@${var.company_email_domain}"
+  email = "${var.company_email_prefix}-project1-nonprod@${var.company_email_domain}"
 
   close_on_deletion           = true
   create_govcloud             = false
@@ -15,7 +15,7 @@ output "account_id_project1_nonprod" {
 
 resource "aws_organizations_account" "project1_prod" {
   name  = "${local.resource_name_stub}-project1-prod"
-  email = "${var.company_email_prefix}+${local.resource_name_stub}-project1-prod@${var.company_email_domain}"
+  email = "${var.company_email_prefix}-project1-prod@${var.company_email_domain}"
 
   close_on_deletion           = true
   create_govcloud             = false

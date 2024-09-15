@@ -38,7 +38,7 @@ resource "aws_organizations_organizational_unit" "workloads" {
 
 resource "aws_organizations_account" "security_tooling" {
   name  = "${local.resource_name_stub}-security-tooling"
-  email = "${var.company_email_prefix}+${local.resource_name_stub}-security-tooling@${var.company_email_domain}"
+  email = "${var.company_email_prefix}-security-tooling@${var.company_email_domain}"
 
   close_on_deletion           = true
   create_govcloud             = false
@@ -49,7 +49,7 @@ resource "aws_organizations_account" "security_tooling" {
 
 resource "aws_organizations_account" "log_archive" {
   name  = "${local.resource_name_stub}-log-archive"
-  email = "${var.company_email_prefix}+${local.resource_name_stub}-log-archive@${var.company_email_domain}"
+  email = "${var.company_email_prefix}-log-archive@${var.company_email_domain}"
 
   close_on_deletion           = true
   create_govcloud             = false
@@ -60,7 +60,7 @@ resource "aws_organizations_account" "log_archive" {
 
 resource "aws_organizations_account" "network" {
   name  = "${local.resource_name_stub}-network"
-  email = "${var.company_email_prefix}+${local.resource_name_stub}-network@${var.company_email_domain}"
+  email = "${var.company_email_prefix}-network@${var.company_email_domain}"
 
   close_on_deletion           = true
   create_govcloud             = false
@@ -71,7 +71,7 @@ resource "aws_organizations_account" "network" {
 
 resource "aws_organizations_account" "shared_services" {
   name  = "${local.resource_name_stub}-shared-services"
-  email = "${var.company_email_prefix}+${local.resource_name_stub}-shared-services@${var.company_email_domain}"
+  email = "${var.company_email_prefix}-shared-services@${var.company_email_domain}"
 
   close_on_deletion           = true
   create_govcloud             = false
