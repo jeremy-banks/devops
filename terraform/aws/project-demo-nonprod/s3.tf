@@ -14,6 +14,7 @@ module "s3_primary" {
         kms_master_key_id = module.kms_primary.key_arn
         sse_algorithm     = "aws:kms"
       }
+      bucket_key_enabled = true
     }
   }
 
@@ -153,6 +154,7 @@ module "s3_failover" {
         kms_master_key_id = module.kms_failover.key_arn
         sse_algorithm     = "aws:kms"
       }
+      bucket_key_enabled = true
     }
   }
 
