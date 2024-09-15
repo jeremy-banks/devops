@@ -32,9 +32,9 @@ module "s3_primary" {
         delete_marker_replication = true
 
         source_selection_criteria = {
-          # replica_modifications = {
-          #   status = "Enabled"
-          # }
+          replica_modifications = {
+            status = "Enabled"
+          }
           sse_kms_encrypted_objects = {
             enabled = true
           }
@@ -67,39 +67,50 @@ module "iam_policy_s3_primary_to_failover" {
 
   policy = <<EOF
 {
-   "Version":"2012-10-17",
-   "Statement":[
-      {
-         "Effect":"Allow",
-         "Action":[
-            "s3:GetReplicationConfiguration",
-            "s3:ListBucket"
-         ],
-         "Resource":[
-            "arn:aws:s3:::${module.s3_primary.s3_bucket_arn}"
-         ]
-      },
-      {
-         "Effect":"Allow",
-         "Action":[
-            "s3:GetObjectVersionForReplication",
-            "s3:GetObjectVersionAcl",
-            "s3:GetObjectVersionTagging"
-         ],
-         "Resource":[
-            "arn:aws:s3:::${module.s3_primary.s3_bucket_arn}/*"
-         ]
-      },
-      {
-         "Effect":"Allow",
-         "Action":[
-            "s3:ReplicateObject",
-            "s3:ReplicateDelete",
-            "s3:ReplicateTags"
-         ],
-         "Resource":"arn:aws:s3:::${module.s3_failover.s3_bucket_arn}/*"
-      }
-   ]
+  "Version":"2012-10-17",
+  "Statement":[
+    {
+        "Effect":"Allow",
+        "Action":[
+          "s3:GetReplicationConfiguration",
+          "s3:ListBucket"
+        ],
+        "Resource":"${module.s3_primary.s3_bucket_arn}"
+    },
+    {
+        "Effect":"Allow",
+        "Action":[
+          "s3:GetObjectVersion",
+          "s3:GetObjectVersionForReplication",
+          "s3:GetObjectVersionAcl",
+          "s3:GetObjectVersionTagging"
+        ],
+        "Resource":"${module.s3_primary.s3_bucket_arn}/*"
+    },
+    {
+        "Effect":"Allow",
+        "Action":[
+          "s3:ReplicateObject",
+          "s3:ReplicateDelete",
+          "s3:ReplicateTags"
+        ],
+        "Resource":"${module.s3_failover.s3_bucket_arn}/*"
+    },
+    {
+        "Effect":"Allow",
+        "Action":[
+          "kms:ReEncrypt*",
+          "kms:GenerateDataKey*",
+          "kms:Encrypt",
+          "kms:DescribeKey",
+          "kms:Decrypt"
+        ],
+        "Resource":[
+          "${module.kms_primary.key_arn}",
+          "${module.kms_failover.key_arn}"
+        ]
+    }
+  ]
 }
 EOF
 }
