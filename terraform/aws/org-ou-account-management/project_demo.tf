@@ -1,6 +1,6 @@
-resource "aws_organizations_account" "project1_nonprod" {
-  name  = "${local.resource_name_stub}-project1-nonprod"
-  email = "${var.company_email_prefix}-project1-nonprod@${var.company_email_domain}"
+resource "aws_organizations_account" "project_demo_nonprod" {
+  name  = "${local.resource_name_prefix_abbr}-project-demo-nonprod"
+  email = "${var.org_owner_email_prefix}-project-demo-nonprod@${var.org_owner_email_domain}"
 
   close_on_deletion           = true
   create_govcloud             = false
@@ -9,13 +9,13 @@ resource "aws_organizations_account" "project1_nonprod" {
   role_name                   = var.assumable_role_name.superadmin
 }
 
-output "account_id_project1_nonprod" {
-  value = aws_organizations_account.project1_nonprod.id
+output "project_demo_nonprod" {
+  value = aws_organizations_account.project_demo_nonprod.id
 }
 
-resource "aws_organizations_account" "project1_prod" {
-  name  = "${local.resource_name_stub}-project1-prod"
-  email = "${var.company_email_prefix}-project1-prod@${var.company_email_domain}"
+resource "aws_organizations_account" "project_demo_prod" {
+  name  = "${local.resource_name_prefix_abbr}-project-demo-prod"
+  email = "${var.org_owner_email_prefix}-project-demo-prod@${var.org_owner_email_domain}"
 
   close_on_deletion           = true
   create_govcloud             = false
@@ -24,6 +24,6 @@ resource "aws_organizations_account" "project1_prod" {
   role_name                   = var.assumable_role_name.superadmin
 }
 
-output "account_id_project1_prod" {
-  value = aws_organizations_account.project1_prod.id
+output "project_demo_prod" {
+  value = aws_organizations_account.project_demo_prod.id
 }

@@ -32,7 +32,7 @@ resource "aws_ec2_client_vpn_endpoint" "client_vpn_primary" {
   }
 
   tags = {
-    Name = "${local.resource_name_stub_env}-client-vpn-primary"
+    Name = "${local.resource_name_prefix_env}-client-vpn-primary"
   }
 }
 
@@ -53,7 +53,7 @@ module "client_vpn_endpoint_sg_primary" {
   version = "5.1.0"
   providers = { aws = aws.network }
 
-  name        = "${local.resource_name_stub_env}-client-vpn-endpoint-primary"
+  name        = "${local.resource_name_prefix_env}-client-vpn-endpoint-primary"
   use_name_prefix = false
   description = "main sg for client-vpn endpoint"
   vpc_id      = data.aws_vpc.shared_primary.id
@@ -108,7 +108,7 @@ module "client_vpn_endpoint_r53_healthcheck_sg_primary" {
   version = "5.1.0"
   providers = { aws = aws.network }
 
-  name        = "${local.resource_name_stub_env}-client-vpn-endpoint-r53-healthcheck-primary"
+  name        = "${local.resource_name_prefix_env}-client-vpn-endpoint-r53-healthcheck-primary"
   use_name_prefix = false
   description = "r53 healthcheck sg for client-vpn endpoint"
   vpc_id      = data.aws_vpc.shared_primary.id
@@ -197,7 +197,7 @@ resource "aws_ec2_client_vpn_endpoint" "client_vpn_failover" {
   }
 
   tags = {
-    Name = "${local.resource_name_stub_env}-client-vpn-failover"
+    Name = "${local.resource_name_prefix_env}-client-vpn-failover"
   }
 }
 
@@ -206,7 +206,7 @@ module "client_vpn_endpoint_sg_failover" {
   version = "5.1.0"
   providers = { aws = aws.network_failover }
 
-  name        = "${local.resource_name_stub_env}-client-vpn-endpoint-failover"
+  name        = "${local.resource_name_prefix_env}-client-vpn-endpoint-failover"
   use_name_prefix = false
   description = "main sg for client-vpn endpoint"
   vpc_id      = data.aws_vpc.shared_failover.id
@@ -261,7 +261,7 @@ module "client_vpn_endpoint_r53_healthcheck_sg_failover" {
   version = "5.1.0"
   providers = { aws = aws.network_failover }
 
-  name        = "${local.resource_name_stub_env}-client-vpn-endpoint-r53-healthcheck-failover"
+  name        = "${local.resource_name_prefix_env}-client-vpn-endpoint-r53-healthcheck-failover"
   use_name_prefix = false
   description = "r53 healthcheck sg for client-vpn endpoint"
   vpc_id      = data.aws_vpc.shared_failover.id
@@ -336,7 +336,7 @@ resource "aws_route53_health_check" "client_vpn_primary" {
   ]
 
   tags = {
-    Name = "${local.resource_name_stub_env}-client-vpn-healthcheck-primary"
+    Name = "${local.resource_name_prefix_env}-client-vpn-healthcheck-primary"
   }
 }
 
@@ -355,7 +355,7 @@ resource "aws_route53_health_check" "client_vpn_failover" {
   ]
 
   tags = {
-    Name = "${local.resource_name_stub_env}-client-vpn-healthcheck-failover"
+    Name = "${local.resource_name_prefix_env}-client-vpn-healthcheck-failover"
   }
 }
 

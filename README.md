@@ -10,7 +10,6 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
 - Terraform does not manage resources it uses to access provisioning
   - superadmin role is used to manage automation, admin, poweruser, readonly, and eks roles
   - every other resource is managed by automation role
-- MFA enforced organization-wide
 - Code written following AWS documentation
   - Well-Architected Framework  https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html
   - Prescriptive Guidance Security Reference Architecture https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture/org-management.html
@@ -26,17 +25,21 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
 
 ## Initial Setup
 1. Create AWS Account to be Organization root
-1. Create non-Console IAM user named "superadmin" and attach AdministratorAccess policy
-   1. Create an Access Key/Secret to be used in AWS CLI profile named "superadmin"
+1. Create non-Console IAM user named "superadmin"
+   1. Attach AdministratorAccess policy
+   1. Create an access key to be used in AWS CLI profile named "superadmin"
       ```sh
       aws configure --profile superadmin
    1. Update the terraform/variables.tf with your unique information
-      1. company_name (Microsoft)
-      1. company_email_prefix (billg)
-      1. company_email_domain (microsoft.com)
+      1. org_owner_email_prefix (billg)
+      1. org_owner_email_domain (microsoft.com)
       1. company_domain (windows.com)
-      1. team_name (Blue)
-      1. project_name (Windows 13)
+      1. company_name (microsoft)
+      1. team_name (blue)
+      1. project_name (windows13)
+      1. company_name_abbr (ms)
+      1. team_name_abbr (blue)
+      1. project_name_abbr (w13)
 <!-- 1. Deploy terraform/aws/tfstate-backend
    1. Update the terraform/aws/*/backend.tf files
       ```sh
@@ -46,10 +49,10 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
 1. Deploy terraform/aws/org-ou-account-management to create additional AWS Organization Units and Accounts
    1. Update the terraform/variables.tf account_numbers map with the output
 1. Deploy terraform/aws/iam-groups-and-roles
-   1. Create a new AWS CLI profile named "automation" with terraform output
-   ```sh
-   terraform output -json
-   aws configure --profile automation
+   1. Create AWS CLI profile named "automation" with terraform output
+      ```sh
+      terraform output -json
+      aws configure --profile automation
 1. Deploy terraform/aws/r53-zones-and-records
    1. Update your domain registrar with the output nameservers
 1. Deploy terraform/aws/tgw-and-shared-vpc
@@ -100,6 +103,7 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
    - Disable unlimited burstable instance credits
    - delete all default VPCs in all regions of every account
 - AWS Backup with Multi-AZ and glacier
+- MFA enforced organization-wide
 - AD
    - Update directory AD and client VPN so groups in AD manage network access to AWS environments
    - Add Windows Server 2019 cheap instance to Directory for AD administration

@@ -42,7 +42,7 @@ module "kms_primary" {
   key_usage               = "ENCRYPT_DECRYPT"
   multi_region            = true
 
-  aliases = ["${local.resource_name_stub_env}-tfstate"]
+  aliases = ["${local.resource_name_prefix_env}-tfstate"]
 
   policy = data.aws_iam_policy_document.kms.json
 }
@@ -53,7 +53,7 @@ module "s3_primary" {
   version = "4.1.0"
   providers = { aws = aws.org }
 
-  bucket = "${local.resource_name_stub_env}-tfstate"
+  bucket = "${local.resource_name_prefix_env}-tfstate"
 
   force_destroy = true
 
