@@ -4,7 +4,7 @@ module "s3_primary" {
   version = "4.1.0"
   providers = { aws = aws.project_demo_nonprod }
 
-  bucket = "${local.resource_name_prefix_env}-storage-blob-primary"
+  bucket = "${local.resource_name_prefix_env_region_primary_abbr}-storage-blob"
 
   force_destroy = true
 
@@ -153,7 +153,7 @@ module "s3_failover" {
   version = "4.1.0"
   providers = { aws = aws.project_demo_nonprod_failover }
 
-  bucket = "${local.resource_name_prefix_env}-storage-blob-failover"
+  bucket = "${local.resource_name_prefix_env_region_failover_abbr}-storage-blob"
 
   force_destroy = true
 
