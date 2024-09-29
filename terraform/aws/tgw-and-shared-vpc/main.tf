@@ -58,7 +58,7 @@ resource "aws_ec2_transit_gateway_peering_attachment_accepter" "tgw_peering" {
 resource "aws_eip" "vpc_nat_primary" {
   provider = aws.network
 
-  count = 2
+  count = 3
   domain = "vpc"
   tags = { "Name" = "${local.resource_name_prefix_env_region_primary_abbr}-${count.index}" }
 
@@ -83,12 +83,14 @@ module "vpc_primary" {
 
   azs = var.availability_zones.primary
   public_subnets = [
-    "${var.vpc_prefixes.shared_vpc.primary}.${var.vpc_suffixes.subnet_public_a}",
-    "${var.vpc_prefixes.shared_vpc.primary}.${var.vpc_suffixes.subnet_public_b}",
+    "${var.vpc_prefixes.shared_vpc.primary}.${var.vpc_suffixes_3az.subnet_public_a}",
+    "${var.vpc_prefixes.shared_vpc.primary}.${var.vpc_suffixes_3az.subnet_public_b}",
+    "${var.vpc_prefixes.shared_vpc.primary}.${var.vpc_suffixes_3az.subnet_public_c}",
   ]
   private_subnets = [
-    "${var.vpc_prefixes.shared_vpc.primary}.${var.vpc_suffixes.subnet_private_a}",
-    "${var.vpc_prefixes.shared_vpc.primary}.${var.vpc_suffixes.subnet_private_b}",
+    "${var.vpc_prefixes.shared_vpc.primary}.${var.vpc_suffixes_3az.subnet_private_a}",
+    "${var.vpc_prefixes.shared_vpc.primary}.${var.vpc_suffixes_3az.subnet_private_b}",
+    "${var.vpc_prefixes.shared_vpc.primary}.${var.vpc_suffixes_3az.subnet_private_c}",
   ]
 
   public_subnet_tags = { "kubernetes.io/role/elb" = 1 }
@@ -306,7 +308,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_primary" {
 resource "aws_eip" "vpc_nat_failover" {
   provider = aws.network_failover
 
-  count = 2
+  count = 3
   domain = "vpc"
   tags = { "Name" = "${local.resource_name_prefix_env_region_failover_abbr}-${count.index}" }
 
@@ -331,12 +333,14 @@ module "vpc_failover" {
 
   azs = var.availability_zones.failover
   public_subnets = [
-    "${var.vpc_prefixes.shared_vpc.failover}.${var.vpc_suffixes.subnet_public_a}",
-    "${var.vpc_prefixes.shared_vpc.failover}.${var.vpc_suffixes.subnet_public_b}",
+    "${var.vpc_prefixes.shared_vpc.failover}.${var.vpc_suffixes_3az.subnet_public_a}",
+    "${var.vpc_prefixes.shared_vpc.failover}.${var.vpc_suffixes_3az.subnet_public_b}",
+    "${var.vpc_prefixes.shared_vpc.failover}.${var.vpc_suffixes_3az.subnet_public_c}",
   ]
   private_subnets = [
-    "${var.vpc_prefixes.shared_vpc.failover}.${var.vpc_suffixes.subnet_private_a}",
-    "${var.vpc_prefixes.shared_vpc.failover}.${var.vpc_suffixes.subnet_private_b}",
+    "${var.vpc_prefixes.shared_vpc.failover}.${var.vpc_suffixes_3az.subnet_private_a}",
+    "${var.vpc_prefixes.shared_vpc.failover}.${var.vpc_suffixes_3az.subnet_private_b}",
+    "${var.vpc_prefixes.shared_vpc.failover}.${var.vpc_suffixes_3az.subnet_private_c}",
   ]
 
   public_subnet_tags = { "kubernetes.io/role/elb" = 1 }

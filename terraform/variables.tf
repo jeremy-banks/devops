@@ -1,7 +1,7 @@
 variable "org_owner_email_prefix" {
   description = "the 'billg' in 'billg@microsoft'"
   type        = string
-  default     = "workjeremyb+assess4"
+  default     = "workjeremyb+assess5"
 }
 
 variable "org_owner_email_domain" {
@@ -182,19 +182,6 @@ variable "vpc_prefixes" {
   }
 }
 
-variable "vpc_suffixes" {
-  type    = map(string)
-  default = {
-    subnet_public_a = "128.0/20"
-    subnet_public_b = "144.0/20"
-    subnet_private_a = "0.0/18"
-    subnet_private_b = "64.0/18"
-    # remaining
-    # 160.0/19
-    # 192.0/18
-  }
-}
-
 variable "vpc_suffixes_2az" {
   description = "two public subnets with 4k addresses and two private subnets with 16k addresses"
   type    = map(string)
@@ -215,12 +202,12 @@ variable "vpc_suffixes_3az" {
   default = {
     subnet_public_a = "192.0/20"
     subnet_public_b = "208.0/20"
-    subnet_public_c = "224.0/20	"
+    subnet_public_c = "224.0/20"
     subnet_private_a = "0.0/18"
     subnet_private_b = "64.0/18"
     subnet_private_c = "128.0/18"
     # remaining
-    # 240.0/2
+    # 240.0/20
   }
 }
 
