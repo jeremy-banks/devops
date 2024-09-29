@@ -13,7 +13,7 @@ variable "org_owner_email_domain" {
 variable "company_domain" {
   description = "company domain"
   type        = string
-  default     = "microsoft.com"
+  default     = "outerplanes.org"
 }
 
 variable "company_name" {
@@ -192,6 +192,35 @@ variable "vpc_suffixes" {
     # remaining
     # 160.0/19
     # 192.0/18
+  }
+}
+
+variable "vpc_suffixes_2az" {
+  description = "two public subnets with 4k addresses and two private subnets with 16k addresses"
+  type    = map(string)
+  default = {
+    subnet_public_a = "128.0/20"
+    subnet_public_b = "144.0/20"
+    subnet_private_a = "0.0/18"
+    subnet_private_b = "64.0/18"
+    # remaining
+    # 160.0/19
+    # 192.0/18
+  }
+}
+
+variable "vpc_suffixes_3az" {
+  description = "three public subnets with 4k addresses and three private subnets with 16k addresses"
+  type    = map(string)
+  default = {
+    subnet_public_a = "192.0/20"
+    subnet_public_b = "208.0/20"
+    subnet_public_c = "224.0/20	"
+    subnet_private_a = "0.0/18"
+    subnet_private_b = "64.0/18"
+    subnet_private_c = "128.0/18"
+    # remaining
+    # 240.0/2
   }
 }
 

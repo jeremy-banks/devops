@@ -8,13 +8,13 @@ module "tgw_primary" {
   version = "2.12.1"
   providers = { aws = aws.network }
 
-  name = "${local.resource_name_prefix_env}-tgw-primary"
+  name = "${local.resource_name_prefix_env_region_primary_abbr}-tgw"
 
   amazon_side_asn = var.tgw_asn.primary
   enable_auto_accept_shared_attachments = true
   create_tgw_routes = false
 
-  ram_name = "${local.resource_name_prefix_env}-ram-tgw-primary"
+  ram_name = "${local.resource_name_prefix_env_region_primary_abbr}-ram-tgw"
   ram_allow_external_principals = false
   ram_principals = [data.aws_organizations_organization.current.arn]
 }
@@ -24,13 +24,13 @@ module "tgw_failover" {
   version = "2.12.1"
   providers = { aws = aws.network_failover }
 
-  name = "${local.resource_name_prefix_env}-tgw-failover"
+  name = "${local.resource_name_prefix_env_region_failover_abbr}-tgw"
 
   amazon_side_asn = var.tgw_asn.failover
   enable_auto_accept_shared_attachments = true
   create_tgw_routes = false
 
-  ram_name = "${local.resource_name_prefix_env}-ram-tgw-failover"
+  ram_name = "${local.resource_name_prefix_env_region_failover_abbr}-ram-tgw"
   ram_allow_external_principals = false
   ram_principals = [data.aws_organizations_organization.current.arn]
 }
@@ -60,7 +60,7 @@ resource "aws_eip" "vpc_nat_primary" {
 
   count = 2
   domain = "vpc"
-  tags = { "Name" = "${local.resource_name_prefix_env}-primary-${count.index}" }
+  tags = { "Name" = "${local.resource_name_prefix_env_region_primary_abbr}-${count.index}" }
 
   # lifecycle { prevent_destroy = true } # YOU NEVER WANT TO DELETE THESE
 }
@@ -76,7 +76,7 @@ module "vpc_primary" {
   external_nat_ip_ids = aws_eip.vpc_nat_primary[*].id
   external_nat_ips = aws_eip.vpc_nat_primary[*].public_ip
 
-  name = "${local.resource_name_prefix_env}-vpc-primary"
+  name = "${local.resource_name_prefix_env_region_primary_abbr}-vpc"
   public_subnet_suffix = "pub"
   private_subnet_suffix = "pvt"
   cidr = "${var.vpc_prefixes.shared_vpc.primary}.0.0/16"
@@ -94,13 +94,13 @@ module "vpc_primary" {
   public_subnet_tags = { "kubernetes.io/role/elb" = 1 }
   private_subnet_tags = { "kubernetes.io/role/internal-elb" = 1 }
   vpc_tags = {
-    "${local.resource_name_prefix_env}-cluster-primary-blue"   = "shared"
-    "${local.resource_name_prefix_env}-cluster-primary-green"  = "shared"
+    "${local.resource_name_prefix_env_region_primary_abbr}-cluster-blue"   = "shared"
+    "${local.resource_name_prefix_env_region_primary_abbr}-cluster-green"  = "shared"
     "k8s.io/cluster-autoscaler/enabled" = "true"
-    "k8s.io/cluster-autoscaler/${local.resource_name_prefix_env}-cluster-primary-blue" = "shared"
-    "k8s.io/cluster-autoscaler/${local.resource_name_prefix_env}-cluster-primary-green" = "shared"
-    "kubernetes.io/cluster/${local.resource_name_prefix_env}-cluster-primary-blue" = "shared"
-    "kubernetes.io/cluster/${local.resource_name_prefix_env}-cluster-primary-green" = "shared"
+    "k8s.io/cluster-autoscaler/${local.resource_name_prefix_env_region_primary_abbr}-cluster-blue" = "shared"
+    "k8s.io/cluster-autoscaler/${local.resource_name_prefix_env_region_primary_abbr}-cluster-green" = "shared"
+    "kubernetes.io/cluster/${local.resource_name_prefix_env_region_primary_abbr}-cluster-blue" = "shared"
+    "kubernetes.io/cluster/${local.resource_name_prefix_env_region_primary_abbr}-cluster-green" = "shared"
   }
 
   manage_default_security_group = true
@@ -122,9 +122,9 @@ module "vpc_main_sg_primary" {
   version = "5.1.0"
   providers = { aws = aws.network }
 
-  name        = "${local.resource_name_prefix_env}-main"
+  name        = "${local.resource_name_prefix_env_region_primary_abbr}-main"
   use_name_prefix = false
-  description = "main security group for ${local.resource_name_prefix_env}"
+  description = "main security group for ${local.resource_name_prefix_env_region_primary_abbr}"
   vpc_id      = module.vpc_primary.vpc_id
 
   ingress_with_self = [
@@ -185,9 +185,9 @@ module "vpc_alb_sg_primary" {
   version = "5.1.0"
   providers = { aws = aws.network }
 
-  name  = "${local.resource_name_prefix_env}-alb"
+  name  = "${local.resource_name_prefix_env_region_primary_abbr}-alb"
   use_name_prefix = false
-  description = "load balancer security group for ${local.resource_name_prefix_env}"
+  description = "load balancer security group for ${local.resource_name_prefix_env_region_primary_abbr}"
   vpc_id  = module.vpc_primary.vpc_id
 
   ingress_with_self = [
@@ -261,7 +261,7 @@ module "vpc_endpoints_primary" {
       # security_group_ids  = [module.vpc_main_sg_primary.security_group_id]
       subnet_ids = module.vpc_primary.private_subnets
       route_table_ids = flatten([module.vpc_primary.private_route_table_ids, module.vpc_primary.public_route_table_ids])
-      tags                = { Name = "${local.resource_name_prefix_env}-s3-vpc-endpoint-primary" }
+      tags                = { Name = "${local.resource_name_prefix_env_region_primary_abbr}-s3-vpc-endpoint" }
     },
     rds = {
       # interface endpoint
@@ -271,7 +271,7 @@ module "vpc_endpoints_primary" {
       # security_group_ids  = [module.vpc_main_sg_primary.security_group_id]
       subnet_ids = module.vpc_primary.private_subnets
       # route_table_ids = flatten([module.vpc_primary.private_route_table_ids, module.vpc_primary.public_route_table_ids])
-      tags                = { Name = "${local.resource_name_prefix_env}-rds-endpoint-primary" }
+      tags                = { Name = "${local.resource_name_prefix_env_region_primary_abbr}-rds-endpoint" }
     },
     # dynamodb = {
     #   # gateway endpoint
@@ -308,7 +308,7 @@ resource "aws_eip" "vpc_nat_failover" {
 
   count = 2
   domain = "vpc"
-  tags = { "Name" = "${local.resource_name_prefix_env}-failover-${count.index}" }
+  tags = { "Name" = "${local.resource_name_prefix_env_region_failover_abbr}-${count.index}" }
 
   # lifecycle { prevent_destroy = true } # YOU NEVER WANT TO DELETE THESE
 }
@@ -324,7 +324,7 @@ module "vpc_failover" {
   external_nat_ip_ids = aws_eip.vpc_nat_failover[*].id
   external_nat_ips = aws_eip.vpc_nat_failover[*].public_ip
 
-  name = "${local.resource_name_prefix_env}-vpc-failover"
+  name = "${local.resource_name_prefix_env_region_failover_abbr}-vpc"
   public_subnet_suffix = "pub"
   private_subnet_suffix = "pvt"
   cidr = "${var.vpc_prefixes.shared_vpc.failover}.0.0/16"
@@ -342,8 +342,8 @@ module "vpc_failover" {
   public_subnet_tags = { "kubernetes.io/role/elb" = 1 }
   private_subnet_tags = { "kubernetes.io/role/internal-elb" = 1 }
   vpc_tags = {
-    "${local.resource_name_prefix_env}-cluster-failover-blue"   = "shared"
-    "${local.resource_name_prefix_env}-cluster-failover-green"  = "shared"
+    "${local.resource_name_prefix_env_region_failover_abbr}-cluster-blue"   = "shared"
+    "${local.resource_name_prefix_env_region_failover_abbr}-cluster-green"  = "shared"
   }
 
   manage_default_security_group = true
@@ -365,9 +365,9 @@ module "vpc_main_sg_failover" {
   version = "5.1.0"
   providers = { aws = aws.network_failover }
 
-  name        = "${local.resource_name_prefix_env}-main"
+  name        = "${local.resource_name_prefix_env_region_failover_abbr}-main"
   use_name_prefix = false
-  description = "main security group for ${local.resource_name_prefix_env}"
+  description = "main security group for ${local.resource_name_prefix_env_region_failover_abbr}"
   vpc_id      = module.vpc_failover.vpc_id
 
   ingress_with_self = [
@@ -428,9 +428,9 @@ module "vpc_alb_sg_failover" {
   version = "5.1.0"
   providers = { aws = aws.network_failover }
 
-  name  = "${local.resource_name_prefix_env}-alb"
+  name  = "${local.resource_name_prefix_env_region_failover_abbr}-alb"
   use_name_prefix = false
-  description = "load balancer security group for ${local.resource_name_prefix_env}"
+  description = "load balancer security group for ${local.resource_name_prefix_env_region_failover_abbr}"
   vpc_id  = module.vpc_failover.vpc_id
 
   ingress_with_self = [
@@ -504,7 +504,7 @@ module "vpc_endpoints_failover" {
       # security_group_ids  = [module.vpc_main_sg_primary.security_group_id]
       subnet_ids = module.vpc_failover.private_subnets
       route_table_ids = flatten([module.vpc_failover.private_route_table_ids, module.vpc_failover.public_route_table_ids])
-      tags                = { Name = "${local.resource_name_prefix_env}-s3-vpc-endpoint-failover" }
+      tags                = { Name = "${local.resource_name_prefix_env_region_failover_abbr}-s3-vpc-endpoint" }
     },
     rds = {
       # interface endpoint
@@ -514,7 +514,7 @@ module "vpc_endpoints_failover" {
       # security_group_ids  = [module.vpc_main_sg_primary.security_group_id]
       subnet_ids = module.vpc_failover.private_subnets
       # route_table_ids = flatten([module.vpc_primary.private_route_table_ids, module.vpc_primary.public_route_table_ids])
-      tags                = { Name = "${local.resource_name_prefix_env}-rds-endpoint-failover" }
+      tags                = { Name = "${local.resource_name_prefix_env_region_failover_abbr}-rds-endpoint" }
     },
     # dynamodb = {
     #   # gateway endpoint
@@ -550,7 +550,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_failover" {
 resource "aws_ram_resource_share" "primary" {
   provider = aws.network
 
-  name                      = "${local.resource_name_prefix_env}-ram-vpc-primary"
+  name                      = "${local.resource_name_prefix_env_region_primary_abbr}-ram-vpc"
   allow_external_principals = false
 }
 
@@ -572,7 +572,7 @@ resource "aws_ram_resource_association" "primary" {
 resource "aws_ram_resource_share" "failover" {
   provider = aws.network_failover
 
-  name  = "${local.resource_name_prefix_env}-ram-vpc-failover"
+  name  = "${local.resource_name_prefix_env_region_failover_abbr}-ram-vpc"
   allow_external_principals = false
 }
 
