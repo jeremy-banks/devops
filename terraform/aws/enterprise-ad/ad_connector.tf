@@ -11,7 +11,7 @@ resource "aws_directory_service_directory" "connector_network" {
     customer_dns_ips  = aws_directory_service_directory.ad_primary.dns_ip_addresses
     customer_username = "Admin"
     vpc_id     = data.aws_vpc.shared_primary.id
-    subnet_ids = [data.aws_subnet.shared_a_primary.id, data.aws_subnet.shared_b_primary.id]
+    subnet_ids = slice(data.aws_subnets.shared_primary.ids, 0, 2)
   }
 }
 
@@ -31,7 +31,7 @@ resource "aws_directory_service_directory" "connector_network_failover" {
     customer_dns_ips  = data.aws_directory_service_directory.ad_failover.dns_ip_addresses
     customer_username = "Admin"
     vpc_id     = data.aws_vpc.shared_failover.id
-    subnet_ids = [data.aws_subnet.shared_a_failover.id, data.aws_subnet.shared_b_failover.id]
+    subnet_ids = slice(data.aws_subnets.shared_failover.ids, 0, 2)
   }
 }
 
