@@ -1,17 +1,17 @@
 #primary
-data "aws_vpc" "shared_primary" {
+data "aws_vpc" "network_primary" {
   provider = aws.network
 
   cidr_block = "${var.vpc_cidr_network_primary}"
   state = "available"
 }
 
-data "aws_subnets" "shared_primary" {
+data "aws_subnets" "network_primary" {
   provider = aws.network
 
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.shared_primary.id]
+    values = [data.aws_vpc.network_primary.id]
   }
 
   filter {
@@ -30,8 +30,8 @@ resource "aws_directory_service_directory" "ad_primary" {
   type        = "MicrosoftAD"
   edition     = "Enterprise"
   vpc_settings {
-    vpc_id      = data.aws_vpc.shared_primary.id
-    subnet_ids  = slice(data.aws_subnets.shared_primary.ids, 0, 2)
+    vpc_id      = data.aws_vpc.network_primary.id
+    subnet_ids  = slice(data.aws_subnets.network_primary.ids, 0, 2)
   }
 }
 
@@ -59,19 +59,19 @@ resource "aws_route53_record" "corp_ad" {
 }
 
 #failover
-data "aws_vpc" "shared_failover" {
+data "aws_vpc" "network_failover" {
   provider = aws.network_failover
 
   cidr_block = "${var.vpc_cidr_network_failover}"
   state = "available"
 }
 
-data "aws_subnets" "shared_failover" {
+data "aws_subnets" "network_failover" {
   provider = aws.network_failover
   
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.shared_failover.id]
+    values = [data.aws_vpc.network_failover.id]
   }
 
   filter {
@@ -87,8 +87,8 @@ resource "aws_directory_service_region" "ad_failover" {
   region_name  = var.region.failover
 
   vpc_settings {
-    vpc_id     = data.aws_vpc.shared_failover.id
-    subnet_ids = slice(data.aws_subnets.shared_failover.ids, 0, 2)
+    vpc_id     = data.aws_vpc.network_failover.id
+    subnet_ids = slice(data.aws_subnets.network_failover.ids, 0, 2)
   }
 }
 
