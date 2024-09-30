@@ -1,13 +1,13 @@
 variable "org_owner_email_prefix" {
   description = "the 'billg' in 'billg@microsoft'"
   type        = string
-  default     = "workjeremyb+assess5"
+  default     = "billg"
 }
 
 variable "org_owner_email_domain" {
   description = "the 'microsoft.com' in 'billg@microsoft.com'"
   type        = string
-  default     = "gmail.com"
+  default     = "microsoft.com"
 }
 
 variable "company_domain" {
@@ -79,13 +79,12 @@ variable "cli_profile_name_aws_substitute" {
 variable "account_id" {
   type    = map(number)
   default = {
-    log_archive = "615299772193"
-    network = "724772075765"
-    org = "266735804093"
-    project_demo_prod = "886436972084"
-    security_tooling = "739275460046"
-    shared_services = "842676016691"
-    workload_dev = "982534358549"
+    log_archive = ""
+    network = ""
+    org = ""
+    security_tooling = ""
+    shared_services = ""
+    workload_dev = ""
   }
 }
 
