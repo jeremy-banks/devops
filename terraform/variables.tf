@@ -79,12 +79,12 @@ variable "cli_profile_name_aws_substitute" {
 variable "account_id" {
   type    = map(number)
   default = {
-    log_archive = ""
-    network = ""
-    org = ""
-    security_tooling = ""
-    shared_services = ""
-    workload_dev = ""
+    log_archive = 0
+    network = 0
+    org = 0
+    security_tooling = 0
+    shared_services = 0
+    workload_dev = 0
   }
 }
 
