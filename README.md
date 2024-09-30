@@ -80,6 +80,7 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
    1. Basic welcome page
 
 ## To-Do
+- Update version of all modules
 - Centralized logging with compression and glacier archive
    - DNS logs sent to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
    - ALB logs send to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
