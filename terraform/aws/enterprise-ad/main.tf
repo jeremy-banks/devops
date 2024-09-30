@@ -1,13 +1,13 @@
 #primary
 data "aws_vpc" "shared_primary" {
-  provider = aws.shared_services
+  provider = aws.network
 
   cidr_block = "${var.vpc_cidr_network_primary}"
   state = "available"
 }
 
 data "aws_subnets" "shared_primary" {
-  provider = aws.shared_services
+  provider = aws.network
 
   filter {
     name   = "vpc-id"
@@ -15,8 +15,8 @@ data "aws_subnets" "shared_primary" {
   }
 
   filter {
-    name   = "mapPublicIpOnLaunch"
-    values = ["false"]
+    name   = "tag:Name"
+    values = ["*-pvt-*"]
   }
 }
 
@@ -60,14 +60,14 @@ resource "aws_route53_record" "corp_ad" {
 
 #failover
 data "aws_vpc" "shared_failover" {
-  provider = aws.shared_services_failover
+  provider = aws.network_failover
 
   cidr_block = "${var.vpc_cidr_network_failover}"
   state = "available"
 }
 
 data "aws_subnets" "shared_failover" {
-  provider = aws.shared_services_failover
+  provider = aws.network_failover
   
   filter {
     name   = "vpc-id"
@@ -75,8 +75,8 @@ data "aws_subnets" "shared_failover" {
   }
 
   filter {
-    name   = "mapPublicIpOnLaunch"
-    values = ["false"]
+    name   = "tag:Name"
+    values = ["*-pvt-*"]
   }
 }
 
