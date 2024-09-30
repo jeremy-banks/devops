@@ -80,16 +80,9 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
    1. Basic welcome page
 
 ## To-Do
-- Create truncated resource stub for those few resources with limited characters in names
-   - remove all vowels except for first character of each word
-   - replace spaces with dashes
-   - truncate each input by local.trimmed_length
-   - lowercase
-- need to move VPC to a new model
-   - three non-customer env: dev, test, and stage
-   - two environments per customer: preprod and prod
-   - dev and test are 2-AZ VPCs, stage, preprod, and prod are 3-AZ VPCs
-   - all DR tests can be run on stage, preprod, or prod
+- Centralized logging with compression and glacier archive
+   - DNS logs sent to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
+   - ALB logs send to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
 - Implement backend tfstate lock with dynamodb
 - Multi-AZ storage active-active if possible
    - s3 DONE!
@@ -113,9 +106,6 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
 - move desired R53 healthcheck source locations to a var and local design
 - ALB sec group with cool way of allowing ingress (nonprod through private CVPN, prod through public)
 - Mozilla Secrets OPerationS (SOPS) protects secrets in code using Key Management System (KMS) Customer Managed Key (CMK)
-- Centralized logging with compression and glacier archive
-   - DNS logs sent to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
-   - ALB logs send to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
 
 ## Known Issues
 - terraform/aws/org-ou-account-management/main.tf
