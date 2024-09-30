@@ -23,17 +23,11 @@ module "vpc_primary" {
   name = "${local.resource_name_prefix_env_region_primary_abbr}-vpc"
   public_subnet_suffix = "pub"
   private_subnet_suffix = "pvt"
-  cidr = "${var.vpc_prefixes.project_demo_nonprod.primary}.0.0/16"
+  cidr = local.vpc_cidr_primary
 
-  azs = var.availability_zones.primary
-  public_subnets = [
-    "${var.vpc_prefixes.project_demo_nonprod.primary}.${var.vpc_suffixes_2az.subnet_public_a}",
-    "${var.vpc_prefixes.project_demo_nonprod.primary}.${var.vpc_suffixes_2az.subnet_public_b}",
-  ]
-  private_subnets = [
-    "${var.vpc_prefixes.project_demo_nonprod.primary}.${var.vpc_suffixes_2az.subnet_private_a}",
-    "${var.vpc_prefixes.project_demo_nonprod.primary}.${var.vpc_suffixes_2az.subnet_private_b}",
-  ]
+  azs = local.vpc_azs_primary
+  public_subnets = local.vpc_subnets_public_primary
+  private_subnets = local.vpc_subnets_private_primary
 
   public_subnet_tags = { "kubernetes.io/role/elb" = 1 }
   private_subnet_tags = { "kubernetes.io/role/internal-elb" = 1 }
@@ -56,7 +50,7 @@ module "vpc_primary" {
   enable_dns_support   = true
 
   enable_dhcp_options = true
-  dhcp_options_domain_name_servers = ["${var.vpc_prefixes.project_demo_nonprod.primary}.0.2"]
+  dhcp_options_domain_name_servers = [local.vpc_dns_primary]
   dhcp_options_ntp_servers = local.vpc_ntp_servers
 }
 
@@ -84,7 +78,7 @@ module "vpc_main_sg_primary" {
       to_port     = -1
       protocol    = -1
       description = "allow ingress from client-vpn"
-      cidr_blocks = "${var.vpc_prefixes.client_vpn.primary}.0.0/16"
+      cidr_blocks = "${var.vpc_cidr_clientvpn_primary},${var.vpc_cidr_clientvpn_failover}"
     },
   ]
 
@@ -147,7 +141,7 @@ module "vpc_alb_sg_primary" {
       to_port     = -1
       protocol    = -1
       description = "allow ingress from client-vpn"
-      cidr_blocks = "${var.vpc_prefixes.client_vpn.primary}.0.0/16"
+      cidr_blocks = "${var.vpc_cidr_clientvpn_primary},${var.vpc_cidr_clientvpn_failover}"
     },
   ]
 
@@ -285,17 +279,11 @@ module "vpc_failover" {
   name = "${local.resource_name_prefix_env_region_failover_abbr}-vpc"
   public_subnet_suffix = "pub"
   private_subnet_suffix = "pvt"
-  cidr = "${var.vpc_prefixes.project_demo_nonprod.failover}.0.0/16"
+  cidr = local.vpc_cidr_failover
 
-  azs = var.availability_zones.failover
-  public_subnets = [
-    "${var.vpc_prefixes.project_demo_nonprod.failover}.${var.vpc_suffixes_2az.subnet_public_a}",
-    "${var.vpc_prefixes.project_demo_nonprod.failover}.${var.vpc_suffixes_2az.subnet_public_b}",
-  ]
-  private_subnets = [
-    "${var.vpc_prefixes.project_demo_nonprod.failover}.${var.vpc_suffixes_2az.subnet_private_a}",
-    "${var.vpc_prefixes.project_demo_nonprod.failover}.${var.vpc_suffixes_2az.subnet_private_b}",
-  ]
+  azs = local.vpc_azs_failover
+  public_subnets = local.vpc_subnets_public_failover
+  private_subnets = local.vpc_subnets_private_failover
 
   public_subnet_tags = { "kubernetes.io/role/elb" = 1 }
   private_subnet_tags = { "kubernetes.io/role/internal-elb" = 1 }
@@ -318,7 +306,7 @@ module "vpc_failover" {
   enable_dns_support   = true
 
   enable_dhcp_options = true
-  dhcp_options_domain_name_servers = ["${var.vpc_prefixes.project_demo_nonprod.failover}.0.2"]
+  dhcp_options_domain_name_servers = [local.vpc_dns_failover]
   dhcp_options_ntp_servers = local.vpc_ntp_servers
 }
 
@@ -346,7 +334,7 @@ module "vpc_main_sg_failover" {
       to_port     = -1
       protocol    = -1
       description = "allow ingress from client-vpn"
-      cidr_blocks = "${var.vpc_prefixes.client_vpn.failover}.0.0/16"
+      cidr_blocks = "${var.vpc_cidr_clientvpn_primary},${var.vpc_cidr_clientvpn_failover}"
     },
   ]
 
@@ -409,7 +397,7 @@ module "vpc_alb_sg_failover" {
       to_port     = -1
       protocol    = -1
       description = "allow ingress from client-vpn"
-      cidr_blocks = "${var.vpc_prefixes.client_vpn.failover}.0.0/16"
+      cidr_blocks = "${var.vpc_cidr_clientvpn_primary},${var.vpc_cidr_clientvpn_failover}"
     },
   ]
 
