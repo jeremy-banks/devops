@@ -1,6 +1,6 @@
 # Devops
 
-## Goal of this Project
+## Project Goal
 Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resources using only terraform, eksctl, and helm
 
 ## Features
@@ -47,21 +47,24 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
       1. bucket:  find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDS3BUCKETNAME/tfstate-bucket-name/g' {} +
       1. dynamodb table:  find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDDYNAMODBTABLE/dynamodb-tfstate-lock/g' {} + -->
 1. Deploy terraform/aws/org-ou-account-management to create additional AWS Organization Units and Accounts
-   1. Update the terraform/variables.tf account_numbers map with the output
+   1. Update the terraform/variables.tf account_numbers map with terraform output
 1. Deploy terraform/aws/iam-groups-and-roles
    1. Create AWS CLI profile named "automation" with terraform output
       ```sh
       terraform output -json
       aws configure --profile automation
 1. Deploy terraform/aws/r53-zones-and-records
-   1. Update your domain registrar with the output nameservers
+   1. Update your domain registrar with the nameservers from terraform output
 1. Deploy terraform/aws/tgw-and-shared-vpc
 1. Deploy terraform/aws/enterprise-ad
    1. This deployment can take up to 2 hours and may fail several times due to AWS throttling, keep running plan and apply until complete
-   1. Update the terraform/variables.tf ad_directory_id string, ad_directory_id_connector_network string, and ad_directory_id_connector_network_failover string with the output
+   1. Update the terraform/variables.tf ad_directory_id_connector_network and ad_directory_id_connector_network_failover strings with terraform output
 1. Deploy terraform/aws/client-vpn
-1. Deploy terraform/aws/project-demo-nonprod
-<!-- 1. Deploy terraform/aws/project-demo-prod -->
+1. Deploy terraform/aws/workload-dev
+<!-- 1. Deploy terraform/aws/workload-tst
+1. Deploy terraform/aws/workload-stg
+1. Deploy terraform/aws/workload-prd
+1. Deploy terraform/aws/workload-customera -->
 1. Deploy EKS cluster via eksctl
    1. eksctl create cluster -f eksctl/blue.yaml
    1. eksctl delete cluster --name blue
