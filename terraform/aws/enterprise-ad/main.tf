@@ -1,23 +1,23 @@
 #primary
-data "aws_vpc" "shared_primary" {
-  provider = aws.shared_services
+data "aws_vpc" "network_primary" {
+  provider = aws.network
 
-  cidr_block = "${var.vpc_prefixes.shared_vpc.primary}.0.0/16"
+  cidr_block = "${var.vpc_cidr_network_primary}"
   state = "available"
 }
 
-data "aws_subnet" "shared_a_primary" {
-  provider = aws.shared_services
+data "aws_subnets" "network_primary" {
+  provider = aws.network
 
-  cidr_block = "${var.vpc_prefixes.shared_vpc.primary}.${var.vpc_suffixes.subnet_private_a}"
-  state = "available"
-}
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.network_primary.id]
+  }
 
-data "aws_subnet" "shared_b_primary" {
-  provider = aws.shared_services
-
-  cidr_block = "${var.vpc_prefixes.shared_vpc.primary}.${var.vpc_suffixes.subnet_private_b}"
-  state = "available"
+  filter {
+    name   = "tag:Name"
+    values = ["*-pvt-*"]
+  }
 }
 
 resource "aws_directory_service_directory" "ad_primary" {
@@ -30,8 +30,8 @@ resource "aws_directory_service_directory" "ad_primary" {
   type        = "MicrosoftAD"
   edition     = "Enterprise"
   vpc_settings {
-    vpc_id      = data.aws_vpc.shared_primary.id
-    subnet_ids  = [data.aws_subnet.shared_a_primary.id, data.aws_subnet.shared_b_primary.id]
+    vpc_id      = data.aws_vpc.network_primary.id
+    subnet_ids  = slice(data.aws_subnets.network_primary.ids, 0, 2)
   }
 }
 
@@ -59,25 +59,25 @@ resource "aws_route53_record" "corp_ad" {
 }
 
 #failover
-data "aws_vpc" "shared_failover" {
-  provider = aws.shared_services_failover
+data "aws_vpc" "network_failover" {
+  provider = aws.network_failover
 
-  cidr_block = "${var.vpc_prefixes.shared_vpc.failover}.0.0/16"
+  cidr_block = "${var.vpc_cidr_network_failover}"
   state = "available"
 }
 
-data "aws_subnet" "shared_a_failover" {
-  provider = aws.shared_services_failover
+data "aws_subnets" "network_failover" {
+  provider = aws.network_failover
+  
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.network_failover.id]
+  }
 
-  cidr_block = "${var.vpc_prefixes.shared_vpc.failover}.${var.vpc_suffixes.subnet_private_a}"
-  state = "available"
-}
-
-data "aws_subnet" "shared_b_failover" {
-  provider = aws.shared_services_failover
-
-  cidr_block = "${var.vpc_prefixes.shared_vpc.failover}.${var.vpc_suffixes.subnet_private_b}"
-  state = "available"
+  filter {
+    name   = "tag:Name"
+    values = ["*-pvt-*"]
+  }
 }
 
 resource "aws_directory_service_region" "ad_failover" {
@@ -87,8 +87,8 @@ resource "aws_directory_service_region" "ad_failover" {
   region_name  = var.region.failover
 
   vpc_settings {
-    vpc_id     = data.aws_vpc.shared_failover.id
-    subnet_ids = [data.aws_subnet.shared_a_failover.id, data.aws_subnet.shared_b_failover.id]
+    vpc_id     = data.aws_vpc.network_failover.id
+    subnet_ids = slice(data.aws_subnets.network_failover.ids, 0, 2)
   }
 }
 

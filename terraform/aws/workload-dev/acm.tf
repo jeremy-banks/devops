@@ -1,7 +1,7 @@
 module "acm_wildcard_cert_primary" {
   source  = "terraform-aws-modules/acm/aws"
   version = "5.0.0"
-  providers = { aws = aws.project_demo_nonprod }
+  providers = { aws = aws.workload_dev }
 
   domain_name = var.company_domain
   subject_alternative_names = ["*.${var.company_domain}"]
@@ -36,7 +36,7 @@ module "acm_dns_records_primary" {
 module "acm_wildcard_cert_failover" {
   source  = "terraform-aws-modules/acm/aws"
   version = "5.0.0"
-  providers = { aws = aws.project_demo_nonprod_failover }
+  providers = { aws = aws.workload_dev_failover }
 
   domain_name = var.company_domain
   subject_alternative_names = ["*.${var.company_domain}"]

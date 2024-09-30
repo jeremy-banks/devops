@@ -10,16 +10,17 @@ resource "aws_organizations_organization" "org" {
   feature_set = "ALL"
 }
 
-resource "aws_ram_sharing_with_organization" "enable" {}
+resource "aws_ram_sharing_with_organization" "enable" {
+  depends_on = [
+    aws_organizations_organization.org,
+    aws_organizations_account.security_tooling,
+    aws_organizations_account.log_archive,
+    aws_organizations_account.network,
+    aws_organizations_account.shared_services
+  ]
+}
 
 data "aws_caller_identity" "current" {}
-
-#https://github.com/hashicorp/terraform-provider-aws/issues/14731
-# resource "aws_servicequotas_service_quota" "ACCOUNT_NUMBER_LIMIT_EXCEEDED" {
-#   quota_code   = "L-29A0C5DF"
-#   service_code = "organizations"
-#   value        = var.ACCOUNT_NUMBER_LIMIT_EXCEEDED
-# }
 
 resource "aws_organizations_organizational_unit" "security" {
   name      = "security"
@@ -37,8 +38,8 @@ resource "aws_organizations_organizational_unit" "workloads" {
 }
 
 resource "aws_organizations_account" "security_tooling" {
-  name  = "${local.resource_name_stub}-security-tooling"
-  email = "${var.company_email_prefix}-security-tooling@${var.company_email_domain}"
+  name  = "${local.resource_name_prefix_abbr}-security-tooling"
+  email = "${var.org_owner_email_prefix}-security-tooling@${var.org_owner_email_domain}"
 
   close_on_deletion           = true
   create_govcloud             = false
@@ -48,8 +49,8 @@ resource "aws_organizations_account" "security_tooling" {
 }
 
 resource "aws_organizations_account" "log_archive" {
-  name  = "${local.resource_name_stub}-log-archive"
-  email = "${var.company_email_prefix}-log-archive@${var.company_email_domain}"
+  name  = "${local.resource_name_prefix_abbr}-log-archive"
+  email = "${var.org_owner_email_prefix}-log-archive@${var.org_owner_email_domain}"
 
   close_on_deletion           = true
   create_govcloud             = false
@@ -59,8 +60,8 @@ resource "aws_organizations_account" "log_archive" {
 }
 
 resource "aws_organizations_account" "network" {
-  name  = "${local.resource_name_stub}-network"
-  email = "${var.company_email_prefix}-network@${var.company_email_domain}"
+  name  = "${local.resource_name_prefix_abbr}-network"
+  email = "${var.org_owner_email_prefix}-network@${var.org_owner_email_domain}"
 
   close_on_deletion           = true
   create_govcloud             = false
@@ -70,8 +71,8 @@ resource "aws_organizations_account" "network" {
 }
 
 resource "aws_organizations_account" "shared_services" {
-  name  = "${local.resource_name_stub}-shared-services"
-  email = "${var.company_email_prefix}-shared-services@${var.company_email_domain}"
+  name  = "${local.resource_name_prefix_abbr}-shared-services"
+  email = "${var.org_owner_email_prefix}-shared-services@${var.org_owner_email_domain}"
 
   close_on_deletion           = true
   create_govcloud             = false

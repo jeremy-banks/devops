@@ -1,1 +1,1 @@
-deployment_environment = "prod"
+deployment_environment = "prd"
