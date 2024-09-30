@@ -53,9 +53,9 @@ variable "project_name_abbr" {
 }
 
 variable "deployment_environment" {
-  description = "name of the deployment environment, eg nonprod or prod"
+  description = "name of the deployment environment, eg dev, tst, stg, prd"
   type        = string
-  default     = "nonprod"
+  default     = "dev"
 }
 
 variable "resource_owner_email" {
@@ -76,6 +76,19 @@ variable "cli_profile_name_aws_substitute" {
   default     = ""
 }
 
+variable "account_id" {
+  type    = map(number)
+  default = {
+    log_archive = "615299772193"
+    network = "724772075765"
+    org = "266735804093"
+    project_demo_prod = "886436972084"
+    security_tooling = "739275460046"
+    shared_services = "842676016691"
+    workload_dev = "982534358549"
+  }
+}
+
 variable "region" {
   description = "regions for the infrastructure"
   type        = map(string)
@@ -84,21 +97,6 @@ variable "region" {
     failover  = "us-east-1"
     primary_short   = "usw2"
     failover_short  = "use1"
-  }
-}
-
-variable "availability_zones" {
-  description = "specific AZs to use to lower latency"
-  type        = map(list(string))
-  default     = {
-    primary = [
-      "usw2-az1",
-      "usw2-az3",
-    ]
-    failover = [
-      "use1-az2",
-      "use1-az4",
-    ]
   }
 }
 
@@ -139,19 +137,6 @@ variable "iam_access_management_tag_key" {
   default     = "iam_access_management"
 }
 
-variable "account_id" {
-  type    = map(number)
-  default = {
-    log_archive = "314146296298"
-    network = "739275473054"
-    org = "686255956644"
-    project_demo_nonprod = "148761641725"
-    project_demo_prod = "418272785605"
-    security_tooling = "741448947403"
-    shared_services = "183631311282"
-  }
-}
-
 variable "tgw_asn" {
   type  = map(number)
   default = {
@@ -160,65 +145,119 @@ variable "tgw_asn" {
   }
 }
 
-variable "vpc_prefixes" {
-  type    = map(map(string))
+variable "vpc_cidr_substitute_primary" {
+  type = string
+  default = ""
+}
+
+variable "vpc_cidr_substitute_failover" {
+  type = string
+  default = ""
+}
+
+variable "vpc_cidr_network_primary" {
+  type = string
+  default = "10.41.0.0/16"
+}
+
+variable "vpc_cidr_network_failover" {
+  type = string
+  default = "10.42.0.0/16"
+}
+
+variable "vpc_cidr_clientvpn_primary" {
+  type = string
+  default = "10.43.0.0/16"
+}
+
+variable "vpc_cidr_clientvpn_failover" {
+  type = string
+  default = "10.44.0.0/16"
+}
+
+variable "vpc_cidr_dev_primary" {
+  type = string
+  default = "10.51.0.0/16"
+}
+
+variable "vpc_cidr_dev_failover" {
+  type = string
+  default = "10.52.0.0/16"
+}
+
+variable "vpc_cidr_tst_primary" {
+  type = string
+  default = "10.53.0.0/16"
+}
+
+variable "vpc_cidr_tst_failover" {
+  type = string
+  default = "10.54.0.0/16"
+}
+
+variable "vpc_cidr_stg_primary" {
+  type = string
+  default = "10.55.0.0/16"
+}
+
+variable "vpc_cidr_stg_failover" {
+  type = string
+  default = "10.56.0.0/16"
+}
+
+variable "vpc_cidr_prd_primary" {
+  type = string
+  default = "10.57.0.0/16"
+}
+
+variable "vpc_cidr_prd_failover" {
+  type = string
+  default = "10.58.0.0/16"
+}
+
+variable "vpc_cidr_customera_primary" {
+  type = string
+  default = "10.61.0.0/16"
+}
+
+variable "vpc_cidr_customera_failover" {
+  type = string
+  default = "10.62.0.0/16"
+}
+
+variable "availability_zones_double" {
+  type = map(list(string))
   default = {
-    shared_vpc = {
-      primary = "10.41"
-      failover = "10.42"
-    }
-    client_vpn = {
-      primary = "10.51"
-      failover = "10.52"
-    }
-    project_demo_nonprod = {
-      primary = "10.43"
-      failover = "10.44"
-    }
-    project_demo_prod = {
-      primary = "10.45"
-      failover = "10.46"
-    }
+    primary = [
+      "usw2-az1",
+      "usw2-az3",
+    ]
+    failover = [
+      "use1-az2",
+      "use1-az4",
+    ]
   }
 }
 
-variable "vpc_suffixes_2az" {
-  description = "two public subnets with 4k addresses and two private subnets with 16k addresses"
-  type    = map(string)
+variable "availability_zones_triple" {
+  type = map(list(string))
   default = {
-    subnet_public_a = "128.0/20"
-    subnet_public_b = "144.0/20"
-    subnet_private_a = "0.0/18"
-    subnet_private_b = "64.0/18"
-    # remaining
-    # 160.0/19
-    # 192.0/18
-  }
-}
-
-variable "vpc_suffixes_3az" {
-  description = "three public subnets with 4k addresses and three private subnets with 16k addresses"
-  type    = map(string)
-  default = {
-    subnet_public_a = "192.0/20"
-    subnet_public_b = "208.0/20"
-    subnet_public_c = "224.0/20"
-    subnet_private_a = "0.0/18"
-    subnet_private_b = "64.0/18"
-    subnet_private_c = "128.0/18"
-    # remaining
-    # 240.0/20
+    primary = [
+      "usw2-az1",
+      "usw2-az3",
+      "usw2-az4",
+    ]
+    failover = [
+      "use1-az2",
+      "use1-az4",
+      "use1-az5",
+    ]
   }
 }
 
 variable "ntp_server" {
   type  = string
   default = "169.254.169.123"
-}
-
-variable "ipv_to_allow_substitute"{
-  type  = string
-  default = ""
 }
 
 variable "ad_directory_admin_password" {
@@ -253,6 +292,20 @@ locals {
   resource_name_prefix_env_region_primary_abbr = "${local.resource_name_prefix_env_abbr}-${var.region.primary_short}"
   resource_name_prefix_env_region_failover_abbr = "${local.resource_name_prefix_env_abbr}-${var.region.failover_short}"
 
+  vpc_cidr_primary = var.vpc_cidr_substitute_primary != "" ? var.vpc_cidr_substitute_primary : var.vpc_cidr_dev_primary
+  vpc_azs_primary = var.deployment_environment == "prd" || var.deployment_environment == "stg" ? var.availability_zones_triple.primary : var.availability_zones_double.primary
+  vpc_subnets_private_primary = [for k in range(length(local.vpc_azs_primary)) : cidrsubnet(local.vpc_cidr_primary, 2, k)]
+  vpc_subnets_public_primary = [for k in range(length(local.vpc_azs_primary)) : cidrsubnet(local.vpc_cidr_primary, 4, k + (4 * length(local.vpc_azs_primary)))]
+  vpc_cidr_primary_split = split(".", cidrsubnet(local.vpc_cidr_primary, 0, 0))
+  vpc_dns_primary = join(".", [local.vpc_cidr_primary_split[0], local.vpc_cidr_primary_split[1], local.vpc_cidr_primary_split[2], "2"])
+
+  vpc_cidr_failover = var.vpc_cidr_substitute_failover != "" ? var.vpc_cidr_substitute_failover : var.vpc_cidr_dev_failover
+  vpc_azs_failover = var.deployment_environment == "prd" || var.deployment_environment == "stg" ? var.availability_zones_triple.failover : var.availability_zones_double.failover
+  vpc_subnets_private_failover = [for k in range(length(local.vpc_azs_failover)) : cidrsubnet(local.vpc_cidr_failover, 2, k)]
+  vpc_subnets_public_failover = [for k in range(length(local.vpc_azs_failover)) : cidrsubnet(local.vpc_cidr_failover, 4, k + (4 * length(local.vpc_azs_failover)))]
+  vpc_cidr_failover_split = split(".", cidrsubnet(local.vpc_cidr_failover, 0, 0))
+  vpc_dns_failover = join(".", [local.vpc_cidr_failover_split[0], local.vpc_cidr_failover_split[1], local.vpc_cidr_failover_split[2], "2"])
+
   vpc_ntp_servers = [var.ntp_server]
 
   application_load_balancer_allow_list = "foo"
@@ -265,7 +318,7 @@ locals {
     "company"         = var.company_name #Microsoft
     "team"            = var.team_name #Blue
     "project"         = var.project_name #Windows
-    "environment"     = var.deployment_environment #prod|nonprod
+    "environment"     = var.deployment_environment #dev|tst|stg|prd
     "resource_owner"  = local.resource_owner_email
     "tool"            = "terraform"
   }

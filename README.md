@@ -55,7 +55,7 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
       aws configure --profile automation
 1. Deploy terraform/aws/r53-zones-and-records
    1. Update your domain registrar with the nameservers from terraform output
-1. Deploy terraform/aws/tgw-and-shared-vpc
+1. Deploy terraform/aws/tgw-and-network-vpc
 1. Deploy terraform/aws/enterprise-ad
    1. This deployment can take up to 2 hours and may fail several times due to AWS throttling, keep running plan and apply until complete
    1. Update the terraform/variables.tf ad_directory_id_connector_network and ad_directory_id_connector_network_failover strings with terraform output
