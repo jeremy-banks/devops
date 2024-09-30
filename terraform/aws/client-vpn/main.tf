@@ -7,9 +7,9 @@ resource "aws_ec2_client_vpn_endpoint" "client_vpn_primary" {
   provider = aws.network
 
   server_certificate_arn  = module.acm_wildcard_cert_primary.acm_certificate_arn
-  client_cidr_block       = "${var.vpc_prefixes.client_vpn.primary}.0.0/16"
+  client_cidr_block       = "${var.vpc_cidr_clientvpn_primary}"
   transport_protocol      = "tcp"
-  vpc_id                  = data.aws_vpc.shared_primary.id
+  vpc_id                  = data.aws_vpc.network_primary.id
   security_group_ids      = [
     module.client_vpn_endpoint_sg_primary.security_group_id,
     module.client_vpn_endpoint_r53_healthcheck_sg_primary.security_group_id,
@@ -56,7 +56,7 @@ module "client_vpn_endpoint_sg_primary" {
   name        = "${local.resource_name_prefix_env}-client-vpn-endpoint-primary"
   use_name_prefix = false
   description = "main sg for client-vpn endpoint"
-  vpc_id      = data.aws_vpc.shared_primary.id
+  vpc_id      = data.aws_vpc.network_primary.id
 
   computed_ingress_with_self = [
       {
@@ -111,7 +111,7 @@ module "client_vpn_endpoint_r53_healthcheck_sg_primary" {
   name        = "${local.resource_name_prefix_env}-client-vpn-endpoint-r53-healthcheck-primary"
   use_name_prefix = false
   description = "r53 healthcheck sg for client-vpn endpoint"
-  vpc_id      = data.aws_vpc.shared_primary.id
+  vpc_id      = data.aws_vpc.network_primary.id
 
   ingress_prefix_list_ids = [data.aws_ec2_managed_prefix_list.route53_healthchecks_primary.id]
   ingress_with_prefix_list_ids = [
@@ -132,39 +132,34 @@ module "client_vpn_endpoint_r53_healthcheck_sg_primary" {
   ]
 }
 
-data "aws_vpc" "shared_primary" {
-  provider = aws.shared_services
-
-  cidr_block = "${var.vpc_prefixes.shared_vpc.primary}.0.0/16"
-  state = "available"
-}
-
-data "aws_subnet" "shared_a_primary" {
-  provider = aws.shared_services
-
-  cidr_block = "${var.vpc_prefixes.shared_vpc.primary}.${var.vpc_suffixes.subnet_private_a}"
-  state = "available"
-}
-
-data "aws_subnet" "shared_b_primary" {
-  provider = aws.shared_services
-
-  cidr_block = "${var.vpc_prefixes.shared_vpc.primary}.${var.vpc_suffixes.subnet_private_b}"
-  state = "available"
-}
-
-resource "aws_ec2_client_vpn_network_association" "shared_a_primary" {
+data "aws_vpc" "network_primary" {
   provider = aws.network
 
-  client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.client_vpn_primary.id
-  subnet_id              = data.aws_subnet.shared_a_primary.id
+  cidr_block = "${var.vpc_cidr_network_primary}"
+  state = "available"
 }
 
-resource "aws_ec2_client_vpn_network_association" "shared_b_primary" {
+data "aws_subnets" "network_primary" {
   provider = aws.network
 
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.network_primary.id]
+  }
+
+  filter {
+    name   = "tag:Name"
+    values = ["*-pvt-*"]
+  }
+}
+
+resource "aws_ec2_client_vpn_network_association" "primary" {
+  provider = aws.network
+
+  count = length(data.aws_subnets.network_primary.ids)
+
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.client_vpn_primary.id
-  subnet_id              = data.aws_subnet.shared_b_primary.id
+  subnet_id              = element(data.aws_subnets.network_primary.ids, count.index)
 }
 
 #failover
@@ -172,8 +167,8 @@ resource "aws_ec2_client_vpn_endpoint" "client_vpn_failover" {
   provider = aws.network_failover
 
   server_certificate_arn = module.acm_wildcard_cert_failover.acm_certificate_arn
-  client_cidr_block      = "${var.vpc_prefixes.client_vpn.failover}.0.0/16"
-  vpc_id                 = data.aws_vpc.shared_failover.id
+  client_cidr_block      = "${var.vpc_cidr_clientvpn_failover}"
+  vpc_id                 = data.aws_vpc.network_failover.id
   transport_protocol     = "tcp"
   security_group_ids     = [
     module.client_vpn_endpoint_sg_failover.security_group_id,
@@ -209,7 +204,7 @@ module "client_vpn_endpoint_sg_failover" {
   name        = "${local.resource_name_prefix_env}-client-vpn-endpoint-failover"
   use_name_prefix = false
   description = "main sg for client-vpn endpoint"
-  vpc_id      = data.aws_vpc.shared_failover.id
+  vpc_id      = data.aws_vpc.network_failover.id
 
   computed_ingress_with_self = [
       {
@@ -264,7 +259,7 @@ module "client_vpn_endpoint_r53_healthcheck_sg_failover" {
   name        = "${local.resource_name_prefix_env}-client-vpn-endpoint-r53-healthcheck-failover"
   use_name_prefix = false
   description = "r53 healthcheck sg for client-vpn endpoint"
-  vpc_id      = data.aws_vpc.shared_failover.id
+  vpc_id      = data.aws_vpc.network_failover.id
 
   ingress_prefix_list_ids = [data.aws_ec2_managed_prefix_list.route53_healthchecks_failover.id]
   ingress_with_prefix_list_ids = [
@@ -285,39 +280,35 @@ module "client_vpn_endpoint_r53_healthcheck_sg_failover" {
   ]
 }
 
-data "aws_vpc" "shared_failover" {
-  provider = aws.shared_services_failover
-
-  cidr_block = "${var.vpc_prefixes.shared_vpc.failover}.0.0/16"
-  state = "available"
-}
-
-data "aws_subnet" "shared_a_failover" {
-  provider = aws.shared_services_failover
-
-  cidr_block = "${var.vpc_prefixes.shared_vpc.failover}.${var.vpc_suffixes.subnet_private_a}"
-  state = "available"
-}
-
-data "aws_subnet" "shared_b_failover" {
-  provider = aws.shared_services_failover
-
-  cidr_block = "${var.vpc_prefixes.shared_vpc.failover}.${var.vpc_suffixes.subnet_private_b}"
-  state = "available"
-}
-
-resource "aws_ec2_client_vpn_network_association" "shared_a_failover" {
+data "aws_vpc" "network_failover" {
   provider = aws.network_failover
 
-  client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.client_vpn_failover.id
-  subnet_id              = data.aws_subnet.shared_a_failover.id
+  cidr_block = "${var.vpc_cidr_network_failover}"
+  state = "available"
 }
 
-resource "aws_ec2_client_vpn_network_association" "shared_b_failover" {
+data "aws_subnets" "network_failover" {
   provider = aws.network_failover
 
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.network_failover.id]
+  }
+
+  filter {
+    name   = "tag:Name"
+    values = ["*-pvt-*"]
+  }
+}
+
+
+resource "aws_ec2_client_vpn_network_association" "failover" {
+  provider = aws.network_failover
+
+  count = length(data.aws_subnets.network_failover.ids)
+
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.client_vpn_failover.id
-  subnet_id              = data.aws_subnet.shared_b_failover.id
+  subnet_id              = element(data.aws_subnets.network_failover.ids, count.index)
 }
 
 #dns
