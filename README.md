@@ -74,7 +74,10 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
    1. SDLC-dev
       1. Assume role into sdlc-dev (replace 012345678912 with correct account id)
          ```sh
-         AWS_PROFILE=automation aws sts assume-role --role-arn arn:aws:iam::012345678912:role/automation --role-session-name sdlc-dev-session --duration-seconds 3600
+         AWS_PROFILE=automation aws sts assume-role \
+           --role-arn arn:aws:iam::012345678912:role/automation \
+           --role-session-name sdlc-dev-session \
+           --duration-seconds 3600
          export AWS_ACCESS_KEY_ID=foo
          export AWS_SECRET_ACCESS_KEY=bar
          export AWS_SESSION_TOKEN=helloworld
