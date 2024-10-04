@@ -1,6 +1,6 @@
-resource "aws_organizations_account" "workload_dev" {
-  name  = "${local.resource_name_prefix_abbr}-workload-dev"
-  email = "${var.org_owner_email_prefix}-workload-dev@${var.org_owner_email_domain}"
+resource "aws_organizations_account" "sdlc_dev" {
+  name  = "${local.resource_name_prefix_abbr}-sdlc-dev"
+  email = "${var.org_owner_email_prefix}-sdlc-dev@${var.org_owner_email_domain}"
 
   close_on_deletion           = true
   create_govcloud             = false
@@ -9,13 +9,13 @@ resource "aws_organizations_account" "workload_dev" {
   role_name                   = var.assumable_role_name.superadmin
 }
 
-output "workload_dev" {
-  value = aws_organizations_account.workload_dev.id
+output "sdlc_dev" {
+  value = aws_organizations_account.sdlc_dev.id
 }
 
-# resource "aws_organizations_account" "workload_tst" {
-#   name  = "${local.resource_name_prefix_abbr}-workload-tst"
-#   email = "${var.org_owner_email_prefix}-workload-tst@${var.org_owner_email_domain}"
+# resource "aws_organizations_account" "sdlc_tst" {
+#   name  = "${local.resource_name_prefix_abbr}-sdlc-tst"
+#   email = "${var.org_owner_email_prefix}-sdlc-tst@${var.org_owner_email_domain}"
 
 #   close_on_deletion           = true
 #   create_govcloud             = false
@@ -24,13 +24,13 @@ output "workload_dev" {
 #   role_name                   = var.assumable_role_name.superadmin
 # }
 
-# output "workload_tst" {
-#   value = aws_organizations_account.workload_tst.id
+# output "sdlc_tst" {
+#   value = aws_organizations_account.sdlc_tst.id
 # }
 
-# resource "aws_organizations_account" "workload_stg" {
-#   name  = "${local.resource_name_prefix_abbr}-workload-stg"
-#   email = "${var.org_owner_email_prefix}-workload-stg@${var.org_owner_email_domain}"
+# resource "aws_organizations_account" "sdlc_stg" {
+#   name  = "${local.resource_name_prefix_abbr}-sdlc-stg"
+#   email = "${var.org_owner_email_prefix}-sdlc-stg@${var.org_owner_email_domain}"
 
 #   close_on_deletion           = true
 #   create_govcloud             = false
@@ -39,13 +39,13 @@ output "workload_dev" {
 #   role_name                   = var.assumable_role_name.superadmin
 # }
 
-# output "workload_stg" {
-#   value = aws_organizations_account.workload_stg.id
+# output "sdlc_stg" {
+#   value = aws_organizations_account.sdlc_stg.id
 # }
 
-# resource "aws_organizations_account" "workload_prd" {
-#   name  = "${local.resource_name_prefix_abbr}-workload-prd"
-#   email = "${var.org_owner_email_prefix}-workload-prd@${var.org_owner_email_domain}"
+# resource "aws_organizations_account" "sdlc_prd" {
+#   name  = "${local.resource_name_prefix_abbr}-sdlc-prd"
+#   email = "${var.org_owner_email_prefix}-sdlc-prd@${var.org_owner_email_domain}"
 
 #   close_on_deletion           = true
 #   create_govcloud             = false
@@ -54,6 +54,6 @@ output "workload_dev" {
 #   role_name                   = var.assumable_role_name.superadmin
 # }
 
-# output "workload_prd" {
-#   value = aws_organizations_account.workload_prd.id
+# output "sdlc_prd" {
+#   value = aws_organizations_account.sdlc_prd.id
 # }
