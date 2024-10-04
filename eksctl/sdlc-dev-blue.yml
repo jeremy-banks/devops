@@ -1,0 +1,48 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: sdlc-dev-blue
+  region: us-west-2
+  version: "1.31"
+
+vpc:
+  id: vpc-06e31714ad26a1e38
+  subnets:
+    private:
+      private-one: { id: subnet-08c4b99de8dfcf374 }
+      private-two: { id: subnet-0b49561eefd1e8faf }
+
+managedNodeGroups:
+  - name: general
+    instanceType: t3a.medium
+    minSize: 3
+    desiredCapacity: 3
+    privateNetworking: true
+
+nodeGroups:
+  - name: cluster-services
+    labels:
+      role: &clusterServices cluster-services
+    taints:
+      - key: *clusterServices
+        value: "true"
+        effect: "NoSchedule"
+    instanceType: t3a.medium
+    minSize: 3
+    desiredCapacity: 3
+    privateNetworking: true
+    iam:
+      withAddonPolicies:
+        appMesh: true
+        appMeshPreview: true
+        autoScaler: true
+        awsLoadBalancerController: true
+        certManager: true
+        cloudWatch: true
+        ebs: true
+        efs: true
+        externalDNS: true
+        fsx: true
+        imageBuilder: true
+        xRay: true

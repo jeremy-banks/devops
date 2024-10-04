@@ -1,7 +1,7 @@
 module "kms_primary" {
   source  = "terraform-aws-modules/kms/aws"
-  version = "2.1.0"
-  providers = { aws = aws.workload_dev }
+  version = "3.1.0"
+  providers = { aws = aws.sdlc_dev }
 
   deletion_window_in_days = 30
   enable_key_rotation     = true
@@ -16,8 +16,8 @@ module "kms_primary" {
 
 module "kms_failover" {
   source  = "terraform-aws-modules/kms/aws"
-  version = "2.1.0"
-  providers = { aws = aws.workload_dev_failover }
+  version = "3.1.0"
+  providers = { aws = aws.sdlc_dev_failover }
 
   deletion_window_in_days = 30
   create_replica          = true
@@ -28,7 +28,7 @@ module "kms_failover" {
   policy = data.aws_iam_policy_document.kms.json
 }
 
-data "aws_caller_identity" "workload_dev" { provider = aws.workload_dev }
+data "aws_caller_identity" "sdlc_dev" { provider = aws.sdlc_dev }
 
 data "aws_iam_policy_document" "kms"  {
   statement {
@@ -38,7 +38,7 @@ data "aws_iam_policy_document" "kms"  {
 
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.workload_dev.account_id}:root"]
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.sdlc_dev.account_id}:root"]
     }
 
     actions   = ["kms:*"]
@@ -53,7 +53,7 @@ data "aws_iam_policy_document" "kms"  {
 
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.workload_dev.account_id}:root"]
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.sdlc_dev.account_id}:root"]
     }
 
     actions   = [
@@ -69,7 +69,7 @@ data "aws_iam_policy_document" "kms"  {
     condition {
       test     = "StringEquals"
       variable = "aws:SourceAccount"
-      values   = ["${data.aws_caller_identity.workload_dev.account_id}"]
+      values   = ["${data.aws_caller_identity.sdlc_dev.account_id}"]
     }
   }
 
@@ -80,7 +80,7 @@ data "aws_iam_policy_document" "kms"  {
 
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.workload_dev.account_id}:root"]
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.sdlc_dev.account_id}:root"]
     }
 
     actions   = [
@@ -100,7 +100,7 @@ data "aws_iam_policy_document" "kms"  {
     condition {
       test     = "StringEquals"
       variable = "aws:SourceAccount"
-      values   = ["${data.aws_caller_identity.workload_dev.account_id}"]
+      values   = ["${data.aws_caller_identity.sdlc_dev.account_id}"]
     }
   }
 }

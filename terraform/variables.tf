@@ -13,7 +13,7 @@ variable "org_owner_email_domain" {
 variable "company_domain" {
   description = "company domain"
   type        = string
-  default     = "outerplanes.org"
+  default     = "windows.com"
 }
 
 variable "company_name" {
@@ -77,14 +77,14 @@ variable "cli_profile_name_aws_substitute" {
 }
 
 variable "account_id" {
-  type    = map(number)
+  type    = map(string)
   default = {
-    log_archive = "0"
-    network = "0"
-    org = "0"
-    security_tooling = "0"
-    shared_services = "0"
-    workload_dev = "0"
+    log_archive = ""
+    network = ""
+    org = ""
+    sdlc_dev = ""
+    security_tooling = ""
+    shared_services = ""
   }
 }
 

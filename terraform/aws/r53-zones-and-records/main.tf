@@ -1,7 +1,7 @@
 # zone
 module "r53_zone_company_domain" {
   source  = "terraform-aws-modules/route53/aws//modules/zones"
-  version = "2.11.0"
+  version = "4.1.0"
   providers = { aws = aws.network }
 
   zones = {
@@ -13,7 +13,7 @@ module "r53_zone_company_domain" {
 
 # module "project1_dns_logs_kms" {
 #   source  = "terraform-aws-modules/kms/aws"
-#   version = "2.1.0"
+#   version = "3.1.0"
 
 #   providers = { aws = aws.log-archive }
 
@@ -24,7 +24,7 @@ module "r53_zone_company_domain" {
 
 # module "project1_dns_logs_kms_replica" {
 #   source  = "terraform-aws-modules/kms/aws"
-#   version = "2.1.0"
+#   version = "3.1.0"
 
 #   providers = { aws = aws.log-archive-dr }
 

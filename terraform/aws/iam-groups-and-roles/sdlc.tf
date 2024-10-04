@@ -1,7 +1,7 @@
-module "iam_assumable_roles_workload_dev" {
+module "iam_assumable_roles_sdlc_dev" {
   source = "terraform-aws-modules/iam/aws//modules/iam-assumable-roles"
-  version = "5.32.0"
-  providers = { aws = aws.workload_dev }
+  version = "5.45.0"
+  providers = { aws = aws.sdlc_dev }
 
   trusted_role_arns = [
      "arn:aws:iam::${var.account_id.shared_services}:root",
@@ -21,10 +21,10 @@ module "iam_assumable_roles_workload_dev" {
   max_session_duration = 43200
 }
 
-module "iam_assumable_role_automation_workload_dev" {
+module "iam_assumable_role_automation_sdlc_dev" {
   source = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.32.0"
-  providers = { aws = aws.workload_dev }
+  version = "5.45.0"
+  providers = { aws = aws.sdlc_dev }
 
   trusted_role_arns = [
      "arn:aws:iam::${var.account_id.shared_services}:root",

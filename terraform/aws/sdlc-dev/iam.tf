@@ -26,8 +26,8 @@ data "aws_iam_policy_document" "iam_role_eks_cluster" {
 
 module "iam_policy_eks_cluster" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.33.0"
-  providers = { aws = aws.workload_dev }
+  version = "5.45.0"
+  providers = { aws = aws.sdlc_dev }
 
   name        = "eks-cluster"
   path        = "/"
@@ -37,8 +37,8 @@ module "iam_policy_eks_cluster" {
 
 module "iam_role_eks_cluster" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.33.0"
-  providers = { aws = aws.workload_dev }
+  version = "5.45.0"
+  providers = { aws = aws.sdlc_dev }
 
   trusted_role_services = [
     "eks.amazonaws.com"
@@ -70,8 +70,8 @@ data "aws_iam_policy_document" "iam_role_eks_cluster_services" {
 
 module "iam_policy_eks_cluster_services" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.33.0"
-  providers = { aws = aws.workload_dev }
+  version = "5.45.0"
+  providers = { aws = aws.sdlc_dev }
 
   name        = "eks-cluster-services"
   path        = "/"
@@ -81,8 +81,8 @@ module "iam_policy_eks_cluster_services" {
 
 module "iam_role_eks_cluster_services_node" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.33.0"
-  providers = { aws = aws.workload_dev }
+  version = "5.45.0"
+  providers = { aws = aws.sdlc_dev }
 
   create_instance_profile = true
   trusted_role_services = [
@@ -118,8 +118,8 @@ data "aws_iam_policy_document" "iam_role_eks_worker_node" {
 
 module "iam_policy_eks_worker_node" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.33.0"
-  providers = { aws = aws.workload_dev }
+  version = "5.45.0"
+  providers = { aws = aws.sdlc_dev }
 
   name        = "eks-worker-node"
   path        = "/"
@@ -129,8 +129,8 @@ module "iam_policy_eks_worker_node" {
 
 module "iam_role_eks_worker_node" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.33.0"
-  providers = { aws = aws.workload_dev }
+  version = "5.45.0"
+  providers = { aws = aws.sdlc_dev }
 
   create_instance_profile = true
   trusted_role_services = [

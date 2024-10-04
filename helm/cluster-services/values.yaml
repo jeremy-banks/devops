@@ -10,9 +10,9 @@ cluster-autoscaler:
   nodeSelector:
     role: *cluster-services
   tolerations:
-    - key: "role"
+    - key: "cluster-services"
       operator: "Equal"
-      value: *cluster-services
+      value: "true"
       effect: "NoSchedule"
   replicaCount: 2
 
@@ -21,9 +21,9 @@ aws-load-balancer-controller:
   nodeSelector:
     role: *cluster-services
   tolerations:
-    - key: "role"
+    - key: "cluster-services"
       operator: "Equal"
-      value: *cluster-services
+      value: "true"
       effect: "NoSchedule"
   # region: *region
   # VpcId: vpc-0393e1a05766d6cea

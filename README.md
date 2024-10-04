@@ -18,41 +18,45 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
   - Latencies between AWS availability zones https://www.flashgrid.io/news/latencies-between-aws-availability-zones-what-are-they-and-how-to-minimize-them
 
 ## Prerequisites
-- AWS cli 2.17.48
-- Terraform v1.9.5
-- eksctl 0.173.0
-- kubectl v1.29.2
+- aws-cli/2.17.65
+- Terraform v1.9.7
+- eksctl version 0.191.0
+- kubectl v1.31.1
+- helm v3.16.1
 
 ## Initial Setup
 1. Create AWS Account to be Organization root
-1. Create non-Console IAM user named "superadmin"
+1. Update the terraform/variables.tf with your unique information
+   1. org_owner_email_prefix (billg)
+   1. org_owner_email_domain (microsoft.com)
+   1. company_domain (windows.com)
+   1. company_name (microsoft)
+   1. company_name_abbr (ms)
+   1. team_name (blue)
+   1. team_name_abbr (blue)
+   1. project_name (windows13)
+   1. project_name_abbr (w13)
+1. Create IAM User "superadmin"
    1. Attach AdministratorAccess policy
    1. Create an access key to be used in AWS CLI profile named "superadmin"
       ```sh
       aws configure --profile superadmin
-   1. Update the terraform/variables.tf with your unique information
-      1. org_owner_email_prefix (billg)
-      1. org_owner_email_domain (microsoft.com)
-      1. company_domain (windows.com)
-      1. company_name (microsoft)
-      1. team_name (blue)
-      1. project_name (windows13)
-      1. company_name_abbr (ms)
-      1. team_name_abbr (blue)
-      1. project_name_abbr (w13)
+      ```
 <!-- 1. Deploy terraform/aws/tfstate-backend
    1. Update the terraform/aws/*/backend.tf files
       ```sh
       org root account id   find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDORGACCOUNTID/123456789012/g' {} +
       1. bucket:  find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDS3BUCKETNAME/tfstate-bucket-name/g' {} +
-      1. dynamodb table:  find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDDYNAMODBTABLE/dynamodb-tfstate-lock/g' {} + -->
+      1. dynamodb table:  find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDDYNAMODBTABLE/dynamodb-tfstate-lock/g' {} +
+      ``` -->
 1. Deploy terraform/aws/org-ou-account-management to create additional AWS Organization Units and Accounts
-   1. Update the terraform/variables.tf account_numbers map with terraform output
+   1. Update the terraform/variables.tf account_id map with terraform output
 1. Deploy terraform/aws/iam-groups-and-roles
    1. Create AWS CLI profile named "automation" with terraform output
       ```sh
       terraform output -json
       aws configure --profile automation
+      ```
 1. Deploy terraform/aws/r53-zones-and-records
    1. Update your domain registrar with the nameservers from terraform output
 1. Deploy terraform/aws/tgw-and-network-vpc
@@ -60,27 +64,48 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
    1. This deployment can take up to 2 hours and may fail several times due to AWS throttling, keep running plan and apply until complete
    1. Update the terraform/variables.tf ad_directory_id_connector_network and ad_directory_id_connector_network_failover strings with terraform output
 1. Deploy terraform/aws/client-vpn
-1. Deploy terraform/aws/workload-dev
-<!-- 1. Deploy terraform/aws/workload-tst
-1. Deploy terraform/aws/workload-stg
-1. Deploy terraform/aws/workload-prd
-1. Deploy terraform/aws/workload-customera -->
-1. Deploy EKS cluster via eksctl
-   1. eksctl create cluster -f eksctl/blue.yaml
-   1. eksctl delete cluster --name blue
-   1. eksctl create nodegroup --cluster blue --name=general
-   1. eksctl delete nodegroup --cluster blue --name=general
+1. Deploy sdlc accounts
+   1. Deploy terraform/aws/sdlc-dev
 <!-- 1. YOU ARE HERE -->
-1. Deploy cluster-services via helm
-   1. CNI
-   1. externalDNS
-   1. ALB controller
-   1. Cluster Autoscaler Horiz + Vert
-1. Deploy nginx via helm
-   1. Basic welcome page
+   <!-- 1. Deploy terraform/aws/sdlc-tst
+   1. Deploy terraform/aws/sdlc-stg
+   1. Deploy terraform/aws/sdlc-prd -->
+   1. Update eksctl/sdlc-dev-blue.yaml and eksctl/sdlc-dev-failover-blue.yaml with vpc_id and private_subnets for primary and failover from terraform output
+<!-- 1. Deploy customer accounts
+   1. Deploy terraform/aws/workload-customera
+   1. Deploy terraform/aws/workload-customerb -->
+1. Deploy EKS clusters in each sdlc account (using sdlc-dev below for example)
+   1. Assume role into sdlc-dev (replace 012345678912 with correct account id)
+      ```sh
+      AWS_PROFILE=automation aws sts assume-role \
+         --role-arn arn:aws:iam::012345678912:role/automation \
+         --role-session-name sdlc-dev-session \
+         --duration-seconds 3600
+      export AWS_ACCESS_KEY_ID=foo
+      export AWS_SECRET_ACCESS_KEY=bar
+      export AWS_SESSION_TOKEN=helloworld
+      ```
+   1. Deploy EKS Cluster
+      ```sh
+      eksctl create cluster -f sdlc-dev-blue.yml
+      ```
+   1. Deploy cluster-services
+      ```sh
+      kubectl create namespace cluster-services
+      helm install cluster-services . --namespace cluster-services
+      ```
+   1. Deploy nginx welcome page
+      1. To be completed
+   1. Repeat steps for other sdlc tst, stg, and prd accounts
 
 ## To-Do
-- Update version of all modules
+- Finish out k8s cluster with an nginx welcome page deployment and alb
+- Complete sdlc test, stage, and prod
+- Complete CustomerA workload
+- Complete some kind of automation to convert drawio into png for this documentation
+- Base docker images for all distros
+   - initially just docker images which run apt-get upgrade or yum upgrade to get patches
+- Packer and ansible example for building base AMIs
 - Centralized logging with compression and glacier archive
    - DNS logs sent to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
    - ALB logs send to CloudWatch Log Group and S3 (with cross-regional replication and glacier)

@@ -1,8 +1,8 @@
 #primary bucket
 module "s3_primary" {
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "4.1.0"
-  providers = { aws = aws.workload_dev }
+  version = "4.1.2"
+  providers = { aws = aws.sdlc_dev }
 
   bucket = "${local.resource_name_prefix_env_region_primary_abbr}-storage-blob"
 
@@ -70,8 +70,8 @@ module "s3_primary" {
 #iam policy for data transfer
 module "iam_policy_s3_primary_replicate_to_failover" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.44.0"
-  providers = { aws = aws.workload_dev }
+  version = "5.45.0"
+  providers = { aws = aws.sdlc_dev }
 
   name  = "s3-primary-replicate-to-failover"
 
@@ -128,8 +128,8 @@ EOF
 #iam role for data transfer
 module "iam_role_s3_primary_replicate_to_failover" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.44.0"
-  providers = { aws = aws.workload_dev }
+  version = "5.45.0"
+  providers = { aws = aws.sdlc_dev }
 
   trusted_role_services = [
     "s3.amazonaws.com",
@@ -150,8 +150,8 @@ module "iam_role_s3_primary_replicate_to_failover" {
 #failover bucket
 module "s3_failover" {
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "4.1.0"
-  providers = { aws = aws.workload_dev_failover }
+  version = "4.1.2"
+  providers = { aws = aws.sdlc_dev_failover }
 
   bucket = "${local.resource_name_prefix_env_region_failover_abbr}-storage-blob"
 
