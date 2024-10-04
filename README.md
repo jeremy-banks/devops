@@ -40,12 +40,14 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
    1. Create an access key to be used in AWS CLI profile named "superadmin"
       ```sh
       aws configure --profile superadmin
+      ```
 <!-- 1. Deploy terraform/aws/tfstate-backend
    1. Update the terraform/aws/*/backend.tf files
       ```sh
       org root account id   find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDORGACCOUNTID/123456789012/g' {} +
       1. bucket:  find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDS3BUCKETNAME/tfstate-bucket-name/g' {} +
-      1. dynamodb table:  find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDDYNAMODBTABLE/dynamodb-tfstate-lock/g' {} + -->
+      1. dynamodb table:  find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDDYNAMODBTABLE/dynamodb-tfstate-lock/g' {} +
+      ``` -->
 1. Deploy terraform/aws/org-ou-account-management to create additional AWS Organization Units and Accounts
    1. Update the terraform/variables.tf account_id map with terraform output
 1. Deploy terraform/aws/iam-groups-and-roles
@@ -53,6 +55,7 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
       ```sh
       terraform output -json
       aws configure --profile automation
+      ```
 1. Deploy terraform/aws/r53-zones-and-records
    1. Update your domain registrar with the nameservers from terraform output
 1. Deploy terraform/aws/tgw-and-network-vpc
@@ -60,7 +63,7 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
    1. This deployment can take up to 2 hours and may fail several times due to AWS throttling, keep running plan and apply until complete
    1. Update the terraform/variables.tf ad_directory_id_connector_network and ad_directory_id_connector_network_failover strings with terraform output
 1. Deploy terraform/aws/client-vpn
-1. Deploy SDLC accounts
+1. Deploy sdlc accounts
    1. Deploy terraform/aws/sdlc-dev
 <!-- 1. YOU ARE HERE -->
    <!-- 1. Deploy terraform/aws/sdlc-tst
@@ -70,33 +73,36 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
 <!-- 1. Deploy customer accounts
    1. Deploy terraform/aws/workload-customera
    1. Deploy terraform/aws/workload-customerb -->
-1. Deploy EKS clusters in each SDLC account
-   1. SDLC-dev
-      1. Assume role into sdlc-dev (replace 012345678912 with correct account id)
-         ```sh
-         AWS_PROFILE=automation aws sts assume-role \
-           --role-arn arn:aws:iam::012345678912:role/automation \
-           --role-session-name sdlc-dev-session \
-           --duration-seconds 3600
-         export AWS_ACCESS_KEY_ID=foo
-         export AWS_SECRET_ACCESS_KEY=bar
-         export AWS_SESSION_TOKEN=helloworld
-         ```
-      1. eksctl create cluster -f sdlc-dev-blue.yml
-      1. eksctl delete cluster --name sdlc-dev-blue
-      1. eksctl create nodegroup --cluster sdlc-dev-blue --name=general
-      1. eksctl delete nodegroup --cluster sdlc-dev-blue --name=general
-1. Deploy cluster-services via helm
-   1. CNI
-   1. externalDNS
-   1. ALB controller
-   1. Cluster Autoscaler Horiz + Vert
-1. Deploy nginx via helm
-   1. Basic welcome page
+1. Deploy EKS clusters in each sdlc account (using sdlc-dev below for example)
+   1. Assume role into sdlc-dev (replace 012345678912 with correct account id)
+      ```sh
+      AWS_PROFILE=automation aws sts assume-role \
+         --role-arn arn:aws:iam::012345678912:role/automation \
+         --role-session-name sdlc-dev-session \
+         --duration-seconds 3600
+      export AWS_ACCESS_KEY_ID=foo
+      export AWS_SECRET_ACCESS_KEY=bar
+      export AWS_SESSION_TOKEN=helloworld
+      ```
+   1. Manage EKS cluster
+      ```sh
+      eksctl create cluster -f sdlc-dev-blue.yml
+      eksctl delete cluster --name sdlc-dev-blue
+      eksctl create nodegroup --cluster sdlc-dev-blue --name=general
+      eksctl delete nodegroup --cluster sdlc-dev-blue --name=general
+      ```
+   1. Deploy cluster-services via helm
+      1. CNI
+      1. externalDNS
+      1. ALB controller
+      1. Cluster Autoscaler Horiz + Vert
+   1. Deploy nginx via helm
+      1. Basic welcome page
+   1. Repeat steps for other sdlc accounts
 
 ## To-Do
 - Finish out k8s cluster with an nginx welcome page deployment and alb
-- Complete SDLC test, stage, and prod
+- Complete sdlc test, stage, and prod
 - Complete CustomerA workload
 - Complete some kind of automation to convert drawio into png for this documentation
 - Base docker images for all distros
