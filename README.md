@@ -25,21 +25,21 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
 
 ## Initial Setup
 1. Create AWS Account to be Organization root
-1. Create non-Console IAM user named "superadmin"
+1. Update the terraform/variables.tf with your unique information
+   1. org_owner_email_prefix (billg)
+   1. org_owner_email_domain (microsoft.com)
+   1. company_domain (windows.com)
+   1. company_name (microsoft)
+   1. company_name_abbr (ms)
+   1. team_name (blue)
+   1. team_name_abbr (blue)
+   1. project_name (windows13)
+   1. project_name_abbr (w13)
+1. Create IAM User "superadmin"
    1. Attach AdministratorAccess policy
    1. Create an access key to be used in AWS CLI profile named "superadmin"
       ```sh
       aws configure --profile superadmin
-   1. Update the terraform/variables.tf with your unique information
-      1. org_owner_email_prefix (billg)
-      1. org_owner_email_domain (microsoft.com)
-      1. company_domain (windows.com)
-      1. company_name (microsoft)
-      1. team_name (blue)
-      1. project_name (windows13)
-      1. company_name_abbr (ms)
-      1. team_name_abbr (blue)
-      1. project_name_abbr (w13)
 <!-- 1. Deploy terraform/aws/tfstate-backend
    1. Update the terraform/aws/*/backend.tf files
       ```sh
@@ -47,7 +47,7 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
       1. bucket:  find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDS3BUCKETNAME/tfstate-bucket-name/g' {} +
       1. dynamodb table:  find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDDYNAMODBTABLE/dynamodb-tfstate-lock/g' {} + -->
 1. Deploy terraform/aws/org-ou-account-management to create additional AWS Organization Units and Accounts
-   1. Update the terraform/variables.tf account_numbers map with terraform output
+   1. Update the terraform/variables.tf account_id map with terraform output
 1. Deploy terraform/aws/iam-groups-and-roles
    1. Create AWS CLI profile named "automation" with terraform output
       ```sh
@@ -60,17 +60,20 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
    1. This deployment can take up to 2 hours and may fail several times due to AWS throttling, keep running plan and apply until complete
    1. Update the terraform/variables.tf ad_directory_id_connector_network and ad_directory_id_connector_network_failover strings with terraform output
 1. Deploy terraform/aws/client-vpn
-1. Deploy terraform/aws/workload-dev
-<!-- 1. Deploy terraform/aws/workload-tst
-1. Deploy terraform/aws/workload-stg
-1. Deploy terraform/aws/workload-prd
-1. Deploy terraform/aws/workload-customera -->
+1. Deploy SDLC accounts
+   1. Deploy terraform/aws/sdlc-dev
+<!-- 1. YOU ARE HERE -->
+   <!-- 1. Deploy terraform/aws/sdlc-tst
+   1. Deploy terraform/aws/sdlc-stg
+   1. Deploy terraform/aws/sdlc-prd
+1. Deploy customer accounts
+   1. Deploy terraform/aws/workload-customera
+   1. Deploy terraform/aws/workload-customerb -->
 1. Deploy EKS cluster via eksctl
    1. eksctl create cluster -f eksctl/blue.yaml
    1. eksctl delete cluster --name blue
    1. eksctl create nodegroup --cluster blue --name=general
    1. eksctl delete nodegroup --cluster blue --name=general
-<!-- 1. YOU ARE HERE -->
 1. Deploy cluster-services via helm
    1. CNI
    1. externalDNS
@@ -80,8 +83,9 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
    1. Basic welcome page
 
 ## To-Do
-- Update version of all modules
 - Finish out k8s cluster with an nginx welcome page deployment and alb
+- Complete SDLC test, stage, and prod
+- Complete CustomerA workload
 - Complete some kind of automation to convert drawio into png for this documentation
 - Base docker images for all distros
    - initially just docker images which run apt-get upgrade or yum upgrade to get patches

@@ -1,6 +1,6 @@
 #vpc
 resource "aws_eip" "vpc_nat_primary" {
-  provider = aws.workload_dev
+  provider = aws.sdlc_dev
 
   count = 2
   domain = "vpc"
@@ -12,7 +12,7 @@ resource "aws_eip" "vpc_nat_primary" {
 module "vpc_primary" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.13.0"
-  providers = { aws = aws.workload_dev }
+  providers = { aws = aws.sdlc_dev }
 
   enable_nat_gateway = true
   reuse_nat_ips = true
@@ -58,7 +58,7 @@ module "vpc_primary" {
 module "vpc_main_sg_primary" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.2.0"
-  providers = { aws = aws.workload_dev }
+  providers = { aws = aws.sdlc_dev }
 
   name        = "${local.resource_name_prefix_env_region_primary_abbr}-main"
   use_name_prefix = false
@@ -121,7 +121,7 @@ module "vpc_main_sg_primary" {
 module "vpc_alb_sg_primary" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.2.0"
-  providers = { aws = aws.workload_dev }
+  providers = { aws = aws.sdlc_dev }
 
   name  = "${local.resource_name_prefix_env_region_primary_abbr}-alb"
   use_name_prefix = false
@@ -185,7 +185,7 @@ module "vpc_alb_sg_primary" {
 module "vpc_endpoints_primary" {
   source = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
   version = "5.13.0"
-  providers = { aws = aws.workload_dev }
+  providers = { aws = aws.sdlc_dev }
 
   vpc_id             = module.vpc_primary.vpc_id
   security_group_ids = [module.vpc_main_sg_primary.security_group_id]
@@ -234,7 +234,7 @@ module "vpc_endpoints_primary" {
 
 #vpc tgw attachment
 data "aws_ec2_transit_gateway" "primary" {
-  provider = aws.workload_dev
+  provider = aws.sdlc_dev
 
   filter {
     name   = "options.amazon-side-asn"
@@ -248,7 +248,7 @@ data "aws_ec2_transit_gateway" "primary" {
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_primary" {
-  provider = aws.workload_dev
+  provider = aws.sdlc_dev
 
   subnet_ids         = module.vpc_primary.private_subnets
   transit_gateway_id = data.aws_ec2_transit_gateway.primary.id
@@ -256,7 +256,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_primary" {
 }
 
 resource "aws_eip" "vpc_nat_failover" {
-  provider = aws.workload_dev_failover
+  provider = aws.sdlc_dev_failover
 
   count = 2
   domain = "vpc"
@@ -268,7 +268,7 @@ resource "aws_eip" "vpc_nat_failover" {
 module "vpc_failover" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.13.0"
-  providers = { aws = aws.workload_dev_failover }
+  providers = { aws = aws.sdlc_dev_failover }
 
   enable_nat_gateway = true
   reuse_nat_ips = true
@@ -314,7 +314,7 @@ module "vpc_failover" {
 module "vpc_main_sg_failover" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.2.0"
-  providers = { aws = aws.workload_dev_failover }
+  providers = { aws = aws.sdlc_dev_failover }
 
   name        = "${local.resource_name_prefix_env_region_failover_abbr}-main"
   use_name_prefix = false
@@ -377,7 +377,7 @@ module "vpc_main_sg_failover" {
 module "vpc_alb_sg_failover" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.2.0"
-  providers = { aws = aws.workload_dev_failover }
+  providers = { aws = aws.sdlc_dev_failover }
 
   name  = "${local.resource_name_prefix_env_region_failover_abbr}-alb"
   use_name_prefix = false
@@ -441,7 +441,7 @@ module "vpc_alb_sg_failover" {
 module "vpc_endpoints_failover" {
   source = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
   version = "5.13.0"
-  providers = { aws = aws.workload_dev_failover }
+  providers = { aws = aws.sdlc_dev_failover }
 
   vpc_id             = module.vpc_failover.vpc_id
   security_group_ids = [module.vpc_main_sg_failover.security_group_id]
@@ -490,7 +490,7 @@ module "vpc_endpoints_failover" {
 
 #vpc tgw attachment
 data "aws_ec2_transit_gateway" "failover" {
-  provider = aws.workload_dev_failover
+  provider = aws.sdlc_dev_failover
 
   filter {
     name   = "options.amazon-side-asn"
@@ -504,7 +504,7 @@ data "aws_ec2_transit_gateway" "failover" {
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_failover" {
-  provider = aws.workload_dev_failover
+  provider = aws.sdlc_dev_failover
 
   subnet_ids         = module.vpc_failover.private_subnets
   transit_gateway_id = data.aws_ec2_transit_gateway.failover.id
