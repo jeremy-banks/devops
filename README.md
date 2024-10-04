@@ -22,6 +22,7 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
 - Terraform v1.9.7
 - eksctl version 0.191.0
 - kubectl v1.31.1
+- helm v3.16.1
 
 ## Initial Setup
 1. Create AWS Account to be Organization root
@@ -69,7 +70,7 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
    <!-- 1. Deploy terraform/aws/sdlc-tst
    1. Deploy terraform/aws/sdlc-stg
    1. Deploy terraform/aws/sdlc-prd -->
-   1. Update eksctl/blue.yaml and eksctl
+   1. Update eksctl/sdlc-dev-blue.yaml and eksctl/sdlc-dev-failover-blue.yaml with vpc_id and private_subnets for primary and failover from terraform output
 <!-- 1. Deploy customer accounts
    1. Deploy terraform/aws/workload-customera
    1. Deploy terraform/aws/workload-customerb -->
@@ -84,21 +85,18 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
       export AWS_SECRET_ACCESS_KEY=bar
       export AWS_SESSION_TOKEN=helloworld
       ```
-   1. Manage EKS cluster
+   1. Deploy EKS Cluster
       ```sh
       eksctl create cluster -f sdlc-dev-blue.yml
-      eksctl delete cluster --name sdlc-dev-blue
-      eksctl create nodegroup --cluster sdlc-dev-blue --name=general
-      eksctl delete nodegroup --cluster sdlc-dev-blue --name=general
       ```
-   1. Deploy cluster-services via helm
-      1. CNI
-      1. externalDNS
-      1. ALB controller
-      1. Cluster Autoscaler Horiz + Vert
-   1. Deploy nginx via helm
-      1. Basic welcome page
-   1. Repeat steps for other sdlc accounts
+   1. Deploy cluster-services
+      ```sh
+      kubectl create namespace cluster-services
+      helm install cluster-services . --namespace cluster-services
+      ```
+   1. Deploy nginx welcome page
+      1. To be completed
+   1. Repeat steps for other sdlc tst, stg, and prd accounts
 
 ## To-Do
 - Finish out k8s cluster with an nginx welcome page deployment and alb
