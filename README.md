@@ -18,8 +18,8 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
   - Latencies between AWS availability zones https://www.flashgrid.io/news/latencies-between-aws-availability-zones-what-are-they-and-how-to-minimize-them
 
 ## Prerequisites
-- AWS cli 2.17.48
-- Terraform v1.9.5
+- aws-cli/2.17.65
+- Terraform v1.9.7
 - eksctl 0.173.0
 - kubectl v1.29.2
 
@@ -83,6 +83,9 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
 - Update version of all modules
 - Finish out k8s cluster with an nginx welcome page deployment and alb
 - Complete some kind of automation to convert drawio into png for this documentation
+- Base docker images for all distros
+   - initially just docker images which run apt-get upgrade or yum upgrade to get patches
+- Packer and ansible example for building base AMIs
 - Centralized logging with compression and glacier archive
    - DNS logs sent to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
    - ALB logs send to CloudWatch Log Group and S3 (with cross-regional replication and glacier)

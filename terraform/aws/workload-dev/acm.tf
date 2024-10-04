@@ -1,6 +1,6 @@
 module "acm_wildcard_cert_primary" {
   source  = "terraform-aws-modules/acm/aws"
-  version = "5.0.0"
+  version = "5.1.0"
   providers = { aws = aws.workload_dev }
 
   domain_name = var.company_domain
@@ -20,7 +20,7 @@ data "aws_route53_zone" "company_domain" {
 
 module "acm_dns_records_primary" {
   source  = "terraform-aws-modules/acm/aws"
-  version = "5.0.0"
+  version = "5.1.0"
   providers = { aws = aws.network }
 
   create_certificate          = false
@@ -35,7 +35,7 @@ module "acm_dns_records_primary" {
 
 module "acm_wildcard_cert_failover" {
   source  = "terraform-aws-modules/acm/aws"
-  version = "5.0.0"
+  version = "5.1.0"
   providers = { aws = aws.workload_dev_failover }
 
   domain_name = var.company_domain
@@ -48,7 +48,7 @@ module "acm_wildcard_cert_failover" {
 
 module "acm_dns_records_failover" {
   source  = "terraform-aws-modules/acm/aws"
-  version = "5.0.0"
+  version = "5.1.0"
   providers = { aws = aws.network_failover }
 
   create_certificate          = false

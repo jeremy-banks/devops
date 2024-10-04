@@ -1,6 +1,6 @@
 module "iam_assumable_roles_workload_dev" {
   source = "terraform-aws-modules/iam/aws//modules/iam-assumable-roles"
-  version = "5.32.0"
+  version = "5.45.0"
   providers = { aws = aws.workload_dev }
 
   trusted_role_arns = [
@@ -23,7 +23,7 @@ module "iam_assumable_roles_workload_dev" {
 
 module "iam_assumable_role_automation_workload_dev" {
   source = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.32.0"
+  version = "5.45.0"
   providers = { aws = aws.workload_dev }
 
   trusted_role_arns = [

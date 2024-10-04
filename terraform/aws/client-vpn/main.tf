@@ -50,7 +50,7 @@ data "aws_ec2_managed_prefix_list" "route53_healthchecks_failover" {
 
 module "client_vpn_endpoint_sg_primary" {
   source  = "terraform-aws-modules/security-group/aws"
-  version = "5.1.0"
+  version = "5.2.0"
   providers = { aws = aws.network }
 
   name        = "${local.resource_name_prefix_env}-client-vpn-endpoint-primary"
@@ -105,7 +105,7 @@ module "client_vpn_endpoint_sg_primary" {
 
 module "client_vpn_endpoint_r53_healthcheck_sg_primary" {
   source  = "terraform-aws-modules/security-group/aws"
-  version = "5.1.0"
+  version = "5.2.0"
   providers = { aws = aws.network }
 
   name        = "${local.resource_name_prefix_env}-client-vpn-endpoint-r53-healthcheck-primary"
@@ -198,7 +198,7 @@ resource "aws_ec2_client_vpn_endpoint" "client_vpn_failover" {
 
 module "client_vpn_endpoint_sg_failover" {
   source  = "terraform-aws-modules/security-group/aws"
-  version = "5.1.0"
+  version = "5.2.0"
   providers = { aws = aws.network_failover }
 
   name        = "${local.resource_name_prefix_env}-client-vpn-endpoint-failover"
@@ -253,7 +253,7 @@ module "client_vpn_endpoint_sg_failover" {
 
 module "client_vpn_endpoint_r53_healthcheck_sg_failover" {
   source  = "terraform-aws-modules/security-group/aws"
-  version = "5.1.0"
+  version = "5.2.0"
   providers = { aws = aws.network_failover }
 
   name        = "${local.resource_name_prefix_env}-client-vpn-endpoint-r53-healthcheck-failover"
@@ -352,7 +352,7 @@ resource "aws_route53_health_check" "client_vpn_failover" {
 
 module "client_vpn_records" {
   source  = "terraform-aws-modules/route53/aws//modules/records"
-  version = "2.11.0"
+  version = "4.1.0"
   providers = { aws = aws.network }
 
   zone_name = var.company_domain

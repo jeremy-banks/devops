@@ -1,6 +1,6 @@
 module "kms_primary" {
   source  = "terraform-aws-modules/kms/aws"
-  version = "2.1.0"
+  version = "3.1.0"
   providers = { aws = aws.workload_dev }
 
   deletion_window_in_days = 30
@@ -16,7 +16,7 @@ module "kms_primary" {
 
 module "kms_failover" {
   source  = "terraform-aws-modules/kms/aws"
-  version = "2.1.0"
+  version = "3.1.0"
   providers = { aws = aws.workload_dev_failover }
 
   deletion_window_in_days = 30

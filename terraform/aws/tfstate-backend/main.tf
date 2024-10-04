@@ -33,7 +33,7 @@ data "aws_iam_policy_document" "kms"  {
 
 module "kms_primary" {
   source  = "terraform-aws-modules/kms/aws"
-  version = "2.1.0"
+  version = "3.1.0"
   providers = { aws = aws.org }
 
   deletion_window_in_days = 30
@@ -50,7 +50,7 @@ module "kms_primary" {
 #s3 bucket
 module "s3_primary" {
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "4.1.0"
+  version = "4.1.2"
   providers = { aws = aws.org }
 
   bucket = "${local.resource_name_prefix_env}-tfstate"

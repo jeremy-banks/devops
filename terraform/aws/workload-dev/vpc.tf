@@ -11,7 +11,7 @@ resource "aws_eip" "vpc_nat_primary" {
 
 module "vpc_primary" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "5.4.0"
+  version = "5.13.0"
   providers = { aws = aws.workload_dev }
 
   enable_nat_gateway = true
@@ -57,7 +57,7 @@ module "vpc_primary" {
 #vpc security groups
 module "vpc_main_sg_primary" {
   source  = "terraform-aws-modules/security-group/aws"
-  version = "5.1.0"
+  version = "5.2.0"
   providers = { aws = aws.workload_dev }
 
   name        = "${local.resource_name_prefix_env_region_primary_abbr}-main"
@@ -120,7 +120,7 @@ module "vpc_main_sg_primary" {
 
 module "vpc_alb_sg_primary" {
   source  = "terraform-aws-modules/security-group/aws"
-  version = "5.1.0"
+  version = "5.2.0"
   providers = { aws = aws.workload_dev }
 
   name  = "${local.resource_name_prefix_env_region_primary_abbr}-alb"
@@ -184,7 +184,7 @@ module "vpc_alb_sg_primary" {
 #vpc endpoints
 module "vpc_endpoints_primary" {
   source = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
-  version = "5.4.0"
+  version = "5.13.0"
   providers = { aws = aws.workload_dev }
 
   vpc_id             = module.vpc_primary.vpc_id
@@ -267,7 +267,7 @@ resource "aws_eip" "vpc_nat_failover" {
 
 module "vpc_failover" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "5.4.0"
+  version = "5.13.0"
   providers = { aws = aws.workload_dev_failover }
 
   enable_nat_gateway = true
@@ -313,7 +313,7 @@ module "vpc_failover" {
 #vpc security groups
 module "vpc_main_sg_failover" {
   source  = "terraform-aws-modules/security-group/aws"
-  version = "5.1.0"
+  version = "5.2.0"
   providers = { aws = aws.workload_dev_failover }
 
   name        = "${local.resource_name_prefix_env_region_failover_abbr}-main"
@@ -376,7 +376,7 @@ module "vpc_main_sg_failover" {
 
 module "vpc_alb_sg_failover" {
   source  = "terraform-aws-modules/security-group/aws"
-  version = "5.1.0"
+  version = "5.2.0"
   providers = { aws = aws.workload_dev_failover }
 
   name  = "${local.resource_name_prefix_env_region_failover_abbr}-alb"
@@ -440,7 +440,7 @@ module "vpc_alb_sg_failover" {
 #vpc endpoints
 module "vpc_endpoints_failover" {
   source = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
-  version = "5.4.0"
+  version = "5.13.0"
   providers = { aws = aws.workload_dev_failover }
 
   vpc_id             = module.vpc_failover.vpc_id
