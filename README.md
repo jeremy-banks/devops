@@ -20,8 +20,8 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
 ## Prerequisites
 - aws-cli/2.17.65
 - Terraform v1.9.7
-- eksctl 0.173.0
-- kubectl v1.29.2
+- eksctl version 0.191.0
+- kubectl v1.31.1
 
 ## Initial Setup
 1. Create AWS Account to be Organization root
@@ -65,15 +65,24 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
 <!-- 1. YOU ARE HERE -->
    <!-- 1. Deploy terraform/aws/sdlc-tst
    1. Deploy terraform/aws/sdlc-stg
-   1. Deploy terraform/aws/sdlc-prd
-1. Deploy customer accounts
+   1. Deploy terraform/aws/sdlc-prd -->
+   1. Update eksctl/blue.yaml and eksctl
+<!-- 1. Deploy customer accounts
    1. Deploy terraform/aws/workload-customera
    1. Deploy terraform/aws/workload-customerb -->
-1. Deploy EKS cluster via eksctl
-   1. eksctl create cluster -f eksctl/blue.yaml
-   1. eksctl delete cluster --name blue
-   1. eksctl create nodegroup --cluster blue --name=general
-   1. eksctl delete nodegroup --cluster blue --name=general
+1. Deploy EKS clusters in each SDLC account
+   1. SDLC-dev
+      1. Assume role into sdlc-dev (replace 012345678912 with correct account id)
+         ```sh
+         AWS_PROFILE=automation aws sts assume-role --role-arn arn:aws:iam::012345678912:role/automation --role-session-name sdlc-dev-session --duration-seconds 3600
+         export AWS_ACCESS_KEY_ID=foo
+         export AWS_SECRET_ACCESS_KEY=bar
+         export AWS_SESSION_TOKEN=helloworld
+         ```
+      1. eksctl create cluster -f sdlc-dev-blue.yml
+      1. eksctl delete cluster --name sdlc-dev-blue
+      1. eksctl create nodegroup --cluster sdlc-dev-blue --name=general
+      1. eksctl delete nodegroup --cluster sdlc-dev-blue --name=general
 1. Deploy cluster-services via helm
    1. CNI
    1. externalDNS
