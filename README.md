@@ -81,6 +81,8 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
 
 ## To-Do
 - Update version of all modules
+- Finish out k8s cluster with an nginx welcome page deployment and alb
+- Complete some kind of automation to convert drawio into png for this documentation
 - Centralized logging with compression and glacier archive
    - DNS logs sent to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
    - ALB logs send to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
