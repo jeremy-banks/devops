@@ -66,40 +66,43 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
 1. Deploy terraform/aws/client-vpn
 1. Deploy sdlc accounts
    1. Deploy terraform/aws/sdlc-dev
-<!-- 1. YOU ARE HERE -->
-   <!-- 1. Deploy terraform/aws/sdlc-tst
+      1. Update eksctl/sdlc-dev-blue.yaml and eksctl/sdlc-dev-failover-blue.yaml with vpc_id and private_subnets for primary and failover from terraform output
+      1. Deploy EKS cluster
+         1. Assume automation role in account
+            ```sh
+            # replace 012345678912 with the account id
+            AWS_PROFILE=automation aws sts assume-role \
+               --role-arn arn:aws:iam::012345678912:role/automation \
+               --role-session-name sdlc-session \
+               --duration-seconds 3600
+            # replace foo, bar, and helloworld with matching outputs
+            export AWS_ACCESS_KEY_ID=foo
+            export AWS_SECRET_ACCESS_KEY=bar
+            export AWS_SESSION_TOKEN=helloworld
+            ```
+         1. Deploy EKS Cluster
+            ```sh
+            eksctl create cluster -f sdlc-dev-blue.yml
+            ```
+      1. Deploy cluster-services
+         ```sh
+         kubectl create namespace cluster-services
+         helm install cluster-services . --namespace cluster-services
+         ```
+      1. Deploy nginx welcome page
+         1. To be completed
+      1. Repeat steps for other sdlc tst, stg, and prd accounts
+   1. Deploy terraform/aws/sdlc-tst
    1. Deploy terraform/aws/sdlc-stg
-   1. Deploy terraform/aws/sdlc-prd -->
-   1. Update eksctl/sdlc-dev-blue.yaml and eksctl/sdlc-dev-failover-blue.yaml with vpc_id and private_subnets for primary and failover from terraform output
-<!-- 1. Deploy customer accounts
+   1. Deploy terraform/aws/sdlc-prd
+1. Deploy customer accounts
    1. Deploy terraform/aws/workload-customera
-   1. Deploy terraform/aws/workload-customerb -->
-1. Deploy EKS clusters in each sdlc account (using sdlc-dev below for example)
-   1. Assume role into sdlc-dev (replace 012345678912 with correct account id)
-      ```sh
-      AWS_PROFILE=automation aws sts assume-role \
-         --role-arn arn:aws:iam::012345678912:role/automation \
-         --role-session-name sdlc-dev-session \
-         --duration-seconds 3600
-      export AWS_ACCESS_KEY_ID=foo
-      export AWS_SECRET_ACCESS_KEY=bar
-      export AWS_SESSION_TOKEN=helloworld
-      ```
-   1. Deploy EKS Cluster
-      ```sh
-      eksctl create cluster -f sdlc-dev-blue.yml
-      ```
-   1. Deploy cluster-services
-      ```sh
-      kubectl create namespace cluster-services
-      helm install cluster-services . --namespace cluster-services
-      ```
-   1. Deploy nginx welcome page
-      1. To be completed
-   1. Repeat steps for other sdlc tst, stg, and prd accounts
+   1. Deploy terraform/aws/workload-customerb
 
 ## To-Do
 - Finish out k8s cluster with an nginx welcome page deployment and alb
+- Triggering a DR event
+   - ACL allows no traffic in one subnet
 - Complete sdlc test, stage, and prod
 - Complete CustomerA workload
 - Complete some kind of automation to convert drawio into png for this documentation
@@ -117,8 +120,6 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
 - EKS autoscaling examples
    - CPU
    - Sessions
-- Triggering a DR event
-   - ACL allows no traffic in one subnet
 - SCP enforcing features
    - EBS volume encryption
    - S3 buckets never public
