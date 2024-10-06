@@ -102,6 +102,8 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
 - Finish out k8s cluster with an nginx welcome page deployment and alb
 - Triggering a DR event
    - ACL allows no traffic in one subnet
+- Need scalable solution to deploy security settings such as aws_ebs_snapshot_block_public_access, block public s3 access, default ebs encryption, etc
+   - probably need a step after account creation before iam to deploy org-security-settings
 - Complete sdlc test, stage, and prod
 - Complete CustomerA workload
 - Complete some kind of automation to convert drawio into png for this documentation

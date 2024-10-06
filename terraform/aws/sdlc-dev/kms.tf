@@ -31,8 +31,9 @@ module "kms_failover" {
 data "aws_caller_identity" "sdlc_dev" { provider = aws.sdlc_dev }
 
 data "aws_iam_policy_document" "kms"  {
+  # https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-default.html
   statement {
-    sid    = "Default"
+    sid    = "Enable IAM User Permissions"
 
     effect = "Allow"
 
@@ -46,31 +47,26 @@ data "aws_iam_policy_document" "kms"  {
     resources = ["*"]
   }
 
+  # https://docs.aws.amazon.com/autoscaling/ec2/userguide/key-policy-requirements-EBS-encryption.html
   statement {
-    sid    = "Allow use of the key"
+    sid    = "Allow service-linked role use of the customer managed key"
 
     effect = "Allow"
 
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.sdlc_dev.account_id}:root"]
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.sdlc_dev.account_id}:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling"]
     }
 
     actions   = [
-      "kms:Decrypt",
-      "kms:DescribeKey",
-      "kms:Encrypt",
-      "kms:GenerateDataKey*",
-      "kms:ReEncrypt*",
+       "kms:Decrypt",
+       "kms:DescribeKey",
+       "kms:Encrypt",
+       "kms:GenerateDataKey*",
+       "kms:ReEncrypt*",
     ]
 
     resources = ["*"]
-
-    condition {
-      test     = "StringEquals"
-      variable = "aws:SourceAccount"
-      values   = ["${data.aws_caller_identity.sdlc_dev.account_id}"]
-    }
   }
 
   statement {
@@ -80,13 +76,11 @@ data "aws_iam_policy_document" "kms"  {
 
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.sdlc_dev.account_id}:root"]
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.sdlc_dev.account_id}:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling"]
     }
 
     actions   = [
       "kms:CreateGrant",
-      "kms:ListGrants",
-      "kms:RevokeGrant",
     ]
 
     resources = ["*"]
@@ -96,11 +90,29 @@ data "aws_iam_policy_document" "kms"  {
       variable = "kms:GrantIsForAWSResource"
       values   = ["true"]
     }
-
-    condition {
-      test     = "StringEquals"
-      variable = "aws:SourceAccount"
-      values   = ["${data.aws_caller_identity.sdlc_dev.account_id}"]
-    }
   }
+}
+
+resource "aws_ebs_encryption_by_default" "kms_primary" {
+  provider = aws.sdlc_dev
+
+  enabled = true
+}
+
+resource "aws_ebs_default_kms_key" "kms_primary" {
+  provider = aws.sdlc_dev
+
+  key_arn = module.kms_primary.key_arn
+}
+
+resource "aws_ebs_encryption_by_default" "kms_failover" {
+  provider = aws.sdlc_dev_failover
+
+  enabled = true
+}
+
+resource "aws_ebs_default_kms_key" "kms_failover" {
+  provider = aws.sdlc_dev_failover
+
+  key_arn = module.kms_failover.key_arn
 }
