@@ -67,23 +67,22 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
 1. Deploy sdlc accounts
    1. Deploy terraform/aws/sdlc-dev
       1. Update eksctl/sdlc-dev-blue.yaml and eksctl/sdlc-dev-failover-blue.yaml with vpc_id and private_subnets for primary and failover from terraform output
-      1. Deploy EKS cluster
-         1. Assume automation role in account
-            ```sh
-            # replace 012345678912 with the account id
-            AWS_PROFILE=automation aws sts assume-role \
-               --role-arn arn:aws:iam::012345678912:role/automation \
-               --role-session-name sdlc-session \
-               --duration-seconds 3600
-            # replace foo, bar, and helloworld with matching outputs
-            export AWS_ACCESS_KEY_ID=foo
-            export AWS_SECRET_ACCESS_KEY=bar
-            export AWS_SESSION_TOKEN=helloworld
-            ```
-         1. Deploy EKS Cluster
-            ```sh
-            eksctl create cluster -f sdlc-dev-blue.yml
-            ```
+      1. Assume automation role in account
+         ```sh
+         # replace 012345678912 with the account id
+         AWS_PROFILE=automation aws sts assume-role \
+            --role-arn arn:aws:iam::012345678912:role/automation \
+            --role-session-name sdlc-session \
+            --duration-seconds 3600
+         # replace foo, bar, and helloworld with matching outputs
+         export AWS_ACCESS_KEY_ID=foo
+         export AWS_SECRET_ACCESS_KEY=bar
+         export AWS_SESSION_TOKEN=helloworld
+         ```
+      1. Deploy EKS Cluster
+         ```sh
+         eksctl create cluster -f sdlc-dev-blue.yml
+         ```
       1. Deploy cluster-services
          ```sh
          kubectl create namespace cluster-services
