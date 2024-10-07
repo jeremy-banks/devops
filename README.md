@@ -73,7 +73,7 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
          AWS_PROFILE=automation aws sts assume-role \
             --role-arn arn:aws:iam::012345678912:role/automation \
             --role-session-name sdlc-session \
-            --duration-seconds 3600
+            --duration-seconds 36000
          # replace foo, bar, and helloworld with matching outputs
          export AWS_ACCESS_KEY_ID=foo
          export AWS_SECRET_ACCESS_KEY=bar
@@ -82,11 +82,15 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
       1. Deploy EKS Cluster
          ```sh
          eksctl create cluster -f sdlc-dev-blue.yml
+         eksctl delete cluster --name sdlc-dev-blue --region us-west-2
+         eksctl create nodegroup -f sdlc-dev-blue.yml
+         eksctl delete nodegroup --cluster sdlc-dev-blue --name general --region us-west-2
          ```
       1. Deploy cluster-services
          ```sh
-         kubectl create namespace cluster-services
-         helm install cluster-services . --namespace cluster-services
+         helm install cluster-services . --namespace kube-system
+         helm upgrade cluster-services . --namespace kube-system
+         helm uninstall cluster-services --namespace kube-system
          ```
       1. Deploy nginx welcome page
          1. To be completed

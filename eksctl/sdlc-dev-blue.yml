@@ -2,47 +2,81 @@ apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 
 metadata:
-  name: sdlc-dev-blue
+  name: &clusterName sdlc-dev-green
   region: us-west-2
   version: "1.31"
 
+iam:
+  withOIDC: true
+  serviceAccounts:
+    - metadata:
+        name: vpc-cni
+        namespace: kube-system
+      attachPolicyARNs: [ "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy" ]
+
 vpc:
-  id: vpc-06e31714ad26a1e38
+  id: vpc-0604df84cd9036ddb
   subnets:
     private:
-      private-one: { id: subnet-08c4b99de8dfcf374 }
-      private-two: { id: subnet-0b49561eefd1e8faf }
+      private-one: { id: subnet-0282590062a438be3 }
+      private-two: { id: subnet-0e15c87d734ea4de8 }
+
+addons:
+  - name: vpc-cni
+    version: "latest"
+
+cloudWatch:
+  clusterLogging:
+    enableTypes: [ "all" ]
+    logRetentionInDays: 1
 
 managedNodeGroups:
-  - name: general
-    instanceType: t3a.medium
-    minSize: 3
-    desiredCapacity: 3
+  - name: cluster-autoscaler
+    labels:
+      role: &clusterAutoscaler cluster-autoscaler
+    taints:
+      - key: "role"
+        value: *clusterAutoscaler
+        effect: "NoSchedule"
+    instanceType: t4g.micro # 2core 1gb
+    spot: true
+    minSize: 2
+    desiredCapacity: 2
+    maxSize: 5
     privateNetworking: true
+    volumeSize: 20
+    ebsOptimized: true
+    iam:
+      withAddonPolicies:
+        autoScaler: true
 
-nodeGroups:
   - name: cluster-services
     labels:
       role: &clusterServices cluster-services
     taints:
-      - key: *clusterServices
-        value: "true"
+      - key: "role"
+        value: *clusterServices
         effect: "NoSchedule"
-    instanceType: t3a.medium
-    minSize: 3
-    desiredCapacity: 3
+    instanceType: t4g.medium # 2core 4gb
+    spot: true
+    minSize: 0
+    desiredCapacity: 0
+    maxSize: 5
     privateNetworking: true
+    volumeSize: 20
+    ebsOptimized: true
     iam:
       withAddonPolicies:
-        appMesh: true
-        appMeshPreview: true
-        autoScaler: true
+        # externalDNS: true
+        # certManager: true
         awsLoadBalancerController: true
-        certManager: true
-        cloudWatch: true
-        ebs: true
-        efs: true
-        externalDNS: true
-        fsx: true
-        imageBuilder: true
-        xRay: true
+        albIngress: true
+
+  - name: general
+    instanceType: t4g.medium # 2core 4gb
+    spot: true
+    minSize: 1
+    desiredCapacity: 1
+    maxSize: 10
+    privateNetworking: true
+    ebsOptimized: true

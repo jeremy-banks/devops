@@ -1,32 +1,89 @@
-aws-ebs-csi-driver:
-  controller.region: &region us-west-2
-  controller.nodeSelector: &cluster-services cluster-services
-  enableVolumeResizing: true
-  node.tolerateAllTaints: true
+.anchors:
+  clusterName: &clusterName sdlc-dev-green
+  clusterAutoscaler: &clusterAutoscaler cluster-autoscaler
+  clusterServices: &clusterServices cluster-services
+  region: &region us-west-2
+  acmArnPrimary: &acmArnPrimary "arn:aws:acm:us-west-2:615299741042:certificate/8b5157dd-0e0e-453a-bb85-776fbfa294d7"
+  acmArnFailover: &acmArnFailover "bar"
 
 cluster-autoscaler:
   autoDiscovery:
-    clusterName: &clusterName blue
+    clusterName: *clusterName
   nodeSelector:
-    role: *cluster-services
+    role: *clusterAutoscaler
   tolerations:
-    - key: "cluster-services"
+    - key: "role"
       operator: "Equal"
-      value: "true"
+      value: *clusterAutoscaler
       effect: "NoSchedule"
   replicaCount: 2
+  resources:
+    limits:
+      cpu: 100m
+      memory: 300Mi
+    requests:
+      cpu: 100m
+      memory: 300Mi
+
+aws-ebs-csi-driver:
+  controller.region: *region
+  controller.nodeSelector:
+    role: *clusterServices
+  controller.tolerations:
+    - key: "role"
+      operator: "Equal"
+      value: *clusterServices
+      effect: "NoSchedule"
+  controller.resources:
+    requests:
+      cpu: 10m
+      memory: 40Mi
+    limits:
+      memory: 256Mi
+  enableVolumeResizing: true
+  node.tolerateAllTaints: true
+  node.resources:
+    requests:
+      cpu: 10m
+      memory: 40Mi
+    limits:
+      memory: 256Mi
 
 aws-load-balancer-controller:
   clusterName: *clusterName
   nodeSelector:
-    role: *cluster-services
+    role: *clusterServices
   tolerations:
-    - key: "cluster-services"
+    - key: "role"
       operator: "Equal"
-      value: "true"
+      value: *clusterServices
       effect: "NoSchedule"
-  # region: *region
-  # VpcId: vpc-0393e1a05766d6cea
-  # ingressClassParams:
-  #   create: true
-  # createIngressClassResource: true
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  service:
+    type: LoadBalancer
+    annotations:
+      service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+      service.beta.kubernetes.io/aws-load-balancer-internal: "false"
+      service.beta.kubernetes.io/aws-load-balancer-ssl-cert: *acmArnPrimary
+      service.beta.kubernetes.io/aws-load-balancer-ssl-redirect: "443"
+  servicePort: 80
+  ingress:
+    enabled: true
+    className: alb
+    annotations:
+      kubernetes.io/ingress.class: "alb"
+      alb.ingress.kubernetes.io/scheme: internet-facing
+      alb.ingress.kubernetes.io/certificate-arn: *acmArnPrimary
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+      alb.ingress.kubernetes.io/target-group-attributes: "stickiness.enabled=true,stickiness.type=source"
+      alb.ingress.kubernetes.io/healthcheck-path: "/"
+      alb.ingress.kubernetes.io/healthcheck-interval: "30"
+      alb.ingress.kubernetes.io/healthcheck-timeout: "5"
+      alb.ingress.kubernetes.io/healthcheck-healthy-threshold: "3"
+      alb.ingress.kubernetes.io/healthcheck-unhealthy-threshold: "3"
