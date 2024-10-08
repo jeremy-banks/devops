@@ -1,7 +1,4 @@
 dependencies:
-- name: coredns
-  repository: https://coredns.github.io/helm
-  version: 1.35.0
 - name: cluster-autoscaler
   repository: https://kubernetes.github.io/autoscaler
   version: 9.43.0
@@ -11,5 +8,5 @@ dependencies:
 - name: aws-load-balancer-controller
   repository: https://aws.github.io/eks-charts
   version: 1.9.0
-digest: sha256:1fe270a27f48613b2cfeed1804af14d6aa2dbd32724fd4922639482db6794e23
-generated: "2024-10-07T00:52:36.517555396-07:00"
+digest: sha256:032db050cbfa452588abf4531b80aedcd90c22e5427cd8a6fba14c4f6dd334ff
+generated: "2024-10-07T09:14:54.838480599-07:00"

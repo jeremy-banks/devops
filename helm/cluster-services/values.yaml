@@ -5,52 +5,113 @@
   region: &region us-west-2
   acmArnPrimary: &acmArnPrimary "arn:aws:acm:us-west-2:615299741042:certificate/8b5157dd-0e0e-453a-bb85-776fbfa294d7"
   acmArnFailover: &acmArnFailover "bar"
+  podReplicaCount: &podReplicaCount 2
 
 cluster-autoscaler:
   autoDiscovery:
     clusterName: *clusterName
+  cloudProvider: aws
+  awsregion: *region
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: role
+            operator: In
+            values:
+            - *clusterAutoscaler
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+          - key: app.kubernetes.io/name
+            operator: In
+            values:
+            - cluster-autoscaler
+        topologyKey: "topology.kubernetes.io/zone"
   nodeSelector:
     role: *clusterAutoscaler
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: "topology.kubernetes.io/zone"
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchLabels:
+          app: *clusterAutoscaler
   tolerations:
     - key: "role"
       operator: "Equal"
       value: *clusterAutoscaler
       effect: "NoSchedule"
-  replicaCount: 2
+  rbac:
+    serviceAccount:
+      create: false
+      name: *clusterAutoscaler
+  replicaCount: *podReplicaCount
   resources:
-    limits:
+    requests:
       cpu: 100m
       memory: 300Mi
-    requests:
+    limits:
       cpu: 100m
       memory: 300Mi
 
 aws-ebs-csi-driver:
-  controller.region: *region
-  controller.nodeSelector:
-    role: *clusterServices
-  controller.tolerations:
-    - key: "role"
-      operator: "Equal"
-      value: *clusterServices
-      effect: "NoSchedule"
-  controller.resources:
-    requests:
-      cpu: 10m
-      memory: 40Mi
-    limits:
-      memory: 256Mi
-  enableVolumeResizing: true
-  node.tolerateAllTaints: true
-  node.resources:
-    requests:
-      cpu: 10m
-      memory: 40Mi
-    limits:
-      memory: 256Mi
+  controller:
+    region: *region
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: role
+                  operator: In
+                  values:
+                    - *clusterServices
+            topologyKey: "kubernetes.io/hostname"
+    # nodeSelector:
+    #   role: *clusterServices
+    tolerations:
+      - key: "role"
+        operator: "Equal"
+        value: *clusterServices
+        effect: "NoSchedule"
+    topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: "topology.kubernetes.io/zone"
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+            app: ebs-csi-controller
+    replicaCount: *podReplicaCount
+    resources:
+      requests:
+        cpu: 10m
+        memory: 40Mi
+      limits:
+        memory: 256Mi
+  node:
+    tolerateAllTaints: true
+    resources:
+      requests:
+        cpu: 10m
+        memory: 40Mi
+      limits:
+        memory: 256Mi
 
 aws-load-balancer-controller:
   clusterName: *clusterName
+  # affinity:
+  #   podAntiAffinity:
+  #     requiredDuringSchedulingIgnoredDuringExecution:
+  #       - labelSelector:
+  #           matchExpressions:
+  #             - key: role
+  #               operator: In
+  #               values:
+  #                 - *clusterServices
+  #         topologyKey: "kubernetes.io/hostname"
   nodeSelector:
     role: *clusterServices
   tolerations:
@@ -58,13 +119,17 @@ aws-load-balancer-controller:
       operator: "Equal"
       value: *clusterServices
       effect: "NoSchedule"
+  replicaCount: *podReplicaCount
   resources:
-    limits:
-      cpu: 100m
-      memory: 128Mi
     requests:
-      cpu: 100m
+      cpu: 500m
       memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
   service:
     type: LoadBalancer
     annotations:
