@@ -2,7 +2,7 @@ apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 
 metadata:
-  name: &clusterName sdlc-dev-green
+  name: &clusterName sdlc-dev-green-4
   region: us-west-2
   version: "1.31"
 
@@ -10,9 +10,10 @@ iam:
   withOIDC: true
   serviceAccounts:
     - metadata:
-        name: vpc-cni
-        namespace: kube-system
-      attachPolicyARNs: [ "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy" ]
+        name: cluster-autoscaler
+        # namespace: kube-system
+      wellKnownPolicies:
+        autoScaler: true
 
 vpc:
   id: vpc-0604df84cd9036ddb
@@ -21,62 +22,110 @@ vpc:
       private-one: { id: subnet-0282590062a438be3 }
       private-two: { id: subnet-0e15c87d734ea4de8 }
 
+addonsConfig:
+  disableDefaultAddons: true
 addons:
+  - name: kube-proxy
+    version: "1.31.0"
+  - name: coredns
+    version: "1.11.3"
+    configurationValues: |
+      replicaCount: 2
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  eks.amazonaws.com/component: coredns
+              topologyKey: "kubernetes.io/hostname"
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: "topology.kubernetes.io/zone"
+          whenUnsatisfiable: "DoNotSchedule"
+          labelSelector:
+            matchLabels:
+              eks.amazonaws.com/component: coredns
   - name: vpc-cni
-    version: "latest"
+    version: "1.18.5"
+    attachPolicyARNs: [ arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy ]
 
-cloudWatch:
-  clusterLogging:
-    enableTypes: [ "all" ]
-    logRetentionInDays: 1
+# coredns
+# kubeproxy
+# ebs-csi-controller
+
+  # - name: eks-pod-identity-agent
+  #   version: latest
+  # - name: cluster-autoscaler
+  #   version: "9.43.0"
+  #   useDefaultPodIdentityAssociations: true
+  #   configurationValues: |
+  #     affinity:
+  #       nodeAffinity:
+  #         requiredDuringSchedulingIgnoredDuringExecution:
+  #           nodeSelectorTerms:
+  #             - matchExpressions:
+  #                 - key: "role"
+  #                   operator: "In"
+  #                   values:
+  #                     - cluster-autoscaler
+  #     nodeSelector:
+  #       role: cluster-autoscaler
+  #     tolerations:
+  #       - key: "role"
+  #         operator: "Equal"
+  #         value: "cluster-autoscaler"
+  #         effect: "NoSchedule"
+  #     topologySpreadConstraints:
+  #       - maxSkew: 1
+  #         topologyKey: "topology.kubernetes.io/zone"
+  #         whenUnsatisfiable: "DoNotSchedule"
+  #         labelSelector:
+  #           matchLabels:
+  #             app: cluster-autoscaler
+
+# cloudWatch:
+#   clusterLogging:
+#     enableTypes: [ "all" ]
+#     logRetentionInDays: 1
 
 managedNodeGroups:
-  - name: cluster-autoscaler
-    labels:
-      role: &clusterAutoscaler cluster-autoscaler
-    taints:
-      - key: "role"
-        value: *clusterAutoscaler
-        effect: "NoSchedule"
-    instanceType: t4g.micro # 2core 1gb
-    spot: true
-    minSize: 2
-    desiredCapacity: 2
-    maxSize: 5
-    privateNetworking: true
-    volumeSize: 20
-    ebsOptimized: true
-    iam:
-      withAddonPolicies:
-        autoScaler: true
+  # - name: cluster-autoscaler
+  #   labels:
+  #     role: &clusterAutoscaler cluster-autoscaler
+  #   taints:
+  #     - key: "role"
+  #       value: *clusterAutoscaler
+  #       effect: "NoSchedule"
+  #   instanceType: t4g.micro # 2core 1gb
+  #   # spot: true
+  #   minSize: 0
+  #   desiredCapacity: 0
+  #   maxSize: 10
+  #   privateNetworking: true
+  #   volumeSize: 20
+  #   ebsOptimized: true
 
-  - name: cluster-services
-    labels:
-      role: &clusterServices cluster-services
-    taints:
-      - key: "role"
-        value: *clusterServices
-        effect: "NoSchedule"
-    instanceType: t4g.medium # 2core 4gb
-    spot: true
-    minSize: 0
-    desiredCapacity: 0
-    maxSize: 5
-    privateNetworking: true
-    volumeSize: 20
-    ebsOptimized: true
-    iam:
-      withAddonPolicies:
-        # externalDNS: true
-        # certManager: true
-        awsLoadBalancerController: true
-        albIngress: true
+  # - name: cluster-services
+  #   labels:
+  #     role: &clusterServices cluster-services
+  #   taints:
+  #     - key: "role"
+  #       value: *clusterServices
+  #       effect: "NoSchedule"
+  #   instanceType: t4g.medium # 2core 4gb
+  #   # spot: true
+  #   minSize: 0
+  #   desiredCapacity: 0
+  #   maxSize: 10
+  #   privateNetworking: true
+  #   volumeSize: 20
+  #   ebsOptimized: true
 
   - name: general
     instanceType: t4g.medium # 2core 4gb
-    spot: true
+    # spot: true
     minSize: 1
-    desiredCapacity: 1
-    maxSize: 10
+    # desiredCapacity: 1
+    maxSize: 25
     privateNetworking: true
     ebsOptimized: true
