@@ -6,14 +6,6 @@ metadata:
   region: us-west-2
   version: "1.31"
 
-iam:
-  podIdentityAssociations:
-    - namespace: kube-system
-      serviceAccountName: cluster-autoscaler
-      roleName: cluster-autoscaler
-      wellKnownPolicies:
-        autoScaler: true
-
 vpc:
   id: vpc-id
   subnets:
@@ -21,38 +13,66 @@ vpc:
       private-one: { id: subnet-id }
       private-two: { id: subnet-id }
 
+cloudWatch:
+  clusterLogging:
+    enableTypes: [ "all" ]
+    logRetentionInDays: 1
+
+iam:
+  podIdentityAssociations:
+    - namespace: kube-system
+      serviceAccountName: image-builder
+      createServiceAccount: true
+      roleName: image-builder
+      wellKnownPolicies:
+        imageBuilder: true
+
+    - namespace: kube-system
+      serviceAccountName: cluster-autoscaler
+      createServiceAccount: true
+      roleName: cluster-autoscaler
+      wellKnownPolicies:
+        autoScaler: true
+
+    - namespace: kube-system
+      serviceAccountName: aws-load-balancer-controller
+      createServiceAccount: true
+      roleName: aws-load-balancer-controller
+      wellKnownPolicies:
+        awsLoadBalancerController: true
+
+    - namespace: kube-system
+      serviceAccountName: external-dns
+      createServiceAccount: true
+      roleName: external-dns
+      wellKnownPolicies:
+        externalDNS: true
+
+    - namespace: kube-system
+      serviceAccountName: cert-manager
+      createServiceAccount: true
+      roleName: cert-manager
+      wellKnownPolicies:
+        certManager: true
+
+    - namespace: kube-system
+      serviceAccountName: aws-ebs-csi-controller
+      createServiceAccount: true
+      roleName: aws-ebs-csi-controller
+      wellKnownPolicies:
+        ebsCSIController: true
+
+    # - namespace: kube-system
+    #   serviceAccountName: aws-efs-csi-controller
+    #   createServiceAccount: true
+    #   roleName: aws-efs-csi-controller
+    #   wellKnownPolicies:
+    #     efsCSIController: true
+
 addonsConfig:
   disableDefaultAddons: true
   autoApplyPodIdentityAssociations: true
 addons:
-  - name: aws-ebs-csi-driver
-    version: "1.35.0"
-    useDefaultPodIdentityAssociations: true
-    configurationValues: |
-      controller:
-        replicaCount: 2
-        affinity:
-          podAntiAffinity:
-            requiredDuringSchedulingIgnoredDuringExecution:
-              - labelSelector:
-                  matchLabels:
-                    app: ebs-csi-controller
-                topologyKey: "kubernetes.io/zone"
-          nodeAffinity:
-            preferredDuringSchedulingIgnoredDuringExecution:
-              - weight: 100
-                preference:
-                  matchExpressions:
-                    - key: role
-                      operator: In
-                      values:
-                        - cluster-services
-        tolerations:
-          - operator: "Exists"
-            effect: "NoSchedule"
-      node:
-        tolerateAllTaints: true
-
   - name: coredns
     version: "1.11.3"
     useDefaultPodIdentityAssociations: true
@@ -65,18 +85,6 @@ addons:
                 matchLabels:
                   eks.amazonaws.com/component: coredns
               topologyKey: "kubernetes.io/zone"
-        nodeAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 100
-              preference:
-                matchExpressions:
-                  - key: role
-                    operator: In
-                    values:
-                      - cluster-services
-      tolerations:
-        - operator: "Exists"
-          effect: "NoSchedule"
 
   - name: eks-pod-identity-agent
     version: "1.3.2"
@@ -89,18 +97,6 @@ addons:
                 matchLabels:
                   app.kubernetes.io/name: eks-pod-identity-agent
               topologyKey: "kubernetes.io/zone"
-        nodeAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 100
-              preference:
-                matchExpressions:
-                  - key: role
-                    operator: In
-                    values:
-                      - cluster-services
-      tolerations:
-        - operator: "Exists"
-          effect: "NoSchedule"
 
   - name: kube-proxy
     useDefaultPodIdentityAssociations: true
@@ -109,11 +105,6 @@ addons:
   - name: vpc-cni
     version: "1.18.5"
     useDefaultPodIdentityAssociations: true
-
-cloudWatch:
-  clusterLogging:
-    enableTypes: [ "all" ]
-    logRetentionInDays: 1
 
 managedNodeGroups:
   - name: cluster-autoscaler
@@ -125,20 +116,6 @@ managedNodeGroups:
         effect: "NoSchedule"
     instanceType: t4g.medium
     minSize: 2
-    maxSize: 10
-    privateNetworking: true
-    volumeSize: 20
-    ebsOptimized: true
-
-  - name: cluster-services
-    labels:
-      role: &clusterServices cluster-services
-    taints:
-      - key: "role"
-        value: *clusterServices
-        effect: "NoSchedule"
-    instanceType: t4g.medium
-    minSize: 0
     maxSize: 10
     privateNetworking: true
     volumeSize: 20
