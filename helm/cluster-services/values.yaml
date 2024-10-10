@@ -2,11 +2,11 @@
   clusterName: &clusterName sdlc-dev-blue
   region: &region us-west-2
   podReplicaCount: &podReplicaCount 2
-  acmArnPrimary: &acmArnPrimary "arn:aws:acm:us-west-2:615299741042:certificate/8b5157dd-0e0e-453a-bb85-776fbfa294d7"
+  acmArnPrimary: &acmArnPrimary "foo"
   acmArnFailover: &acmArnFailover "bar"
 
 cluster-autoscaler:
-  fullnameOverride: &clusterAutoscalerName aws-cluster-autoscaler
+  fullnameOverride: &awsClusterAutoscaler aws-cluster-autoscaler
   autoDiscovery:
     clusterName: *clusterName
   cloudProvider: aws
@@ -19,20 +19,20 @@ cluster-autoscaler:
           - key: app.kubernetes.io/name
             operator: In
             values:
-            - *clusterAutoscalerName
+            - *awsClusterAutoscaler
         topologyKey: "topology.kubernetes.io/zone"
   nodeSelector:
-      role: *clusterAutoscalerName
+      role: *awsClusterAutoscaler
   tolerations:
     - key: "role"
       operator: "Equal"
-      value: *clusterAutoscalerName
+      value: *awsClusterAutoscaler
       effect: "NoSchedule"
   topologySpreadConstraints: []
   rbac:
     serviceAccount:
       create: false
-      name: *clusterAutoscalerName
+      name: *awsClusterAutoscaler
   replicaCount: *podReplicaCount
 
 aws-ebs-csi-driver:
@@ -93,7 +93,7 @@ aws-load-balancer-controller:
   topologySpreadConstraints: []
   rbac.create: false
   serviceAccount:
-    create: true
+    create: false
     name: aws-load-balancer-controller
   replicaCount: *podReplicaCount
   service:
