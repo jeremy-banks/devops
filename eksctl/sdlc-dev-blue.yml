@@ -20,12 +20,12 @@ cloudWatch:
 
 iam:
   podIdentityAssociations:
-    - namespace: kube-system
-      serviceAccountName: image-builder
-      createServiceAccount: true
-      roleName: image-builder
-      wellKnownPolicies:
-        imageBuilder: true
+    # - namespace: kube-system
+    #   serviceAccountName: image-builder
+    #   createServiceAccount: true
+    #   roleName: image-builder
+    #   wellKnownPolicies:
+    #     imageBuilder: true
 
     - namespace: kube-system
       serviceAccountName: cluster-autoscaler
@@ -85,6 +85,10 @@ addons:
                 matchLabels:
                   eks.amazonaws.com/component: coredns
               topologyKey: "kubernetes.io/zone"
+      nodeSelector: {}
+      tolerations:
+        - operator: "Exists"
+      topologySpreadConstraints: []
 
   - name: eks-pod-identity-agent
     version: "1.3.2"
@@ -97,6 +101,9 @@ addons:
                 matchLabels:
                   app.kubernetes.io/name: eks-pod-identity-agent
               topologyKey: "kubernetes.io/zone"
+      nodeSelector: {}
+      tolerations:
+        - operator: "Exists"
 
   - name: kube-proxy
     useDefaultPodIdentityAssociations: true
