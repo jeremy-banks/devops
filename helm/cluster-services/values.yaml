@@ -1,17 +1,16 @@
 .anchors:
   clusterName: &clusterName sdlc-dev-green
-  clusterAutoscaler: &clusterAutoscaler cluster-autoscaler
-  clusterServices: &clusterServices cluster-services
   region: &region us-west-2
+  clusterAutoscaler: &clusterAutoscaler cluster-autoscaler
+  podReplicaCount: &podReplicaCount 2
   acmArnPrimary: &acmArnPrimary "arn:aws:acm:us-west-2:615299741042:certificate/8b5157dd-0e0e-453a-bb85-776fbfa294d7"
   acmArnFailover: &acmArnFailover "bar"
-  podReplicaCount: &podReplicaCount 2
 
 cluster-autoscaler:
   autoDiscovery:
     clusterName: *clusterName
   cloudProvider: aws
-  awsregion: *region
+  awsRegion: *region
   affinity:
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
@@ -28,17 +27,8 @@ cluster-autoscaler:
           - key: app.kubernetes.io/name
             operator: In
             values:
-            - cluster-autoscaler
+            - *clusterAutoscaler
         topologyKey: "topology.kubernetes.io/zone"
-  nodeSelector:
-    role: *clusterAutoscaler
-  topologySpreadConstraints:
-    - maxSkew: 1
-      topologyKey: "topology.kubernetes.io/zone"
-      whenUnsatisfiable: DoNotSchedule
-      labelSelector:
-        matchLabels:
-          app: *clusterAutoscaler
   tolerations:
     - key: "role"
       operator: "Equal"
@@ -49,87 +39,48 @@ cluster-autoscaler:
       create: false
       name: *clusterAutoscaler
   replicaCount: *podReplicaCount
-  resources:
-    requests:
-      cpu: 100m
-      memory: 300Mi
-    limits:
-      cpu: 100m
-      memory: 300Mi
 
 aws-ebs-csi-driver:
-  controller:
-    region: *region
-    affinity:
-      podAntiAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-                - key: role
-                  operator: In
-                  values:
-                    - *clusterServices
-            topologyKey: "kubernetes.io/hostname"
-    # nodeSelector:
-    #   role: *clusterServices
-    tolerations:
-      - key: "role"
-        operator: "Equal"
-        value: *clusterServices
-        effect: "NoSchedule"
-    topologySpreadConstraints:
-      - maxSkew: 1
-        topologyKey: "topology.kubernetes.io/zone"
-        whenUnsatisfiable: DoNotSchedule
-        labelSelector:
-          matchLabels:
-            app: ebs-csi-controller
-    replicaCount: *podReplicaCount
-    resources:
-      requests:
-        cpu: 10m
-        memory: 40Mi
-      limits:
-        memory: 256Mi
-  node:
-    tolerateAllTaints: true
-    resources:
-      requests:
-        cpu: 10m
-        memory: 40Mi
-      limits:
-        memory: 256Mi
+  controller.region: *region
+  controller.affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchLabels:
+              app: ebs-csi-controller
+          topologyKey: "kubernetes.io/zone"
+  controller.serviceAccount:
+    create: false
+    name: aws-ebs-csi-controller
+  enableVolumeResizing: true
+  node.tolerateAllTaints: true
+
+# external-dns:
+#   provider:
+#     name: aws
+#   env:
+#   - name: AWS_DEFAULT_REGION
+#     value: *region
+
+# cert-manager:
 
 aws-load-balancer-controller:
   clusterName: *clusterName
-  # affinity:
-  #   podAntiAffinity:
-  #     requiredDuringSchedulingIgnoredDuringExecution:
-  #       - labelSelector:
-  #           matchExpressions:
-  #             - key: role
-  #               operator: In
-  #               values:
-  #                 - *clusterServices
-  #         topologyKey: "kubernetes.io/hostname"
-  nodeSelector:
-    role: *clusterServices
-  tolerations:
-    - key: "role"
-      operator: "Equal"
-      value: *clusterServices
-      effect: "NoSchedule"
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+          - key: app.kubernetes.io/name
+            operator: In
+            values:
+            - aws-load-balancer-controller
+        topologyKey: "topology.kubernetes.io/zone"
+  rbac:
+    serviceAccount:
+      create: false
+      name: aws-load-balancer-controller
   replicaCount: *podReplicaCount
-  resources:
-    requests:
-      cpu: 500m
-      memory: 128Mi
-    # requests:
-    #   cpu: 100m
-    #   memory: 128Mi
-    # limits:
-    #   cpu: 100m
-    #   memory: 128Mi
   service:
     type: LoadBalancer
     annotations:

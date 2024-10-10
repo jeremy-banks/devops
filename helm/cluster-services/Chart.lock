@@ -9,4 +9,4 @@ dependencies:
   repository: https://aws.github.io/eks-charts
   version: 1.9.0
 digest: sha256:032db050cbfa452588abf4531b80aedcd90c22e5427cd8a6fba14c4f6dd334ff
-generated: "2024-10-07T09:14:54.838480599-07:00"
+generated: "2024-10-09T20:25:43.014349987-07:00"
