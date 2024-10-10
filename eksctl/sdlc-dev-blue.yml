@@ -7,16 +7,18 @@ metadata:
   version: "1.31"
 
 vpc:
-  id: vpc-0604df84cd9036ddb
+  id: vpc-id
   subnets:
     private:
-      private-one: { id: subnet-0282590062a438be3 }
-      private-two: { id: subnet-0e15c87d734ea4de8 }
+      private-one: { id: subnet-id }
+      private-two: { id: subnet-id }
 
-# cloudWatch:
-#   clusterLogging:
-#     enableTypes: [ "all" ]
-#     logRetentionInDays: 1
+cloudWatch:
+  clusterLogging:
+    enableTypes: [ "all" ]
+    logRetentionInDays: 1
+
+secretsEncryption.keyARN: ""
 
 iam:
   podIdentityAssociations:
@@ -33,7 +35,7 @@ iam:
         autoScaler: true
 
     - namespace: kube-system
-      serviceAccountName: aws-load-balancer-controller-sa
+      serviceAccountName: aws-load-balancer-controller
       createServiceAccount: true
       wellKnownPolicies:
         awsLoadBalancerController: true
@@ -74,29 +76,29 @@ addons:
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchLabels:
-                  eks.amazonaws.com/component: coredns
-              topologyKey: "kubernetes.io/zone"
+          - labelSelector:
+              matchExpressions:
+              - key: eks.amazonaws.com/component
+                operator: In
+                values:
+                - coredns
+            topologyKey: "topology.kubernetes.io/zone"
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            preference:
+              matchExpressions:
+              - key: node.kubernetes.io/taint
+                operator: DoesNotExist
       nodeSelector: {}
       tolerations:
         - operator: "Exists"
+          effect: "NoSchedule"
       topologySpreadConstraints: []
 
   - name: eks-pod-identity-agent
     version: "1.3.2"
     useDefaultPodIdentityAssociations: true
-    configurationValues: |
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchLabels:
-                  app.kubernetes.io/name: eks-pod-identity-agent
-              topologyKey: "kubernetes.io/zone"
-      nodeSelector: {}
-      tolerations:
-        - operator: "Exists"
 
   - name: kube-proxy
     useDefaultPodIdentityAssociations: true
@@ -107,12 +109,12 @@ addons:
     useDefaultPodIdentityAssociations: true
 
 managedNodeGroups:
-  - name: cluster-autoscaler
+  - name: &awsClusterAutoscaler aws-cluster-autoscaler
     labels:
-      role: &clusterAutoscaler cluster-autoscaler
+      role: *awsClusterAutoscaler
     taints:
       - key: "role"
-        value: *clusterAutoscaler
+        value: *awsClusterAutoscaler
         effect: "NoSchedule"
     instanceType: t4g.medium
     minSize: 2
