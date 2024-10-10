@@ -18,7 +18,8 @@ cloudWatch:
     enableTypes: [ "all" ]
     logRetentionInDays: 1
 
-secretsEncryption.keyARN: ""
+secretsEncryption:
+  keyARN: keyARN
 
 iam:
   podIdentityAssociations:
