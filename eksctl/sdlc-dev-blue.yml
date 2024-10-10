@@ -7,65 +7,58 @@ metadata:
   version: "1.31"
 
 vpc:
-  id: vpc-id
+  id: vpc-0604df84cd9036ddb
   subnets:
     private:
-      private-one: { id: subnet-id }
-      private-two: { id: subnet-id }
+      private-one: { id: subnet-0282590062a438be3 }
+      private-two: { id: subnet-0e15c87d734ea4de8 }
 
-cloudWatch:
-  clusterLogging:
-    enableTypes: [ "all" ]
-    logRetentionInDays: 1
+# cloudWatch:
+#   clusterLogging:
+#     enableTypes: [ "all" ]
+#     logRetentionInDays: 1
 
 iam:
   podIdentityAssociations:
     # - namespace: kube-system
     #   serviceAccountName: image-builder
     #   createServiceAccount: true
-    #   roleName: image-builder
     #   wellKnownPolicies:
     #     imageBuilder: true
 
     - namespace: kube-system
-      serviceAccountName: cluster-autoscaler
+      serviceAccountName: aws-cluster-autoscaler
       createServiceAccount: true
-      roleName: cluster-autoscaler
       wellKnownPolicies:
         autoScaler: true
 
     - namespace: kube-system
-      serviceAccountName: aws-load-balancer-controller
+      serviceAccountName: aws-load-balancer-controller-sa
       createServiceAccount: true
-      roleName: aws-load-balancer-controller
       wellKnownPolicies:
         awsLoadBalancerController: true
 
     - namespace: kube-system
       serviceAccountName: external-dns
       createServiceAccount: true
-      roleName: external-dns
       wellKnownPolicies:
         externalDNS: true
 
     - namespace: kube-system
       serviceAccountName: cert-manager
       createServiceAccount: true
-      roleName: cert-manager
       wellKnownPolicies:
         certManager: true
 
     - namespace: kube-system
-      serviceAccountName: aws-ebs-csi-controller
+      serviceAccountName: ebs-csi-controller-sa
       createServiceAccount: true
-      roleName: aws-ebs-csi-controller
       wellKnownPolicies:
         ebsCSIController: true
 
     # - namespace: kube-system
-    #   serviceAccountName: aws-efs-csi-controller
+    #   serviceAccountName: aws-efs-csi
     #   createServiceAccount: true
-    #   roleName: aws-efs-csi-controller
     #   wellKnownPolicies:
     #     efsCSIController: true
 

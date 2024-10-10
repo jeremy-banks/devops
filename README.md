@@ -81,16 +81,15 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
          ```
       1. Deploy EKS Cluster
          ```sh
-         eksctl create cluster -f sdlc-dev-blue.yml
-         eksctl delete cluster --name sdlc-dev-blue --region us-west-2
-         eksctl create nodegroup -f sdlc-dev-blue.yml
-         eksctl delete nodegroup --cluster sdlc-dev-blue --name general --region us-west-2
+         eksctl create cluster -f sdlc-dev-blue.yml &
+         eksctl delete cluster --name sdlc-dev-blue --region us-west-2 &
+         eksctl create nodegroup -f sdlc-dev-blue.yml &
+         eksctl delete nodegroup --cluster sdlc-dev-blue --name general --region us-west-2 &
          ```
       1. Deploy cluster-services
          ```sh
-         helm install cluster-services . --namespace kube-system
-         helm upgrade cluster-services . --namespace kube-system
-         helm uninstall cluster-services --namespace kube-system
+         helm upgrade --install cluster-services . --namespace kube-system --force &
+         helm uninstall cluster-services --namespace kube-system &
          ```
       1. Deploy nginx welcome page
          1. To be completed

@@ -1,25 +1,17 @@
 .anchors:
-  clusterName: &clusterName sdlc-dev-green
+  clusterName: &clusterName sdlc-dev-blue
   region: &region us-west-2
-  clusterAutoscaler: &clusterAutoscaler cluster-autoscaler
   podReplicaCount: &podReplicaCount 2
   acmArnPrimary: &acmArnPrimary "arn:aws:acm:us-west-2:615299741042:certificate/8b5157dd-0e0e-453a-bb85-776fbfa294d7"
   acmArnFailover: &acmArnFailover "bar"
 
 cluster-autoscaler:
+  fullnameOverride: &clusterAutoscalerName aws-cluster-autoscaler
   autoDiscovery:
     clusterName: *clusterName
   cloudProvider: aws
   awsRegion: *region
   affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-        - matchExpressions:
-          - key: role
-            operator: In
-            values:
-            - *clusterAutoscaler
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
       - labelSelector:
@@ -27,44 +19,64 @@ cluster-autoscaler:
           - key: app.kubernetes.io/name
             operator: In
             values:
-            - *clusterAutoscaler
+            - *clusterAutoscalerName
         topologyKey: "topology.kubernetes.io/zone"
+  nodeSelector:
+      role: *clusterAutoscalerName
   tolerations:
     - key: "role"
       operator: "Equal"
-      value: *clusterAutoscaler
+      value: *clusterAutoscalerName
       effect: "NoSchedule"
+  topologySpreadConstraints: []
   rbac:
     serviceAccount:
       create: false
-      name: *clusterAutoscaler
+      name: *clusterAutoscalerName
   replicaCount: *podReplicaCount
 
 aws-ebs-csi-driver:
-  controller.region: *region
-  controller.affinity:
-    podAntiAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        - labelSelector:
-            matchLabels:
-              app: ebs-csi-controller
-          topologyKey: "kubernetes.io/zone"
-  controller.serviceAccount:
-    create: false
-    name: aws-ebs-csi-controller
+  controller:
+    region: *region
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - ebs-csi-controller
+            topologyKey: "topology.kubernetes.io/zone"
+    nodeSelector: {}
+    tolerations: []
+    topologySpreadConstraints: []
+    serviceAccount:
+      create: false
+      name: ebs-csi-controller-sa
+    replicaCount: *podReplicaCount
   enableVolumeResizing: true
   node.tolerateAllTaints: true
 
-# external-dns:
-#   provider:
-#     name: aws
-#   env:
-#   - name: AWS_DEFAULT_REGION
-#     value: *region
+external-dns:
+  fullnameOverride: external-dns
+  provider:
+    name: aws
+  env:
+  - name: AWS_DEFAULT_REGION
+    value: *region
+  affinity: {}
+  nodeSelector: {}
+  tolerations: []
+  topologySpreadConstraints: []
+  serviceAccount:
+    create: false
+    name: external-dns
 
 # cert-manager:
 
 aws-load-balancer-controller:
+  fullnameOverride: aws-load-balancer-controller
   clusterName: *clusterName
   affinity:
     podAntiAffinity:
@@ -76,10 +88,13 @@ aws-load-balancer-controller:
             values:
             - aws-load-balancer-controller
         topologyKey: "topology.kubernetes.io/zone"
-  rbac:
-    serviceAccount:
-      create: false
-      name: aws-load-balancer-controller
+  nodeSelector: {}
+  tolerations: []
+  topologySpreadConstraints: []
+  rbac.create: false
+  serviceAccount:
+    create: true
+    name: aws-load-balancer-controller
   replicaCount: *podReplicaCount
   service:
     type: LoadBalancer
