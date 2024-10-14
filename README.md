@@ -1,12 +1,14 @@
 # Devops
 
-## Project Goal
+## Project Goals
 1. Create codebase ideal for "lift and shift" into AWS and EKS
 1. Using minimal number tools with high market share utilization (eg terraform, eksctl, helm)
 1. Demo with k8s nginx welcome page
 1. Demo with k8s deployment of self-hosted Rust server
 
-## Features
+## Details
+
+### Features
 - Terraform providers and modules all version locked
 - All resources which support multi-regional have it enabled in active-active (or at least active-passive)
 - AWS IAM Permission Boundary in effect, preventing all editing of terraformed resources by non-terraform roles
@@ -20,17 +22,26 @@
   - Building a Scalable and Secure Multi-VPC AWS Network Infrastructure https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/welcome.html
   - Latencies between AWS availability zones https://www.flashgrid.io/news/latencies-between-aws-availability-zones-what-are-they-and-how-to-minimize-them
 
-## Organization Layout
+### Organization Layout
 ![Organization Layout](./drawings/org-and-account-layout.png)
 
-## Prerequisites
+### Security Access
+![Security Access](./drawings/security-access.png)
+1. "superadmin" user manages all account and IAM resources
+1. "automation" user manages all non-account and non-IAM resources
+1. Users log in through AWS SSO using AD credentials which permit them to assume roles based on their AD group membership
+   1. Users are not permitted to edit infrastructure managed by IaC tools by way of permission boundary matching tag key:value
+
+## Initial Setup
+
+### Prerequisites
 - aws-cli/2.17.65
 - Terraform v1.9.7
 - eksctl version 0.191.0
 - kubectl v1.31.1
 - helm v3.16.1
 
-## Initial Setup
+### Instructions
 1. Create AWS Account to be Organization root
 1. Update the terraform/variables.tf with your unique information
    1. org_owner_email_prefix (billg)
@@ -124,10 +135,13 @@
 - Triggering a DR event
    - ACL allows no traffic in one subnet
 - Complete sdlc test, stage, and prod
-- Opt out of all AI policy https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_ai-opt-out.html
-- Implement the Well-Architected Tool https://docs.aws.amazon.com/whitepapers/latest/organizing-your-aws-environment/organizing-your-aws-environment.html
 - Need scalable solution to deploy security settings such as aws_ebs_snapshot_block_public_access, block public s3 access, default ebs encryption, etc
    - probably need a step after account creation before iam to deploy org-security-settings
+- Federated login for devops, operations, and developers
+   - https://getstarted.awsworkshop.io/02-dev-fast-follow/02-federated-access-to-aws/02-aws-sso-ad.html
+   - https://aws.amazon.com/blogs/architecture/field-notes-integrating-active-directory-federation-service-with-aws-single-sign-on/
+- Opt out of all AI policy https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_ai-opt-out.html
+- Implement the Well-Architected Tool https://docs.aws.amazon.com/whitepapers/latest/organizing-your-aws-environment/organizing-your-aws-environment.html
 - Complete some kind of automation to convert drawings into png for this documentation
 - Base docker images for all distros
    - initially just docker images which run apt-get upgrade or yum upgrade to get patches
