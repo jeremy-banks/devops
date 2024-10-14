@@ -1,7 +1,10 @@
 # Devops
 
 ## Project Goal
-Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resources using only terraform, eksctl, and helm
+1. Create codebase ideal for "lift and shift" into AWS and EKS
+1. Using minimal number tools with high market share utilization (eg terraform, eksctl, helm)
+1. Demo with k8s nginx welcome page
+1. Demo with k8s deployment of self-hosted Rust server
 
 ## Features
 - Terraform providers and modules all version locked
@@ -16,6 +19,9 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
   - Best practices for multi-account management https://docs.aws.amazon.com/organizations/latest/userguide/orgs_best-practices.html
   - Building a Scalable and Secure Multi-VPC AWS Network Infrastructure https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/welcome.html
   - Latencies between AWS availability zones https://www.flashgrid.io/news/latencies-between-aws-availability-zones-what-are-they-and-how-to-minimize-them
+
+## Organization Layout
+![Organization Layout](./drawings/org-and-account-layout.png)
 
 ## Prerequisites
 - aws-cli/2.17.65
@@ -78,6 +84,7 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
          export AWS_ACCESS_KEY_ID=foo
          export AWS_SECRET_ACCESS_KEY=bar
          export AWS_SESSION_TOKEN=helloworld
+         unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
          ```
       1. Deploy EKS Cluster
          ```sh
@@ -92,8 +99,19 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
          helm uninstall cluster-services --namespace kube-system &
          ```
       1. Deploy nginx welcome page
-         1. To be completed
-      1. Repeat steps for other sdlc tst, stg, and prd accounts
+         ```sh
+         helm upgrade --install my-nginx bitnami/nginx &
+         helm uninstall my-nginx bitnami/nginx &
+         ```
+         1. Great for troubleshooting deployments
+            ```sh
+            for i in $(seq 1 30); do helm upgrade --install my-nginx$i bitnami/nginx; done
+            for i in $(seq 1 30); do helm uninstall my-nginx$i bitnami/nginx; done
+            ```
+      1. Test your website
+         ```sh
+         curl www.yourwebsite.com
+         ```
    1. Deploy terraform/aws/sdlc-tst
    1. Deploy terraform/aws/sdlc-stg
    1. Deploy terraform/aws/sdlc-prd
@@ -105,11 +123,12 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
 - Finish out k8s cluster with an nginx welcome page deployment and alb
 - Triggering a DR event
    - ACL allows no traffic in one subnet
+- Complete sdlc test, stage, and prod
+- Opt out of all AI policy https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_ai-opt-out.html
+- Implement the Well-Architected Tool https://docs.aws.amazon.com/whitepapers/latest/organizing-your-aws-environment/organizing-your-aws-environment.html
 - Need scalable solution to deploy security settings such as aws_ebs_snapshot_block_public_access, block public s3 access, default ebs encryption, etc
    - probably need a step after account creation before iam to deploy org-security-settings
-- Complete sdlc test, stage, and prod
-- Complete CustomerA workload
-- Complete some kind of automation to convert drawio into png for this documentation
+- Complete some kind of automation to convert drawings into png for this documentation
 - Base docker images for all distros
    - initially just docker images which run apt-get upgrade or yum upgrade to get patches
 - Packer and ansible example for building base AMIs
@@ -117,10 +136,6 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
    - DNS logs sent to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
    - ALB logs send to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
 - Implement backend tfstate lock with dynamodb
-- Multi-AZ storage active-active if possible
-   - s3 DONE!
-   - rds
-   - efs
 - EKS autoscaling examples
    - CPU
    - Sessions
@@ -137,6 +152,7 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
 - move desired R53 healthcheck source locations to a var and local design
 - ALB sec group with cool way of allowing ingress (nonprod through private CVPN, prod through public)
 - Mozilla Secrets OPerationS (SOPS) protects secrets in code using Key Management System (KMS) Customer Managed Key (CMK)
+- break glass entry for accounts https://docs.aws.amazon.com/whitepapers/latest/organizing-your-aws-environment/break-glass-access.html
 
 ## Known Issues
 - terraform/aws/org-ou-account-management/main.tf
