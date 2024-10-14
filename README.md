@@ -26,11 +26,11 @@
 ![Organization Layout](./drawings/org-and-account-layout.png)
 
 ### Security Access
-![Security Access](./drawings/security-access.png)
 1. "superadmin" user manages all account and IAM resources
 1. "automation" user manages all non-account and non-IAM resources
 1. Users log in through AWS SSO using AD credentials which permit them to assume roles based on their AD group membership
    1. Users are not permitted to edit infrastructure managed by IaC tools by way of permission boundary matching tag key:value
+![Security Access](./drawings/security-access.png)
 
 ## Initial Setup
 
