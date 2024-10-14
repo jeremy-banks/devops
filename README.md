@@ -23,10 +23,10 @@
   - Latencies between AWS availability zones https://www.flashgrid.io/news/latencies-between-aws-availability-zones-what-are-they-and-how-to-minimize-them
 
 ### Organization Layout
-![Organization Layout](./drawings/org-and-account-layout.png)
+![Organization Layout](./drawings/org-and-account-layout.png#center)
 
 ### Security Access
-![Security Access](./drawings/security-access.png)
+![Security Access](./drawings/security-access.png#center)
 1. "superadmin" user manages all account and IAM resources
 1. "automation" user manages all non-account and non-IAM resources
 1. Users log in through AWS SSO using AD credentials which permit them to assume roles based on their AD group membership
