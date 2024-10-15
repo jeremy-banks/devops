@@ -5,16 +5,12 @@
 1. Using minimal number tools with high market share utilization (eg terraform, eksctl, helm)
 1. Demo with k8s nginx welcome page
 1. Demo with k8s deployment of self-hosted Rust server
+1. All resources which support multi-regional have it enabled in active-active (or at least active-passive)
 
 ## Details
 
-### Features
+### Documentation Reference
 - Terraform providers and modules all version locked
-- All resources which support multi-regional have it enabled in active-active (or at least active-passive)
-- AWS IAM Permission Boundary in effect, preventing all editing of terraformed resources by non-terraform roles
-- Terraform does not manage resources it uses to access provisioning
-  - superadmin role is used to manage automation, admin, poweruser, readonly, and eks roles
-  - every other resource is managed by automation role
 - Code written following AWS documentation
   - Well-Architected Framework  https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html
   - Prescriptive Guidance Security Reference Architecture https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture/org-management.html
@@ -23,14 +19,15 @@
   - Latencies between AWS availability zones https://www.flashgrid.io/news/latencies-between-aws-availability-zones-what-are-they-and-how-to-minimize-them
 
 ### Security Access
-1. "superadmin" user manages all account and IAM resources
-1. "automation" user manages all non-account and non-IAM resources
+1. Terraform does not manage resourcesz it uses to access provisioners
+   1. "superadmin" user manages all account and IAM resources
+   1. "automation" user manages all non-account and non-IAM resources
 1. Users log in through AWS SSO using AD credentials which permit them to assume roles based on their AD group membership
    1. Users are not permitted to edit infrastructure managed by IaC tools by way of permission boundary matching tag key:value
-![Security Access](./drawings/security-access.png)
+![Security Access](./drawings/security-access.drawio.png)
 
 ### Organization Layout
-![Organization Layout](./drawings/org-and-account-layout.png)
+![Organization Layout](./drawings/org-and-account-layout.drawio.png)
 
 ## Initial Setup
 
