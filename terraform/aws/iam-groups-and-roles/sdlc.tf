@@ -1,10 +1,10 @@
-module "iam_assumable_roles_sdlc_dev" {
+module "iam_assumable_roles_sdlc_prd" {
   source = "terraform-aws-modules/iam/aws//modules/iam-assumable-roles"
   version = "5.45.0"
-  providers = { aws = aws.sdlc_dev }
+  providers = { aws = aws.sdlc_prd }
 
   trusted_role_arns = [
-     "arn:aws:iam::${var.account_id.shared_services}:root",
+     "arn:aws:iam::${var.account_id.identity}:root",
      "arn:aws:iam::${var.account_id.org}:user/${var.assumable_role_name.superadmin}",
   ]
 
@@ -21,13 +21,14 @@ module "iam_assumable_roles_sdlc_dev" {
   max_session_duration = 43200
 }
 
-module "iam_assumable_role_automation_sdlc_dev" {
+module "iam_assumable_role_automation_sdlc_prd" {
   source = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "5.45.0"
-  providers = { aws = aws.sdlc_dev }
+  providers = { aws = aws.sdlc_prd }
 
   trusted_role_arns = [
-     "arn:aws:iam::${var.account_id.shared_services}:root",
+     "arn:aws:iam::${var.account_id.identity}:root",
+     "arn:aws:iam::${var.account_id.org}:user/${var.assumable_role_name.automation}",
      "arn:aws:iam::${var.account_id.org}:user/${var.assumable_role_name.superadmin}",
   ]
 

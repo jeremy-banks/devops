@@ -28,34 +28,18 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias = "network"
+  alias = "identity"
   profile = local.cli_profile_name_aws
   region  = var.region.primary
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.network}:role/${local.provider_role_name}" }
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.identity}:role/${local.provider_role_name}" }
   default_tags { tags = local.default_tags }
 }
 
 provider "aws" {
-  alias = "network_failover"
+  alias = "identity_failover"
   profile = local.cli_profile_name_aws
   region  = var.region.failover
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.network}:role/${local.provider_role_name}" }
-  default_tags { tags = local.default_tags }
-}
-
-provider "aws" {
-  alias = "shared_services"
-  profile = local.cli_profile_name_aws
-  region  = var.region.primary
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.shared_services}:role/${local.provider_role_name}" }
-  default_tags { tags = local.default_tags }
-}
-
-provider "aws" {
-  alias = "shared_services_failover"
-  profile = local.cli_profile_name_aws
-  region  = var.region.failover
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.shared_services}:role/${local.provider_role_name}" }
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.identity}:role/${local.provider_role_name}" }
   default_tags { tags = local.default_tags }
 }
 
@@ -76,6 +60,22 @@ provider "aws" {
 }
 
 provider "aws" {
+  alias = "network"
+  profile = local.cli_profile_name_aws
+  region  = var.region.primary
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.network}:role/${local.provider_role_name}" }
+  default_tags { tags = local.default_tags }
+}
+
+provider "aws" {
+  alias = "network_failover"
+  profile = local.cli_profile_name_aws
+  region  = var.region.failover
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.network}:role/${local.provider_role_name}" }
+  default_tags { tags = local.default_tags }
+}
+
+provider "aws" {
   alias = "security_tooling"
   profile = local.cli_profile_name_aws
   region  = var.region.primary
@@ -92,34 +92,18 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias = "sdlc_dev"
+  alias = "sdlc_prd"
   profile = local.cli_profile_name_aws
   region  = var.region.primary
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.sdlc_dev}:role/${local.provider_role_name}" }
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.sdlc_prd}:role/${local.provider_role_name}" }
   default_tags { tags = local.default_tags }
 }
 
 provider "aws" {
-  alias = "sdlc_dev_failover"
+  alias = "sdlc_prd_failover"
   profile = local.cli_profile_name_aws
   region  = var.region.failover
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.sdlc_dev}:role/${local.provider_role_name}" }
-  default_tags { tags = local.default_tags }
-}
-
-provider "aws" {
-  alias = "sdlc_tst"
-  profile = local.cli_profile_name_aws
-  region  = var.region.primary
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.sdlc_tst}:role/${local.provider_role_name}" }
-  default_tags { tags = local.default_tags }
-}
-
-provider "aws" {
-  alias = "sdlc_tst_failover"
-  profile = local.cli_profile_name_aws
-  region  = var.region.failover
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.sdlc_tst}:role/${local.provider_role_name}" }
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.sdlc_prd}:role/${local.provider_role_name}" }
   default_tags { tags = local.default_tags }
 }
 
@@ -140,17 +124,33 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias = "sdlc_prd"
+  alias = "sdlc_tst"
   profile = local.cli_profile_name_aws
   region  = var.region.primary
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.sdlc_prd}:role/${local.provider_role_name}" }
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.sdlc_tst}:role/${local.provider_role_name}" }
   default_tags { tags = local.default_tags }
 }
 
 provider "aws" {
-  alias = "sdlc_prd_failover"
+  alias = "sdlc_tst_failover"
   profile = local.cli_profile_name_aws
   region  = var.region.failover
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.sdlc_prd}:role/${local.provider_role_name}" }
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.sdlc_tst}:role/${local.provider_role_name}" }
+  default_tags { tags = local.default_tags }
+}
+
+provider "aws" {
+  alias = "sdlc_dev"
+  profile = local.cli_profile_name_aws
+  region  = var.region.primary
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.sdlc_dev}:role/${local.provider_role_name}" }
+  default_tags { tags = local.default_tags }
+}
+
+provider "aws" {
+  alias = "sdlc_dev_failover"
+  profile = local.cli_profile_name_aws
+  region  = var.region.failover
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.sdlc_dev}:role/${local.provider_role_name}" }
   default_tags { tags = local.default_tags }
 }

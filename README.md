@@ -71,16 +71,16 @@
       terraform output -json
       aws configure --profile automation
       ```
-1. Deploy terraform/aws/r53-zones-and-records
-   1. Update your domain registrar with the nameservers from terraform output
+<!-- 1. Deploy terraform/aws/r53-zones-and-records
+   1. Update your domain registrar with the nameservers from terraform output -->
 1. Deploy terraform/aws/tgw-and-network-vpc
-1. Deploy terraform/aws/enterprise-ad
+<!-- 1. Deploy terraform/aws/enterprise-ad
    1. This deployment can take up to 2 hours and may fail several times due to AWS throttling, keep running plan and apply until complete
    1. Update the terraform/variables.tf ad_directory_id_connector_network and ad_directory_id_connector_network_failover strings with terraform output
-1. Deploy terraform/aws/client-vpn
+1. Deploy terraform/aws/client-vpn -->
 1. Deploy sdlc accounts
-   1. Deploy terraform/aws/sdlc-dev
-      1. Update eksctl/sdlc-dev-blue.yaml and eksctl/sdlc-dev-failover-blue.yaml with vpc_id and private_subnets for primary and failover from terraform output
+   1. Deploy terraform/aws/sdlc-prd
+      1. Update eksctl/sdlc-prd-blue.yaml and eksctl/sdlc-prd-failover-blue.yaml with vpc_id and private_subnets for primary and failover from terraform output
       1. Assume automation role in account
          ```sh
          # replace 012345678912 with the account id
@@ -96,10 +96,10 @@
          ```
       1. Deploy EKS Cluster
          ```sh
-         eksctl create cluster -f sdlc-dev-blue.yml &
-         eksctl delete cluster --name sdlc-dev-blue --region us-west-2 &
-         eksctl create nodegroup -f sdlc-dev-blue.yml &
-         eksctl delete nodegroup --cluster sdlc-dev-blue --name general --region us-west-2 &
+         eksctl create cluster -f sdlc-prd-blue.yml &
+         eksctl delete cluster --name sdlc-prd-blue --region us-west-2 &
+         eksctl create nodegroup -f sdlc-prd-blue.yml &
+         eksctl delete nodegroup --cluster sdlc-prd-blue --name general --region us-west-2 &
          ```
       1. Deploy cluster-services
          ```sh
@@ -129,15 +129,21 @@
 
 ## To-Do
 - Finish out k8s cluster with an nginx welcome page deployment and alb
+   - need DNS to work in prod and carry over to downstreeam dev.DOMAIN.TLD format
+   - that way ACM works  automatically
+   - might need to make a separate DOMAIN.TLD for services like clientVPN and enterprise AD domains if any
 - Triggering a DR event
    - ACL allows no traffic in one subnet
-- Complete sdlc test, stage, and prod
-- Need scalable solution to deploy security settings such as aws_ebs_snapshot_block_public_access, block public s3 access, default ebs encryption, etc
-   - probably need a step after account creation before iam to deploy org-security-settings
 - Federated login for devops, operations, and developers
    - https://getstarted.awsworkshop.io/02-dev-fast-follow/02-federated-access-to-aws/02-aws-sso-ad.html
    - https://aws.amazon.com/blogs/architecture/field-notes-integrating-active-directory-federation-service-with-aws-single-sign-on/
+   - Also need Windows Admin Server in some account
+   - Goal is to have everyone log in to SSO and their priviledges to log in and assume roles will dynamically populate based on their groups in AD
+- Complete sdlc dev, tst, and stg
+- Need scalable solution to deploy security settings such as aws_ebs_snapshot_block_public_access, block public s3 access, default ebs encryption, etc
+   - probably need a step after account creation before iam to deploy org-security-settings
 - Opt out of all AI policy https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_ai-opt-out.html
+- Implement Rust server
 - Implement the Well-Architected Tool https://docs.aws.amazon.com/whitepapers/latest/organizing-your-aws-environment/organizing-your-aws-environment.html
 - Complete some kind of automation to convert drawings into png for this documentation
 - Base docker images for all distros

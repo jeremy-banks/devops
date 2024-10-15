@@ -1,70 +1,3 @@
-#tgw
-data "aws_organizations_organization" "current" {
-  provider = aws.network
-}
-
-module "tgw_primary" {
-  source  = "terraform-aws-modules/transit-gateway/aws"
-  version = "2.12.2"
-  providers = { aws = aws.network }
-
-  name = "${local.resource_name_prefix_env_region_primary_abbr}-tgw"
-
-  amazon_side_asn = var.tgw_asn.primary
-  enable_auto_accept_shared_attachments = true
-  create_tgw_routes = false
-
-  ram_name = "${local.resource_name_prefix_env_region_primary_abbr}-ram-tgw"
-  ram_allow_external_principals = false
-  ram_principals = [data.aws_organizations_organization.current.arn]
-}
-
-module "tgw_failover" {
-  source  = "terraform-aws-modules/transit-gateway/aws"
-  version = "2.12.2"
-  providers = { aws = aws.network_failover }
-
-  name = "${local.resource_name_prefix_env_region_failover_abbr}-tgw"
-
-  amazon_side_asn = var.tgw_asn.failover
-  enable_auto_accept_shared_attachments = true
-  create_tgw_routes = false
-
-  ram_name = "${local.resource_name_prefix_env_region_failover_abbr}-ram-tgw"
-  ram_allow_external_principals = false
-  ram_principals = [data.aws_organizations_organization.current.arn]
-}
-
-data "aws_caller_identity" "network" {
-  provider = aws.network
-}
-
-resource "aws_ec2_transit_gateway_peering_attachment" "tgw_peering" {
-  provider = aws.network_failover
-
-  peer_account_id                     = data.aws_caller_identity.network.account_id
-  peer_region                         = var.region.primary
-  peer_transit_gateway_id             = module.tgw_primary.ec2_transit_gateway_id
-  transit_gateway_id                  = module.tgw_failover.ec2_transit_gateway_id
-}
-
-resource "aws_ec2_transit_gateway_peering_attachment_accepter" "tgw_peering" {
-  provider = aws.network
-  
-  transit_gateway_attachment_id = aws_ec2_transit_gateway_peering_attachment.tgw_peering.id
-}
-
-#vpc
-resource "aws_eip" "vpc_nat_primary" {
-  provider = aws.network
-
-  count = 3
-  domain = "vpc"
-  tags = { "Name" = "${local.resource_name_prefix_env_region_primary_abbr}-${count.index}" }
-
-  # lifecycle { prevent_destroy = true } # YOU NEVER WANT TO DELETE THESE
-}
-
 module "vpc_primary" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.13.0"
@@ -297,16 +230,6 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_primary" {
   vpc_id             = module.vpc_primary.vpc_id
 }
 
-resource "aws_eip" "vpc_nat_failover" {
-  provider = aws.network_failover
-
-  count = 3
-  domain = "vpc"
-  tags = { "Name" = "${local.resource_name_prefix_env_region_failover_abbr}-${count.index}" }
-
-  # lifecycle { prevent_destroy = true } # YOU NEVER WANT TO DELETE THESE
-}
-
 module "vpc_failover" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.13.0"
@@ -532,65 +455,4 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_failover" {
   subnet_ids         = module.vpc_failover.private_subnets
   transit_gateway_id = module.tgw_failover.ec2_transit_gateway_id
   vpc_id             = module.vpc_failover.vpc_id
-}
-
-#vpc ram
-resource "aws_ram_resource_share" "primary" {
-  provider = aws.network
-
-  name                      = "${local.resource_name_prefix_env_region_primary_abbr}-ram-vpc"
-  allow_external_principals = false
-}
-
-resource "aws_ram_principal_association" "primary" {
-  provider = aws.network
-
-  principal          = data.aws_organizations_organization.current.arn
-  resource_share_arn = aws_ram_resource_share.primary.arn
-}
-
-resource "aws_ram_resource_association" "primary_pub" {
-  provider = aws.network
-
-  count = length(module.vpc_primary.public_subnet_arns)
-  resource_arn       = module.vpc_primary.public_subnet_arns[count.index]
-  resource_share_arn = aws_ram_resource_share.primary.arn
-}
-
-resource "aws_ram_resource_association" "primary_pvt" {
-  provider = aws.network
-
-  count = length(module.vpc_primary.private_subnet_arns)
-  resource_arn       = module.vpc_primary.private_subnet_arns[count.index]
-  resource_share_arn = aws_ram_resource_share.primary.arn
-}
-
-resource "aws_ram_resource_share" "failover" {
-  provider = aws.network_failover
-
-  name  = "${local.resource_name_prefix_env_region_failover_abbr}-ram-vpc"
-  allow_external_principals = false
-}
-
-resource "aws_ram_principal_association" "failover" {
-  provider = aws.network_failover
-
-  principal          = data.aws_organizations_organization.current.arn
-  resource_share_arn = aws_ram_resource_share.failover.arn
-}
-
-resource "aws_ram_resource_association" "failover_pub" {
-  provider = aws.network_failover
-
-  count = length(module.vpc_failover.public_subnet_arns)
-  resource_arn       = module.vpc_failover.public_subnet_arns[count.index]
-  resource_share_arn = aws_ram_resource_share.failover.arn
-}
-
-resource "aws_ram_resource_association" "failover_pvt" {
-  provider = aws.network_failover
-
-  count = length(module.vpc_failover.private_subnet_arns)
-  resource_arn       = module.vpc_failover.private_subnet_arns[count.index]
-  resource_share_arn = aws_ram_resource_share.failover.arn
 }

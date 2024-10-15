@@ -2,8 +2,8 @@ output "org" {
   value = data.aws_caller_identity.current.account_id
 }
 
-output "security_tooling" {
-  value = aws_organizations_account.security_tooling.id
+output "identity" {
+  value = aws_organizations_account.identity.id
 }
 
 output "log_archive" {
@@ -14,6 +14,6 @@ output "network" {
   value = aws_organizations_account.network.id
 }
 
-output "shared_services" {
-  value = aws_organizations_account.shared_services.id
+output "security_tooling" {
+  value = aws_organizations_account.security_tooling.id
 }
