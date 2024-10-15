@@ -10,12 +10,6 @@ variable "org_owner_email_domain" {
   default     = "microsoft.com"
 }
 
-variable "company_domain" {
-  description = "company domain"
-  type        = string
-  default     = "windows.com"
-}
-
 variable "company_name" {
   description = "name of the company"
   type        = string
@@ -79,12 +73,12 @@ variable "cli_profile_name_aws_substitute" {
 variable "account_id" {
   type    = map(string)
   default = {
+    identity = ""
     log_archive = ""
     network = ""
     org = ""
-    sdlc_dev = ""
+    sdlc_prd = ""
     security_tooling = ""
-    shared_services = ""
   }
 }
 
@@ -144,12 +138,12 @@ variable "tgw_asn" {
   }
 }
 
-variable "vpc_cidr_substitute_primary" {
+variable "vpc_cidr_primary_substitute" {
   type = string
   default = ""
 }
 
-variable "vpc_cidr_substitute_failover" {
+variable "vpc_cidr_failover_substitute" {
   type = string
   default = ""
 }
@@ -174,54 +168,24 @@ variable "vpc_cidr_clientvpn_failover" {
   default = "10.44.0.0/16"
 }
 
-variable "vpc_cidr_dev_primary" {
+variable "vpc_cidr_sdlc_prod_primary" {
   type = string
   default = "10.51.0.0/16"
 }
 
-variable "vpc_cidr_dev_failover" {
+variable "vpc_cidr_sdlc_prod_failover" {
   type = string
   default = "10.52.0.0/16"
 }
 
-variable "vpc_cidr_tst_primary" {
+variable "vpc_cidr_sdlc_nonprod_primary" {
   type = string
   default = "10.53.0.0/16"
 }
 
-variable "vpc_cidr_tst_failover" {
+variable "vpc_cidr_sdlc_nonprod_failover" {
   type = string
   default = "10.54.0.0/16"
-}
-
-variable "vpc_cidr_stg_primary" {
-  type = string
-  default = "10.55.0.0/16"
-}
-
-variable "vpc_cidr_stg_failover" {
-  type = string
-  default = "10.56.0.0/16"
-}
-
-variable "vpc_cidr_prd_primary" {
-  type = string
-  default = "10.57.0.0/16"
-}
-
-variable "vpc_cidr_prd_failover" {
-  type = string
-  default = "10.58.0.0/16"
-}
-
-variable "vpc_cidr_customera_primary" {
-  type = string
-  default = "10.61.0.0/16"
-}
-
-variable "vpc_cidr_customera_failover" {
-  type = string
-  default = "10.62.0.0/16"
 }
 
 variable "availability_zones_double" {
@@ -291,14 +255,14 @@ locals {
   resource_name_prefix_env_region_primary_abbr = "${local.resource_name_prefix_env_abbr}-${var.region.primary_short}"
   resource_name_prefix_env_region_failover_abbr = "${local.resource_name_prefix_env_abbr}-${var.region.failover_short}"
 
-  vpc_cidr_primary = var.vpc_cidr_substitute_primary != "" ? var.vpc_cidr_substitute_primary : var.vpc_cidr_dev_primary
+  vpc_cidr_primary = var.vpc_cidr_primary_substitute != "" ? var.vpc_cidr_primary_substitute : var.vpc_cidr_dev_primary
   vpc_azs_primary = var.deployment_environment == "prd" || var.deployment_environment == "stg" ? var.availability_zones_triple.primary : var.availability_zones_double.primary
   vpc_subnets_private_primary = [for k in range(length(local.vpc_azs_primary)) : cidrsubnet(local.vpc_cidr_primary, 2, k)]
   vpc_subnets_public_primary = [for k in range(length(local.vpc_azs_primary)) : cidrsubnet(local.vpc_cidr_primary, 4, k + (4 * length(local.vpc_azs_primary)))]
   vpc_cidr_primary_split = split(".", cidrsubnet(local.vpc_cidr_primary, 0, 0))
   vpc_dns_primary = join(".", [local.vpc_cidr_primary_split[0], local.vpc_cidr_primary_split[1], local.vpc_cidr_primary_split[2], "2"])
 
-  vpc_cidr_failover = var.vpc_cidr_substitute_failover != "" ? var.vpc_cidr_substitute_failover : var.vpc_cidr_dev_failover
+  vpc_cidr_failover = var.vpc_cidr_failover_substitute != "" ? var.vpc_cidr_failover_substitute : var.vpc_cidr_dev_failover
   vpc_azs_failover = var.deployment_environment == "prd" || var.deployment_environment == "stg" ? var.availability_zones_triple.failover : var.availability_zones_double.failover
   vpc_subnets_private_failover = [for k in range(length(local.vpc_azs_failover)) : cidrsubnet(local.vpc_cidr_failover, 2, k)]
   vpc_subnets_public_failover = [for k in range(length(local.vpc_azs_failover)) : cidrsubnet(local.vpc_cidr_failover, 4, k + (4 * length(local.vpc_azs_failover)))]
