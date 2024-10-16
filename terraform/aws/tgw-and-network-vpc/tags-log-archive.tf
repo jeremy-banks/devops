@@ -3,7 +3,7 @@ resource "aws_ec2_tag" "tgw_log_archive" {
 
   resource_id = module.tgw_primary.ec2_transit_gateway_id
   key         = "Name"
-  value       = "${local.resource_name_stub}-${var.region.primary_short}-tgw"
+  value       = "${local.resource_name_stub}-${var.region.primary_short}-network-tgw"
 }
 
 resource "aws_ec2_tag" "tgw_log_archive_failover" {
@@ -11,7 +11,7 @@ resource "aws_ec2_tag" "tgw_log_archive_failover" {
 
   resource_id = module.tgw_failover.ec2_transit_gateway_id
   key         = "Name"
-  value       = "${local.resource_name_stub}-${var.region.failover_short}-tgw"
+  value       = "${local.resource_name_stub}-${var.region.failover_short}-network-tgw"
 }
 
 resource "aws_ec2_tag" "vpc_log_archive" {

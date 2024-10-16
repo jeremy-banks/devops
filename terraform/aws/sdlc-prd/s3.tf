@@ -1,10 +1,16 @@
+data "aws_caller_identity" "current" {}
+
+locals {
+  unique_id = substr(sha256("foo${data.aws_caller_identity.current.account_id}"), 0, 8)
+}
+
 #primary bucket
 module "s3_primary" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "4.1.2"
   providers = { aws = aws.sdlc_prd }
 
-  bucket = "${local.resource_name_stub}-${var.region.failover_short}-storage-blob"
+  bucket = "${local.resource_name_stub}-${var.region.primary_short}-sdlc-prd-storage-blob-${local.unique_id}"
 
   force_destroy = true
 
@@ -153,7 +159,7 @@ module "s3_failover" {
   version = "4.1.2"
   providers = { aws = aws.sdlc_prd_failover }
 
-  bucket = "${local.resource_name_stub}-${var.region.failover_short}-storage-blob"
+  bucket = "${local.resource_name_stub}-${var.region.failover_short}-sdlc-prd-storage-blob-${local.unique_id}"
 
   force_destroy = true
 

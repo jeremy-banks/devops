@@ -1,31 +1,3 @@
-locals {
-  vpc_tags_primary = {
-    "${local.resource_name_stub}-${var.region.primary_short}-blue"  = "shared"
-    "${local.resource_name_stub}-${var.region.primary_short}-green" = "shared"
-    "k8s.io/cluster-autoscaler/${local.resource_name_stub}-${var.region.primary_short}-blue"  = "shared"
-    "k8s.io/cluster-autoscaler/${local.resource_name_stub}-${var.region.primary_short}-green" = "shared"
-    "k8s.io/cluster-autoscaler/enabled" = "true"
-    "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.primary_short}-blue"  = "shared"
-    "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.primary_short}-green" = "shared"
-    "Name" = "${local.resource_name_stub}-${var.region.primary_short}-network-vpc"
-  }
-  public_subnet_tags_primary = { "kubernetes.io/role/elb" = 1 }
-  private_subnet_tags_primary = { "kubernetes.io/role/internal-elb" = 1 }
-
-  vpc_tags_failover = {
-    "${local.resource_name_stub}-${var.region.failover_short}-blue"  = "shared"
-    "${local.resource_name_stub}-${var.region.failover_short}-green" = "shared"
-    "k8s.io/cluster-autoscaler/${local.resource_name_stub}-${var.region.failover_short}-blue"  = "shared"
-    "k8s.io/cluster-autoscaler/${local.resource_name_stub}-${var.region.failover_short}-green" = "shared"
-    "k8s.io/cluster-autoscaler/enabled" = "true"
-    "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.failover_short}-blue"  = "shared"
-    "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.failover_short}-green" = "shared"
-    "Name" = "${local.resource_name_stub}-${var.region.failover_short}-network-vpc"
-  }
-  public_subnet_tags_failover = local.public_subnet_tags_primary
-  private_subnet_tags_failover = local.private_subnet_tags_primary
-}
-
 module "vpc_primary" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.13.0"
@@ -49,8 +21,6 @@ module "vpc_primary" {
     "${local.resource_name_stub}-${var.region.primary_short}-network-vpc-pvt-2",
   ]
 
-  # public_subnet_suffix = "pub"
-  # private_subnet_suffix = "pvt"
   cidr = local.vpc_cidr_primary
   azs = local.vpc_azs_primary
   public_subnets = local.vpc_subnets_public_primary
@@ -58,7 +28,7 @@ module "vpc_primary" {
 
   public_subnet_tags = local.public_subnet_tags_primary
   private_subnet_tags = local.private_subnet_tags_primary
-  vpc_tags = local.vpc_tags_primary
+  vpc_tags = merge({"Name" = "${local.resource_name_stub}-${var.region.primary_short}-network-vpc"}, local.vpc_tags_primary)
 
   manage_default_security_group = true
   default_security_group_name = "NEVER-USE-THIS-SECURITY-GROUP"
@@ -272,17 +242,25 @@ module "vpc_failover" {
   external_nat_ips = aws_eip.vpc_nat_failover[*].public_ip
 
   name = "${local.resource_name_stub}-${var.region.failover_short}-network-vpc"
-  public_subnet_suffix = "pub"
-  private_subnet_suffix = "pvt"
-  cidr = local.vpc_cidr_failover
+  public_subnet_names   =  [
+    "${local.resource_name_stub}-${var.region.failover_short}-network-vpc-pub-0",
+    "${local.resource_name_stub}-${var.region.failover_short}-network-vpc-pub-1",
+    "${local.resource_name_stub}-${var.region.failover_short}-network-vpc-pub-2",
+  ]
+  private_subnet_names  = [
+    "${local.resource_name_stub}-${var.region.failover_short}-network-vpc-pvt-0",
+    "${local.resource_name_stub}-${var.region.failover_short}-network-vpc-pvt-1",
+    "${local.resource_name_stub}-${var.region.failover_short}-network-vpc-pvt-2",
+  ]
 
+  cidr = local.vpc_cidr_failover
   azs = local.vpc_azs_failover
   public_subnets = local.vpc_subnets_public_failover
   private_subnets = local.vpc_subnets_private_failover
 
   public_subnet_tags = local.public_subnet_tags_failover
   private_subnet_tags = local.private_subnet_tags_failover
-  vpc_tags = local.vpc_tags_failover
+  vpc_tags = merge({"Name" = "${local.resource_name_stub}-${var.region.failover_short}-network-vpc"}, local.vpc_tags_primary)
 
   manage_default_security_group = true
   default_security_group_name = "NEVER-USE-THIS-SECURITY-GROUP"

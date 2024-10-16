@@ -32,5 +32,8 @@ module "iam_user_automation" {
 
   create_iam_user_login_profile = false
   create_iam_access_key         = true
-  policy_arns                   = [module.iam_user_automation_policy.arn]
+  policy_arns                   = [
+    module.iam_user_automation_policy.arn,
+    "arn:aws:iam::aws:policy/AWSOrganizationsReadOnlyAccess",
+  ]
 }

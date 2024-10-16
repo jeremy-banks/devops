@@ -1,5 +1,24 @@
 data "aws_organizations_organization" "current" {
-  provider = aws.network
+  provider = aws.org
+}
+
+data "aws_organizations_organizational_unit" "infrastructure" {
+  provider = aws.org
+
+  parent_id = data.aws_organizations_organization.current.roots[0].id
+  name      = "infrastructure"
+}
+
+data "aws_organizations_organizational_unit" "security" {
+  provider = aws.org
+
+  parent_id = data.aws_organizations_organization.current.roots[0].id
+  name      = "security"
+}
+
+data "aws_organizations_organizational_unit" "workloads" {
+  parent_id = data.aws_organizations_organization.current.roots[0].id
+  name      = "workloads"
 }
 
 module "tgw_primary" {
@@ -7,15 +26,19 @@ module "tgw_primary" {
   version = "2.12.2"
   providers = { aws = aws.network }
 
-  name = "${local.resource_name_stub}-${var.region.primary_short}-tgw"
+  name = "${local.resource_name_stub}-${var.region.primary_short}-network-tgw"
 
   amazon_side_asn = var.tgw_asn.primary
   enable_auto_accept_shared_attachments = true
   create_tgw_routes = false
 
-  ram_name = "${local.resource_name_stub}-${var.region.primary_short}-ram"
+  ram_name = "${local.resource_name_stub}-${var.region.primary_short}-network-tgw"
   ram_allow_external_principals = false
-  ram_principals = [data.aws_organizations_organization.current.arn]
+  ram_principals = [
+    data.aws_organizations_organizational_unit.infrastructure.arn,
+    data.aws_organizations_organizational_unit.security.arn,
+    data.aws_organizations_organizational_unit.workloads.arn,
+  ]
 }
 
 module "tgw_failover" {
@@ -23,15 +46,19 @@ module "tgw_failover" {
   version = "2.12.2"
   providers = { aws = aws.network_failover }
 
-  name = "${local.resource_name_stub}-${var.region.failover_short}-tgw"
+  name = "${local.resource_name_stub}-${var.region.failover_short}-network-tgw"
 
   amazon_side_asn = var.tgw_asn.failover
   enable_auto_accept_shared_attachments = true
   create_tgw_routes = false
 
-  ram_name = "${local.resource_name_stub}-${var.region.failover_short}-ram"
+  ram_name = "${local.resource_name_stub}-${var.region.failover_short}-network-tgw"
   ram_allow_external_principals = false
-  ram_principals = [data.aws_organizations_organization.current.arn]
+  ram_principals = [
+    data.aws_organizations_organizational_unit.infrastructure.arn,
+    data.aws_organizations_organizational_unit.security.arn,
+    data.aws_organizations_organizational_unit.workloads.arn,
+  ]
 }
 
 data "aws_caller_identity" "network" {

@@ -1,5 +1,5 @@
 resource "aws_eip" "vpc_nat_primary" {
-  provider = aws.network
+  provider = aws.sdlc_prd
 
   count = length(local.vpc_azs_primary)
   domain = "vpc"
@@ -9,7 +9,7 @@ resource "aws_eip" "vpc_nat_primary" {
 }
 
 resource "aws_eip" "vpc_nat_failover" {
-  provider = aws.network_failover
+  provider = aws.sdlc_prd_failover
 
   count = length(local.vpc_azs_primary)
   domain = "vpc"
