@@ -124,6 +124,8 @@
    - need DNS to work in prod and carry over to downstreeam dev.DOMAIN.TLD format
    - that way ACM works  automatically
    - might need to make a separate DOMAIN.TLD for services like clientVPN and enterprise AD domains if any
+- Implement backend tfstate lock with dynamodb
+   - need bucket, table, and access set up uniquely for superadmin and automation users
 - Triggering a DR event
    - ACL allows no traffic in one subnet
 - Federated login for devops, operations, and developers
@@ -144,7 +146,6 @@
 - Centralized logging with compression and glacier archive
    - DNS logs sent to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
    - ALB logs send to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
-- Implement backend tfstate lock with dynamodb
 - EKS autoscaling examples
    - CPU
    - Sessions

@@ -9,7 +9,7 @@ module "kms_primary" {
   key_usage               = "ENCRYPT_DECRYPT"
   multi_region            = true
 
-  aliases = ["${local.resource_name_prefix_env_region_primary_abbr}"]
+  aliases = ["${local.resource_name_stub}-${var.region.primary_short}"]
 
   policy = data.aws_iam_policy_document.kms.json
 }
@@ -23,7 +23,7 @@ module "kms_failover" {
   create_replica          = true
   primary_key_arn         = module.kms_primary.key_arn
 
-  aliases = ["${local.resource_name_prefix_env_region_failover_abbr}"]
+  aliases = ["${local.resource_name_stub}-${var.region.failover_short}"]
 
   policy = data.aws_iam_policy_document.kms.json
 }

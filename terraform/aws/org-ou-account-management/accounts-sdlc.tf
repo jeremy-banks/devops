@@ -1,5 +1,5 @@
 resource "aws_organizations_account" "sdlc_prd" {
-  name  = "${local.resource_name_prefix_abbr}-sdlc-prd"
+  name  = "${local.resource_name_stub}-sdlc-prd"
   email = "${var.org_owner_email_prefix}-sdlc-prd@${var.org_owner_email_domain}"
 
   close_on_deletion           = true
@@ -14,7 +14,7 @@ output "sdlc_prd" {
 }
 
 # resource "aws_organizations_account" "sdlc_stg" {
-#   name  = "${local.resource_name_prefix_abbr}-sdlc-stg"
+#   name  = "${local.resource_name_stub}-sdlc-stg"
 #   email = "${var.org_owner_email_prefix}-sdlc-stg@${var.org_owner_email_domain}"
 
 #   close_on_deletion           = true
@@ -29,7 +29,7 @@ output "sdlc_prd" {
 # }
 
 # resource "aws_organizations_account" "sdlc_tst" {
-#   name  = "${local.resource_name_prefix_abbr}-sdlc-tst"
+#   name  = "${local.resource_name_stub}-sdlc-tst"
 #   email = "${var.org_owner_email_prefix}-sdlc-tst@${var.org_owner_email_domain}"
 
 #   close_on_deletion           = true
@@ -44,7 +44,7 @@ output "sdlc_prd" {
 # }
 
 # resource "aws_organizations_account" "sdlc_dev" {
-#   name  = "${local.resource_name_prefix_abbr}-sdlc-dev"
+#   name  = "${local.resource_name_stub}-sdlc-dev"
 #   email = "${var.org_owner_email_prefix}-sdlc-dev@${var.org_owner_email_domain}"
 
 #   close_on_deletion           = true

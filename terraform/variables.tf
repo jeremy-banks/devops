@@ -245,24 +245,36 @@ locals {
   org_owner_email = "${var.org_owner_email_prefix}@${var.org_owner_email_domain}"
   resource_owner_email = var.resource_owner_email != "" ? var.resource_owner_email : local.org_owner_email
 
-  resource_name_prefix = "${var.company_name}-${var.team_name}-${var.project_name}"
-  resource_name_prefix_env = "${local.resource_name_prefix}-${var.deployment_environment}"
-  resource_name_prefix_env_region_primary = "${local.resource_name_prefix_env}-${var.region.primary_short}"
-  resource_name_prefix_env_region_failover = "${local.resource_name_prefix_env}-${var.region.failover_short}"
+  #company - team - project - env
+  resource_name_stub = "${var.company_name_abbr}-${var.team_name_abbr}-${var.project_name_abbr}"
+  
+  #wo region
+  #wo environment
+  #w region primary
+  #w region fail
 
-  resource_name_prefix_abbr = "${var.company_name_abbr}-${var.team_name_abbr}-${var.project_name_abbr}"
-  resource_name_prefix_env_abbr = "${local.resource_name_prefix_abbr}-${var.deployment_environment}"
-  resource_name_prefix_env_region_primary_abbr = "${local.resource_name_prefix_env_abbr}-${var.region.primary_short}"
-  resource_name_prefix_env_region_failover_abbr = "${local.resource_name_prefix_env_abbr}-${var.region.failover_short}"
+  #abbr
+  
+  #delimiter
 
-  vpc_cidr_primary = var.vpc_cidr_primary_substitute != "" ? var.vpc_cidr_primary_substitute : var.vpc_cidr_dev_primary
+  # resource_name_prefix = "${var.company_name}-${var.team_name}-${var.project_name}"
+  # resource_name_prefix_env = "${local.resource_name_prefix}-${var.deployment_environment}"
+  # resource_name_prefix_env_region_primary = "${local.resource_name_prefix_env}-${var.region.primary_short}"
+  # resource_name_prefix_env_region_failover = "${local.resource_name_prefix_env}-${var.region.failover_short}"
+
+  # resource_name_prefix_abbr = "${var.company_name_abbr}-${var.team_name_abbr}-${var.project_name_abbr}"
+  # resource_name_prefix_env_abbr = "${local.resource_name_prefix_abbr}-${var.deployment_environment}"
+  # resource_name_prefix_env_region_primary_abbr = "${local.resource_name_prefix_env_abbr}-${var.region.primary_short}"
+  # resource_name_prefix_env_region_failover_abbr = "${local.resource_name_prefix_env_abbr}-${var.region.failover_short}"
+
+  vpc_cidr_primary = var.vpc_cidr_primary_substitute != "" ? var.vpc_cidr_primary_substitute : var.vpc_cidr_sdlc_nonprod_primary
   vpc_azs_primary = var.deployment_environment == "prd" || var.deployment_environment == "stg" ? var.availability_zones_triple.primary : var.availability_zones_double.primary
   vpc_subnets_private_primary = [for k in range(length(local.vpc_azs_primary)) : cidrsubnet(local.vpc_cidr_primary, 2, k)]
   vpc_subnets_public_primary = [for k in range(length(local.vpc_azs_primary)) : cidrsubnet(local.vpc_cidr_primary, 4, k + (4 * length(local.vpc_azs_primary)))]
   vpc_cidr_primary_split = split(".", cidrsubnet(local.vpc_cidr_primary, 0, 0))
   vpc_dns_primary = join(".", [local.vpc_cidr_primary_split[0], local.vpc_cidr_primary_split[1], local.vpc_cidr_primary_split[2], "2"])
 
-  vpc_cidr_failover = var.vpc_cidr_failover_substitute != "" ? var.vpc_cidr_failover_substitute : var.vpc_cidr_dev_failover
+  vpc_cidr_failover = var.vpc_cidr_failover_substitute != "" ? var.vpc_cidr_failover_substitute : var.vpc_cidr_sdlc_nonprod_failover
   vpc_azs_failover = var.deployment_environment == "prd" || var.deployment_environment == "stg" ? var.availability_zones_triple.failover : var.availability_zones_double.failover
   vpc_subnets_private_failover = [for k in range(length(local.vpc_azs_failover)) : cidrsubnet(local.vpc_cidr_failover, 2, k)]
   vpc_subnets_public_failover = [for k in range(length(local.vpc_azs_failover)) : cidrsubnet(local.vpc_cidr_failover, 4, k + (4 * length(local.vpc_azs_failover)))]
@@ -274,7 +286,7 @@ locals {
   application_load_balancer_allow_list = "foo"
 
   iam_access_management_tag_key = var.iam_access_management_tag_key
-  iam_access_management_tag_value = "${local.resource_name_prefix}"
+  iam_access_management_tag_value = "${local.resource_name_stub}"
   iam_access_management_tag_map = { "${local.iam_access_management_tag_key}" = "${local.iam_access_management_tag_value}" }
 
   default_tags_map = {

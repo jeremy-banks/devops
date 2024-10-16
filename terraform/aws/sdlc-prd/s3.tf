@@ -4,7 +4,7 @@ module "s3_primary" {
   version = "4.1.2"
   providers = { aws = aws.sdlc_prd }
 
-  bucket = "${local.resource_name_prefix_env_region_primary_abbr}-storage-blob"
+  bucket = "${local.resource_name_stub}-${var.region.failover_short}-storage-blob"
 
   force_destroy = true
 
@@ -153,7 +153,7 @@ module "s3_failover" {
   version = "4.1.2"
   providers = { aws = aws.sdlc_prd_failover }
 
-  bucket = "${local.resource_name_prefix_env_region_failover_abbr}-storage-blob"
+  bucket = "${local.resource_name_stub}-${var.region.failover_short}-storage-blob"
 
   force_destroy = true
 

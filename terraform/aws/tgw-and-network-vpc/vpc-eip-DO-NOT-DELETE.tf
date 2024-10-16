@@ -3,7 +3,7 @@ resource "aws_eip" "vpc_nat_primary" {
 
   count = 3
   domain = "vpc"
-  tags = { "Name" = "${local.resource_name_prefix_env_region_primary_abbr}-${count.index}" }
+  tags = { "Name" = "${local.resource_name_stub}-${var.region.failover_short}-${count.index}" }
 
   # lifecycle { prevent_destroy = true } # YOU NEVER WANT TO DELETE THESE
 }
@@ -13,7 +13,7 @@ resource "aws_eip" "vpc_nat_failover" {
 
   count = 3
   domain = "vpc"
-  tags = { "Name" = "${local.resource_name_prefix_env_region_failover_abbr}-${count.index}" }
+  tags = { "Name" = "${local.resource_name_stub}-${var.region.failover_short}-${count.index}" }
 
   # lifecycle { prevent_destroy = true } # YOU NEVER WANT TO DELETE THESE
 }

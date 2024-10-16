@@ -4,7 +4,7 @@
 
 #   count = 2
 #   domain = "vpc"
-#   tags = { "Name" = "${local.resource_name_prefix_env_region_primary_abbr}-${count.index}" }
+#   tags = { "Name" = "${local.resource_name_stub}-${var.region.failover_short}-${count.index}" }
 
 #   # lifecycle { prevent_destroy = true } # YOU NEVER WANT TO DELETE THESE
 # }
@@ -20,7 +20,7 @@
 #   external_nat_ip_ids = aws_eip.vpc_nat_primary[*].id
 #   external_nat_ips = aws_eip.vpc_nat_primary[*].public_ip
 
-#   name = "${local.resource_name_prefix_env_region_primary_abbr}-vpc"
+#   name = "${local.resource_name_stub}-${var.region.failover_short}-vpc"
 #   public_subnet_suffix = "pub"
 #   private_subnet_suffix = "pvt"
 #   cidr = local.vpc_cidr_primary
@@ -60,9 +60,9 @@
 #   version = "5.2.0"
 #   providers = { aws = aws.sdlc_dev }
 
-#   name        = "${local.resource_name_prefix_env_region_primary_abbr}-main"
+#   name        = "${local.resource_name_stub}-${var.region.failover_short}-main"
 #   use_name_prefix = false
-#   description = "main security group for ${local.resource_name_prefix_env_region_primary_abbr}"
+#   description = "main security group for ${local.resource_name_stub}-${var.region.failover_short}"
 #   vpc_id      = module.vpc_primary.vpc_id
 
 #   ingress_with_self = [
@@ -123,9 +123,9 @@
 #   version = "5.2.0"
 #   providers = { aws = aws.sdlc_dev }
 
-#   name  = "${local.resource_name_prefix_env_region_primary_abbr}-alb"
+#   name  = "${local.resource_name_stub}-${var.region.failover_short}-alb"
 #   use_name_prefix = false
-#   description = "load balancer security group for ${local.resource_name_prefix_env_region_primary_abbr}"
+#   description = "load balancer security group for ${local.resource_name_stub}-${var.region.failover_short}"
 #   vpc_id  = module.vpc_primary.vpc_id
 
 #   ingress_with_self = [
@@ -199,7 +199,7 @@
 #       # security_group_ids  = [module.vpc_main_sg_primary.security_group_id]
 #       subnet_ids = module.vpc_primary.private_subnets
 #       route_table_ids = flatten([module.vpc_primary.private_route_table_ids, module.vpc_primary.public_route_table_ids])
-#       tags                = { Name = "${local.resource_name_prefix_env_region_primary_abbr}-s3-vpc-endpoint" }
+#       tags                = { Name = "${local.resource_name_stub}-${var.region.failover_short}-s3-vpc-endpoint" }
 #     },
 #     rds = {
 #       # interface endpoint
@@ -209,7 +209,7 @@
 #       # security_group_ids  = [module.vpc_main_sg_primary.security_group_id]
 #       subnet_ids = module.vpc_primary.private_subnets
 #       # route_table_ids = flatten([module.vpc_primary.private_route_table_ids, module.vpc_primary.public_route_table_ids])
-#       tags                = { Name = "${local.resource_name_prefix_env_region_primary_abbr}-rds-endpoint" }
+#       tags                = { Name = "${local.resource_name_stub}-${var.region.failover_short}-rds-endpoint" }
 #     },
 #     # dynamodb = {
 #     #   # gateway endpoint
@@ -260,7 +260,7 @@
 
 #   count = 2
 #   domain = "vpc"
-#   tags = { "Name" = "${local.resource_name_prefix_env_region_failover_abbr}-${count.index}" }
+#   tags = { "Name" = "${local.resource_name_stub}-${var.region.failover_short}-${count.index}" }
 
 #   # lifecycle { prevent_destroy = true } # YOU NEVER WANT TO DELETE THESE
 # }
@@ -276,7 +276,7 @@
 #   external_nat_ip_ids = aws_eip.vpc_nat_failover[*].id
 #   external_nat_ips = aws_eip.vpc_nat_failover[*].public_ip
 
-#   name = "${local.resource_name_prefix_env_region_failover_abbr}-vpc"
+#   name = "${local.resource_name_stub}-${var.region.failover_short}-vpc"
 #   public_subnet_suffix = "pub"
 #   private_subnet_suffix = "pvt"
 #   cidr = local.vpc_cidr_failover
@@ -288,13 +288,13 @@
 #   public_subnet_tags = { "kubernetes.io/role/elb" = 1 }
 #   private_subnet_tags = { "kubernetes.io/role/internal-elb" = 1 }
 #   vpc_tags = {
-#     "${local.resource_name_prefix_env_region_failover_abbr}-cluster-blue"   = "shared"
-#     "${local.resource_name_prefix_env_region_failover_abbr}-cluster-green"  = "shared"
+#     "${local.resource_name_stub}-${var.region.failover_short}-cluster-blue"   = "shared"
+#     "${local.resource_name_stub}-${var.region.failover_short}-cluster-green"  = "shared"
 #     "k8s.io/cluster-autoscaler/enabled" = "true"
-#     "k8s.io/cluster-autoscaler/${local.resource_name_prefix_env_region_failover_abbr}-cluster-blue" = "shared"
-#     "k8s.io/cluster-autoscaler/${local.resource_name_prefix_env_region_failover_abbr}-cluster-green" = "shared"
-#     "kubernetes.io/cluster/${local.resource_name_prefix_env_region_failover_abbr}-cluster-blue" = "shared"
-#     "kubernetes.io/cluster/${local.resource_name_prefix_env_region_failover_abbr}-cluster-green" = "shared"
+#     "k8s.io/cluster-autoscaler/${local.resource_name_stub}-${var.region.failover_short}-cluster-blue" = "shared"
+#     "k8s.io/cluster-autoscaler/${local.resource_name_stub}-${var.region.failover_short}-cluster-green" = "shared"
+#     "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.failover_short}-cluster-blue" = "shared"
+#     "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.failover_short}-cluster-green" = "shared"
 #   }
 
 #   manage_default_security_group = true
@@ -316,9 +316,9 @@
 #   version = "5.2.0"
 #   providers = { aws = aws.sdlc_dev_failover }
 
-#   name        = "${local.resource_name_prefix_env_region_failover_abbr}-main"
+#   name        = "${local.resource_name_stub}-${var.region.failover_short}-main"
 #   use_name_prefix = false
-#   description = "main security group for ${local.resource_name_prefix_env_region_failover_abbr}"
+#   description = "main security group for ${local.resource_name_stub}-${var.region.failover_short}"
 #   vpc_id      = module.vpc_failover.vpc_id
 
 #   ingress_with_self = [
@@ -379,9 +379,9 @@
 #   version = "5.2.0"
 #   providers = { aws = aws.sdlc_dev_failover }
 
-#   name  = "${local.resource_name_prefix_env_region_failover_abbr}-alb"
+#   name  = "${local.resource_name_stub}-${var.region.failover_short}-alb"
 #   use_name_prefix = false
-#   description = "load balancer security group for ${local.resource_name_prefix_env_region_failover_abbr}"
+#   description = "load balancer security group for ${local.resource_name_stub}-${var.region.failover_short}"
 #   vpc_id  = module.vpc_failover.vpc_id
 
 #   ingress_with_self = [
@@ -455,7 +455,7 @@
 #       # security_group_ids  = [module.vpc_main_sg_primary.security_group_id]
 #       subnet_ids = module.vpc_failover.private_subnets
 #       route_table_ids = flatten([module.vpc_failover.private_route_table_ids, module.vpc_failover.public_route_table_ids])
-#       tags                = { Name = "${local.resource_name_prefix_env_region_failover_abbr}-s3-vpc-endpoint" }
+#       tags                = { Name = "${local.resource_name_stub}-${var.region.failover_short}-s3-vpc-endpoint" }
 #     },
 #     rds = {
 #       # interface endpoint
@@ -465,7 +465,7 @@
 #       # security_group_ids  = [module.vpc_main_sg_primary.security_group_id]
 #       subnet_ids = module.vpc_failover.private_subnets
 #       # route_table_ids = flatten([module.vpc_primary.private_route_table_ids, module.vpc_primary.public_route_table_ids])
-#       tags                = { Name = "${local.resource_name_prefix_env_region_failover_abbr}-rds-endpoint" }
+#       tags                = { Name = "${local.resource_name_stub}-${var.region.failover_short}-rds-endpoint" }
 #     },
 #     # dynamodb = {
 #     #   # gateway endpoint

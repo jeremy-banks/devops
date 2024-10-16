@@ -5,8 +5,8 @@
 #     effect = "Allow"
 #     actions = ["s3:*"]
 #     resources = [
-#       "arn:aws:s3:::${local.resource_name_prefix_env}-tfstate",
-#       "arn:aws:s3:::${local.resource_name_prefix_env}-tfstate/*",
+#       "arn:aws:s3:::${local.resource_name_stub}-tfstate",
+#       "arn:aws:s3:::${local.resource_name_stub}-tfstate/*",
 #     ]
 #   }
 # }

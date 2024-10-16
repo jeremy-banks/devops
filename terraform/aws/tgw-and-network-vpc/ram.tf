@@ -1,7 +1,7 @@
 resource "aws_ram_resource_share" "primary" {
   provider = aws.network
 
-  name                      = "${local.resource_name_prefix_env_region_primary_abbr}-ram-vpc"
+  name                      = "${local.resource_name_stub}-${var.region.failover_short}-ram-vpc"
   allow_external_principals = false
 }
 
@@ -31,7 +31,7 @@ resource "aws_ram_resource_association" "primary_pvt" {
 resource "aws_ram_resource_share" "failover" {
   provider = aws.network_failover
 
-  name  = "${local.resource_name_prefix_env_region_failover_abbr}-ram-vpc"
+  name  = "${local.resource_name_stub}-${var.region.failover_short}-ram-vpc"
   allow_external_principals = false
 }
 
