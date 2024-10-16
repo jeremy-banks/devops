@@ -7,13 +7,13 @@ module "tgw_primary" {
   version = "2.12.2"
   providers = { aws = aws.network }
 
-  name = "${local.resource_name_stub}-${var.region.failover_short}-tgw"
+  name = "${local.resource_name_stub}-${var.region.primary_short}-tgw"
 
   amazon_side_asn = var.tgw_asn.primary
   enable_auto_accept_shared_attachments = true
   create_tgw_routes = false
 
-  ram_name = "${local.resource_name_stub}-${var.region.failover_short}-ram-tgw"
+  ram_name = "${local.resource_name_stub}-${var.region.primary_short}-ram"
   ram_allow_external_principals = false
   ram_principals = [data.aws_organizations_organization.current.arn]
 }
@@ -29,7 +29,7 @@ module "tgw_failover" {
   enable_auto_accept_shared_attachments = true
   create_tgw_routes = false
 
-  ram_name = "${local.resource_name_stub}-${var.region.failover_short}-ram-tgw"
+  ram_name = "${local.resource_name_stub}-${var.region.failover_short}-ram"
   ram_allow_external_principals = false
   ram_principals = [data.aws_organizations_organization.current.arn]
 }

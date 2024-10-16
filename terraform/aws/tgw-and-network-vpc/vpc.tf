@@ -1,19 +1,26 @@
 locals {
   vpc_tags_primary = {
-    "${local.resource_name_stub}-${var.region.failover_short}-cluster-blue"   = "shared"
-    "${local.resource_name_stub}-${var.region.failover_short}-cluster-green"  = "shared"
+    "${local.resource_name_stub}-${var.region.primary_short}-blue"  = "shared"
+    "${local.resource_name_stub}-${var.region.primary_short}-green" = "shared"
+    "k8s.io/cluster-autoscaler/${local.resource_name_stub}-${var.region.primary_short}-blue"  = "shared"
+    "k8s.io/cluster-autoscaler/${local.resource_name_stub}-${var.region.primary_short}-green" = "shared"
     "k8s.io/cluster-autoscaler/enabled" = "true"
-    "k8s.io/cluster-autoscaler/${local.resource_name_stub}-${var.region.failover_short}-cluster-blue" = "shared"
-    "k8s.io/cluster-autoscaler/${local.resource_name_stub}-${var.region.failover_short}-cluster-green" = "shared"
-    "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.failover_short}-cluster-blue" = "shared"
-    "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.failover_short}-cluster-green" = "shared"
+    "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.primary_short}-blue"  = "shared"
+    "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.primary_short}-green" = "shared"
+    "Name" = "${local.resource_name_stub}-${var.region.primary_short}-network-vpc"
   }
   public_subnet_tags_primary = { "kubernetes.io/role/elb" = 1 }
   private_subnet_tags_primary = { "kubernetes.io/role/internal-elb" = 1 }
 
   vpc_tags_failover = {
-    "${local.resource_name_stub}-${var.region.failover_short}-cluster-blue"   = "shared"
-    "${local.resource_name_stub}-${var.region.failover_short}-cluster-green"  = "shared"
+    "${local.resource_name_stub}-${var.region.failover_short}-blue"  = "shared"
+    "${local.resource_name_stub}-${var.region.failover_short}-green" = "shared"
+    "k8s.io/cluster-autoscaler/${local.resource_name_stub}-${var.region.failover_short}-blue"  = "shared"
+    "k8s.io/cluster-autoscaler/${local.resource_name_stub}-${var.region.failover_short}-green" = "shared"
+    "k8s.io/cluster-autoscaler/enabled" = "true"
+    "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.failover_short}-blue"  = "shared"
+    "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.failover_short}-green" = "shared"
+    "Name" = "${local.resource_name_stub}-${var.region.failover_short}-network-vpc"
   }
   public_subnet_tags_failover = local.public_subnet_tags_primary
   private_subnet_tags_failover = local.private_subnet_tags_primary
@@ -30,11 +37,21 @@ module "vpc_primary" {
   external_nat_ip_ids = aws_eip.vpc_nat_primary[*].id
   external_nat_ips = aws_eip.vpc_nat_primary[*].public_ip
 
-  name = "${local.resource_name_stub}-${var.region.failover_short}-vpc"
-  public_subnet_suffix = "pub"
-  private_subnet_suffix = "pvt"
-  cidr = local.vpc_cidr_primary
+  name = "${local.resource_name_stub}-${var.region.primary_short}-network-vpc"
+  public_subnet_names   =  [
+    "${local.resource_name_stub}-${var.region.primary_short}-network-vpc-pub-0",
+    "${local.resource_name_stub}-${var.region.primary_short}-network-vpc-pub-1",
+    "${local.resource_name_stub}-${var.region.primary_short}-network-vpc-pub-2",
+  ]
+  private_subnet_names  = [
+    "${local.resource_name_stub}-${var.region.primary_short}-network-vpc-pvt-0",
+    "${local.resource_name_stub}-${var.region.primary_short}-network-vpc-pvt-1",
+    "${local.resource_name_stub}-${var.region.primary_short}-network-vpc-pvt-2",
+  ]
 
+  # public_subnet_suffix = "pub"
+  # private_subnet_suffix = "pvt"
+  cidr = local.vpc_cidr_primary
   azs = local.vpc_azs_primary
   public_subnets = local.vpc_subnets_public_primary
   private_subnets = local.vpc_subnets_private_primary
@@ -62,9 +79,9 @@ module "vpc_main_sg_primary" {
   version = "5.2.0"
   providers = { aws = aws.network }
 
-  name        = "${local.resource_name_stub}-${var.region.failover_short}-main"
+  name        = "${local.resource_name_stub}-${var.region.primary_short}-main"
   use_name_prefix = false
-  description = "main security group for ${local.resource_name_stub}-${var.region.failover_short}"
+  description = "main security group for ${local.resource_name_stub}-${var.region.primary_short}"
   vpc_id      = module.vpc_primary.vpc_id
 
   ingress_with_self = [
@@ -74,87 +91,24 @@ module "vpc_main_sg_primary" {
     },
   ]
 
-  ingress_with_cidr_blocks = [
-    {
-      from_port   = -1
-      to_port     = -1
-      protocol    = -1
-      description = "allow ingress from client-vpn"
-      cidr_blocks = "${var.vpc_cidr_clientvpn_primary},${var.vpc_cidr_clientvpn_failover}"
-    },
-  ]
+  # ingress_with_cidr_blocks = [
+  #   {
+  #     from_port   = -1
+  #     to_port     = -1
+  #     protocol    = -1
+  #     description = "allow ingress from client-vpn"
+  #     cidr_blocks = "${var.vpc_cidr_clientvpn_primary},${var.vpc_cidr_clientvpn_failover}"
+  #   },
+  # ]
 
-  number_of_computed_ingress_with_source_security_group_id = 1
-  computed_ingress_with_source_security_group_id = [
-    {
-      rule  = "all-all"
-      source_security_group_id = module.vpc_alb_sg_primary.security_group_id
-      description = "allow ingress from ${module.vpc_alb_sg_primary.security_group_name}"
-    },
-  ]
-
-  egress_with_self = [
-    {
-      rule = "all-all"
-      description = "allow egress to self"
-    },
-  ]
-
-  egress_with_cidr_blocks = [
-    {
-      from_port   = -1
-      to_port     = -1
-      protocol    = -1
-      description = "allow egress to internet"
-      cidr_blocks = "0.0.0.0/0"
-    },
-  ]
-
-  number_of_computed_egress_with_source_security_group_id = 1
-  computed_egress_with_source_security_group_id = [
-    {
-      rule  = "all-all"
-      source_security_group_id = module.vpc_alb_sg_primary.security_group_id
-      description = "allow egress to ${module.vpc_alb_sg_primary.security_group_name}"
-    },
-  ]
-}
-
-module "vpc_alb_sg_primary" {
-  source  = "terraform-aws-modules/security-group/aws"
-  version = "5.2.0"
-  providers = { aws = aws.network }
-
-  name  = "${local.resource_name_stub}-${var.region.failover_short}-alb"
-  use_name_prefix = false
-  description = "load balancer security group for ${local.resource_name_stub}-${var.region.failover_short}"
-  vpc_id  = module.vpc_primary.vpc_id
-
-  ingress_with_self = [
-    {
-      rule = "all-all"
-      description = "allow ingress from self"
-    },
-  ]
-
-  ingress_with_cidr_blocks = [
-    {
-      from_port   = -1
-      to_port     = -1
-      protocol    = -1
-      description = "allow ingress from client-vpn"
-      cidr_blocks = "${var.vpc_cidr_clientvpn_primary},${var.vpc_cidr_clientvpn_failover}"
-    },
-  ]
-
-  number_of_computed_ingress_with_source_security_group_id = 1
-  computed_ingress_with_source_security_group_id = [
-    {
-      rule  = "all-all"
-      source_security_group_id = module.vpc_main_sg_primary.security_group_id
-      description = "allow ingress from ${module.vpc_main_sg_primary.security_group_name}"
-    },
-  ]
+  # number_of_computed_ingress_with_source_security_group_id = 1
+  # computed_ingress_with_source_security_group_id = [
+  #   {
+  #     rule  = "all-all"
+  #     source_security_group_id = module.vpc_alb_sg_primary.security_group_id
+  #     description = "allow ingress from ${module.vpc_alb_sg_primary.security_group_name}"
+  #   },
+  # ]
 
   egress_with_self = [
     {
@@ -163,25 +117,88 @@ module "vpc_alb_sg_primary" {
     },
   ]
 
-  egress_with_cidr_blocks = [
-    {
-      from_port   = -1
-      to_port     = -1
-      protocol    = -1
-      description = "allow egress to internet"
-      cidr_blocks = "0.0.0.0/0"
-    },
-  ]
+  # egress_with_cidr_blocks = [
+  #   {
+  #     from_port   = -1
+  #     to_port     = -1
+  #     protocol    = -1
+  #     description = "allow egress to internet"
+  #     cidr_blocks = "0.0.0.0/0"
+  #   },
+  # ]
 
-  number_of_computed_egress_with_source_security_group_id = 1
-  computed_egress_with_source_security_group_id = [
-    {
-      rule  = "all-all"
-      source_security_group_id  = module.vpc_main_sg_primary.security_group_id
-      description = "allow egress to ${module.vpc_main_sg_primary.security_group_name}"
-    },
-  ]
+  # number_of_computed_egress_with_source_security_group_id = 1
+  # computed_egress_with_source_security_group_id = [
+  #   {
+  #     rule  = "all-all"
+  #     source_security_group_id = module.vpc_alb_sg_primary.security_group_id
+  #     description = "allow egress to ${module.vpc_alb_sg_primary.security_group_name}"
+  #   },
+  # ]
 }
+
+# module "vpc_alb_sg_primary" {
+#   source  = "terraform-aws-modules/security-group/aws"
+#   version = "5.2.0"
+#   providers = { aws = aws.network }
+
+#   name  = "${local.resource_name_stub}-${var.region.primary_short}-alb"
+#   use_name_prefix = false
+#   description = "load balancer security group for ${local.resource_name_stub}-${var.region.primary_short}"
+#   vpc_id  = module.vpc_primary.vpc_id
+
+#   ingress_with_self = [
+#     {
+#       rule = "all-all"
+#       description = "allow ingress from self"
+#     },
+#   ]
+
+#   ingress_with_cidr_blocks = [
+#     {
+#       from_port   = -1
+#       to_port     = -1
+#       protocol    = -1
+#       description = "allow ingress from client-vpn"
+#       cidr_blocks = "${var.vpc_cidr_clientvpn_primary},${var.vpc_cidr_clientvpn_failover}"
+#     },
+#   ]
+
+#   number_of_computed_ingress_with_source_security_group_id = 1
+#   computed_ingress_with_source_security_group_id = [
+#     {
+#       rule  = "all-all"
+#       source_security_group_id = module.vpc_main_sg_primary.security_group_id
+#       description = "allow ingress from ${module.vpc_main_sg_primary.security_group_name}"
+#     },
+#   ]
+
+#   egress_with_self = [
+#     {
+#       rule = "all-all"
+#       description = "allow egress to self"
+#     },
+#   ]
+
+#   egress_with_cidr_blocks = [
+#     {
+#       from_port   = -1
+#       to_port     = -1
+#       protocol    = -1
+#       description = "allow egress to internet"
+#       cidr_blocks = "0.0.0.0/0"
+#     },
+#   ]
+
+#   number_of_computed_egress_with_source_security_group_id = 1
+#   computed_egress_with_source_security_group_id = [
+#     {
+#       rule  = "all-all"
+#       source_security_group_id  = module.vpc_main_sg_primary.security_group_id
+#       description = "allow egress to ${module.vpc_main_sg_primary.security_group_name}"
+#     },
+#   ]
+# }
 
 #vpc endpoints
 module "vpc_endpoints_primary" {
@@ -201,7 +218,7 @@ module "vpc_endpoints_primary" {
       # security_group_ids  = [module.vpc_main_sg_primary.security_group_id]
       subnet_ids = module.vpc_primary.private_subnets
       route_table_ids = flatten([module.vpc_primary.private_route_table_ids, module.vpc_primary.public_route_table_ids])
-      tags                = { Name = "${local.resource_name_stub}-${var.region.failover_short}-s3-vpc-endpoint" }
+      tags                = { Name = "${local.resource_name_stub}-${var.region.primary_short}-s3-vpc-endpoint" }
     },
     rds = {
       # interface endpoint
@@ -211,7 +228,7 @@ module "vpc_endpoints_primary" {
       # security_group_ids  = [module.vpc_main_sg_primary.security_group_id]
       subnet_ids = module.vpc_primary.private_subnets
       # route_table_ids = flatten([module.vpc_primary.private_route_table_ids, module.vpc_primary.public_route_table_ids])
-      tags                = { Name = "${local.resource_name_stub}-${var.region.failover_short}-rds-endpoint" }
+      tags                = { Name = "${local.resource_name_stub}-${var.region.primary_short}-rds-endpoint" }
     },
     # dynamodb = {
     #   # gateway endpoint
@@ -254,7 +271,7 @@ module "vpc_failover" {
   external_nat_ip_ids = aws_eip.vpc_nat_failover[*].id
   external_nat_ips = aws_eip.vpc_nat_failover[*].public_ip
 
-  name = "${local.resource_name_stub}-${var.region.failover_short}-vpc"
+  name = "${local.resource_name_stub}-${var.region.failover_short}-network-vpc"
   public_subnet_suffix = "pub"
   private_subnet_suffix = "pvt"
   cidr = local.vpc_cidr_failover
@@ -298,87 +315,24 @@ module "vpc_main_sg_failover" {
     },
   ]
 
-  ingress_with_cidr_blocks = [
-    {
-      from_port   = -1
-      to_port     = -1
-      protocol    = -1
-      description = "allow ingress from client-vpn"
-      cidr_blocks = "${var.vpc_cidr_clientvpn_primary},${var.vpc_cidr_clientvpn_failover}"
-    },
-  ]
+  # ingress_with_cidr_blocks = [
+  #   {
+  #     from_port   = -1
+  #     to_port     = -1
+  #     protocol    = -1
+  #     description = "allow ingress from client-vpn"
+  #     cidr_blocks = "${var.vpc_cidr_clientvpn_primary},${var.vpc_cidr_clientvpn_failover}"
+  #   },
+  # ]
 
-  number_of_computed_ingress_with_source_security_group_id = 1
-  computed_ingress_with_source_security_group_id = [
-    {
-      rule  = "all-all"
-      source_security_group_id = module.vpc_alb_sg_failover.security_group_id
-      description = "allow ingress from ${module.vpc_alb_sg_failover.security_group_name}"
-    },
-  ]
-
-  egress_with_self = [
-    {
-      rule = "all-all"
-      description = "allow egress to self"
-    },
-  ]
-
-  egress_with_cidr_blocks = [
-    {
-      from_port   = -1
-      to_port     = -1
-      protocol    = -1
-      description = "allow egress to internet"
-      cidr_blocks = "0.0.0.0/0"
-    },
-  ]
-
-  number_of_computed_egress_with_source_security_group_id = 1
-  computed_egress_with_source_security_group_id = [
-    {
-      rule  = "all-all"
-      source_security_group_id = module.vpc_alb_sg_failover.security_group_id
-      description = "allow egress to ${module.vpc_alb_sg_failover.security_group_name}"
-    },
-  ]
-}
-
-module "vpc_alb_sg_failover" {
-  source  = "terraform-aws-modules/security-group/aws"
-  version = "5.2.0"
-  providers = { aws = aws.network_failover }
-
-  name  = "${local.resource_name_stub}-${var.region.failover_short}-alb"
-  use_name_prefix = false
-  description = "load balancer security group for ${local.resource_name_stub}-${var.region.failover_short}"
-  vpc_id  = module.vpc_failover.vpc_id
-
-  ingress_with_self = [
-    {
-      rule = "all-all"
-      description = "allow ingress from self"
-    },
-  ]
-
-  ingress_with_cidr_blocks = [
-    {
-      from_port   = -1
-      to_port     = -1
-      protocol    = -1
-      description = "allow ingress from client-vpn"
-      cidr_blocks = "${var.vpc_cidr_clientvpn_primary},${var.vpc_cidr_clientvpn_failover}"
-    },
-  ]
-
-  number_of_computed_ingress_with_source_security_group_id = 1
-  computed_ingress_with_source_security_group_id = [
-    {
-      rule  = "all-all"
-      source_security_group_id = module.vpc_main_sg_failover.security_group_id
-      description = "allow ingress from ${module.vpc_main_sg_failover.security_group_name}"
-    },
-  ]
+  # number_of_computed_ingress_with_source_security_group_id = 1
+  # computed_ingress_with_source_security_group_id = [
+  #   {
+  #     rule  = "all-all"
+  #     source_security_group_id = module.vpc_alb_sg_failover.security_group_id
+  #     description = "allow ingress from ${module.vpc_alb_sg_failover.security_group_name}"
+  #   },
+  # ]
 
   egress_with_self = [
     {
@@ -387,25 +341,88 @@ module "vpc_alb_sg_failover" {
     },
   ]
 
-  egress_with_cidr_blocks = [
-    {
-      from_port   = -1
-      to_port     = -1
-      protocol    = -1
-      description = "allow egress to internet"
-      cidr_blocks = "0.0.0.0/0"
-    },
-  ]
+  # egress_with_cidr_blocks = [
+  #   {
+  #     from_port   = -1
+  #     to_port     = -1
+  #     protocol    = -1
+  #     description = "allow egress to internet"
+  #     cidr_blocks = "0.0.0.0/0"
+  #   },
+  # ]
 
-  number_of_computed_egress_with_source_security_group_id = 1
-  computed_egress_with_source_security_group_id = [
-    {
-      rule  = "all-all"
-      source_security_group_id  = module.vpc_main_sg_failover.security_group_id
-      description = "allow egress to ${module.vpc_main_sg_failover.security_group_name}"
-    },
-  ]
+  # number_of_computed_egress_with_source_security_group_id = 1
+  # computed_egress_with_source_security_group_id = [
+  #   {
+  #     rule  = "all-all"
+  #     source_security_group_id = module.vpc_alb_sg_failover.security_group_id
+  #     description = "allow egress to ${module.vpc_alb_sg_failover.security_group_name}"
+  #   },
+  # ]
 }
+
+# module "vpc_alb_sg_failover" {
+#   source  = "terraform-aws-modules/security-group/aws"
+#   version = "5.2.0"
+#   providers = { aws = aws.network_failover }
+
+#   name  = "${local.resource_name_stub}-${var.region.failover_short}-alb"
+#   use_name_prefix = false
+#   description = "load balancer security group for ${local.resource_name_stub}-${var.region.failover_short}"
+#   vpc_id  = module.vpc_failover.vpc_id
+
+#   ingress_with_self = [
+#     {
+#       rule = "all-all"
+#       description = "allow ingress from self"
+#     },
+#   ]
+
+#   ingress_with_cidr_blocks = [
+#     {
+#       from_port   = -1
+#       to_port     = -1
+#       protocol    = -1
+#       description = "allow ingress from client-vpn"
+#       cidr_blocks = "${var.vpc_cidr_clientvpn_primary},${var.vpc_cidr_clientvpn_failover}"
+#     },
+#   ]
+
+#   number_of_computed_ingress_with_source_security_group_id = 1
+#   computed_ingress_with_source_security_group_id = [
+#     {
+#       rule  = "all-all"
+#       source_security_group_id = module.vpc_main_sg_failover.security_group_id
+#       description = "allow ingress from ${module.vpc_main_sg_failover.security_group_name}"
+#     },
+#   ]
+
+#   egress_with_self = [
+#     {
+#       rule = "all-all"
+#       description = "allow egress to self"
+#     },
+#   ]
+
+#   egress_with_cidr_blocks = [
+#     {
+#       from_port   = -1
+#       to_port     = -1
+#       protocol    = -1
+#       description = "allow egress to internet"
+#       cidr_blocks = "0.0.0.0/0"
+#     },
+#   ]
+
+#   number_of_computed_egress_with_source_security_group_id = 1
+#   computed_egress_with_source_security_group_id = [
+#     {
+#       rule  = "all-all"
+#       source_security_group_id  = module.vpc_main_sg_failover.security_group_id
+#       description = "allow egress to ${module.vpc_main_sg_failover.security_group_name}"
+#     },
+#   ]
+# }
 
 #vpc endpoints
 module "vpc_endpoints_failover" {
