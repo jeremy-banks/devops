@@ -1,3 +1,5 @@
+this_slug = "network"
+
 deployment_environment = "prd"
 
 vpc_cidr_primary_substitute = "10.41.0.0/16"
