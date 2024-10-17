@@ -45,8 +45,9 @@ data "aws_iam_policy_document" "kms"  {
       test     = "StringLike"
       variable = "aws:PrincipalArn"
       values   = [
+        "arn:aws:iam::${data.aws_caller_identity.this.account_id}:instance-profile/*",
         "arn:aws:iam::${data.aws_caller_identity.this.account_id}:role/*",
-        "arn:aws:iam::${data.aws_caller_identity.this.account_id}:user/*",
+        "arn:aws:iam::${data.aws_caller_identity.this.account_id}:role/aws-service-role/*",
       ]
     }
   }
@@ -73,8 +74,9 @@ data "aws_iam_policy_document" "kms"  {
       test     = "StringLike"
       variable = "aws:PrincipalArn"
       values   = [
+        "arn:aws:iam::${data.aws_caller_identity.this.account_id}:instance-profile/*",
         "arn:aws:iam::${data.aws_caller_identity.this.account_id}:role/*",
-        "arn:aws:iam::${data.aws_caller_identity.this.account_id}:user/*",
+        "arn:aws:iam::${data.aws_caller_identity.this.account_id}:role/aws-service-role/*",
       ]
     }
   }
