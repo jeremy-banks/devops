@@ -58,6 +58,12 @@ variable "resource_owner_email" {
   default     = ""
 }
 
+variable "this_slug" {
+  description = "used to programatically declare resource names"
+  type        = string
+  default     = "YOU-FORGOT-TO-DECLARE-this_slug-AND-AS-A-RESULT-THIS-STRING-IS-SO-LONG-IT-WILL-HOPEFULLY-FAIL-PROMPTING-YOU-TO-DEFINE-IT"
+}
+
 variable "cli_profile_name_aws" {
   description = "aws profile name to be used"
   type        = string
@@ -213,7 +219,8 @@ locals {
   resource_owner_email = var.resource_owner_email != "" ? var.resource_owner_email : local.org_owner_email
 
   resource_name_stub = "${var.company_name_abbr}-${var.team_name_abbr}-${var.project_name_abbr}" #company - team - project - env
-  
+  this_slug = "${var.this_slug}"
+
   vpc_cidr_primary = var.vpc_cidr_primary_substitute != "" ? var.vpc_cidr_primary_substitute : "0.0.0.0/0"
   vpc_azs_primary = var.deployment_environment == "prd" || var.deployment_environment == "stg" ? var.availability_zones_triple.primary : var.availability_zones_double.primary
   vpc_subnets_private_primary = [for k in range(length(local.vpc_azs_primary)) : cidrsubnet(local.vpc_cidr_primary, 2, k)]
