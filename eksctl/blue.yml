@@ -7,12 +7,12 @@ metadata:
   version: "1.31"
 
 vpc:
-  id: vpc-0042fd85c2de79795
+  id: vpc-id
   subnets:
     private:
-      private-one:    { id: subnet-0156cf85400a412a3 }
-      private-two:    { id: subnet-09f9b4aaf23b983ba }
-      private-three:  { id: subnet-0c65472072b250c5d }
+      private-one:    { id: subnet-id }
+      private-two:    { id: subnet-id }
+      private-three:  { id: subnet-id }
 
 # cloudWatch:
 #   clusterLogging:
@@ -74,17 +74,24 @@ addons:
     version: "1.11.3"
     useDefaultPodIdentityAssociations: true
     configurationValues: |
-      replicaCount: 2
+      replicaCount: 3
       affinity:
         podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 10
+            preference:
               matchExpressions:
               - key: eks.amazonaws.com/component
                 operator: In
                 values:
                 - coredns
-            topologyKey: "topology.kubernetes.io/zone"
+              topologyKey: "topology.kubernetes.io/zone"
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: Exists
+              topologyKey: "kubernetes.io/hostname"
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 100
@@ -119,7 +126,7 @@ managedNodeGroups:
         value: *awsClusterAutoscaler
         effect: "NoSchedule"
     instanceType: t4g.medium
-    minSize: 2
+    minSize: 1
     maxSize: 10
     privateNetworking: true
     volumeSize: 20
