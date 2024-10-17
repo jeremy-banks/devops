@@ -2,24 +2,25 @@ apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 
 metadata:
-  name: &clusterName sdlc-dev-blue
+  name: &clusterName scc-blue-w12-usw2-blue
   region: us-west-2
   version: "1.31"
 
 vpc:
-  id: vpc-id
+  id: vpc-0042fd85c2de79795
   subnets:
     private:
-      private-one: { id: subnet-id }
-      private-two: { id: subnet-id }
+      private-one:    { id: subnet-0156cf85400a412a3 }
+      private-two:    { id: subnet-09f9b4aaf23b983ba }
+      private-three:  { id: subnet-0c65472072b250c5d }
 
-cloudWatch:
-  clusterLogging:
-    enableTypes: [ "all" ]
-    logRetentionInDays: 1
+# cloudWatch:
+#   clusterLogging:
+#     enableTypes: [ "all" ]
+#     logRetentionInDays: 1
 
-secretsEncryption:
-  keyARN: keyARN
+# secretsEncryption:
+#   keyARN: keyARN
 
 iam:
   podIdentityAssociations:
