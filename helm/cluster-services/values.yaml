@@ -1,7 +1,7 @@
 .anchors:
-  clusterName: &clusterName sdlc-dev-blue
+  clusterName: &clusterName scc-blue-w12-usw2-blue
   region: &region us-west-2
-  podReplicaCount: &podReplicaCount 2
+  podReplicaCount: &podReplicaCount 3
   acmArnPrimary: &acmArnPrimary "foo"
   acmArnFailover: &acmArnFailover "bar"
 
@@ -13,20 +13,33 @@ cluster-autoscaler:
   awsRegion: *region
   affinity:
     podAntiAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-      - labelSelector:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+              - *awsClusterAutoscaler
+          topologyKey: "topology.kubernetes.io/zone"
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 10
+        preference:
           matchExpressions:
-          - key: app.kubernetes.io/name
+          - key: role
             operator: In
             values:
             - *awsClusterAutoscaler
-        topologyKey: "topology.kubernetes.io/zone"
-  nodeSelector:
-      role: *awsClusterAutoscaler
+      - weight: 1
+        preference:
+          matchExpressions:
+          - key: node.kubernetes.io/taint
+            operator: DoesNotExist
+  nodeSelector: {}
   tolerations:
-    - key: "role"
-      operator: "Equal"
-      value: *awsClusterAutoscaler
+    - operator: "Exists"
       effect: "NoSchedule"
   topologySpreadConstraints: []
   rbac:
