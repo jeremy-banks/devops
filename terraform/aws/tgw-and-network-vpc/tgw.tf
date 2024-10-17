@@ -5,10 +5,10 @@ resource "aws_ec2_transit_gateway" "tgw_primary" {
   auto_accept_shared_attachments      = "enable"
   default_route_table_association     = "enable"
   default_route_table_propagation     = "enable"
-  description                         = "${local.resource_name_stub}-${var.region.primary_short}-network-tgw"
+  description                         = "${local.resource_name_stub}-${var.region.primary_short}-${local.this_slug}-tgw"
   dns_support                         = "enable"
   security_group_referencing_support  = "enable"
-  tags                                = { "Name" = "${local.resource_name_stub}-${var.region.primary_short}-network-tgw"}
+  tags                                = { "Name" = "${local.resource_name_stub}-${var.region.primary_short}-${local.this_slug}-tgw"}
 }
 
 resource "aws_ec2_transit_gateway" "tgw_failover" {
@@ -18,10 +18,10 @@ resource "aws_ec2_transit_gateway" "tgw_failover" {
   auto_accept_shared_attachments      = "enable"
   default_route_table_association     = "enable"
   default_route_table_propagation     = "enable"
-  description                         = "${local.resource_name_stub}-${var.region.failover_short}-network-tgw"
+  description                         = "${local.resource_name_stub}-${var.region.failover_short}-${local.this_slug}-tgw"
   dns_support                         = "enable"
   security_group_referencing_support  = "enable"
-  tags                                = { "Name" = "${local.resource_name_stub}-${var.region.failover_short}-network-tgw"}
+  tags                                = { "Name" = "${local.resource_name_stub}-${var.region.failover_short}-${local.this_slug}-tgw"}
 }
 
 data "aws_caller_identity" "network" {

@@ -17,6 +17,8 @@ data "aws_organizations_organizational_unit" "security" {
 }
 
 data "aws_organizations_organizational_unit" "workloads" {
+  provider = aws.org
+
   parent_id = data.aws_organizations_organization.current.roots[0].id
   name      = "workloads"
 }

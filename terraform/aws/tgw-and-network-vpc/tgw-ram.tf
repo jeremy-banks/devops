@@ -1,7 +1,7 @@
 resource "aws_ram_resource_share" "tgw_primary" {
   provider = aws.network
 
-  name                      = "${local.resource_name_stub}-${var.region.primary_short}-network-tgw"
+  name                      = "${local.resource_name_stub}-${var.region.primary_short}-${local.this_slug}-tgw"
   allow_external_principals = false
 }
 
@@ -36,7 +36,7 @@ resource "aws_ram_principal_association" "tgw_primary_ou_workloads" {
 resource "aws_ram_resource_share" "tgw_failover" {
   provider = aws.network_failover
 
-  name                      = "${local.resource_name_stub}-${var.region.failover_short}-network-tgw"
+  name                      = "${local.resource_name_stub}-${var.region.failover_short}-${local.this_slug}-tgw"
   allow_external_principals = false
 }
 
