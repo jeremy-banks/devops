@@ -1,4 +1,4 @@
-# Devops
+# DevOps
 
 ## Project Goals
 1. Create codebase ideal for "lift and shift" into AWS and EKS
@@ -122,7 +122,7 @@
 ## To-Do
 - Finish out k8s cluster with an nginx welcome page deployment and alb
    - need DNS to work in prod and carry over to downstreeam dev.DOMAIN.TLD format
-   - that way ACM works  automatically
+   - that way ACM works automatically
    - might need to make a separate DOMAIN.TLD for services like clientVPN and enterprise AD domains if any
 - Implement backend tfstate lock with dynamodb
    - need bucket, table, and access set up uniquely for superadmin and automation users
