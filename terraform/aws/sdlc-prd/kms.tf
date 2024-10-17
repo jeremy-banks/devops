@@ -1,3 +1,85 @@
+data "aws_caller_identity" "this" { provider = aws.sdlc_prd }
+
+data "aws_iam_policy_document" "kms"  {
+  # https://docs.aws.amazon.com/kms/latest/prdeloperguide/key-policy-default.html
+  statement {
+    sid    = "Enable IAM User Permissions"
+    effect = "Allow"
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.this.account_id}:root"]
+    }
+    actions   = ["kms:*"]
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "Allow use of the key"
+    effect = "Allow"
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+    actions   = [
+      "kms:DescribeKey",
+      "kms:Decrypt",
+      "kms:DescribeKey",
+      "kms:Encrypt",
+      "kms:GenerateDataKey*",
+      "kms:ReEncrypt*",
+      "kms:Decrypt",
+      "kms:DeriveSharedSecret",
+      "kms:DescribeKey",
+      "kms:Encrypt",
+      "kms:GenerateDataKey*",
+      "kms:GenerateMac",
+      "kms:GetPublicKey",
+      "kms:ReEncrypt*",
+      "kms:ReEncrypt*",
+      "kms:Sign",
+      "kms:Verify",
+      "kms:VerifyMac",
+    ]
+    resources = ["*"]
+    condition {
+      test     = "StringLike"
+      variable = "aws:PrincipalArn"
+      values   = [
+        "arn:aws:iam::${data.aws_caller_identity.this.account_id}:role/*",
+        "arn:aws:iam::${data.aws_caller_identity.this.account_id}:user/*",
+      ]
+    }
+  }
+
+  statement {
+    sid    = "Allow attachment of persistent resources"
+    effect = "Allow"
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+    actions   = [
+      "kms:CreateGrant",
+      "kms:ListGrants",
+      "kms:RevokeGrant",
+    ]
+    resources = ["*"]
+    condition {
+      test     = "Bool"
+      variable = "kms:GrantIsForAWSResource"
+      values   = [true]
+    }
+    condition {
+      test     = "StringLike"
+      variable = "aws:PrincipalArn"
+      values   = [
+        "arn:aws:iam::${data.aws_caller_identity.this.account_id}:role/*",
+        "arn:aws:iam::${data.aws_caller_identity.this.account_id}:user/*",
+      ]
+    }
+  }
+}
+
 module "kms_primary" {
   source  = "terraform-aws-modules/kms/aws"
   version = "3.1.0"
@@ -26,71 +108,6 @@ module "kms_failover" {
   aliases = ["${local.resource_name_stub}-${var.region.failover_short}"]
 
   policy = data.aws_iam_policy_document.kms.json
-}
-
-data "aws_caller_identity" "this" { provider = aws.sdlc_prd }
-
-data "aws_iam_policy_document" "kms"  {
-  # https://docs.aws.amazon.com/kms/latest/prdeloperguide/key-policy-default.html
-  statement {
-    sid    = "Enable IAM User Permissions"
-
-    effect = "Allow"
-
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.this.account_id}:root"]
-    }
-
-    actions   = ["kms:*"]
-
-    resources = ["*"]
-  }
-
-  # https://docs.aws.amazon.com/autoscaling/ec2/userguide/key-policy-requirements-EBS-encryption.html
-  # statement {
-  #   sid    = "Allow service-linked role use of the customer managed key"
-
-  #   effect = "Allow"
-
-  #   principals {
-  #     type        = "AWS"
-  #     identifiers = ["arn:aws:iam::${data.aws_caller_identity.this.account_id}:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling"]
-  #   }
-
-  #   actions   = [
-  #      "kms:Decrypt",
-  #      "kms:DescribeKey",
-  #      "kms:Encrypt",
-  #      "kms:GenerateDataKey*",
-  #      "kms:ReEncrypt*",
-  #   ]
-
-  #   resources = ["*"]
-  # }
-
-  # statement {
-  #   sid    = "Allow attachment of persistent resources"
-
-  #   effect = "Allow"
-
-  #   principals {
-  #     type        = "AWS"
-  #     identifiers = ["arn:aws:iam::${data.aws_caller_identity.this.account_id}:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling"]
-  #   }
-
-  #   actions   = [
-  #     "kms:CreateGrant",
-  #   ]
-
-  #   resources = ["*"]
-  
-  #   condition {
-  #     test     = "Bool"
-  #     variable = "kms:GrantIsForAWSResource"
-  #     values   = ["true"]
-  #   }
-  # }
 }
 
 resource "aws_ebs_encryption_by_default" "kms_primary" {
