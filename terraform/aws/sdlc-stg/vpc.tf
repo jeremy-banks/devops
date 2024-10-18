@@ -1,7 +1,7 @@
 module "vpc_primary" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.13.0"
-  providers = { aws = aws.sdlc_prd }
+  providers = { aws = aws.sdlc_stg }
 
   count = var.vpc_enabled ? 1 : 0
 
@@ -48,7 +48,7 @@ module "vpc_primary" {
 module "vpc_main_sg_primary" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.2.0"
-  providers = { aws = aws.sdlc_prd }
+  providers = { aws = aws.sdlc_stg }
 
   count = var.vpc_enabled ? 1 : 0
 
@@ -75,7 +75,7 @@ module "vpc_main_sg_primary" {
 module "vpc_failover" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.13.0"
-  providers = { aws = aws.sdlc_prd_failover }
+  providers = { aws = aws.sdlc_stg_failover }
 
   count = var.vpc_enabled ? 1 : 0
 
@@ -122,7 +122,7 @@ module "vpc_failover" {
 module "vpc_main_sg_failover" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.2.0"
-  providers = { aws = aws.sdlc_prd_failover }
+  providers = { aws = aws.sdlc_stg_failover }
 
   count = var.vpc_enabled ? 1 : 0
 

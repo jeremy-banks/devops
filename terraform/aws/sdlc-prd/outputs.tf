@@ -15,17 +15,17 @@
 
 output "primary_vpc_id" {
   description = "The ID of the VPC"
-  value       = module.vpc_primary.vpc_id
+  value       = module.vpc_primary[*].vpc_id
 }
 
 output "primary_public_subnets" {
   description = "List of IDs of public subnets"
-  value       = module.vpc_primary.public_subnets
+  value       = module.vpc_primary[*].public_subnets
 }
 
 output "primary_private_subnets" {
   description = "List of IDs of private subnets"
-  value       = module.vpc_primary.private_subnets
+  value       = module.vpc_primary[*].private_subnets
 }
 
 output "primary_nat_public_ips" {
@@ -35,7 +35,7 @@ output "primary_nat_public_ips" {
 
 output "primary_security_group_id_main" {
   description = "The ID of the security group created for general use"
-  value       = module.vpc_main_sg_primary.security_group_id
+  value       = module.vpc_main_sg_primary[*].security_group_id
 }
 
 # output "primary_acm_arn" {
@@ -45,22 +45,22 @@ output "primary_security_group_id_main" {
 
 output "primary_kms_arn" {
   description = "The ARN of the key"
-  value       = module.kms_primary.key_arn
+  value       = module.kms_primary[*].key_arn
 }
 
 output "failover_vpc_id" {
   description = "The ID of the VPC"
-  value       = module.vpc_failover.vpc_id
+  value       = module.vpc_failover[*].vpc_id
 }
 
 output "failover_public_subnets" {
   description = "List of IDs of public subnets"
-  value       = module.vpc_failover.public_subnets
+  value       = module.vpc_failover[*].public_subnets
 }
 
 output "failover_private_subnets" {
   description = "List of IDs of private subnets"
-  value       = module.vpc_failover.private_subnets
+  value       = module.vpc_failover[*].private_subnets
 }
 
 output "failover_nat_public_ips" {
@@ -70,7 +70,7 @@ output "failover_nat_public_ips" {
 
 output "failover_security_group_id_main" {
   description = "The ID of the security group created for general use"
-  value       = module.vpc_main_sg_failover.security_group_id
+  value       = module.vpc_main_sg_failover[*].security_group_id
 }
 
 # output "failover_acm_arn" {

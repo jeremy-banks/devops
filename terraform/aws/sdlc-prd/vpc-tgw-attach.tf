@@ -9,9 +9,9 @@ data "aws_ec2_transit_gateway" "tgw_primary" {
 resource "aws_ec2_transit_gateway_vpc_attachment" "tgw_primary" {
   provider = aws.sdlc_prd
 
-  subnet_ids                                      = module.vpc_primary.private_subnets
+  subnet_ids                                      = module.vpc_primary[0].private_subnets
   transit_gateway_id                              = data.aws_ec2_transit_gateway.tgw_primary.id
-  vpc_id                                          = module.vpc_primary.vpc_id
+  vpc_id                                          = module.vpc_primary[0].vpc_id
   dns_support                                     = "enable"
   security_group_referencing_support              = "enable"
   transit_gateway_default_route_table_association = true
@@ -37,9 +37,9 @@ data "aws_ec2_transit_gateway" "tgw_failover" {
 resource "aws_ec2_transit_gateway_vpc_attachment" "tgw_failover" {
   provider = aws.sdlc_prd_failover
 
-  subnet_ids                                      = module.vpc_failover.private_subnets
+  subnet_ids                                      = module.vpc_failover[0].private_subnets
   transit_gateway_id                              = data.aws_ec2_transit_gateway.tgw_failover.id
-  vpc_id                                          = module.vpc_failover.vpc_id
+  vpc_id                                          = module.vpc_failover[0].vpc_id
   dns_support                                     = "enable"
   security_group_referencing_support              = "enable"
   transit_gateway_default_route_table_association = true
