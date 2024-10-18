@@ -1,7 +1,7 @@
 resource "aws_eip" "vpc_nat_primary" {
   provider = aws.network
 
-  count = length(local.vpc_azs_primary)
+  count = var.vpc_enabled ? length(local.vpc_azs_primary) : 0
   domain = "vpc"
   tags = { "Name" = "${local.resource_name_stub}-${var.region.primary_short}-${local.this_slug}-vpc-eip-DO-NOT-DELETE-${count.index}" }
 
@@ -11,7 +11,7 @@ resource "aws_eip" "vpc_nat_primary" {
 resource "aws_eip" "vpc_nat_failover" {
   provider = aws.network_failover
 
-  count = length(local.vpc_azs_primary)
+  count = var.vpc_enabled ? length(local.vpc_azs_failover) : 0
   domain = "vpc"
   tags = { "Name" = "${local.resource_name_stub}-${var.region.failover_short}-${local.this_slug}-vpc-eip-DO-NOT-DELETE-${count.index}" }
 

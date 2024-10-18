@@ -3,7 +3,7 @@ module "vpc_primary" {
   version = "5.13.0"
   providers = { aws = aws.sdlc_prd }
 
-  count = var.vpc_enabled ? 1 : 0
+  create_vpc = var.vpc_enabled
 
   enable_nat_gateway      = true
   reuse_nat_ips           = true
@@ -50,12 +50,12 @@ module "vpc_main_sg_primary" {
   version = "5.2.0"
   providers = { aws = aws.sdlc_prd }
 
-  count = var.vpc_enabled ? 1 : 0
+  create_sg = var.vpc_enabled
 
   name        = "${local.resource_name_stub}-${var.region.primary_short}-main"
   use_name_prefix = false
   description = "main security group for ${local.resource_name_stub}-${var.region.primary_short}"
-  vpc_id      = module.vpc_primary[0].vpc_id
+  vpc_id      = module.vpc_primary.vpc_id
 
   ingress_with_self = [
     {
@@ -77,7 +77,7 @@ module "vpc_failover" {
   version = "5.13.0"
   providers = { aws = aws.sdlc_prd_failover }
 
-  count = var.vpc_enabled ? 1 : 0
+  create_vpc = var.vpc_enabled
 
   enable_nat_gateway      = true
   reuse_nat_ips           = true
@@ -124,12 +124,12 @@ module "vpc_main_sg_failover" {
   version = "5.2.0"
   providers = { aws = aws.sdlc_prd_failover }
 
-  count = var.vpc_enabled ? 1 : 0
+  create_sg = var.vpc_enabled
 
   name        = "${local.resource_name_stub}-${var.region.failover_short}-main"
   use_name_prefix = false
   description = "main security group for ${local.resource_name_stub}-${var.region.failover_short}"
-  vpc_id      = module.vpc_failover[0].vpc_id
+  vpc_id      = module.vpc_failover.vpc_id
 
   ingress_with_self = [
     {

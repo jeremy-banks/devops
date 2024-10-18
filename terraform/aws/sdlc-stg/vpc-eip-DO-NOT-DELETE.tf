@@ -11,7 +11,7 @@ resource "aws_eip" "vpc_nat_primary" {
 resource "aws_eip" "vpc_nat_failover" {
   provider = aws.sdlc_stg_failover
 
-  count = var.vpc_enabled ? length(local.vpc_azs_primary) : 0
+  count = var.vpc_enabled ? length(local.vpc_azs_failover) : 0
   domain = "vpc"
   tags = { "Name" = "${local.resource_name_stub}-${var.region.failover_short}-${local.this_slug}-vpc-eip-DO-NOT-DELETE-${count.index}" }
 
