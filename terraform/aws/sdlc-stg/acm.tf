@@ -1,7 +1,7 @@
 module "acm_wildcard_cert_primary" {
   source  = "terraform-aws-modules/acm/aws"
   version = "5.1.1"
-  providers = { aws = aws.sdlc_prd }
+  providers = { aws = aws.sdlc_stg }
 
   for_each = toset(var.r53_zones)
 
@@ -15,6 +15,15 @@ module "acm_wildcard_cert_primary" {
   wait_for_validation = false
 }
 
+data "aws_route53_zone" "public_zones" {
+  provider = aws.sdlc_prd
+
+  for_each = toset(var.r53_zones)
+
+  name         = "${each.key}."
+  private_zone = false
+}
+
 module "acm_dns_records_primary" {
   source  = "terraform-aws-modules/acm/aws"
   version = "5.1.1"
@@ -26,7 +35,7 @@ module "acm_dns_records_primary" {
   create_route53_records_only = true
   validation_method           = "DNS"
 
-  zone_id               = module.r53_zones.route53_zone_zone_id[each.key]
+  zone_id               = data.aws_route53_zone.public_zones[each.key].zone_id
   distinct_domain_names = module.acm_wildcard_cert_primary[each.key].distinct_domain_names
 
   dns_ttl = 86400
@@ -37,7 +46,7 @@ module "acm_dns_records_primary" {
 module "acm_wildcard_cert_failover" {
   source  = "terraform-aws-modules/acm/aws"
   version = "5.1.1"
-  providers = { aws = aws.sdlc_prd_failover }
+  providers = { aws = aws.sdlc_stg_failover }
 
   for_each = toset(var.r53_zones)
 
@@ -62,7 +71,7 @@ module "acm_dns_records_failover" {
   create_route53_records_only = true
   validation_method           = "DNS"
 
-  zone_id               = module.r53_zones.route53_zone_zone_id[each.key]
+  zone_id               = data.aws_route53_zone.public_zones[each.key].zone_id
   distinct_domain_names = module.acm_wildcard_cert_failover[each.key].distinct_domain_names
 
   dns_ttl = 86400

@@ -88,10 +88,10 @@
          ```
       1. Deploy EKS Cluster
          ```sh
-         eksctl create cluster -f sdlc-prd-blue.yml &
-         eksctl delete cluster --name sdlc-prd-blue --region us-west-2 &
-         eksctl create nodegroup -f sdlc-prd-blue.yml &
-         eksctl delete nodegroup --cluster sdlc-prd-blue --name general --region us-west-2 &
+         eksctl create cluster -f blue.yml &
+         eksctl delete cluster --name scc-blue-w12-usw2-blue --region us-west-2 &
+         eksctl create nodegroup -f blue.yml &
+         eksctl delete nodegroup --cluster scc-blue-w12-usw2-blue --name general --region us-west-2 &
          ```
       1. Deploy cluster-services
          ```sh

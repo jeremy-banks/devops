@@ -1,3 +1,18 @@
+variable "account_id" {
+  type    = map(string)
+  default = {
+    identity = ""
+    log_archive = ""
+    network = ""
+    org = ""
+    sdlc_dev = ""
+    sdlc_prd = ""
+    sdlc_stg = ""
+    sdlc_tst = ""
+    security_tooling = ""
+  }
+}
+
 variable "org_owner_email_prefix" {
   description = "the 'billg' in 'billg@microsoft'"
   type        = string
@@ -70,18 +85,6 @@ variable "cli_profile_name_aws" {
   default     = "automation"
 }
 
-variable "account_id" {
-  type    = map(string)
-  default = {
-    identity = ""
-    log_archive = ""
-    network = ""
-    org = ""
-    sdlc_prd = ""
-    security_tooling = ""
-  }
-}
-
 variable "region" {
   description = "regions for the infrastructure"
   type        = map(string)
@@ -130,6 +133,11 @@ variable "tgw_asn" {
     primary = 65434
     failover = 65433
   }
+}
+
+variable "vpc_enabled" {
+  type = bool
+  default = false
 }
 
 variable "vpc_cidr_primary_substitute" {
@@ -209,6 +217,11 @@ variable "ad_directory_id_connector_network" {
 variable "ad_directory_id_connector_network_failover" {
   type  = string
   default = ""
+}
+
+variable "r53_zones" {
+  type    = list(string)
+  default = []
 }
 
 locals {
