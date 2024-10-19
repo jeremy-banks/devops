@@ -73,10 +73,10 @@ output "failover_security_group_id_main" {
   value       = module.vpc_main_sg_failover.security_group_id
 }
 
-# output "failover_acm_arn" {
-#   description = "The ARN of the certificate"
-#   value       = module.acm_wildcard_cert_failover[*].acm_certificate_arn.thi
-# }
+output "failover_acm_arn" {
+  description = "The ARN of the certificate"
+  value       = [for cert in module.acm_wildcard_cert_failover : cert.acm_certificate_arn]
+}
 
 output "failover_kms_arn" {
   description = "The ARN of the key"
