@@ -1,23 +1,11 @@
 output "acm_arn_primary" {
   description = "The ARN of the certificate"
-  value = {
-    for domain, cert in module.acm_wildcard_cert_primary : domain => cert.acm_certificate_arn
-  }
+  value = module.acm_wildcard_cert_primary.acm_certificate_arn
 }
 
 output "kms_arn_primary" {
   description = "The ARN of the key"
   value       = module.kms_primary.key_arn
-}
-
-output "r53_zone_records" {
-  description = "Displays each domain and its corresponding NS records."
-  value = {
-    for zone in var.r53_zones : zone => {
-      domain_name = var.deployment_environment == "prd" ? zone : "${var.deployment_environment}.${zone}"
-      ns_records   = try(module.r53_zones.route53_zone_zone_id[zone].name_servers, [])
-    }
-  }
 }
 
 output "vpc_id_primary" {
@@ -45,12 +33,12 @@ output "vpc_subnets_pvt_primary" {
   value       = module.vpc_primary.private_subnets
 }
 
-output "acm_arn_failover" {
-  description = "The ARN of the certificate"
-  value = {
-    for domain, cert in module.acm_wildcard_cert_failover : domain => cert.acm_certificate_arn
-  }
-}
+# output "acm_arn_failover" {
+#   description = "The ARN of the certificate"
+#   value = {
+#     for domain, cert in module.acm_wildcard_cert_failover : domain => cert.acm_certificate_arn
+#   }
+# }
 
 output "kms_arn_failover" {
   description = "The ARN of the key"
