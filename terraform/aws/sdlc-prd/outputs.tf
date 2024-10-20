@@ -10,6 +10,16 @@ output "kms_arn_primary" {
   value       = module.kms_primary.key_arn
 }
 
+output "r53_zone_records" {
+  description = "Displays each domain and its corresponding NS records."
+  value = {
+    for zone in var.r53_zones : zone => {
+      domain_name = var.deployment_environment == "prd" ? zone : "${var.deployment_environment}.${zone}"
+      ns_records   = try(module.r53_zones.route53_zone_zone_id[zone].name_servers, [])
+    }
+  }
+}
+
 output "vpc_id_primary" {
   description = "The ID of the VPC"
   value       = module.vpc_primary.vpc_id
