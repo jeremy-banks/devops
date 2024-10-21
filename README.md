@@ -1,11 +1,9 @@
 # DevOps
 
 ## Project Goals
-1. Create codebase ideal for "lift and shift" into AWS and EKS
+1. Create my ideal codebase to "lift and shift" a startup into AWS and EKS
 1. Using minimal number tools with high market share utilization (eg terraform, eksctl, helm)
 1. Demo with k8s nginx welcome page
-1. Demo with k8s deployment of self-hosted Rust server
-1. All resources which support multi-regional have it enabled in active-active (or at least active-passive)
 
 ## Details
 
@@ -124,15 +122,15 @@
    - need DNS to work in prod and carry over to downstreeam dev.DOMAIN.TLD format
    - that way ACM works automatically
    - might need to make a separate DOMAIN.TLD for services like clientVPN and enterprise AD domains if any
-- Implement backend tfstate lock with dynamodb
-   - need bucket, table, and access set up uniquely for superadmin and automation users
-- Triggering a DR event
-   - ACL allows no traffic in one subnet
 - Federated login for devops, operations, and developers
    - https://getstarted.awsworkshop.io/02-dev-fast-follow/02-federated-access-to-aws/02-aws-sso-ad.html
    - https://aws.amazon.com/blogs/architecture/field-notes-integrating-active-directory-federation-service-with-aws-single-sign-on/
    - Also need Windows Admin Server in some account
    - Goal is to have everyone log in to SSO and their priviledges to log in and assume roles will dynamically populate based on their groups in AD
+- Triggering a DR event
+   - ACL allows no traffic in one subnet
+- Implement backend tfstate lock with dynamodb
+   - need bucket, table, and access set up uniquely for superadmin and automation users
 - Complete sdlc dev, tst, and stg
 - Need scalable solution to deploy security settings such as aws_ebs_snapshot_block_public_access, block public s3 access, default ebs encryption, etc
    - probably need a step after account creation before iam to deploy org-security-settings

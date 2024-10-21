@@ -1,9 +1,9 @@
 .anchors:
-  clusterName: &clusterName scc-blue-w12-usw2-blue
+  clusterName: &clusterName scc-blue-w12-usw2-green
   region: &region us-west-2
   podReplicaCount: &podReplicaCount 3
-  acmArnPrimary: &acmArnPrimary "foo"
-  acmArnFailover: &acmArnFailover "bar"
+  acmArnPrimary: &acmArnPrimary "arn:aws:acm:us-west-2:920373017681:certificate/f1879129-3b2b-49e3-8cd8-f25c335b36ff"
+  acmArnFailover: &acmArnFailover "arn:aws:acm:us-east-1:920373017681:certificate/2bff1b38-e77d-40f2-b02f-d2632ded975f"
 
 cluster-autoscaler:
   fullnameOverride: &awsClusterAutoscaler aws-cluster-autoscaler
@@ -86,8 +86,6 @@ external-dns:
     create: false
     name: external-dns
 
-# cert-manager:
-
 aws-load-balancer-controller:
   fullnameOverride: aws-load-balancer-controller
   clusterName: *clusterName
@@ -112,22 +110,22 @@ aws-load-balancer-controller:
   service:
     type: LoadBalancer
     annotations:
-      service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
-      service.beta.kubernetes.io/aws-load-balancer-internal: "false"
-      service.beta.kubernetes.io/aws-load-balancer-ssl-cert: *acmArnPrimary
-      service.beta.kubernetes.io/aws-load-balancer-ssl-redirect: "443"
+      kubernetes.io/ingress.class: alb
+      alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-west-2:xxxx:certificate/xxxxxx
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+      alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
   servicePort: 80
-  ingress:
-    enabled: true
-    className: alb
-    annotations:
-      kubernetes.io/ingress.class: "alb"
-      alb.ingress.kubernetes.io/scheme: internet-facing
-      alb.ingress.kubernetes.io/certificate-arn: *acmArnPrimary
-      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
-      alb.ingress.kubernetes.io/target-group-attributes: "stickiness.enabled=true,stickiness.type=source"
-      alb.ingress.kubernetes.io/healthcheck-path: "/"
-      alb.ingress.kubernetes.io/healthcheck-interval: "30"
-      alb.ingress.kubernetes.io/healthcheck-timeout: "5"
-      alb.ingress.kubernetes.io/healthcheck-healthy-threshold: "3"
-      alb.ingress.kubernetes.io/healthcheck-unhealthy-threshold: "3"
+  # ingress:
+  #   enabled: true
+  #   className: alb
+  #   annotations:
+  #     kubernetes.io/ingress.class: "alb"
+  #     alb.ingress.kubernetes.io/scheme: internet-facing
+  #     alb.ingress.kubernetes.io/certificate-arn: *acmArnPrimary
+  #     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+  #     alb.ingress.kubernetes.io/target-group-attributes: "stickiness.enabled=true,stickiness.type=source"
+  #     alb.ingress.kubernetes.io/healthcheck-path: "/"
+  #     alb.ingress.kubernetes.io/healthcheck-interval: "30"
+  #     alb.ingress.kubernetes.io/healthcheck-timeout: "5"
+  #     alb.ingress.kubernetes.io/healthcheck-healthy-threshold: "3"
+  #     alb.ingress.kubernetes.io/healthcheck-unhealthy-threshold: "3"

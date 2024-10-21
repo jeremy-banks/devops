@@ -33,7 +33,7 @@ module "acm_dns_records_primary" {
   create_certificate          = false
   create_route53_records_only = true
   validation_method           = "DNS"
-  dns_ttl                     = 60
+  dns_ttl                     = 86400
 
   zone_id = data.aws_route53_zone.public_zones[each.key].zone_id
   distinct_domain_names = module.acm_wildcard_cert_primary.distinct_domain_names

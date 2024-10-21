@@ -288,4 +288,15 @@ locals {
   }
 
   default_tags = merge(local.default_tags_map, local.iam_access_management_tag_map)
+
+  acm_san_names = concat(
+    [
+      for zone in var.r53_zones : 
+      (var.deployment_environment != "prd" ? "${var.deployment_environment}.${zone}" : zone)
+    ],
+    [
+      for zone in var.r53_zones : 
+      (var.deployment_environment != "prd" ? "*.${var.deployment_environment}.${zone}" : "*.${zone}")
+    ]
+  )
 }
