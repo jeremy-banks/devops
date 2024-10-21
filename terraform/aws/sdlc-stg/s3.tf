@@ -8,7 +8,7 @@ locals {
 module "s3_primary" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "4.1.2"
-  providers = { aws = aws.sdlc_prd }
+  providers = { aws = aws.sdlc_stg }
 
   bucket = "${local.resource_name_stub}-${var.region.primary_short}-${local.this_slug}-storage-blob-${local.unique_id}"
 
@@ -77,7 +77,7 @@ module "s3_primary" {
 module "iam_policy_s3_primary_replicate_to_failover" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version = "5.45.0"
-  providers = { aws = aws.sdlc_prd }
+  providers = { aws = aws.sdlc_stg }
 
   name  = "s3-primary-replicate-to-failover"
 
@@ -135,7 +135,7 @@ EOF
 module "iam_role_s3_primary_replicate_to_failover" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "5.45.0"
-  providers = { aws = aws.sdlc_prd }
+  providers = { aws = aws.sdlc_stg }
 
   trusted_role_services = [
     "s3.amazonaws.com",
@@ -157,7 +157,7 @@ module "iam_role_s3_primary_replicate_to_failover" {
 module "s3_failover" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "4.1.2"
-  providers = { aws = aws.sdlc_prd_failover }
+  providers = { aws = aws.sdlc_stg_failover }
 
   bucket = "${local.resource_name_stub}-${var.region.failover_short}-${local.this_slug}-storage-blob-${local.unique_id}"
 
