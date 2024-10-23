@@ -1,15 +1,14 @@
-# Devops
+# DevOps
 
-## Project Goal
-Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resources using only terraform, eksctl, and helm
+## Project Goals
+1. Create my ideal codebase to "lift and shift" a startup into AWS and EKS
+1. Using minimal number tools with high market share utilization (eg terraform, eksctl, helm)
+1. Demo with k8s nginx welcome page
 
-## Features
+## Details
+
+### Documentation Reference
 - Terraform providers and modules all version locked
-- All resources which support multi-regional have it enabled in active-active (or at least active-passive)
-- AWS IAM Permission Boundary in effect, preventing all editing of terraformed resources by non-terraform roles
-- Terraform does not manage resources it uses to access provisioning
-  - superadmin role is used to manage automation, admin, poweruser, readonly, and eks roles
-  - every other resource is managed by automation role
 - Code written following AWS documentation
   - Well-Architected Framework  https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html
   - Prescriptive Guidance Security Reference Architecture https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture/org-management.html
@@ -17,14 +16,19 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
   - Building a Scalable and Secure Multi-VPC AWS Network Infrastructure https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/welcome.html
   - Latencies between AWS availability zones https://www.flashgrid.io/news/latencies-between-aws-availability-zones-what-are-they-and-how-to-minimize-them
 
-## Prerequisites
+### AWS Environment Organization
+![Organization Layout](./drawings/org-and-account-layout.drawio.png)
+
+## Initial Setup
+
+### Prerequisites
 - aws-cli/2.17.65
 - Terraform v1.9.7
 - eksctl version 0.191.0
 - kubectl v1.31.1
 - helm v3.16.1
 
-## Initial Setup
+### Instructions
 1. Create AWS Account to be Organization root
 1. Update the terraform/variables.tf with your unique information
    1. org_owner_email_prefix (billg)
@@ -57,68 +61,92 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
       terraform output -json
       aws configure --profile automation
       ```
-1. Deploy terraform/aws/r53-zones-and-records
-   1. Update your domain registrar with the nameservers from terraform output
+<!-- 1. Deploy terraform/aws/r53-zones-and-records
+   1. Update your domain registrar with the nameservers from terraform output -->
 1. Deploy terraform/aws/tgw-and-network-vpc
-1. Deploy terraform/aws/enterprise-ad
+<!-- 1. Deploy terraform/aws/enterprise-ad
    1. This deployment can take up to 2 hours and may fail several times due to AWS throttling, keep running plan and apply until complete
    1. Update the terraform/variables.tf ad_directory_id_connector_network and ad_directory_id_connector_network_failover strings with terraform output
-1. Deploy terraform/aws/client-vpn
+1. Deploy terraform/aws/client-vpn -->
 1. Deploy sdlc accounts
-   1. Deploy terraform/aws/sdlc-dev
-<!-- 1. YOU ARE HERE -->
-   <!-- 1. Deploy terraform/aws/sdlc-tst
+   1. Deploy terraform/aws/sdlc-prd
+      1. Update eksctl/sdlc-prd-blue.yaml and eksctl/sdlc-prd-failover-blue.yaml with vpc_id and private_subnets for primary and failover from terraform output
+      1. Assume automation role in account
+         ```sh
+         # replace 012345678912 with the account id
+         AWS_PROFILE=automation aws sts assume-role \
+            --role-arn arn:aws:iam::012345678912:role/automation \
+            --role-session-name sdlc-session \
+            --duration-seconds 36000
+         # replace foo, bar, and helloworld with matching outputs
+         export AWS_ACCESS_KEY_ID=foo
+         export AWS_SECRET_ACCESS_KEY=bar
+         export AWS_SESSION_TOKEN=helloworld
+         unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
+         ```
+      1. Deploy EKS Cluster
+         ```sh
+         eksctl create cluster -f blue.yml &
+         eksctl delete cluster --name scc-blue-w12-usw2-blue --region us-west-2 &
+         eksctl create nodegroup -f blue.yml &
+         eksctl delete nodegroup --cluster scc-blue-w12-usw2-blue --name general --region us-west-2 &
+         ```
+      1. Deploy cluster-services
+         ```sh
+         helm upgrade --install cluster-services . --namespace kube-system --force &
+         helm uninstall cluster-services --namespace kube-system &
+         ```
+      1. Deploy nginx welcome page
+         ```sh
+         helm upgrade --install my-nginx bitnami/nginx &
+         helm uninstall my-nginx bitnami/nginx &
+         ```
+         1. Great for troubleshooting deployments
+            ```sh
+            for i in $(seq 1 30); do helm upgrade --install my-nginx$i bitnami/nginx; done &
+            for i in $(seq 1 30); do helm uninstall my-nginx$i bitnami/nginx; done &
+            ```
+      1. Test your website
+         ```sh
+         curl www.yourwebsite.com
+         ```
+   1. Deploy terraform/aws/sdlc-tst
    1. Deploy terraform/aws/sdlc-stg
-   1. Deploy terraform/aws/sdlc-prd -->
-   1. Update eksctl/sdlc-dev-blue.yaml and eksctl/sdlc-dev-failover-blue.yaml with vpc_id and private_subnets for primary and failover from terraform output
-<!-- 1. Deploy customer accounts
+   1. Deploy terraform/aws/sdlc-prd
+1. Deploy customer accounts
    1. Deploy terraform/aws/workload-customera
-   1. Deploy terraform/aws/workload-customerb -->
-1. Deploy EKS clusters in each sdlc account (using sdlc-dev below for example)
-   1. Assume role into sdlc-dev (replace 012345678912 with correct account id)
-      ```sh
-      AWS_PROFILE=automation aws sts assume-role \
-         --role-arn arn:aws:iam::012345678912:role/automation \
-         --role-session-name sdlc-dev-session \
-         --duration-seconds 3600
-      export AWS_ACCESS_KEY_ID=foo
-      export AWS_SECRET_ACCESS_KEY=bar
-      export AWS_SESSION_TOKEN=helloworld
-      ```
-   1. Deploy EKS Cluster
-      ```sh
-      eksctl create cluster -f sdlc-dev-blue.yml
-      ```
-   1. Deploy cluster-services
-      ```sh
-      kubectl create namespace cluster-services
-      helm install cluster-services . --namespace cluster-services
-      ```
-   1. Deploy nginx welcome page
-      1. To be completed
-   1. Repeat steps for other sdlc tst, stg, and prd accounts
+   1. Deploy terraform/aws/workload-customerb
 
 ## To-Do
 - Finish out k8s cluster with an nginx welcome page deployment and alb
-- Complete sdlc test, stage, and prod
-- Complete CustomerA workload
-- Complete some kind of automation to convert drawio into png for this documentation
+   - need DNS to work in prod and carry over to downstreeam dev.DOMAIN.TLD format
+   - that way ACM works automatically
+   - might need to make a separate DOMAIN.TLD for services like clientVPN and enterprise AD domains if any
+- Federated login for devops, operations, and developers
+   - https://getstarted.awsworkshop.io/02-dev-fast-follow/02-federated-access-to-aws/02-aws-sso-ad.html
+   - https://aws.amazon.com/blogs/architecture/field-notes-integrating-active-directory-federation-service-with-aws-single-sign-on/
+   - Also need Windows Admin Server in some account
+   - Goal is to have everyone log in to SSO and their priviledges to log in and assume roles will dynamically populate based on their groups in AD
+- Triggering a DR event
+   - ACL allows no traffic in one subnet
+- Implement backend tfstate lock with dynamodb
+   - need bucket, table, and access set up uniquely for superadmin and automation users
+- Complete sdlc dev, tst, and stg
+- Need scalable solution to deploy security settings such as aws_ebs_snapshot_block_public_access, block public s3 access, default ebs encryption, etc
+   - probably need a step after account creation before iam to deploy org-security-settings
+- Opt out of all AI policy https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_ai-opt-out.html
+- Implement Rust server
+- Implement the Well-Architected Tool https://docs.aws.amazon.com/whitepapers/latest/organizing-your-aws-environment/organizing-your-aws-environment.html
+- Complete some kind of automation to convert drawings into png for this documentation
 - Base docker images for all distros
    - initially just docker images which run apt-get upgrade or yum upgrade to get patches
 - Packer and ansible example for building base AMIs
 - Centralized logging with compression and glacier archive
    - DNS logs sent to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
    - ALB logs send to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
-- Implement backend tfstate lock with dynamodb
-- Multi-AZ storage active-active if possible
-   - s3 DONE!
-   - rds
-   - efs
 - EKS autoscaling examples
    - CPU
    - Sessions
-- Triggering a DR event
-   - ACL allows no traffic in one subnet
 - SCP enforcing features
    - EBS volume encryption
    - S3 buckets never public
@@ -132,6 +160,7 @@ Codebase for provisioning managed Kubernetes (EKS) and all surrounding AWS resou
 - move desired R53 healthcheck source locations to a var and local design
 - ALB sec group with cool way of allowing ingress (nonprod through private CVPN, prod through public)
 - Mozilla Secrets OPerationS (SOPS) protects secrets in code using Key Management System (KMS) Customer Managed Key (CMK)
+- break glass entry for accounts https://docs.aws.amazon.com/whitepapers/latest/organizing-your-aws-environment/break-glass-access.html
 
 ## Known Issues
 - terraform/aws/org-ou-account-management/main.tf

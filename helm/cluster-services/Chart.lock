@@ -1,12 +1,15 @@
 dependencies:
-- name: aws-ebs-csi-driver
-  repository: https://kubernetes-sigs.github.io/aws-ebs-csi-driver
-  version: 2.35.1
 - name: cluster-autoscaler
   repository: https://kubernetes.github.io/autoscaler
   version: 9.43.0
+- name: aws-ebs-csi-driver
+  repository: https://kubernetes-sigs.github.io/aws-ebs-csi-driver
+  version: 2.35.1
+- name: external-dns
+  repository: https://kubernetes-sigs.github.io/external-dns
+  version: 1.15.0
 - name: aws-load-balancer-controller
   repository: https://aws.github.io/eks-charts
   version: 1.9.0
-digest: sha256:04d80bb24de372222604025a93c962c6d4037006b0f5ce1930b2c509a2cdaab1
-generated: "2024-10-04T00:59:50.253815637-07:00"
+digest: sha256:c0da5363f717cfb2927207ef7368b00643ebac0af71caaa55948fbef7dc0c525
+generated: "2024-10-10T00:24:18.3718886-07:00"
