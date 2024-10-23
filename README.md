@@ -103,8 +103,8 @@
          ```
          1. Great for troubleshooting deployments
             ```sh
-            for i in $(seq 1 30); do helm upgrade --install my-nginx$i bitnami/nginx; done
-            for i in $(seq 1 30); do helm uninstall my-nginx$i bitnami/nginx; done
+            for i in $(seq 1 30); do helm upgrade --install my-nginx$i bitnami/nginx; done &
+            for i in $(seq 1 30); do helm uninstall my-nginx$i bitnami/nginx; done &
             ```
       1. Test your website
          ```sh

@@ -259,8 +259,20 @@ locals {
     "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.primary_short}-blue"  = "shared"
     "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.primary_short}-green" = "shared"
   }
-  public_subnet_tags_primary = { "kubernetes.io/role/elb" = 1 }
-  private_subnet_tags_primary = { "kubernetes.io/role/internal-elb" = 1 }
+
+  public_subnet_tags_primary = {
+    "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.primary_short}-blue"  = "shared"
+    "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.primary_short}-green" = "shared"
+    "kubernetes.io/role/alb-ingress"  = 1
+    "kubernetes.io/role/elb"          = 1
+  }
+
+  private_subnet_tags_primary = {
+    "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.primary_short}-blue"  = "shared"
+    "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.primary_short}-green" = "shared"
+    "kubernetes.io/role/alb-ingress"  = 1
+    "kubernetes.io/role/internal-elb" = 1
+  }
 
   vpc_tags_failover = {
     "${local.resource_name_stub}-${var.region.failover_short}-blue"  = "shared"
