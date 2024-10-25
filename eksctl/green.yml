@@ -19,7 +19,7 @@ vpc:
       private-three:  { id: subnet-id }
 
 secretsEncryption:
-  keyARN:
+  keyARN: 
 
 cloudWatch:
   clusterLogging:
@@ -45,6 +45,7 @@ iam:
       createServiceAccount: true
       wellKnownPolicies:
         awsLoadBalancerController: true
+      permissionPolicyARNs: [ "arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess" ]
 
     - namespace: kube-system
       serviceAccountName: external-dns
