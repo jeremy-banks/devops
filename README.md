@@ -1,7 +1,7 @@
 # DevOps
 
 ## Project Goals
-1. Create my ideal codebase to "lift and shift" a startup into AWS and EKS
+1. Create my ideal codebase to "lift and shift" a startup or small organization into AWS and EKS
 1. Using minimal number tools with high market share utilization (eg terraform, eksctl, helm)
 1. Demo with k8s nginx welcome page
 
@@ -61,13 +61,7 @@
       terraform output -json
       aws configure --profile automation
       ```
-<!-- 1. Deploy terraform/aws/r53-zones-and-records
-   1. Update your domain registrar with the nameservers from terraform output -->
 1. Deploy terraform/aws/tgw-and-network-vpc
-<!-- 1. Deploy terraform/aws/enterprise-ad
-   1. This deployment can take up to 2 hours and may fail several times due to AWS throttling, keep running plan and apply until complete
-   1. Update the terraform/variables.tf ad_directory_id_connector_network and ad_directory_id_connector_network_failover strings with terraform output
-1. Deploy terraform/aws/client-vpn -->
 1. Deploy sdlc accounts
    1. Deploy terraform/aws/sdlc-prd
       1. Update eksctl/sdlc-prd-blue.yaml and eksctl/sdlc-prd-failover-blue.yaml with vpc_id and private_subnets for primary and failover from terraform output
@@ -85,6 +79,7 @@
          unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
          ```
       1. Deploy EKS Cluster
+         Update the vpc-id and subnet-ids in blue.yml
          ```sh
          eksctl create cluster -f blue.yml &
          eksctl delete cluster --name scc-blue-w12-usw2-blue --region us-west-2 &
@@ -113,11 +108,19 @@
    1. Deploy terraform/aws/sdlc-tst
    1. Deploy terraform/aws/sdlc-stg
    1. Deploy terraform/aws/sdlc-prd
+<!-- 1. Deploy terraform/aws/enterprise-ad
+   1. This deployment can take up to 2 hours and may fail several times due to AWS throttling, keep running plan and apply until complete
+   1. Update the terraform/variables.tf ad_directory_id_connector_network and ad_directory_id_connector_network_failover strings with terraform output
+1. Deploy terraform/aws/client-vpn -->
 1. Deploy customer accounts
    1. Deploy terraform/aws/workload-customera
    1. Deploy terraform/aws/workload-customerb
 
 ## To-Do
+- network and sdlc need different deployment options
+   - 2x subnets instead of 3x (cost)
+   - multi-region instead of not
+      - probably need to be very granular here with variable definitions and deployments
 - Federated login for devops, operations, and developers
    - https://getstarted.awsworkshop.io/02-dev-fast-follow/02-federated-access-to-aws/02-aws-sso-ad.html
    - https://aws.amazon.com/blogs/architecture/field-notes-integrating-active-directory-federation-service-with-aws-single-sign-on/
