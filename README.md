@@ -98,13 +98,13 @@
          ```
       1. Deploy nginx welcome page
          ```sh
-         helm upgrade --install my-nginx bitnami/nginx &
-         helm uninstall my-nginx bitnami/nginx &
+         helm upgrade --install nginx-welcome bitnami/nginx -f values.yaml --force &
+         helm uninstall nginx-welcome &
          ```
          1. Great for troubleshooting deployments
             ```sh
-            for i in $(seq 1 30); do helm upgrade --install my-nginx$i bitnami/nginx; done &
-            for i in $(seq 1 30); do helm uninstall my-nginx$i bitnami/nginx; done &
+            for i in $(seq 1 30); do helm upgrade --install nginx-welcome$i bitnami/nginx; done &
+            for i in $(seq 1 30); do helm uninstall nginx-welcome$i bitnami/nginx; done &
             ```
       1. Test your website
          ```sh
@@ -118,15 +118,12 @@
    1. Deploy terraform/aws/workload-customerb
 
 ## To-Do
-- Finish out k8s cluster with an nginx welcome page deployment and alb
-   - need DNS to work in prod and carry over to downstreeam dev.DOMAIN.TLD format
-   - that way ACM works automatically
-   - might need to make a separate DOMAIN.TLD for services like clientVPN and enterprise AD domains if any
 - Federated login for devops, operations, and developers
    - https://getstarted.awsworkshop.io/02-dev-fast-follow/02-federated-access-to-aws/02-aws-sso-ad.html
    - https://aws.amazon.com/blogs/architecture/field-notes-integrating-active-directory-federation-service-with-aws-single-sign-on/
    - Also need Windows Admin Server in some account
    - Goal is to have everyone log in to SSO and their priviledges to log in and assume roles will dynamically populate based on their groups in AD
+   - might need to make a separate DOMAIN.TLD for services like clientVPN and enterprise AD domains if any
 - Triggering a DR event
    - ACL allows no traffic in one subnet
 - Implement backend tfstate lock with dynamodb

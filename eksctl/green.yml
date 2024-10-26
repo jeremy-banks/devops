@@ -7,19 +7,19 @@ metadata:
   version: "1.31"
 
 vpc:
-  id: vpc-id
   subnets:
-    public:
-      public-one:    { id: subnet-id }
-      public-two:    { id: subnet-id }
-      public-three:  { id: subnet-id }
     private:
       private-one:    { id: subnet-id }
       private-two:    { id: subnet-id }
       private-three:  { id: subnet-id }
+    public:
+      public-one:     { id: subnet-id }
+      public-two:     { id: subnet-id }
+      public-three:   { id: subnet-id }
+  id: vpc-id
 
 secretsEncryption:
-  keyARN:
+  keyARN: 
 
 cloudWatch:
   clusterLogging:
@@ -45,6 +45,7 @@ iam:
       createServiceAccount: true
       wellKnownPolicies:
         awsLoadBalancerController: true
+      permissionPolicyARNs: [ "arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess" ]
 
     - namespace: kube-system
       serviceAccountName: external-dns

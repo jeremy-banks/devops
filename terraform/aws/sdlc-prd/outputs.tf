@@ -10,21 +10,17 @@ output "kms_arn_primary" {
 
 output "vpc_primary" {
   value = {
-    id = module.vpc_primary.vpc_id
-
-    subnets = {
-      public = {
-        public-one  = { id = module.vpc_primary.public_subnets[0] }
-        public-two  = { id = module.vpc_primary.public_subnets[1] }
-        public-three = { id = module.vpc_primary.public_subnets[2] }
-      }
-
-      private = {
-        private-one  = { id = module.vpc_primary.private_subnets[0] }
-        private-two  = { id = module.vpc_primary.private_subnets[1] }
-        private-three = { id = module.vpc_primary.private_subnets[2] }
-      }
+    subnets_private = {
+      0 = module.vpc_primary.private_subnets[0]
+      1 = module.vpc_primary.private_subnets[1]
+      2 = module.vpc_primary.private_subnets[2]
     }
+    subnets_public = {
+      0 = module.vpc_primary.public_subnets[0]
+      1 = module.vpc_primary.public_subnets[1]
+      2 = module.vpc_primary.public_subnets[2]
+    }
+    vpc_id = module.vpc_primary.vpc_id
   }
 }
 
@@ -50,22 +46,18 @@ output "kms_arn_failover" {
 
 output "vpc_failover" {
   value = {
-    id = module.vpc_failover.vpc_id
-
-    subnets = {
-      public = {
-        public-one  = { id = module.vpc_failover.public_subnets[0] }
-        public-two  = { id = module.vpc_failover.public_subnets[1] }
-        public-three = { id = module.vpc_failover.public_subnets[2] }
-      }
-
-      private = {
-        private-one  = { id = module.vpc_failover.private_subnets[0] }
-        private-two  = { id = module.vpc_failover.private_subnets[1] }
-        private-three = { id = module.vpc_failover.private_subnets[2] }
-      }
+    subnets_private = {
+      0 = module.vpc_failover.private_subnets[0]
+      1 = module.vpc_failover.private_subnets[1]
+      2 = module.vpc_failover.private_subnets[2]
     }
-  }
+    subnets_public = {
+      0 = module.vpc_failover.public_subnets[0]
+      1 = module.vpc_failover.public_subnets[1]
+      2 = module.vpc_failover.public_subnets[2]
+    }
+    vpc_id = module.vpc_failover.vpc_id
+ }
 }
 
 output "vpc_nat_public_ips_failover" {
