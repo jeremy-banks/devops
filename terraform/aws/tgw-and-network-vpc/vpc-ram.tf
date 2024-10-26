@@ -22,10 +22,7 @@ resource "aws_ram_principal_association" "vpc_primary_security_ou" {
 resource "aws_ram_resource_association" "vpc_primary_subnets" {
   provider = aws.network
 
-  count = length(flatten([
-    module.vpc_primary[0].public_subnet_arns,
-    module.vpc_primary[0].private_subnet_arns,
-  ]))
+  count = var.vpc_enabled ? 1 : 0
   
   resource_arn  = flatten([
     module.vpc_primary[0].public_subnet_arns,
