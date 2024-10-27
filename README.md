@@ -20,20 +20,25 @@
 
 #### Org and Accounts
 ![Org and Accounts Layout](./drawings/org-and-account-layout.drawio.png)
+
 foo bar hello world
 
 #### VPC Options
 ![VPC Layout Failover](./drawings/vpc-layout-failover.drawio.png)
+
 foo bar hello world
 
 ![VPC Layout](./drawings/vpc-layout.drawio.png)
+
 foo bar hello world
 
 #### VPC Subnet Options
 ![VPC Subnet Five 9s Layout](./drawings/vpc-subnet-layout-five9s.drawio.png)
+
 foo bar hello world
 
 ![VPC Subnet Four 9s Layout](./drawings/vpc-subnet-layout-four9s.drawio.png)
+
 foo bar hello world
 
 ## Initial Setup
