@@ -1,22 +1,22 @@
-resource "aws_ram_resource_share" "vpc_primary" {
+resource "aws_ram_resource_share" "network_primary" {
   provider = aws.network
 
-  name                      = "${local.resource_name_stub}-${var.region.primary_short}-${local.this_slug}-vpc"
+  name                      = "${local.resource_name_stub}-${var.region.primary_short}-${local.this_slug}-ram"
   allow_external_principals = false
 }
 
-resource "aws_ram_principal_association" "vpc_primary_infrastructure_ou" {
+resource "aws_ram_principal_association" "network_primary_infrastructure_ou" {
   provider = aws.network
 
   principal          = data.aws_organizations_organizational_unit.infrastructure.arn
-  resource_share_arn = aws_ram_resource_share.vpc_primary.arn
+  resource_share_arn = aws_ram_resource_share.network_primary.arn
 }
 
-resource "aws_ram_principal_association" "vpc_primary_security_ou" {
+resource "aws_ram_principal_association" "network_primary_security_ou" {
   provider = aws.network
 
   principal          = data.aws_organizations_organizational_unit.security.arn
-  resource_share_arn = aws_ram_resource_share.vpc_primary.arn
+  resource_share_arn = aws_ram_resource_share.network_primary.arn
 }
 
 resource "aws_ram_resource_association" "vpc_primary_subnets" {
@@ -32,28 +32,28 @@ resource "aws_ram_resource_association" "vpc_primary_subnets" {
     module.vpc_primary[0].private_subnet_arns
   ))[count.index]
   
-  resource_share_arn = aws_ram_resource_share.vpc_primary.id
+  resource_share_arn = aws_ram_resource_share.network_primary.id
 }
 
-resource "aws_ram_resource_share" "vpc_failover" {
+resource "aws_ram_resource_share" "network_failover" {
   provider = aws.network_failover
 
-  name                      = "${local.resource_name_stub}-${var.region.failover_short}-${local.this_slug}-vpc"
+  name                      = "${local.resource_name_stub}-${var.region.failover_short}-${local.this_slug}-ram"
   allow_external_principals = false
 }
 
-resource "aws_ram_principal_association" "vpc_failover_infrastructure_ou" {
+resource "aws_ram_principal_association" "network_failover_infrastructure_ou" {
   provider = aws.network_failover
 
   principal          = data.aws_organizations_organizational_unit.infrastructure.arn
-  resource_share_arn = aws_ram_resource_share.vpc_failover.arn
+  resource_share_arn = aws_ram_resource_share.network_failover.arn
 }
 
-resource "aws_ram_principal_association" "vpc_failover_security_ou" {
+resource "aws_ram_principal_association" "network_failover_security_ou" {
   provider = aws.network_failover
 
   principal          = data.aws_organizations_organizational_unit.security.arn
-  resource_share_arn = aws_ram_resource_share.vpc_failover.arn
+  resource_share_arn = aws_ram_resource_share.network_failover.arn
 }
 
 resource "aws_ram_resource_association" "vpc_failover_subnets" {
@@ -69,5 +69,5 @@ resource "aws_ram_resource_association" "vpc_failover_subnets" {
     module.vpc_failover[0].private_subnet_arns
   ))[count.index]
   
-  resource_share_arn = aws_ram_resource_share.vpc_failover.id
+  resource_share_arn = aws_ram_resource_share.network_failover.id
 }

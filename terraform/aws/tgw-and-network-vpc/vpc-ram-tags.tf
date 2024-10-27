@@ -1,7 +1,7 @@
 resource "aws_ec2_tag" "vpc_identity" {
   provider    = aws.identity
   depends_on  = [
-    aws_ram_principal_association.vpc_primary_infrastructure_ou,
+    aws_ram_principal_association.network_primary_infrastructure_ou,
     aws_ram_resource_association.vpc_primary_subnets,
   ]
   count = length(local.vpc_tags_primary)
@@ -14,7 +14,7 @@ resource "aws_ec2_tag" "vpc_identity" {
 resource "aws_ec2_tag" "subnets_pub_identity" {
   provider    = aws.identity
   depends_on  = [
-    aws_ram_principal_association.vpc_primary_infrastructure_ou,
+    aws_ram_principal_association.network_primary_infrastructure_ou,
     aws_ram_resource_association.vpc_primary_subnets,
   ]
   count       = length(module.vpc_primary[0].public_subnets)
@@ -27,7 +27,7 @@ resource "aws_ec2_tag" "subnets_pub_identity" {
 resource "aws_ec2_tag" "subnets_pvt_identity" {
   provider    = aws.identity
   depends_on  = [
-    aws_ram_principal_association.vpc_primary_infrastructure_ou,
+    aws_ram_principal_association.network_primary_infrastructure_ou,
     aws_ram_resource_association.vpc_primary_subnets,
   ]
   count       = length(module.vpc_primary[0].private_subnets)
@@ -40,7 +40,7 @@ resource "aws_ec2_tag" "subnets_pvt_identity" {
 resource "aws_ec2_tag" "vpc_log_archive" {
   provider    = aws.log_archive
   depends_on  = [
-    aws_ram_principal_association.vpc_primary_security_ou,
+    aws_ram_principal_association.network_primary_security_ou,
     aws_ram_resource_association.vpc_primary_subnets,
   ]
   count = length(local.vpc_tags_primary)
@@ -53,7 +53,7 @@ resource "aws_ec2_tag" "vpc_log_archive" {
 resource "aws_ec2_tag" "subnets_pub_log_archive" {
   provider    = aws.log_archive
   depends_on  = [
-    aws_ram_principal_association.vpc_primary_security_ou,
+    aws_ram_principal_association.network_primary_security_ou,
     aws_ram_resource_association.vpc_primary_subnets,
   ]
   count       = length(module.vpc_primary[0].public_subnets)
@@ -66,7 +66,7 @@ resource "aws_ec2_tag" "subnets_pub_log_archive" {
 resource "aws_ec2_tag" "subnets_pvt_log_archive" {
   provider    = aws.log_archive
   depends_on  = [
-    aws_ram_principal_association.vpc_primary_security_ou,
+    aws_ram_principal_association.network_primary_security_ou,
     aws_ram_resource_association.vpc_primary_subnets,
   ]
   count       = length(module.vpc_primary[0].private_subnets)
@@ -79,7 +79,7 @@ resource "aws_ec2_tag" "subnets_pvt_log_archive" {
 resource "aws_ec2_tag" "vpc_security_tooling" {
   provider    = aws.security_tooling
   depends_on  = [
-    aws_ram_principal_association.vpc_primary_security_ou,
+    aws_ram_principal_association.network_primary_security_ou,
     aws_ram_resource_association.vpc_primary_subnets,
   ]
   count = length(local.vpc_tags_primary)
@@ -92,7 +92,7 @@ resource "aws_ec2_tag" "vpc_security_tooling" {
 resource "aws_ec2_tag" "subnets_pub_security_tooling" {
   provider    = aws.security_tooling
   depends_on  = [
-    aws_ram_principal_association.vpc_primary_security_ou,
+    aws_ram_principal_association.network_primary_security_ou,
     aws_ram_resource_association.vpc_primary_subnets,
   ]
   count       = length(module.vpc_primary[0].public_subnets)
@@ -105,7 +105,7 @@ resource "aws_ec2_tag" "subnets_pub_security_tooling" {
 resource "aws_ec2_tag" "subnets_pvt_security_tooling" {
   provider    = aws.security_tooling
   depends_on  = [
-    aws_ram_principal_association.vpc_primary_security_ou,
+    aws_ram_principal_association.network_primary_security_ou,
     aws_ram_resource_association.vpc_primary_subnets,
   ]
   count       = length(module.vpc_primary[0].private_subnets)
@@ -118,7 +118,7 @@ resource "aws_ec2_tag" "subnets_pvt_security_tooling" {
 resource "aws_ec2_tag" "vpc_identity_failover" {
   provider    = aws.identity_failover
   depends_on = [
-    aws_ram_principal_association.vpc_failover_infrastructure_ou,
+    aws_ram_principal_association.network_failover_infrastructure_ou,
     aws_ram_resource_association.vpc_failover_subnets,
   ]
   count = var.vpc_failover_enabled ? length(local.vpc_tags_failover) : 0
@@ -131,7 +131,7 @@ resource "aws_ec2_tag" "vpc_identity_failover" {
 resource "aws_ec2_tag" "subnets_pub_identity_failover" {
   provider    = aws.identity_failover
   depends_on = [
-    aws_ram_principal_association.vpc_failover_infrastructure_ou,
+    aws_ram_principal_association.network_failover_infrastructure_ou,
     aws_ram_resource_association.vpc_failover_subnets,
   ]
   count       = var.vpc_failover_enabled ? length(module.vpc_failover[0].public_subnets) : 0
@@ -144,7 +144,7 @@ resource "aws_ec2_tag" "subnets_pub_identity_failover" {
 resource "aws_ec2_tag" "subnets_pvt_identity_failover" {
   provider    = aws.identity_failover
   depends_on = [
-    aws_ram_principal_association.vpc_failover_infrastructure_ou,
+    aws_ram_principal_association.network_failover_infrastructure_ou,
     aws_ram_resource_association.vpc_failover_subnets,
   ]
   count       = var.vpc_failover_enabled ? length(module.vpc_failover[0].private_subnets) : 0
@@ -157,7 +157,7 @@ resource "aws_ec2_tag" "subnets_pvt_identity_failover" {
 resource "aws_ec2_tag" "vpc_log_archive_failover" {
   provider    = aws.log_archive_failover
   depends_on = [
-    aws_ram_principal_association.vpc_failover_security_ou,
+    aws_ram_principal_association.network_failover_security_ou,
     aws_ram_resource_association.vpc_failover_subnets,
   ]
   count = var.vpc_failover_enabled ? length(local.vpc_tags_failover) : 0
@@ -171,7 +171,7 @@ resource "aws_ec2_tag" "vpc_log_archive_failover" {
 resource "aws_ec2_tag" "subnets_pub_log_archive_failover" {
   provider    = aws.log_archive_failover
   depends_on = [
-    aws_ram_principal_association.vpc_failover_security_ou,
+    aws_ram_principal_association.network_failover_security_ou,
     aws_ram_resource_association.vpc_failover_subnets,
   ]
   count       = var.vpc_failover_enabled ? length(module.vpc_failover[0].public_subnets) : 0
@@ -184,7 +184,7 @@ resource "aws_ec2_tag" "subnets_pub_log_archive_failover" {
 resource "aws_ec2_tag" "subnets_pvt_log_archive_failover" {
   provider    = aws.log_archive_failover
   depends_on = [
-    aws_ram_principal_association.vpc_failover_security_ou,
+    aws_ram_principal_association.network_failover_security_ou,
     aws_ram_resource_association.vpc_failover_subnets,
   ]
   count       = var.vpc_failover_enabled ? length(module.vpc_failover[0].private_subnets) : 0
@@ -197,7 +197,7 @@ resource "aws_ec2_tag" "subnets_pvt_log_archive_failover" {
 resource "aws_ec2_tag" "vpc_security_tooling_failover" {
   provider    = aws.security_tooling_failover
   depends_on = [
-    aws_ram_principal_association.vpc_failover_security_ou,
+    aws_ram_principal_association.network_failover_security_ou,
     aws_ram_resource_association.vpc_failover_subnets,
   ]
   count = var.vpc_failover_enabled ? length(local.vpc_tags_failover) : 0
@@ -210,7 +210,7 @@ resource "aws_ec2_tag" "vpc_security_tooling_failover" {
 resource "aws_ec2_tag" "subnets_pub_security_tooling_failover" {
   provider    = aws.security_tooling_failover
   depends_on = [
-    aws_ram_principal_association.vpc_failover_security_ou,
+    aws_ram_principal_association.network_failover_security_ou,
     aws_ram_resource_association.vpc_failover_subnets,
   ]
   count       = var.vpc_failover_enabled ? length(module.vpc_failover[0].public_subnets) : 0
@@ -223,7 +223,7 @@ resource "aws_ec2_tag" "subnets_pub_security_tooling_failover" {
 resource "aws_ec2_tag" "subnets_pvt_security_tooling_failover" {
   provider    = aws.security_tooling_failover
   depends_on = [
-    aws_ram_principal_association.vpc_failover_security_ou,
+    aws_ram_principal_association.network_failover_security_ou,
     aws_ram_resource_association.vpc_failover_subnets,
   ]
   count       = var.vpc_failover_enabled ? length(module.vpc_failover[0].private_subnets) : 0
