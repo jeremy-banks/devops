@@ -1,6 +1,8 @@
 resource "aws_ram_resource_share" "tgw_primary" {
   provider = aws.network
 
+  count = 1
+
   name                      = "${local.resource_name_stub}-${var.region.primary_short}-${local.this_slug}-tgw"
   allow_external_principals = false
 }
@@ -8,29 +10,37 @@ resource "aws_ram_resource_share" "tgw_primary" {
 resource "aws_ram_resource_association" "tgw_primary" {
   provider = aws.network
 
-  resource_arn       = aws_ec2_transit_gateway.tgw_primary.arn
-  resource_share_arn = aws_ram_resource_share.tgw_primary.arn
+  count = 1
+
+  resource_arn       = aws_ec2_transit_gateway.tgw_primary[0].arn
+  resource_share_arn = aws_ram_resource_share.tgw_primary[0].arn
 }
 
 resource "aws_ram_principal_association" "tgw_primary_ou_infrastructure" {
   provider = aws.network
 
+  count = 1
+
   principal          = data.aws_organizations_organizational_unit.infrastructure.arn
-  resource_share_arn = aws_ram_resource_share.tgw_primary.arn
+  resource_share_arn = aws_ram_resource_share.tgw_primary[0].arn
 }
 
 resource "aws_ram_principal_association" "tgw_primary_ou_security" {
   provider = aws.network
 
+  count = 1
+
   principal          = data.aws_organizations_organizational_unit.security.arn
-  resource_share_arn = aws_ram_resource_share.tgw_primary.arn
+  resource_share_arn = aws_ram_resource_share.tgw_primary[0].arn
 }
 
 resource "aws_ram_principal_association" "tgw_primary_ou_workloads" {
   provider = aws.network
 
+  count = 1
+
   principal          = data.aws_organizations_organizational_unit.workloads.arn
-  resource_share_arn = aws_ram_resource_share.tgw_primary.arn
+  resource_share_arn = aws_ram_resource_share.tgw_primary[0].arn
 }
 
 resource "aws_ram_resource_share" "tgw_failover" {

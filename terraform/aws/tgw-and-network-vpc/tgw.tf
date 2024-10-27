@@ -1,6 +1,8 @@
 resource "aws_ec2_transit_gateway" "tgw_primary" {
   provider = aws.network
 
+  count = 1
+
   amazon_side_asn = var.tgw_asn.primary
   auto_accept_shared_attachments      = "enable"
   default_route_table_association     = "enable"
@@ -37,7 +39,7 @@ resource "aws_ec2_transit_gateway_peering_attachment" "tgw_peering" {
 
   peer_account_id         = data.aws_caller_identity.network.account_id
   peer_region             = var.region.primary
-  peer_transit_gateway_id = aws_ec2_transit_gateway.tgw_primary.id
+  peer_transit_gateway_id = aws_ec2_transit_gateway.tgw_primary[0].id
   transit_gateway_id      = aws_ec2_transit_gateway.tgw_failover[0].id
 }
 
