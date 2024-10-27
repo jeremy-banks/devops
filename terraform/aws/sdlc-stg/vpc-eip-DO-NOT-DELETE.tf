@@ -3,7 +3,7 @@ resource "aws_eip" "vpc_nat_primary" {
 
   count = var.vpc_enabled ? length(local.vpc_azs_primary) : 0
   domain = "vpc"
-  tags = { "Name" = "${local.resource_name_stub_primary}-${local.this_slug}-vpc-eip-DO-NOT-DELETE-${count.index}" }
+  tags = { "Name" = "${local.vpc_name_primary}-eip-DO-NOT-DELETE-${count.index}" }
 
   # lifecycle { prevent_destroy = true } # YOU NEVER WANT TO DELETE THESE
 }
@@ -13,7 +13,7 @@ resource "aws_eip" "vpc_nat_failover" {
 
   count = var.vpc_enabled ? length(local.vpc_azs_failover) : 0
   domain = "vpc"
-  tags = { "Name" = "${local.resource_name_stub_failover}-${local.this_slug}-vpc-eip-DO-NOT-DELETE-${count.index}" }
+  tags = { "Name" = "${local.vpc_name_failover}-eip-DO-NOT-DELETE-${count.index}" }
 
   # lifecycle { prevent_destroy = true } # YOU NEVER WANT TO DELETE THESE
 }

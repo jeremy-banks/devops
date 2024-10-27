@@ -30,9 +30,9 @@ module "vpc_primary" {
   public_subnets  = local.vpc_subnets_public_primary
   private_subnets = local.vpc_subnets_private_primary
 
-  public_subnet_tags  = local.public_subnet_tags_primary
-  private_subnet_tags = local.private_subnet_tags_primary
-  vpc_tags            = merge({"Name" = "${local.resource_name_stub_primary}-${local.this_slug}-vpc"}, local.vpc_tags_primary)
+  public_subnet_tags  = local.subnet_pub_tags_primary
+  private_subnet_tags = local.subnet_pvt_tags_primary
+  vpc_tags            = merge({"Name" = "${local.vpc_name_primary}"}, local.vpc_tags_primary)
 
   manage_default_security_group   = true
   default_security_group_name     = "NEVER-USE-THIS-SECURITY-GROUP"
@@ -96,9 +96,9 @@ module "vpc_failover" {
   public_subnets  = local.vpc_subnets_public_failover
   private_subnets = local.vpc_subnets_private_failover
 
-  public_subnet_tags  = local.public_subnet_tags_failover
-  private_subnet_tags = local.private_subnet_tags_failover
-  vpc_tags            = merge({"Name" = "${local.resource_name_stub_failover}-${local.this_slug}-vpc"}, local.vpc_tags_primary)
+  public_subnet_tags  = local.subnet_pub_tags_failover
+  private_subnet_tags = local.subnet_pvt_tags_failover
+  vpc_tags            = merge({"Name" = "${local.vpc_name_failover}"}, local.vpc_tags_primary)
 
   manage_default_security_group   = true
   default_security_group_name     = "NEVER-USE-THIS-SECURITY-GROUP"

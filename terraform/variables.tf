@@ -277,8 +277,8 @@ locals {
     "k8s.io/cluster-autoscaler/enabled" = "true"
   })
 
-  public_subnet_tags_primary = merge(local.k8s_tags_primary, local.k8s_tags_subnet_pub)
-  private_subnet_tags_primary = merge(local.k8s_tags_primary, local.k8s_tags_subnet_pvt)
+  subnet_pub_tags_primary = merge(local.k8s_tags_primary, local.k8s_tags_subnet_pub)
+  subnet_pvt_tags_primary = merge(local.k8s_tags_primary, local.k8s_tags_subnet_pvt)
 
   vpc_tags_failover = merge(local.k8s_tags_failover, {
     "${local.resource_name_stub_failover}-blue"  = "shared"
@@ -288,8 +288,8 @@ locals {
     "k8s.io/cluster-autoscaler/enabled" = "true"
   })
 
-  public_subnet_tags_failover = merge(local.k8s_tags_failover, local.k8s_tags_subnet_pub)
-  private_subnet_tags_failover = merge(local.k8s_tags_failover, local.k8s_tags_subnet_pvt)
+  subnet_pub_tags_failover = merge(local.k8s_tags_failover, local.k8s_tags_subnet_pub)
+  subnet_pvt_tags_failover = merge(local.k8s_tags_failover, local.k8s_tags_subnet_pvt)
 
   iam_access_management_tag_key = var.iam_access_management_tag_key
   iam_access_management_tag_value = "${local.resource_name_stub}"
