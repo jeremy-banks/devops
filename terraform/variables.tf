@@ -144,9 +144,15 @@ variable "vpc_five9s_enabled" {
   default = false
 }
 
-variable "vpc_endpoints_enabled" {
+variable "vpc_network_endpoints_enabled" {
   type    = bool
   default = false
+}
+
+variable "vpc_network_endpoint_services" {
+  description = "ec2, rds, s3..."
+  type        = list(string)
+  default     = [""]
 }
 
 variable "vpc_failover_enabled" {

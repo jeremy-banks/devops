@@ -117,9 +117,11 @@
    1. Deploy terraform/aws/workload-customerb
 
 ## To-Do
-- network and sdlc need different deployment options
-   - fix shared subnet tags so EKS can use them
-   - expand vpc-endpoints in network vpc
+- network and sdlc need different deployment options for whether a VPC is created
+   - sdlc needs an elegant way to create DNS records to point to VPC endpoints in the shared network VPC
+     - even if a VPC isn't created, a route would still need to exist for the account
+     - obviously if no VPC is being created then the endpoint wouldn't need ot be created either
+   - needs to support multi-regional failover as well
 - Federated login for devops, operations, and developers
    - https://getstarted.awsworkshop.io/02-dev-fast-follow/02-federated-access-to-aws/02-aws-sso-ad.html
    - https://aws.amazon.com/blogs/architecture/field-notes-integrating-active-directory-federation-service-with-aws-single-sign-on/
