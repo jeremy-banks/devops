@@ -3,7 +3,7 @@ module "vpc_primary" {
   version = "5.13.0"
   providers = { aws = aws.network }
 
-  count = var.vpc_enabled ? 1 : 0
+  count = 1
 
   enable_nat_gateway      = true
   reuse_nat_ips           = true
@@ -50,7 +50,7 @@ module "vpc_main_sg_primary" {
   version = "5.2.0"
   providers = { aws = aws.network }
 
-  count = var.vpc_enabled ? 1 : 0
+  count = 1
 
   name        = "${local.resource_name_stub}-${var.region.primary_short}-main"
   use_name_prefix = false
@@ -77,7 +77,7 @@ module "vpc_failover" {
   version = "5.13.0"
   providers = { aws = aws.network_failover }
 
-  count = var.vpc_enabled && var.vpc_failover_enabled ? 1 : 0
+  count = var.vpc_failover_enabled ? 1 : 0
 
   enable_nat_gateway      = true
   reuse_nat_ips           = true
@@ -124,7 +124,7 @@ module "vpc_main_sg_failover" {
   version = "5.2.0"
   providers = { aws = aws.network_failover }
 
-  count = var.vpc_enabled && var.vpc_failover_enabled ? 1 : 0
+  count = var.vpc_failover_enabled ? 1 : 0
 
   name        = "${local.resource_name_stub}-${var.region.failover_short}-main"
   use_name_prefix = false

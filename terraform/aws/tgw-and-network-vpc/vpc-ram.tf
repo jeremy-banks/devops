@@ -22,10 +22,10 @@ resource "aws_ram_principal_association" "network_primary_security_ou" {
 resource "aws_ram_resource_association" "vpc_primary_subnets" {
   provider = aws.network
 
-  count = var.vpc_enabled ? length(flatten(concat(
+  count = length(flatten(concat(
     module.vpc_primary[0].public_subnet_arns,
     module.vpc_primary[0].private_subnet_arns
-  ))) : 0
+  )))
   
   resource_arn = flatten(concat(
     module.vpc_primary[0].public_subnet_arns,
@@ -59,7 +59,7 @@ resource "aws_ram_principal_association" "network_failover_security_ou" {
 resource "aws_ram_resource_association" "vpc_failover_subnets" {
   provider = aws.network_failover
 
-  count = var.vpc_enabled && var.vpc_failover_enabled ? length(flatten(concat(
+  count = var.vpc_failover_enabled ? length(flatten(concat(
     module.vpc_failover[0].public_subnet_arns,
     module.vpc_failover[0].private_subnet_arns
   ))) : 0

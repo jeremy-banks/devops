@@ -16,7 +16,7 @@ resource "aws_ec2_transit_gateway" "tgw_primary" {
 resource "aws_ec2_transit_gateway" "tgw_failover" {
   provider = aws.network_failover
 
-  count = var.vpc_enabled && var.vpc_failover_enabled ? 1 : 0
+  count = var.vpc_failover_enabled ? 1 : 0
 
   amazon_side_asn = var.tgw_asn.failover
   auto_accept_shared_attachments      = "enable"
@@ -35,7 +35,7 @@ data "aws_caller_identity" "network" {
 resource "aws_ec2_transit_gateway_peering_attachment" "tgw_peering" {
   provider = aws.network_failover
 
-  count = var.vpc_enabled && var.vpc_failover_enabled ? 1 : 0
+  count = var.vpc_failover_enabled ? 1 : 0
 
   peer_account_id         = data.aws_caller_identity.network.account_id
   peer_region             = var.region.primary
@@ -46,7 +46,7 @@ resource "aws_ec2_transit_gateway_peering_attachment" "tgw_peering" {
 resource "aws_ec2_transit_gateway_peering_attachment_accepter" "tgw_peering" {
   provider = aws.network
   
-  count = var.vpc_enabled && var.vpc_failover_enabled ? 1 : 0
+  count = var.vpc_failover_enabled ? 1 : 0
 
   transit_gateway_attachment_id = aws_ec2_transit_gateway_peering_attachment.tgw_peering[0].id
 }
