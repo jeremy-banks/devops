@@ -256,10 +256,17 @@ locals {
     "kubernetes.io/cluster/${local.resource_name_stub_primary}-blue"  = "shared"
     "kubernetes.io/cluster/${local.resource_name_stub_primary}-green" = "shared"
   }
-
   k8s_tags_failover = {
     "kubernetes.io/cluster/${local.resource_name_stub_failover}-blue"  = "shared"
     "kubernetes.io/cluster/${local.resource_name_stub_failover}-green" = "shared"
+  }
+  k8s_tags_subnet_pub = {
+    "kubernetes.io/role/alb-ingress"  = 1
+    "kubernetes.io/role/elb"          = 1    
+  }
+  k8s_tags_subnet_pvt = {
+    "kubernetes.io/role/alb-ingress"  = 1
+    "kubernetes.io/role/internal-elb" = 1
   }
 
   vpc_tags_primary = merge(local.k8s_tags_primary, {
@@ -270,15 +277,8 @@ locals {
     "k8s.io/cluster-autoscaler/enabled" = "true"
   })
 
-  public_subnet_tags_primary = merge(local.k8s_tags_primary, {
-    "kubernetes.io/role/alb-ingress"  = 1
-    "kubernetes.io/role/elb"          = 1
-  })
-
-  private_subnet_tags_primary = merge(local.k8s_tags_primary, {
-    "kubernetes.io/role/alb-ingress"  = 1
-    "kubernetes.io/role/internal-elb" = 1
-  })
+  public_subnet_tags_primary = merge(local.k8s_tags_primary, local.k8s_tags_subnet_pub)
+  private_subnet_tags_primary = merge(local.k8s_tags_primary, local.k8s_tags_subnet_pvt)
 
   vpc_tags_failover = merge(local.k8s_tags_failover, {
     "${local.resource_name_stub_failover}-blue"  = "shared"
@@ -288,15 +288,8 @@ locals {
     "k8s.io/cluster-autoscaler/enabled" = "true"
   })
 
-  public_subnet_tags_failover = merge(local.k8s_tags_failover, {
-    "kubernetes.io/role/alb-ingress"  = 1
-    "kubernetes.io/role/elb"          = 1
-  })
-
-  private_subnet_tags_failover = merge(local.k8s_tags_failover, {
-    "kubernetes.io/role/alb-ingress"  = 1
-    "kubernetes.io/role/internal-elb" = 1
-  })
+  public_subnet_tags_failover = merge(local.k8s_tags_failover, local.k8s_tags_subnet_pub)
+  private_subnet_tags_failover = merge(local.k8s_tags_failover, local.k8s_tags_subnet_pvt)
 
   iam_access_management_tag_key = var.iam_access_management_tag_key
   iam_access_management_tag_value = "${local.resource_name_stub}"
