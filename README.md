@@ -21,7 +21,7 @@
 #### Org and Accounts
 ![Org and Accounts Layout](./drawings/org-and-account-layout.drawio.png)
 
-foo bar hello world
+The organization, organization units, and accounts are created in a layout which follows the documented best practices for OUs in the [AWS Organizations User Guide](doc:https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_ous_best_practices.html). This codebase is can be expanded to accomadate additional OUs such as Sandbox, Suspended, Exceptions, etc.
 
 #### VPC Options
 
