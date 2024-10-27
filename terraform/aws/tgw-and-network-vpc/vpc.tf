@@ -1,3 +1,13 @@
+locals {
+  vpc_name_primary  = "${local.resource_name_stub_primary}-${local.this_slug}-vpc"
+  vpc_subnet_pvt_name_primary = format("%s-pvt-", local.vpc_name_primary)
+  vpc_subnet_pub_name_primary = format("%s-pub-", local.vpc_name_primary)
+
+  vpc_name_failover = "${local.resource_name_stub_failover}-${local.this_slug}-vpc"
+  vpc_subnet_pvt_name_failover  = format("%s-pvt-", local.vpc_name_failover)
+  vpc_subnet_pub_name_failover  = format("%s-pub-", local.vpc_name_failover)
+}
+
 module "vpc_primary" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.13.0"
@@ -11,17 +21,9 @@ module "vpc_primary" {
   external_nat_ip_ids     = aws_eip.vpc_nat_primary[*].id
   external_nat_ips        = aws_eip.vpc_nat_primary[*].public_ip
 
-  name  = "${local.resource_name_stub_primary}-${local.this_slug}-vpc"
-  public_subnet_names =  [
-    "${local.resource_name_stub_primary}-${local.this_slug}-vpc-pub-0",
-    "${local.resource_name_stub_primary}-${local.this_slug}-vpc-pub-1",
-    "${local.resource_name_stub_primary}-${local.this_slug}-vpc-pub-2",
-  ]
-  private_subnet_names  = [
-    "${local.resource_name_stub_primary}-${local.this_slug}-vpc-pvt-0",
-    "${local.resource_name_stub_primary}-${local.this_slug}-vpc-pvt-1",
-    "${local.resource_name_stub_primary}-${local.this_slug}-vpc-pvt-2",
-  ]
+  name  = local.vpc_name_primary
+  public_subnet_names   = [ "${local.vpc_subnet_pub_name_primary}0", "${local.vpc_subnet_pub_name_primary}1", "${local.vpc_subnet_pub_name_primary}2" ]
+  private_subnet_names  = [ "${local.vpc_subnet_pvt_name_primary}0", "${local.vpc_subnet_pvt_name_primary}1", "${local.vpc_subnet_pvt_name_primary}2" ]
 
   cidr            = local.vpc_cidr_primary
   azs             = local.vpc_azs_primary
@@ -85,17 +87,9 @@ module "vpc_failover" {
   external_nat_ip_ids     = aws_eip.vpc_nat_failover[*].id
   external_nat_ips        = aws_eip.vpc_nat_failover[*].public_ip
 
-  name  = "${local.resource_name_stub_failover}-${local.this_slug}-vpc"
-  public_subnet_names =  [
-    "${local.resource_name_stub_failover}-${local.this_slug}-vpc-pub-0",
-    "${local.resource_name_stub_failover}-${local.this_slug}-vpc-pub-1",
-    "${local.resource_name_stub_failover}-${local.this_slug}-vpc-pub-2",
-  ]
-  private_subnet_names  = [
-    "${local.resource_name_stub_failover}-${local.this_slug}-vpc-pvt-0",
-    "${local.resource_name_stub_failover}-${local.this_slug}-vpc-pvt-1",
-    "${local.resource_name_stub_failover}-${local.this_slug}-vpc-pvt-2",
-  ]
+  name  = local.vpc_name_failover
+  public_subnet_names   = [ "${local.vpc_subnet_pub_name_failover}0", "${local.vpc_subnet_pub_name_failover}1", "${local.vpc_subnet_pub_name_failover}2" ]
+  private_subnet_names  = [ "${local.vpc_subnet_pvt_name_failover}0", "${local.vpc_subnet_pvt_name_failover}1", "${local.vpc_subnet_pvt_name_failover}2" ]
 
   cidr            = local.vpc_cidr_failover
   azs             = local.vpc_azs_failover

@@ -21,7 +21,7 @@ resource "aws_ec2_tag" "subnets_pub_identity" {
 
   resource_id = module.vpc_primary[0].public_subnets[count.index]
   key         = "Name"
-  value       = "${local.resource_name_stub_primary}-${local.this_slug}-vpc-pub-${count.index}"
+  value       = "${local.vpc_subnet_pub_name_primary}${count.index}"
 }
 
 resource "aws_ec2_tag" "subnets_pvt_identity" {
@@ -34,7 +34,7 @@ resource "aws_ec2_tag" "subnets_pvt_identity" {
 
   resource_id = module.vpc_primary[0].private_subnets[count.index]
   key         = "Name"
-  value       = "${local.resource_name_stub_primary}-${local.this_slug}-vpc-pvt-${count.index}"
+  value       = "${local.vpc_subnet_pvt_name_primary}${count.index}"
 }
 
 resource "aws_ec2_tag" "vpc_identity_failover" {
@@ -60,7 +60,7 @@ resource "aws_ec2_tag" "subnets_pub_identity_failover" {
 
   resource_id = module.vpc_failover[0].public_subnets[count.index]
   key         = "Name"
-  value       = "${local.resource_name_stub_failover}-${local.this_slug}-vpc-pub-${count.index}"
+  value       = "${local.resource_name_stub}-${var.region.failover_short}-${local.this_slug}-vpc-pub-${count.index}"
 }
 
 resource "aws_ec2_tag" "subnets_pvt_identity_failover" {
@@ -73,5 +73,5 @@ resource "aws_ec2_tag" "subnets_pvt_identity_failover" {
 
   resource_id = module.vpc_failover[0].private_subnets[count.index]
   key         = "Name"
-  value       = "${local.resource_name_stub_failover}-${local.this_slug}-vpc-pvt-${count.index}"
+  value       = "${local.resource_name_stub}-${var.region.failover_short}-${local.this_slug}-vpc-pvt-${count.index}"
 }
