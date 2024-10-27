@@ -5,7 +5,7 @@ resource "aws_ec2_tag" "tgw_identity" {
 
   resource_id = aws_ec2_transit_gateway.tgw_primary[0].id
   key         = "Name"
-  value       = "${local.resource_name_stub}-${var.region.primary_short}-${local.this_slug}-tgw"
+  value       = "${local.resource_name_stub_primary}-${local.this_slug}-tgw"
 }
 
 resource "aws_ec2_tag" "tgw_log_archive" {
@@ -15,7 +15,7 @@ resource "aws_ec2_tag" "tgw_log_archive" {
 
   resource_id = aws_ec2_transit_gateway.tgw_primary[0].id
   key         = "Name"
-  value       = "${local.resource_name_stub}-${var.region.primary_short}-${local.this_slug}-tgw"
+  value       = "${local.resource_name_stub_primary}-${local.this_slug}-tgw"
 }
 
 resource "aws_ec2_tag" "tgw_security_tooling" {
@@ -25,7 +25,7 @@ resource "aws_ec2_tag" "tgw_security_tooling" {
 
   resource_id = aws_ec2_transit_gateway.tgw_primary[0].id
   key         = "Name"
-  value       = "${local.resource_name_stub}-${var.region.primary_short}-${local.this_slug}-tgw"
+  value       = "${local.resource_name_stub_primary}-${local.this_slug}-tgw"
 }
 
 resource "aws_ec2_tag" "tgw_identity_failover" {
@@ -35,7 +35,7 @@ resource "aws_ec2_tag" "tgw_identity_failover" {
 
   resource_id = aws_ec2_transit_gateway.tgw_failover[0].id
   key         = "Name"
-  value       = "${local.resource_name_stub}-${var.region.failover_short}-${local.this_slug}-tgw"
+  value       = "${local.resource_name_stub_failover}-${local.this_slug}-tgw"
 }
 
 resource "aws_ec2_tag" "tgw_log_archive_failover" {
@@ -45,7 +45,7 @@ resource "aws_ec2_tag" "tgw_log_archive_failover" {
 
   resource_id = aws_ec2_transit_gateway.tgw_failover[0].id
   key         = "Name"
-  value       = "${local.resource_name_stub}-${var.region.failover_short}-${local.this_slug}-tgw"
+  value       = "${local.resource_name_stub_failover}-${local.this_slug}-tgw"
 }
 
 resource "aws_ec2_tag" "tgw_security_tooling_failover" {
@@ -55,5 +55,5 @@ resource "aws_ec2_tag" "tgw_security_tooling_failover" {
 
   resource_id = aws_ec2_transit_gateway.tgw_failover[0].id
   key         = "Name"
-  value       = "${local.resource_name_stub}-${var.region.failover_short}-${local.this_slug}-tgw"
+  value       = "${local.resource_name_stub_failover}-${local.this_slug}-tgw"
 }

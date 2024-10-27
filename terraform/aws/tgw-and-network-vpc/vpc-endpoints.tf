@@ -13,7 +13,7 @@
 #     #   security_group_ids  = [module.vpc_main_sg_primary.security_group_id]
 #     #   subnet_ids          = module.vpc_primary.private_subnets
 #     #   route_table_ids     = module.vpc_primary.private_route_table_ids
-#     #   tags                = { Name = "${local.resource_name_stub}-${var.region.primary_short}-dynamodb-endpoint" }
+#     #   tags                = { Name = "${local.resource_name_stub_primary}-dynamodb-endpoint" }
 #     # },
 #     # kms = {
 #     #   service             = "kms"
@@ -22,14 +22,14 @@
 #     #   security_group_ids  = [module.vpc_main_sg_primary.security_group_id]
 #     #   subnet_ids          = module.vpc_primary.private_subnets
 #     #   route_table_ids     = module.vpc_primary.private_route_table_ids
-#     #   tags                = { Name = "${local.resource_name_stub}-${var.region.primary_short}-kms-endpoint" }
+#     #   tags                = { Name = "${local.resource_name_stub_primary}-kms-endpoint" }
 #     # },
 #     # rds = {
 #     #   service             = "rds"
 #     #   private_dns_enabled = true
 #     #   security_group_ids  = [module.vpc_main_sg_primary.security_group_id]
 #     #   subnet_ids          = module.vpc_primary.private_subnets
-#     #   tags                = { Name = "${local.resource_name_stub}-${var.region.primary_short}-rds-endpoint" }
+#     #   tags                = { Name = "${local.resource_name_stub_primary}-rds-endpoint" }
 #     # },
 #     s3 = {
 #       service             = "s3"
@@ -37,7 +37,7 @@
 #       security_group_ids  = [module.vpc_main_sg_primary.security_group_id]
 #       subnet_ids          = module.vpc_primary.private_subnets
 #       route_table_ids     = module.vpc_primary.private_route_table_ids
-#       tags                = { Name = "${local.resource_name_stub}-${var.region.primary_short}-s3-endpoint" }
+#       tags                = { Name = "${local.resource_name_stub_primary}-s3-endpoint" }
 #     },
 #     # secretsmanager = {
 #     #   service             = "secretsmanager"
@@ -46,7 +46,7 @@
 #     #   security_group_ids  = [module.vpc_main_sg_primary.security_group_id]
 #     #   subnet_ids          = module.vpc_primary.private_subnets
 #     #   route_table_ids     = module.vpc_primary.private_route_table_ids
-#     #   tags                = { Name = "${local.resource_name_stub}-${var.region.primary_short}-secretsmanager-endpoint" }
+#     #   tags                = { Name = "${local.resource_name_stub_primary}-secretsmanager-endpoint" }
 #     # },
 #     # sns = {
 #     #   service             = "sns"
@@ -55,7 +55,7 @@
 #     #   security_group_ids  = [module.vpc_main_sg_primary.security_group_id]
 #     #   subnet_ids          = module.vpc_primary.private_subnets
 #     #   route_table_ids     = module.vpc_primary.private_route_table_ids
-#     #   tags                = { Name = "${local.resource_name_stub}-${var.region.primary_short}-sns-endpoint" }
+#     #   tags                = { Name = "${local.resource_name_stub_primary}-sns-endpoint" }
 #     # },
 #     # sqs = {
 #     #   service             = "sqs"
@@ -64,7 +64,7 @@
 #     #   security_group_ids  = [module.vpc_main_sg_primary.security_group_id]
 #     #   subnet_ids          = module.vpc_primary.private_subnets
 #     #   route_table_ids     = module.vpc_primary.private_route_table_ids
-#     #   tags                = { Name = "${local.resource_name_stub}-${var.region.primary_short}-sqs-endpoint" }
+#     #   tags                = { Name = "${local.resource_name_stub_primary}-sqs-endpoint" }
 #     # },
 #   }
 # }
@@ -86,7 +86,7 @@
 #       # security_group_ids  = [module.vpc_main_sg_failover.security_group_id]
 #       subnet_ids = module.vpc_failover.private_subnets
 #       route_table_ids = flatten([module.vpc_failover.private_route_table_ids, module.vpc_failover.public_route_table_ids])
-#       tags                = { Name = "${local.resource_name_stub}-${var.region.failover_short}-s3-vpc-endpoint" }
+#       tags                = { Name = "${local.resource_name_stub_failover}-s3-vpc-endpoint" }
 #     },
 #     rds = {
 #       # interface endpoint
@@ -96,7 +96,7 @@
 #       # security_group_ids  = [module.vpc_main_sg_failover.security_group_id]
 #       subnet_ids = module.vpc_failover.private_subnets
 #       # route_table_ids = flatten([module.vpc_failover.private_route_table_ids, module.vpc_failover.public_route_table_ids])
-#       tags                = { Name = "${local.resource_name_stub}-${var.region.failover_short}-rds-endpoint" }
+#       tags                = { Name = "${local.resource_name_stub_failover}-rds-endpoint" }
 #     },
 #     # dynamodb = {
 #     #   # gateway endpoint

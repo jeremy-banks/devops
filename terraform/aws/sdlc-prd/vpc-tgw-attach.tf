@@ -10,7 +10,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "tgw_primary" {
   provider = aws.sdlc_prd
 
   subnet_ids                                      = module.vpc_primary.private_subnets
-  transit_gateway_id                              = data.aws_ec2_transit_gateway.tgw_primary.id
+  transit_gateway_id                              = data.aws_ec2_transit_gateway.tgw_primary[0].id
   vpc_id                                          = module.vpc_primary.vpc_id
   dns_support                                     = "enable"
   security_group_referencing_support              = "enable"
@@ -21,9 +21,9 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "tgw_primary" {
 resource "aws_ec2_tag" "tgw_primary" {
   provider    = aws.sdlc_prd
 
-  resource_id = data.aws_ec2_transit_gateway.tgw_primary.id
+  resource_id = data.aws_ec2_transit_gateway.tgw_primary[0].id
   key         = "Name"
-  value       = "${local.resource_name_stub}-${var.region.primary_short}-network-tgw"
+  value       = "${local.resource_name_stub_primary}-network-tgw"
 }
 
 data "aws_ec2_transit_gateway" "tgw_failover" {
@@ -51,5 +51,5 @@ resource "aws_ec2_tag" "tgw_failover" {
 
   resource_id = data.aws_ec2_transit_gateway.tgw_failover.id
   key         = "Name"
-  value       = "${local.resource_name_stub}-${var.region.failover_short}-network-tgw"
+  value       = "${local.resource_name_stub_failover}-network-tgw"
 }

@@ -2,7 +2,7 @@
 data "aws_vpc" "network_primary" {
   provider = aws.network
 
-  cidr_block = "${var.vpc_cidr_network_primary}"
+  cidr_block = "${var.vpc_cidr_network.primary}"
   state = "available"
 }
 
@@ -21,7 +21,7 @@ data "aws_subnets" "network_primary" {
 }
 
 resource "aws_directory_service_directory" "ad_primary" {
-  provider = aws.shared_services
+  provider = aws.identity
 
   name        = "corp.${var.company_domain}"
   short_name  = "CORP"
@@ -36,7 +36,7 @@ resource "aws_directory_service_directory" "ad_primary" {
 }
 
 data "aws_organizations_organization" "org" {
-  provider = aws.shared_services
+  provider = aws.identity
 }
 
 data "aws_route53_zone" "company_domain" {
@@ -62,7 +62,7 @@ resource "aws_route53_record" "corp_ad" {
 data "aws_vpc" "network_failover" {
   provider = aws.network_failover
 
-  cidr_block = "${var.vpc_cidr_network_failover}"
+  cidr_block = "${var.vpc_cidr_network.failover}"
   state = "available"
 }
 
@@ -81,7 +81,7 @@ data "aws_subnets" "network_failover" {
 }
 
 resource "aws_directory_service_region" "ad_failover" {
-  provider = aws.shared_services
+  provider = aws.identity
 
   directory_id = aws_directory_service_directory.ad_primary.id
   region_name  = var.region.failover
@@ -93,7 +93,7 @@ resource "aws_directory_service_region" "ad_failover" {
 }
 
 data "aws_directory_service_directory" "ad_failover" {
-  provider = aws.shared_services_failover
+  provider = aws.identity_failover
 
   directory_id = split(",", aws_directory_service_region.ad_failover.id)[0]
 }

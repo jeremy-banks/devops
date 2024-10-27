@@ -286,20 +286,14 @@ locals {
     "k8s.io/cluster-autoscaler/${local.resource_name_stub_failover}-blue"  = "shared"
     "k8s.io/cluster-autoscaler/${local.resource_name_stub_failover}-green" = "shared"
     "k8s.io/cluster-autoscaler/enabled" = "true"
-    "kubernetes.io/cluster/${local.resource_name_stub_failover}-blue"  = "shared"
-    "kubernetes.io/cluster/${local.resource_name_stub_failover}-green" = "shared"
   })
 
   public_subnet_tags_failover = merge(local.k8s_tags_failover, {
-    "kubernetes.io/cluster/${local.resource_name_stub_failover}-blue"  = "shared"
-    "kubernetes.io/cluster/${local.resource_name_stub_failover}-green" = "shared"
     "kubernetes.io/role/alb-ingress"  = 1
     "kubernetes.io/role/elb"          = 1
   })
 
   private_subnet_tags_failover = merge(local.k8s_tags_failover, {
-    "kubernetes.io/cluster/${local.resource_name_stub_failover}-blue"  = "shared"
-    "kubernetes.io/cluster/${local.resource_name_stub_failover}-green" = "shared"
     "kubernetes.io/role/alb-ingress"  = 1
     "kubernetes.io/role/internal-elb" = 1
   })

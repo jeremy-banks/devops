@@ -10,7 +10,7 @@ module "s3_primary" {
   version = "4.1.2"
   providers = { aws = aws.sdlc_stg }
 
-  bucket = "${local.resource_name_stub}-${var.region.primary_short}-${local.this_slug}-storage-blob-${local.unique_id}"
+  bucket = "${local.resource_name_stub_primary}-${local.this_slug}-storage-blob-${local.unique_id}"
 
   force_destroy = true
 
@@ -159,7 +159,7 @@ module "s3_failover" {
   version = "4.1.2"
   providers = { aws = aws.sdlc_stg_failover }
 
-  bucket = "${local.resource_name_stub}-${var.region.failover_short}-${local.this_slug}-storage-blob-${local.unique_id}"
+  bucket = "${local.resource_name_stub_failover}-${local.this_slug}-storage-blob-${local.unique_id}"
 
   force_destroy = true
 

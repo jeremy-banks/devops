@@ -11,16 +11,16 @@ module "vpc_primary" {
   external_nat_ip_ids     = aws_eip.vpc_nat_primary[*].id
   external_nat_ips        = aws_eip.vpc_nat_primary[*].public_ip
 
-  name  = "${local.resource_name_stub}-${var.region.primary_short}-${local.this_slug}-vpc"
+  name  = "${local.resource_name_stub_primary}-${local.this_slug}-vpc"
   public_subnet_names =  [
-    "${local.resource_name_stub}-${var.region.primary_short}-${local.this_slug}-vpc-pub-0",
-    "${local.resource_name_stub}-${var.region.primary_short}-${local.this_slug}-vpc-pub-1",
-    "${local.resource_name_stub}-${var.region.primary_short}-${local.this_slug}-vpc-pub-2",
+    "${local.resource_name_stub_primary}-${local.this_slug}-vpc-pub-0",
+    "${local.resource_name_stub_primary}-${local.this_slug}-vpc-pub-1",
+    "${local.resource_name_stub_primary}-${local.this_slug}-vpc-pub-2",
   ]
   private_subnet_names  = [
-    "${local.resource_name_stub}-${var.region.primary_short}-${local.this_slug}-vpc-pvt-0",
-    "${local.resource_name_stub}-${var.region.primary_short}-${local.this_slug}-vpc-pvt-1",
-    "${local.resource_name_stub}-${var.region.primary_short}-${local.this_slug}-vpc-pvt-2",
+    "${local.resource_name_stub_primary}-${local.this_slug}-vpc-pvt-0",
+    "${local.resource_name_stub_primary}-${local.this_slug}-vpc-pvt-1",
+    "${local.resource_name_stub_primary}-${local.this_slug}-vpc-pvt-2",
   ]
 
   cidr            = local.vpc_cidr_primary
@@ -30,7 +30,7 @@ module "vpc_primary" {
 
   public_subnet_tags  = local.public_subnet_tags_primary
   private_subnet_tags = local.private_subnet_tags_primary
-  vpc_tags            = merge({"Name" = "${local.resource_name_stub}-${var.region.primary_short}-${local.this_slug}-vpc"}, local.vpc_tags_primary)
+  vpc_tags            = merge({"Name" = "${local.resource_name_stub_primary}-${local.this_slug}-vpc"}, local.vpc_tags_primary)
 
   manage_default_security_group   = true
   default_security_group_name     = "NEVER-USE-THIS-SECURITY-GROUP"
@@ -52,9 +52,9 @@ module "vpc_main_sg_primary" {
 
   create_sg = var.vpc_enabled
 
-  name        = "${local.resource_name_stub}-${var.region.primary_short}-main"
+  name        = "${local.resource_name_stub_primary}-main"
   use_name_prefix = false
-  description = "main security group for ${local.resource_name_stub}-${var.region.primary_short}"
+  description = "main security group for ${local.resource_name_stub_primary}"
   vpc_id      = module.vpc_primary.vpc_id
 
   ingress_with_self = [
@@ -85,16 +85,16 @@ module "vpc_failover" {
   external_nat_ip_ids     = aws_eip.vpc_nat_failover[*].id
   external_nat_ips        = aws_eip.vpc_nat_failover[*].public_ip
 
-  name  = "${local.resource_name_stub}-${var.region.failover_short}-${local.this_slug}-vpc"
+  name  = "${local.resource_name_stub_failover}-${local.this_slug}-vpc"
   public_subnet_names =  [
-    "${local.resource_name_stub}-${var.region.failover_short}-${local.this_slug}-vpc-pub-0",
-    "${local.resource_name_stub}-${var.region.failover_short}-${local.this_slug}-vpc-pub-1",
-    "${local.resource_name_stub}-${var.region.failover_short}-${local.this_slug}-vpc-pub-2",
+    "${local.resource_name_stub_failover}-${local.this_slug}-vpc-pub-0",
+    "${local.resource_name_stub_failover}-${local.this_slug}-vpc-pub-1",
+    "${local.resource_name_stub_failover}-${local.this_slug}-vpc-pub-2",
   ]
   private_subnet_names  = [
-    "${local.resource_name_stub}-${var.region.failover_short}-${local.this_slug}-vpc-pvt-0",
-    "${local.resource_name_stub}-${var.region.failover_short}-${local.this_slug}-vpc-pvt-1",
-    "${local.resource_name_stub}-${var.region.failover_short}-${local.this_slug}-vpc-pvt-2",
+    "${local.resource_name_stub_failover}-${local.this_slug}-vpc-pvt-0",
+    "${local.resource_name_stub_failover}-${local.this_slug}-vpc-pvt-1",
+    "${local.resource_name_stub_failover}-${local.this_slug}-vpc-pvt-2",
   ]
 
   cidr            = local.vpc_cidr_failover
@@ -104,7 +104,7 @@ module "vpc_failover" {
 
   public_subnet_tags  = local.public_subnet_tags_failover
   private_subnet_tags = local.private_subnet_tags_failover
-  vpc_tags            = merge({"Name" = "${local.resource_name_stub}-${var.region.failover_short}-${local.this_slug}-vpc"}, local.vpc_tags_primary)
+  vpc_tags            = merge({"Name" = "${local.resource_name_stub_failover}-${local.this_slug}-vpc"}, local.vpc_tags_primary)
 
   manage_default_security_group   = true
   default_security_group_name     = "NEVER-USE-THIS-SECURITY-GROUP"
@@ -126,9 +126,9 @@ module "vpc_main_sg_failover" {
 
   create_sg = var.vpc_enabled
 
-  name        = "${local.resource_name_stub}-${var.region.failover_short}-main"
+  name        = "${local.resource_name_stub_failover}-main"
   use_name_prefix = false
-  description = "main security group for ${local.resource_name_stub}-${var.region.failover_short}"
+  description = "main security group for ${local.resource_name_stub_failover}"
   vpc_id      = module.vpc_failover.vpc_id
 
   ingress_with_self = [

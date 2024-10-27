@@ -118,9 +118,8 @@
 
 ## To-Do
 - network and sdlc need different deployment options
-   - 2x subnets instead of 3x (cost)
-   - multi-region instead of not
-      - probably need to be very granular here with variable definitions and deployments
+   - fix shared subnet tags so EKS can use them
+   - expand vpc-endpoints in network vpc
 - Federated login for devops, operations, and developers
    - https://getstarted.awsworkshop.io/02-dev-fast-follow/02-federated-access-to-aws/02-aws-sso-ad.html
    - https://aws.amazon.com/blogs/architecture/field-notes-integrating-active-directory-federation-service-with-aws-single-sign-on/

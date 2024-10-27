@@ -3,7 +3,7 @@ resource "aws_ram_resource_share" "tgw_primary" {
 
   count = 1
 
-  name                      = "${local.resource_name_stub}-${var.region.primary_short}-${local.this_slug}-tgw"
+  name                      = "${local.resource_name_stub_primary}-${local.this_slug}-tgw"
   allow_external_principals = false
 }
 
@@ -48,7 +48,7 @@ resource "aws_ram_resource_share" "tgw_failover" {
 
   count = var.vpc_failover_enabled ? 1 : 0
 
-  name                      = "${local.resource_name_stub}-${var.region.failover_short}-${local.this_slug}-tgw"
+  name                      = "${local.resource_name_stub_failover}-${local.this_slug}-tgw"
   allow_external_principals = false
 }
 
