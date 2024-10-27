@@ -134,7 +134,12 @@ variable "vpc_enabled" {
   default = false
 }
 
-variable "vpc_five_nines" {
+variable "vpc_network_ram_enable" {
+  type    = bool
+  default = false
+}
+
+variable "vpc_five9s_enabled" {
   type    = bool
   default = false
 }
@@ -226,18 +231,20 @@ locals {
   org_owner_email = "${var.org_owner_email_prefix}@${var.org_owner_email_domain}"
   resource_owner_email = var.resource_owner_email != "" ? var.resource_owner_email : local.org_owner_email
 
-  resource_name_stub = "${var.company_name_abbr}-${var.team_name_abbr}-${var.project_name_abbr}" #company - team - project - env
+  resource_name_stub          = lower("${var.company_name_abbr}-${var.team_name_abbr}-${var.project_name_abbr}") #company - team - project - env
+  resource_name_stub_primary  = lower("${var.company_name_abbr}-${var.team_name_abbr}-${var.project_name_abbr}-${var.region.primary_short}") #company - team - project - env
+  resource_name_stub_failover = lower("${var.company_name_abbr}-${var.team_name_abbr}-${var.project_name_abbr}-${var.region.failover_short}") #company - team - project - env
   this_slug = "${var.this_slug}"
 
   vpc_cidr_primary = var.vpc_cidr_primary_substitute != "" ? var.vpc_cidr_primary_substitute : "0.0.0.0/0"
-  vpc_azs_primary = var.vpc_five_nines ? [ var.availability_zones.primary[0], var.availability_zones.primary[1], var.availability_zones.primary[2] ] : [ var.availability_zones.primary[0], var.availability_zones.primary[1] ]
+  vpc_azs_primary = var.vpc_five9s_enabled ? [ var.availability_zones.primary[0], var.availability_zones.primary[1], var.availability_zones.primary[2] ] : [ var.availability_zones.primary[0], var.availability_zones.primary[1] ]
   vpc_subnets_private_primary = [for k in range(length(local.vpc_azs_primary)) : cidrsubnet(local.vpc_cidr_primary, 2, k)]
   vpc_subnets_public_primary = [for k in range(length(local.vpc_azs_primary)) : cidrsubnet(local.vpc_cidr_primary, 4, k + (4 * length(local.vpc_azs_primary)))]
   vpc_cidr_primary_split = split(".", cidrsubnet(local.vpc_cidr_primary, 0, 0))
   vpc_dns_primary = join(".", [local.vpc_cidr_primary_split[0], local.vpc_cidr_primary_split[1], local.vpc_cidr_primary_split[2], "2"])
 
   vpc_cidr_failover = var.vpc_cidr_failover_substitute != "" ? var.vpc_cidr_failover_substitute : "0.0.0.0/0"
-  vpc_azs_failover = var.vpc_five_nines ? [ var.availability_zones.failover[0], var.availability_zones.failover[1], var.availability_zones.failover[2] ] : [ var.availability_zones.failover[0], var.availability_zones.failover[1] ]
+  vpc_azs_failover = var.vpc_five9s_enabled ? [ var.availability_zones.failover[0], var.availability_zones.failover[1], var.availability_zones.failover[2] ] : [ var.availability_zones.failover[0], var.availability_zones.failover[1] ]
   vpc_subnets_private_failover = [for k in range(length(local.vpc_azs_failover)) : cidrsubnet(local.vpc_cidr_failover, 2, k)]
   vpc_subnets_public_failover = [for k in range(length(local.vpc_azs_failover)) : cidrsubnet(local.vpc_cidr_failover, 4, k + (4 * length(local.vpc_azs_failover)))]
   vpc_cidr_failover_split = split(".", cidrsubnet(local.vpc_cidr_failover, 0, 0))
@@ -245,43 +252,57 @@ locals {
 
   vpc_ntp_servers = [var.ntp_server]
 
-  vpc_tags_primary = {
-    "Name"  = "${local.resource_name_stub}-${var.region.primary_short}-${local.this_slug}-vpc"
-    "${local.resource_name_stub}-${var.region.primary_short}-blue"  = "shared"
-    "${local.resource_name_stub}-${var.region.primary_short}-green" = "shared"
-    "k8s.io/cluster-autoscaler/${local.resource_name_stub}-${var.region.primary_short}-blue"  = "shared"
-    "k8s.io/cluster-autoscaler/${local.resource_name_stub}-${var.region.primary_short}-green" = "shared"
-    "k8s.io/cluster-autoscaler/enabled" = "true"
-    "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.primary_short}-blue"  = "shared"
-    "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.primary_short}-green" = "shared"
+  k8s_tags_primary = {
+    "kubernetes.io/cluster/${local.resource_name_stub_primary}-blue"  = "shared"
+    "kubernetes.io/cluster/${local.resource_name_stub_primary}-green" = "shared"
   }
 
-  public_subnet_tags_primary = {
-    "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.primary_short}-blue"  = "shared"
-    "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.primary_short}-green" = "shared"
+  k8s_tags_failover = {
+    "kubernetes.io/cluster/${local.resource_name_stub_failover}-blue"  = "shared"
+    "kubernetes.io/cluster/${local.resource_name_stub_failover}-green" = "shared"
+  }
+
+  vpc_tags_primary = merge(local.k8s_tags_primary, {
+    "${local.resource_name_stub_primary}-blue"  = "shared"
+    "${local.resource_name_stub_primary}-green" = "shared"
+    "k8s.io/cluster-autoscaler/${local.resource_name_stub_primary}-blue"  = "shared"
+    "k8s.io/cluster-autoscaler/${local.resource_name_stub_primary}-green" = "shared"
+    "k8s.io/cluster-autoscaler/enabled" = "true"
+  })
+
+  public_subnet_tags_primary = merge(local.k8s_tags_primary, {
     "kubernetes.io/role/alb-ingress"  = 1
     "kubernetes.io/role/elb"          = 1
-  }
+  })
 
-  private_subnet_tags_primary = {
-    "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.primary_short}-blue"  = "shared"
-    "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.primary_short}-green" = "shared"
+  private_subnet_tags_primary = merge(local.k8s_tags_primary, {
     "kubernetes.io/role/alb-ingress"  = 1
     "kubernetes.io/role/internal-elb" = 1
-  }
+  })
 
-  vpc_tags_failover = {
-    "Name" = "${local.resource_name_stub}-${var.region.failover_short}-${local.this_slug}-vpc"
-    "${local.resource_name_stub}-${var.region.failover_short}-blue"  = "shared"
-    "${local.resource_name_stub}-${var.region.failover_short}-green" = "shared"
-    "k8s.io/cluster-autoscaler/${local.resource_name_stub}-${var.region.failover_short}-blue"  = "shared"
-    "k8s.io/cluster-autoscaler/${local.resource_name_stub}-${var.region.failover_short}-green" = "shared"
+  vpc_tags_failover = merge(local.k8s_tags_failover, {
+    "${local.resource_name_stub_failover}-blue"  = "shared"
+    "${local.resource_name_stub_failover}-green" = "shared"
+    "k8s.io/cluster-autoscaler/${local.resource_name_stub_failover}-blue"  = "shared"
+    "k8s.io/cluster-autoscaler/${local.resource_name_stub_failover}-green" = "shared"
     "k8s.io/cluster-autoscaler/enabled" = "true"
-    "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.failover_short}-blue"  = "shared"
-    "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.failover_short}-green" = "shared"
-  }
-  public_subnet_tags_failover = local.public_subnet_tags_primary
-  private_subnet_tags_failover = local.private_subnet_tags_primary
+    "kubernetes.io/cluster/${local.resource_name_stub_failover}-blue"  = "shared"
+    "kubernetes.io/cluster/${local.resource_name_stub_failover}-green" = "shared"
+  })
+
+  public_subnet_tags_failover = merge(local.k8s_tags_failover, {
+    "kubernetes.io/cluster/${local.resource_name_stub_failover}-blue"  = "shared"
+    "kubernetes.io/cluster/${local.resource_name_stub_failover}-green" = "shared"
+    "kubernetes.io/role/alb-ingress"  = 1
+    "kubernetes.io/role/elb"          = 1
+  })
+
+  private_subnet_tags_failover = merge(local.k8s_tags_failover, {
+    "kubernetes.io/cluster/${local.resource_name_stub_failover}-blue"  = "shared"
+    "kubernetes.io/cluster/${local.resource_name_stub_failover}-green" = "shared"
+    "kubernetes.io/role/alb-ingress"  = 1
+    "kubernetes.io/role/internal-elb" = 1
+  })
 
   iam_access_management_tag_key = var.iam_access_management_tag_key
   iam_access_management_tag_value = "${local.resource_name_stub}"
