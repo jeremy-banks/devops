@@ -16,8 +16,25 @@
   - Building a Scalable and Secure Multi-VPC AWS Network Infrastructure https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/welcome.html
   - Latencies between AWS availability zones https://www.flashgrid.io/news/latencies-between-aws-availability-zones-what-are-they-and-how-to-minimize-them
 
-### AWS Environment Organization
-![Organization Layout](./drawings/org-and-account-layout.drawio.png)
+### Architectural Overview
+
+#### Org and Accounts
+![Org and Accounts Layout](./drawings/org-and-account-layout.drawio.png)
+foo bar hello world
+
+#### VPC Options
+![VPC Layout Failover](./drawings/vpc-layout-failover.drawio.png)
+foo bar hello world
+
+![VPC Layout](./drawings/vpc-layout.drawio.png)
+foo bar hello world
+
+#### VPC Subnet Options
+![VPC Subnet Five 9s Layout](./drawings/vpc-subnet-layout-five9s.drawio.png)
+foo bar hello world
+
+![VPC Subnet Four 9s Layout](./drawings/vpc-subnet-layout-four9s.drawio.png)
+foo bar hello world
 
 ## Initial Setup
 
@@ -122,6 +139,14 @@
      - even if a VPC isn't created, a route would still need to exist for the account
      - obviously if no VPC is being created then the endpoint wouldn't need ot be created either
    - needs to support multi-regional failover as well
+   - WELL LET'S TEST IT!!
+      - just start with making R53 entries first, this may be all that is needed
+   - bottom line is we have a few different permiations of account layout
+      - lowest level config is one shared vpc
+      - can then add a tgw
+      - can then add vpcs from other accounts
+      - all combinations have multi-region support
+      - all combination support either 2AZ or five9s 3AZ deployments
 - Federated login for devops, operations, and developers
    - https://getstarted.awsworkshop.io/02-dev-fast-follow/02-federated-access-to-aws/02-aws-sso-ad.html
    - https://aws.amazon.com/blogs/architecture/field-notes-integrating-active-directory-federation-service-with-aws-single-sign-on/
