@@ -24,19 +24,25 @@
 foo bar hello world
 
 #### VPC Options
+
+##### Failover Enabled
 ![VPC Layout Failover](./drawings/vpc-layout-failover.drawio.png)
 
 foo bar hello world
 
+##### Failover Disabled
 ![VPC Layout](./drawings/vpc-layout.drawio.png)
 
 foo bar hello world
 
 #### VPC Subnet Options
+
+##### Five 9s
 ![VPC Subnet Five 9s Layout](./drawings/vpc-subnet-layout-five9s.drawio.png)
 
 foo bar hello world
 
+##### Four 9s
 ![VPC Subnet Four 9s Layout](./drawings/vpc-subnet-layout-four9s.drawio.png)
 
 foo bar hello world
