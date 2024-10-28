@@ -5,9 +5,9 @@
 1. Using minimal number tools with high market share utilization (eg terraform, eksctl, helm)
 1. Demo with k8s nginx welcome page
 
-## Details
+### Details
 
-### Documentation Reference
+#### Documentation Reference
 - Terraform providers and modules all version locked
 - Code written following AWS documentation
   - Well-Architected Framework  https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html
@@ -16,16 +16,16 @@
   - Building a Scalable and Secure Multi-VPC AWS Network Infrastructure https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/welcome.html
   - Latencies between AWS availability zones https://www.flashgrid.io/news/latencies-between-aws-availability-zones-what-are-they-and-how-to-minimize-them
 
-### Architectural Overview
+## Architectural Overview
 
-#### Org and Accounts
+### Org and Accounts
 <p align="center"><img src="drawings/org-and-account-layout.drawio.png"/></p>
 
 The organization, organization units, and accounts layout is designed in accordance to the documented best practices for OUs in the [AWS Organizations User Guide](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_ous_best_practices.html). This codebase is can be expanded to accommodate additional OUs such as Sandbox, Suspended, Exceptions, etc.
 
-#### VPC Options
+### VPC Options
 
-##### Failover
+#### Failover
 
 | Failover Enabled | Failover Disabled |
 | :-: | :-: |
@@ -33,7 +33,7 @@ The organization, organization units, and accounts layout is designed in accorda
 
 The Virtual Private Cloud and Transit Gateway layout is designed in accordance to the Hub and Spoke model in the [Building a Scalable and Secure Multi-VPC AWS Network Infrastructure](https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/transit-gateway.html). This codebase offers Failover as an option when deploying by using `vpc_failover_enabled = true`.
 
-##### Subnet HA
+#### Subnet HA
 
 | Five Nines | Four Nines |
 | :-: | :-: |
