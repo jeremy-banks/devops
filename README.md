@@ -29,7 +29,7 @@ The organization, organization units, and accounts layout is designed in accorda
 | :-: | :-: |
 | <img src="drawings/vpc-layout-failover.drawio.png" width="400"/> | <p align="center"><img src="drawings/vpc-layout.drawio.png" width="400"/> |
 
-The Virtual Private Cloud and Transit Gateway layout is designed in accordance to the Hub and Spoke model in the [Building a Scalable and Secure Multi-VPC AWS Network Infrastructure](https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/transit-gateway.html).
+The Virtual Private Cloud and Transit Gateway layout is designed in accordance to the Hub and Spoke model in the [Building a Scalable and Secure Multi-VPC AWS Network Infrastructure Whitepaper](https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/transit-gateway.html).
 
 - Service Endpoints are shared to the entire Organization through the Network VPCs and Transit Gateways
 - Private R53 zone `internal.` is attatched to the Network VPCs providing standard human-readable DNS for the Endpoints
@@ -55,13 +55,23 @@ In the Failover Enabled diagram above, the following options are `true`:
 | CustomerB | `network_tgw_share_enabled`, `vpc_enabled` |
 | CustomerC |  |
 
+In the Failover Disabled diagram above, the following options are `true`:
+
+| Account | Options |
+| --- | --- |
+| Network | `network_vpc_endpoint_services_enabled`, `vpc_enabled` |
+| SDLC | `network_vpc_share_enabled` |
+| CustomerA | `network_tgw_share_enabled`, `vpc_enabled` |
+| CustomerB | `network_tgw_share_enabled`, `vpc_enabled` |
+| CustomerC |  |
+
 #### Subnet HA
 
 | Five Nines | Four Nines |
 | :-: | :-: |
 | <img src="drawings/vpc-subnet-layout-five9s.drawio.png" width="400"/> | <p align="center"><img src="drawings/vpc-subnet-layout-four9s.drawio.png" width="400"/> |
 
-foo bar hello world
+Virtual Private Cloud Subnet layout is designed to provide 99.999% ("Five Nines") availability using 3 Subnets across 3 Availability Zones as per the [recommendations and best practices for ECS](https://aws.amazon.com/blogs/containers/amazon-ecs-availability-best-practices/). Although the blog contains best practices for *ECS*, the same logic for providing 99.999% availability applies to EKS, RDS, S3, etc. This codebase also can be configured to provide 99.99% ("Four Nines") availability using 2 Subnets across 2 Availability Zones as a cost savings option by settging `vpc_five9s_enabled = false`.
 
 ## Initial Setup
 
