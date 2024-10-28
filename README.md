@@ -5,9 +5,7 @@
 1. Using minimal number tools with high market share utilization (eg terraform, eksctl, helm)
 1. Demo with k8s nginx welcome page
 
-### Details
-
-#### Documentation Reference
+### Documentation Reference
 - Terraform providers and modules all version locked
 - Code written following AWS documentation
   - Well-Architected Framework  https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html
@@ -31,7 +29,21 @@ The organization, organization units, and accounts layout is designed in accorda
 | :-: | :-: |
 | <img src="drawings/vpc-layout-failover.drawio.png" width="400"/> | <p align="center"><img src="drawings/vpc-layout.drawio.png" width="400"/> |
 
-The Virtual Private Cloud and Transit Gateway layout is designed in accordance to the Hub and Spoke model in the [Building a Scalable and Secure Multi-VPC AWS Network Infrastructure](https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/transit-gateway.html). This codebase offers Failover as an option when deploying by using `vpc_failover_enabled = true`.
+The Virtual Private Cloud and Transit Gateway layout is designed in accordance to the Hub and Spoke model in the [Building a Scalable and Secure Multi-VPC AWS Network Infrastructure](https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/transit-gateway.html).
+
+##### Options
+
+| Variable | Type | Default | Description |
+| --- | --- | --- | --- |
+| `network_tgw_share_enabled` | boolean | `false` | Network TGW will be shared to this account. |
+| `network_vpc_endpoint_services_enabled` | list(string) | `[""]` | Which endpoint services are attached to the Network VPC and shared through the TGW. |
+| `network_vpc_share_enabled` | boolean | `false` | Network VPC will be shared to this account. |
+| `vpc_enabled` | boolean | `false` | A VPC will be provisioned in the Primary region. |
+| `vpc_failover_enabled` | boolean | `false` | A VPC will be provisioned in the Failover region. |
+
+and connected to the Network Transit Gateway. **Note:** If you plan to use Failover in *any* account on the organization, then it must also be enabled in the Network account. Otherwise your Failover VPCs will be inaccessible as no Failover Transit Gateway will exist to connect the VPC or route traffic.
+
+
 
 #### Subnet HA
 
@@ -54,7 +66,7 @@ foo bar hello world
 1. Create AWS Account to be Organization root
 1. Update the terraform/variables.tf with your unique information
    1. org_owner_email_prefix (billg)
-   1. org_owner_email_domain (microsoft.com)
+   1. org_owner_email_domain_tld (microsoft.com)
    1. company_domain (windows.com)
    1. company_name (microsoft)
    1. company_name_abbr (ms)
