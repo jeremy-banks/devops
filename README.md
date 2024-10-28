@@ -31,7 +31,7 @@ The organization, organization units, and accounts are created in a layout which
 | :-: | :-: |
 | <img src="drawings/vpc-layout-failover.drawio.png" width="400"/> | <p align="center"><img src="drawings/vpc-layout.drawio.png" width="400"/> |
 
-foo bar hello world
+The Virtual Private Cloud and Transit Gateways layout is designed in accordance to the Hub and Spoke model in the [Building a Scalable and Secure Multi-VPC AWS Network Infrastructure](https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/transit-gateway.html). This codebase offers Failover as an option when deploying by using `vpc_failover_enabled = true`.
 
 ##### Subnet HA
 
