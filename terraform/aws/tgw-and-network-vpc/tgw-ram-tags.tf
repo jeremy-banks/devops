@@ -31,7 +31,7 @@ resource "aws_ec2_tag" "tgw_security_tooling" {
 resource "aws_ec2_tag" "tgw_identity_failover" {
   provider    = aws.identity_failover
 
-  count = var.vpc_cidr_substitute_failover != "" ? 1 : 0
+  count = local.create_failover_region != "" ? 1 : 0
 
   resource_id = aws_ec2_transit_gateway.tgw_failover[0].id
   key         = "Name"
@@ -41,7 +41,7 @@ resource "aws_ec2_tag" "tgw_identity_failover" {
 resource "aws_ec2_tag" "tgw_log_archive_failover" {
   provider    = aws.log_archive_failover
 
-  count = var.vpc_cidr_substitute_failover != "" ? 1 : 0
+  count = local.create_failover_region != "" ? 1 : 0
 
   resource_id = aws_ec2_transit_gateway.tgw_failover[0].id
   key         = "Name"
@@ -51,7 +51,7 @@ resource "aws_ec2_tag" "tgw_log_archive_failover" {
 resource "aws_ec2_tag" "tgw_security_tooling_failover" {
   provider    = aws.security_tooling_failover
 
-  count = var.vpc_cidr_substitute_failover != "" ? 1 : 0
+  count = local.create_failover_region != "" ? 1 : 0
 
   resource_id = aws_ec2_transit_gateway.tgw_failover[0].id
   key         = "Name"

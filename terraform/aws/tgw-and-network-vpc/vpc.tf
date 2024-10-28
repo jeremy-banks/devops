@@ -13,7 +13,7 @@ module "vpc_primary" {
   version = "5.13.0"
   providers = { aws = aws.network }
 
-  count = 1
+  count = local.vpc_cidr_primary != "" ? 1 : 0
 
   enable_nat_gateway      = true
   reuse_nat_ips           = true
@@ -52,7 +52,7 @@ module "vpc_main_sg_primary" {
   version = "5.2.0"
   providers = { aws = aws.network }
 
-  count = 1
+  count = local.vpc_cidr_primary != "" ? 1 : 0
 
   name        = "${local.resource_name_stub_primary}-main"
   use_name_prefix = false
@@ -79,7 +79,7 @@ module "vpc_failover" {
   version = "5.13.0"
   providers = { aws = aws.network_failover }
 
-  count = var.vpc_cidr_substitute_failover != "" ? 1 : 0
+  count = local.create_failover_region != "" ? 1 : 0
 
   enable_nat_gateway      = true
   reuse_nat_ips           = true
@@ -118,7 +118,7 @@ module "vpc_main_sg_failover" {
   version = "5.2.0"
   providers = { aws = aws.network_failover }
 
-  count = var.vpc_cidr_substitute_failover != "" ? 1 : 0
+  count = local.create_failover_region != "" ? 1 : 0
 
   name        = "${local.resource_name_stub_failover}-main"
   use_name_prefix = false
