@@ -31,6 +31,10 @@ The organization, organization units, and accounts layout is designed in accorda
 
 The Virtual Private Cloud and Transit Gateway layout is designed in accordance to the Hub and Spoke model in the [Building a Scalable and Secure Multi-VPC AWS Network Infrastructure](https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/transit-gateway.html).
 
+- Service Endpoints are shared to the entire Organization through the Network VPCs and Transit Gateways
+- Private R53 zone `internal.` is attatched to the Network VPCs providing standard human-readable DNS for the Endpoints
+- SDLC Accounts have Network VPC shared to keep down cost
+
 ##### Options
 
 | Variable | Type | Default | Description |
@@ -41,9 +45,12 @@ The Virtual Private Cloud and Transit Gateway layout is designed in accordance t
 | `vpc_enabled` | boolean | `false` | A VPC will be provisioned in the Primary region. |
 | `vpc_failover_enabled` | boolean | `false` | A VPC will be provisioned in the Failover region. |
 
-and connected to the Network Transit Gateway. **Note:** If you plan to use Failover in *any* account on the organization, then it must also be enabled in the Network account. Otherwise your Failover VPCs will be inaccessible as no Failover Transit Gateway will exist to connect the VPC or route traffic.
-
-
+In the Failover Enabled diagram above, the following options are `true`:
+| Network | `network_vpc_endpoint_services_enabled`, `vpc_enabled`, `vpc_failover_enabled` |
+| SDLC | `network_vpc_share_enabled` |
+| CustomerA | `network_tgw_share_enabled`, `vpc_enabled`, `vpc_failover_enabled` |
+| CustomerB | `network_tgw_share_enabled`, `vpc_enabled` |
+| CustomerC |  |
 
 #### Subnet HA
 
