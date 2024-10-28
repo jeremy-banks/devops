@@ -28,12 +28,11 @@ The organization, organization units, and accounts are created in a layout which
 ##### Failover Enabled
 
 <img src="drawings/vpc-layout-failover.drawio.png" width="400"/>
-![VPC Layout Failover](./drawings/vpc-layout-failover.drawio.png)
 
 foo bar hello world
 
 ##### Failover Disabled
-![VPC Layout](./drawings/vpc-layout.drawio.png)
+<img src="drawings/vpc-layout.drawio.png" width="400"/>
 
 foo bar hello world
 
