@@ -19,7 +19,7 @@
 ### Architectural Overview
 
 #### Org and Accounts
-<center><img src="drawings/org-and-account-layout.drawio.png"/></center>
+<p align="center"><img src="drawings/org-and-account-layout.drawio.png"/></p>
 
 The organization, organization units, and accounts are created in a layout which follows the documented best practices for OUs in the [AWS Organizations User Guide](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_ous_best_practices.html). This codebase is can be expanded to accommodate additional OUs such as Sandbox, Suspended, Exceptions, etc.
 
@@ -28,16 +28,16 @@ The organization, organization units, and accounts are created in a layout which
 ##### Failover
 
 | Failover Enabled | Failover Disabled |
-| --- | --- |
-| <center><img src="drawings/vpc-layout-failover.drawio.png" width="400"/></center> | <center><img src="drawings/vpc-layout.drawio.png" width="400"/></center> |
+| :-: | :-: |
+| <img src="drawings/vpc-layout-failover.drawio.png" width="400"/> | <p align="center"><img src="drawings/vpc-layout.drawio.png" width="400"/> |
 
 foo bar hello world
 
 ##### Subnet HA
 
 | Five Nines | Four Nines |
-| --- | --- |
-| <center><img src="drawings/vpc-subnet-layout-five9s.drawio.png" width="400"/></center> | <center><img src="drawings/vpc-subnet-layout-four9s.drawio.png" width="400"/></center> |
+| :-: | :-: |
+| <img src="drawings/vpc-subnet-layout-five9s.drawio.png" width="400"/> | <p align="center"><img src="drawings/vpc-subnet-layout-four9s.drawio.png" width="400"/> |
 
 foo bar hello world
 
