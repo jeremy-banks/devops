@@ -25,26 +25,19 @@ The organization, organization units, and accounts are created in a layout which
 
 #### VPC Options
 
-##### Failover Enabled
+##### Failover
 
-<img src="drawings/vpc-layout-failover.drawio.png" width="400"/>
-
-foo bar hello world
-
-##### Failover Disabled
-<img src="drawings/vpc-layout.drawio.png" width="400"/>
+| Failover Enabled | Failover Disabled |
+| --- | --- |
+| <img src="drawings/vpc-layout-failover.drawio.png" width="400"/> | <img src="drawings/vpc-layout.drawio.png" width="400"/> |
 
 foo bar hello world
 
-#### VPC Subnet Options
+##### Subnet HA
 
-##### Five 9s
-![VPC Subnet Five 9s Layout](./drawings/vpc-subnet-layout-five9s.drawio.png)
-
-foo bar hello world
-
-##### Four 9s
-![VPC Subnet Four 9s Layout](./drawings/vpc-subnet-layout-four9s.drawio.png)
+| Five Nines | Four Nines |
+| --- | --- |
+| <img src="drawings/vpc-subnet-layout-five9s.drawio.png" width="400"/> | <img src="drawings/vpc-subnet-layout-four9s.drawio.png" width="400"/> |
 
 foo bar hello world
 
