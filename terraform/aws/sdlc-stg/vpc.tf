@@ -3,7 +3,7 @@ module "vpc_primary" {
   version = "5.13.0"
   providers = { aws = aws.sdlc_stg }
 
-  create_vpc = var.vpc_enabled
+  create_vpc = var.vpc_cidr_substitute != ""
 
   enable_nat_gateway      = true
   reuse_nat_ips           = true
@@ -43,7 +43,7 @@ module "vpc_main_sg_primary" {
   version = "5.2.0"
   providers = { aws = aws.sdlc_stg }
 
-  create_sg = var.vpc_enabled
+  create_sg = var.vpc_cidr_substitute != ""
 
   name        = "${local.resource_name_stub_primary}-main"
   use_name_prefix = false
@@ -70,7 +70,7 @@ module "vpc_failover" {
   version = "5.13.0"
   providers = { aws = aws.sdlc_stg_failover }
 
-  create_vpc = var.vpc_enabled
+  create_vpc = var.vpc_cidr_substitute != ""
 
   enable_nat_gateway      = true
   reuse_nat_ips           = true
@@ -109,7 +109,7 @@ module "vpc_main_sg_failover" {
   version = "5.2.0"
   providers = { aws = aws.sdlc_stg_failover }
 
-  create_sg = var.vpc_enabled
+  create_sg = var.vpc_cidr_substitute != ""
 
   name        = "${local.resource_name_stub_failover}-main"
   use_name_prefix = false

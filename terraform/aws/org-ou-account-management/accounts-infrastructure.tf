@@ -1,6 +1,6 @@
 resource "aws_organizations_account" "identity" {
   name  = "identity"
-  email = "${var.org_owner_email_prefix}-identity@${var.org_owner_email_domain}"
+  email = "${var.org_owner_email_prefix}-identity@${var.org_owner_email_domain_tld}"
 
   close_on_deletion           = true
   create_govcloud             = false
@@ -11,7 +11,7 @@ resource "aws_organizations_account" "identity" {
 
 resource "aws_organizations_account" "network" {
   name  = "network"
-  email = "${var.org_owner_email_prefix}-network@${var.org_owner_email_domain}"
+  email = "${var.org_owner_email_prefix}-network@${var.org_owner_email_domain_tld}"
 
   close_on_deletion           = true
   create_govcloud             = false

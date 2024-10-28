@@ -1,6 +1,6 @@
 resource "aws_organizations_account" "sdlc_prd" {
   name  = "${local.resource_name_stub}-sdlc-prd"
-  email = "${var.org_owner_email_prefix}-sdlc-prd@${var.org_owner_email_domain}"
+  email = "${var.org_owner_email_prefix}-sdlc-prd@${var.org_owner_email_domain_tld}"
 
   close_on_deletion           = true
   create_govcloud             = false
@@ -15,7 +15,7 @@ output "sdlc_prd" {
 
 resource "aws_organizations_account" "sdlc_stg" {
   name  = "${local.resource_name_stub}-sdlc-stg"
-  email = "${var.org_owner_email_prefix}-sdlc-stg@${var.org_owner_email_domain}"
+  email = "${var.org_owner_email_prefix}-sdlc-stg@${var.org_owner_email_domain_tld}"
 
   close_on_deletion           = true
   create_govcloud             = false
@@ -30,7 +30,7 @@ output "sdlc_stg" {
 
 resource "aws_organizations_account" "sdlc_tst" {
   name  = "${local.resource_name_stub}-sdlc-tst"
-  email = "${var.org_owner_email_prefix}-sdlc-tst@${var.org_owner_email_domain}"
+  email = "${var.org_owner_email_prefix}-sdlc-tst@${var.org_owner_email_domain_tld}"
 
   close_on_deletion           = true
   create_govcloud             = false
@@ -45,7 +45,7 @@ output "sdlc_tst" {
 
 resource "aws_organizations_account" "sdlc_dev" {
   name  = "${local.resource_name_stub}-sdlc-dev"
-  email = "${var.org_owner_email_prefix}-sdlc-dev@${var.org_owner_email_domain}"
+  email = "${var.org_owner_email_prefix}-sdlc-dev@${var.org_owner_email_domain_tld}"
 
   close_on_deletion           = true
   create_govcloud             = false

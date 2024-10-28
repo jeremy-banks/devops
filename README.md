@@ -42,27 +42,27 @@ The Virtual Private Cloud and Transit Gateway layout is designed in accordance t
 | `network_tgw_share_enabled` | boolean | `false` | Network TGW will be shared to this account. |
 | `network_vpc_endpoint_services_enabled` | list(string) | `[""]` | Which endpoint services are attached to the Network VPC and shared through the TGW. |
 | `network_vpc_share_enabled` | boolean | `false` | Network VPC will be shared to this account. |
-| `vpc_enabled` | boolean | `false` | A VPC will be provisioned in the Primary region. |
-| `vpc_failover_enabled` | boolean | `false` | A VPC will be provisioned in the Failover region. |
+| `vpc_cidr_substitute` | string | `""` | A VPC will be provisioned in the Primary region with the specified CIDR. |
+| `vpc_cidr_substitute_failover` | string | `""` | A VPC will be provisioned in the Failover region with the specified CIDR. |
 
-In the Failover Enabled diagram above, the following options are `true`:
+In the Failover Enabled diagram above the following options are defined:
 
 | Account | Options |
 | --- | --- |
-| Network | `network_vpc_endpoint_services_enabled`, `vpc_enabled`, `vpc_failover_enabled` |
+| Network | `network_vpc_endpoint_services_enabled`, `vpc_cidr_substitute`, `vpc_cidr_substitute_failover` |
 | SDLC | `network_vpc_share_enabled` |
-| CustomerA | `network_tgw_share_enabled`, `vpc_enabled`, `vpc_failover_enabled` |
-| CustomerB | `network_tgw_share_enabled`, `vpc_enabled` |
+| CustomerA | `network_tgw_share_enabled`, `vpc_cidr_substitute`, `vpc_cidr_substitute_failover` |
+| CustomerB | `network_tgw_share_enabled`, `vpc_cidr_substitute` |
 | CustomerC |  |
 
-In the Failover Disabled diagram above, the following options are `true`:
+In the Failover Disabled diagram above the following options are defined:
 
 | Account | Options |
 | --- | --- |
-| Network | `network_vpc_endpoint_services_enabled`, `vpc_enabled` |
+| Network | `network_vpc_endpoint_services_enabled`, `vpc_cidr_substitute` |
 | SDLC | `network_vpc_share_enabled` |
-| CustomerA | `network_tgw_share_enabled`, `vpc_enabled` |
-| CustomerB | `network_tgw_share_enabled`, `vpc_enabled` |
+| CustomerA | `network_tgw_share_enabled`, `vpc_cidr_substitute` |
+| CustomerB | `network_tgw_share_enabled`, `vpc_cidr_substitute` |
 | CustomerC |  |
 
 #### Subnet HA

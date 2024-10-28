@@ -19,7 +19,7 @@ variable "org_owner_email_prefix" {
   default     = "billg"
 }
 
-variable "org_owner_email_domain" {
+variable "org_owner_email_domain_tld" {
   description = "the 'microsoft.com' in 'billg@microsoft.com'"
   type        = string
   default     = "microsoft.com"
@@ -82,17 +82,6 @@ variable "cli_profile_name_aws" {
   default     = "automation"
 }
 
-variable "region" {
-  description = "regions for the infrastructure"
-  type        = map(string)
-  default     = {
-    primary   = "us-west-2"
-    failover  = "us-east-1"
-    primary_short   = "usw2"
-    failover_short  = "use1"
-  }
-}
-
 variable "assumable_roles_name" {
   type    = map(string)
   default = {
@@ -121,51 +110,28 @@ variable "iam_access_management_tag_key" {
   default     = "iam_access_management"
 }
 
-variable "tgw_asn" {
-  type    = map(number)
-  default = {
-    primary = 65434
-    failover = 65433
-  }
-}
-
-variable "vpc_enabled" {
+variable "network_tgw_share_enabled" {
   type    = bool
   default = false
 }
 
-variable "vpc_network_ram_enable" {
-  type    = bool
-  default = false
-}
-
-variable "vpc_five9s_enabled" {
-  type    = bool
-  default = false
-}
-
-variable "vpc_network_endpoints_enabled" {
-  type    = bool
-  default = false
-}
-
-variable "vpc_network_endpoint_services" {
+variable "network_vpc_endpoint_services_enabled" {
   description = "ec2, rds, s3..."
   type        = list(string)
   default     = [""]
 }
 
-variable "vpc_failover_enabled" {
+variable "network_vpc_share_enabled" {
   type    = bool
   default = false
 }
 
-variable "vpc_cidr_primary_substitute" {
+variable "vpc_cidr_substitute" {
   type    = string
   default = ""
 }
 
-variable "vpc_cidr_failover_substitute" {
+variable "vpc_cidr_substitute_failover" {
   type    = string
   default = ""
 }
@@ -184,23 +150,36 @@ variable "vpc_cidr_clientvpn" {
   }
 }
 
-# sdlc prd 10.51.0.0/16 10.52.0.0/16
-# sdlc stg 10.53.0.0/16 10.54.0.0/16
-# sdlc tst 10.55.0.0/16 10.56.0.0/16
-# sdlc dev 10.57.0/16 10.58.0.0/16
+variable "vpc_five9s_enabled" {
+  type    = bool
+  default = true
+}
+
+variable "region" {
+  description = "regions for the infrastructure"
+  type        = map(string)
+  default     = {
+    primary   = "us-west-2"
+    failover  = "us-east-1"
+    primary_short   = "usw2"
+    failover_short  = "use1"
+  }
+}
 
 variable "availability_zones" {
   type    = map(list(string))
   default = {
     primary = [
       "usw2-az1",
-      "usw2-az3",
       "usw2-az4",
+      "usw2-az3",
+      "usw2-az2",
     ]
     failover = [
+      "use1-az5",
       "use1-az2",
       "use1-az4",
-      "use1-az5",
+      "use1-az1",
     ]
   }
 }
@@ -208,6 +187,14 @@ variable "availability_zones" {
 variable "ntp_server" {
   type    = string
   default = "169.254.169.123"
+}
+
+variable "tgw_asn" {
+  type    = map(number)
+  default = {
+    primary = 65434
+    failover = 65433
+  }
 }
 
 variable "ad_directory_admin_password" {
@@ -234,7 +221,7 @@ locals {
   cli_profile_name_aws = var.cli_profile_name_aws
   provider_role_name = var.provider_role_name
 
-  org_owner_email = "${var.org_owner_email_prefix}@${var.org_owner_email_domain}"
+  org_owner_email = "${var.org_owner_email_prefix}@${var.org_owner_email_domain_tld}"
   resource_owner_email = var.resource_owner_email != "" ? var.resource_owner_email : local.org_owner_email
 
   resource_name_stub          = lower("${var.company_name_abbr}-${var.team_name_abbr}-${var.project_name_abbr}") #company - team - project - env
@@ -242,14 +229,14 @@ locals {
   resource_name_stub_failover = lower("${var.company_name_abbr}-${var.team_name_abbr}-${var.project_name_abbr}-${var.region.failover_short}") #company - team - project - env
   this_slug = "${var.this_slug}"
 
-  vpc_cidr_primary = var.vpc_cidr_primary_substitute != "" ? var.vpc_cidr_primary_substitute : "0.0.0.0/0"
+  vpc_cidr_primary = var.vpc_cidr_substitute != "" ? var.vpc_cidr_substitute : "0.0.0.0/0"
   vpc_azs_primary = var.vpc_five9s_enabled ? [ var.availability_zones.primary[0], var.availability_zones.primary[1], var.availability_zones.primary[2] ] : [ var.availability_zones.primary[0], var.availability_zones.primary[1] ]
   vpc_subnets_private_primary = [for k in range(length(local.vpc_azs_primary)) : cidrsubnet(local.vpc_cidr_primary, 2, k)]
   vpc_subnets_public_primary = [for k in range(length(local.vpc_azs_primary)) : cidrsubnet(local.vpc_cidr_primary, 4, k + (4 * length(local.vpc_azs_primary)))]
   vpc_cidr_primary_split = split(".", cidrsubnet(local.vpc_cidr_primary, 0, 0))
   vpc_dns_primary = join(".", [local.vpc_cidr_primary_split[0], local.vpc_cidr_primary_split[1], local.vpc_cidr_primary_split[2], "2"])
 
-  vpc_cidr_failover = var.vpc_cidr_failover_substitute != "" ? var.vpc_cidr_failover_substitute : "0.0.0.0/0"
+  vpc_cidr_failover = var.vpc_cidr_substitute_failover != "" ? var.vpc_cidr_substitute_failover : "0.0.0.0/0"
   vpc_azs_failover = var.vpc_five9s_enabled ? [ var.availability_zones.failover[0], var.availability_zones.failover[1], var.availability_zones.failover[2] ] : [ var.availability_zones.failover[0], var.availability_zones.failover[1] ]
   vpc_subnets_private_failover = [for k in range(length(local.vpc_azs_failover)) : cidrsubnet(local.vpc_cidr_failover, 2, k)]
   vpc_subnets_public_failover = [for k in range(length(local.vpc_azs_failover)) : cidrsubnet(local.vpc_cidr_failover, 4, k + (4 * length(local.vpc_azs_failover)))]
