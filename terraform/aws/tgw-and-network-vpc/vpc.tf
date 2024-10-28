@@ -22,13 +22,13 @@ module "vpc_primary" {
   external_nat_ips        = aws_eip.vpc_nat_primary[*].public_ip
 
   name  = local.vpc_name_primary
-  public_subnet_names   = [ "${local.vpc_subnet_pub_name_primary}0", "${local.vpc_subnet_pub_name_primary}1", "${local.vpc_subnet_pub_name_primary}2" ]
-  private_subnet_names  = [ "${local.vpc_subnet_pvt_name_primary}0", "${local.vpc_subnet_pvt_name_primary}1", "${local.vpc_subnet_pvt_name_primary}2" ]
+  public_subnet_names   = [ "${local.vpc_subnet_pub_name_primary}0", "${local.vpc_subnet_pub_name_primary}1", "${local.vpc_subnet_pub_name_primary}2", "${local.vpc_subnet_pub_name_primary}3" ]
+  private_subnet_names  = [ "${local.vpc_subnet_pvt_name_primary}0", "${local.vpc_subnet_pvt_name_primary}1", "${local.vpc_subnet_pvt_name_primary}2", "${local.vpc_subnet_pvt_name_primary}3" ]
 
   cidr            = local.vpc_cidr_primary
-  azs             = local.vpc_azs_primary
-  public_subnets  = local.vpc_subnets_public_primary
-  private_subnets = local.vpc_subnets_private_primary
+  azs             = local.azs_used_list_primary
+  public_subnets  = local.vpc_subnet_cidrs_pub_primary
+  private_subnets = local.vpc_subnet_cidrs_pvt_primary
 
   public_subnet_tags  = local.subnet_pub_tags_primary
   private_subnet_tags = local.subnet_pvt_tags_primary
@@ -88,13 +88,13 @@ module "vpc_failover" {
   external_nat_ips        = aws_eip.vpc_nat_failover[*].public_ip
 
   name  = local.vpc_name_failover
-  public_subnet_names   = [ "${local.vpc_subnet_pub_name_failover}0", "${local.vpc_subnet_pub_name_failover}1", "${local.vpc_subnet_pub_name_failover}2" ]
-  private_subnet_names  = [ "${local.vpc_subnet_pvt_name_failover}0", "${local.vpc_subnet_pvt_name_failover}1", "${local.vpc_subnet_pvt_name_failover}2" ]
+  public_subnet_names   = [ "${local.vpc_subnet_pub_name_failover}0", "${local.vpc_subnet_pub_name_failover}1", "${local.vpc_subnet_pub_name_failover}2", "${local.vpc_subnet_pub_name_failover}3" ]
+  private_subnet_names  = [ "${local.vpc_subnet_pvt_name_failover}0", "${local.vpc_subnet_pvt_name_failover}1", "${local.vpc_subnet_pvt_name_failover}2", "${local.vpc_subnet_pvt_name_failover}3" ]
 
   cidr            = local.vpc_cidr_failover
-  azs             = local.vpc_azs_failover
-  public_subnets  = local.vpc_subnets_public_failover
-  private_subnets = local.vpc_subnets_private_failover
+  azs             = local.azs_used_list_failover
+  public_subnets  = local.vpc_subnet_cidrs_pub_failover
+  private_subnets = local.vpc_subnet_cidrs_pvt_failover
 
   public_subnet_tags  = local.subnet_pub_tags_failover
   private_subnet_tags = local.subnet_pvt_tags_failover

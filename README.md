@@ -71,7 +71,7 @@ In the Failover Disabled diagram above the following options are defined:
 | :-: | :-: |
 | <img src="drawings/vpc-subnet-layout-five9s.drawio.png" width="400"/> | <p align="center"><img src="drawings/vpc-subnet-layout-four9s.drawio.png" width="400"/> |
 
-Virtual Private Cloud Subnet layout is designed to provide 99.999% ("Five Nines") availability using 3 Subnets across 3 Availability Zones as per the [recommendations and best practices for ECS](https://aws.amazon.com/blogs/containers/amazon-ecs-availability-best-practices/). Although the blog contains best practices for *ECS*, the same logic for providing 99.999% availability applies to EKS, RDS, S3, etc. This codebase also can be configured to provide 99.99% ("Four Nines") availability using 2 Subnets across 2 Availability Zones as a cost savings option by settging `vpc_five9s_enabled = false`.
+Virtual Private Cloud Subnet layout is designed to provide 99.999% ("Five Nines") availability using 3 Subnets across 3 Availability Zones as per the [recommendations and best practices for ECS](https://aws.amazon.com/blogs/containers/amazon-ecs-availability-best-practices/). Although the blog contains best practices for *ECS*, the same logic for providing 99.999% availability applies to EKS, RDS, S3, etc. This codebase also can be configured to provide 99.99% ("Four Nines") availability using 2 Subnets across 2 Availability Zones as a cost savings option by setting `foo = false`. This codebase will not provide 99.9999% ("Six Nines") availability using 4 Subnets across 4 Availability Zones is not in the scope of this codebase for various reasons, most noteably because AWS 
 
 ## Initial Setup
 
@@ -224,6 +224,7 @@ Virtual Private Cloud Subnet layout is designed to provide 99.999% ("Five Nines"
 - ALB sec group with cool way of allowing ingress (nonprod through private CVPN, prod through public)
 - Mozilla Secrets OPerationS (SOPS) protects secrets in code using Key Management System (KMS) Customer Managed Key (CMK)
 - break glass entry for accounts https://docs.aws.amazon.com/whitepapers/latest/organizing-your-aws-environment/break-glass-access.html
+- AWS config for hipaa, CIS, NIST
 
 ## Known Issues
 - terraform/aws/org-ou-account-management/main.tf

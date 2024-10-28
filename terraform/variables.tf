@@ -219,13 +219,33 @@ variable "r53_zones" {
   default = []
 }
 
-output "fooo" {
+output "vpc_subnet_cidrs_primary" {
   value = local.vpc_subnet_cidrs_primary
 }
 
-output "bar" {
-  value = local.vpc_cidr_failover
+output "vpc_subnet_cidrs_failover" {
+  value = local.vpc_subnet_cidrs_failover
 }
+
+output "vpc_subnet_cidrs_pvt_primary2" {
+  value = local.vpc_subnet_cidrs_pvt_primary
+}
+
+output "vpc_subnet_cidrs_pub_primary2" {
+  value = local.vpc_subnet_cidrs_pub_primary
+}
+output "vpc_subnet_cidrs_pvt_failover2" {
+  value = local.vpc_subnet_cidrs_pvt_failover
+}
+
+output "vpc_subnet_cidrs_pub_failover2" {
+  value = local.vpc_subnet_cidrs_pub_failover
+}
+
+output "azs_used_list_primary" {
+  value = local.azs_used_list_primary
+}
+
 
 locals {
   cli_profile_name_aws = var.cli_profile_name_aws
@@ -247,38 +267,46 @@ locals {
 #rename vpc_subnet_cidrs_pvt_primary
 
   vpc_cidr_primary = var.vpc_cidr_substitute
-  # increment major subnet for failover
-  vpc_cidr_failover = join(".", [split(".", var.vpc_cidr_substitute)[0], tostring(tonumber(split(".", var.vpc_cidr_substitute)[1]) + 1), split(".", var.vpc_cidr_substitute)[2], split(".", var.vpc_cidr_substitute)[3]])
+  vpc_cidr_failover = var.vpc_cidr_substitute != "" ? join(".", [ #if vpc_cidr_substitute has been defined
+    split(".", var.vpc_cidr_substitute)[0],
+    tostring(tonumber(split(".", var.vpc_cidr_substitute)[1]) + 1), #increment major subnet
+    split(".", var.vpc_cidr_substitute)[2],
+    split(".", var.vpc_cidr_substitute)[3]
+  ]) : var.vpc_cidr_substitute
+
+  azs_used_num = var.availability_zones_used
+  azs_used_list_primary = [for az in range(var.availability_zones_used) : var.availability_zones.primary[az]]
+  azs_used_list_failover = [for az in range(var.availability_zones_used) : var.availability_zones.failover[az]]
 
   vpc_subnet_cidrs_primary = local.vpc_cidr_primary != "" ? (
-    var.availability_zones_used == 6 ? cidrsubnets(local.vpc_cidr_primary, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5) :
-    var.availability_zones_used == 5 ? cidrsubnets(local.vpc_cidr_primary, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5) :
-    var.availability_zones_used == 4 ? cidrsubnets(local.vpc_cidr_primary, 3, 3, 3, 3, 5, 5, 5, 5) :
-    var.availability_zones_used == 3 ? cidrsubnets(local.vpc_cidr_primary, 2, 2, 2, 4, 4, 4) :
+    local.azs_used_num == 6 ? cidrsubnets(local.vpc_cidr_primary, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5) :
+    local.azs_used_num == 5 ? cidrsubnets(local.vpc_cidr_primary, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5) :
+    local.azs_used_num == 4 ? cidrsubnets(local.vpc_cidr_primary, 3, 3, 3, 3, 5, 5, 5, 5) :
+    local.azs_used_num == 3 ? cidrsubnets(local.vpc_cidr_primary, 2, 2, 2, 4, 4, 4) :
     cidrsubnets(local.vpc_cidr_primary, 2, 2, 4, 4)
   ) : []
 
-  vpc_subnet_cidrs_failover = local.vpc_cidr_primary != "" ? (
-    var.availability_zones_used == 6 ? cidrsubnets(local.vpc_cidr_primary, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5) :
-    var.availability_zones_used == 5 ? cidrsubnets(local.vpc_cidr_primary, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5) :
-    var.availability_zones_used == 4 ? cidrsubnets(local.vpc_cidr_primary, 3, 3, 3, 3, 5, 5, 5, 5) :
-    var.availability_zones_used == 3 ? cidrsubnets(local.vpc_cidr_primary, 2, 2, 2, 4, 4, 4) :
-    cidrsubnets(local.vpc_cidr_primary, 2, 2, 4, 4)
+  vpc_subnet_cidrs_failover = local.vpc_cidr_failover != "" ? (
+    local.azs_used_num == 6 ? cidrsubnets(local.vpc_cidr_failover, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5) :
+    local.azs_used_num == 5 ? cidrsubnets(local.vpc_cidr_failover, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5) :
+    local.azs_used_num == 4 ? cidrsubnets(local.vpc_cidr_failover, 3, 3, 3, 3, 5, 5, 5, 5) :
+    local.azs_used_num == 3 ? cidrsubnets(local.vpc_cidr_failover, 2, 2, 2, 4, 4, 4) :
+    cidrsubnets(local.vpc_cidr_failover, 2, 2, 4, 4)
   ) : []
 
-  vpc_subnet_newbits_pvt = length(local.vpc_azs_primary) < 4 ? 2 : 3
-  vpc_subnet_newbits_pub = length(local.vpc_azs_primary) < 4 ? 4 : 5
+  vpc_subnet_cidrs_pvt_primary = slice(local.vpc_subnet_cidrs_primary, 0, length(local.vpc_subnet_cidrs_primary) / 2)
+  vpc_subnet_cidrs_pub_primary = slice(local.vpc_subnet_cidrs_primary, length(local.vpc_subnet_cidrs_primary) / 2, length(local.vpc_subnet_cidrs_primary))
+
+  vpc_subnet_cidrs_pvt_failover = slice(local.vpc_subnet_cidrs_failover, 0, length(local.vpc_subnet_cidrs_failover) / 2)
+  vpc_subnet_cidrs_pub_failover = slice(local.vpc_subnet_cidrs_failover, length(local.vpc_subnet_cidrs_failover) / 2, length(local.vpc_subnet_cidrs_failover))
+
 
   vpc_azs_primary = var.availability_zones.primary
-  vpc_subnet_cidrs_pvt_primary = [for i in range(length(local.vpc_azs_primary)) : cidrsubnet(local.vpc_cidr_primary, local.vpc_subnet_newbits_pvt, i)]
-  vpc_subnet_cidrs_pub_primary = [for i in range(length(local.vpc_azs_primary)) : cidrsubnet(local.vpc_cidr_primary, local.vpc_subnet_newbits_pub + 1, length(local.vpc_azs_primary) + i)]
 
   vpc_cidr_primary_split = split(".", cidrsubnet(local.vpc_cidr_primary, 0, 0))
   vpc_dns_primary = join(".", [local.vpc_cidr_primary_split[0], local.vpc_cidr_primary_split[1], local.vpc_cidr_primary_split[2], "2"])
 
   vpc_azs_failover = var.availability_zones.failover
-  vpc_subnet_cidrs_pvt_failover = [for i in range(length(local.vpc_azs_primary)) : cidrsubnet(local.vpc_cidr_failover, local.vpc_subnet_newbits_pvt, i)]
-  vpc_subnet_cidrs_pub_failover = [for i in range(length(local.vpc_azs_primary)) : cidrsubnet(local.vpc_cidr_failover, local.vpc_subnet_newbits_pub + 1, length(local.vpc_azs_primary) + i)]
   vpc_cidr_failover_split = split(".", cidrsubnet(local.vpc_cidr_failover, 0, 0))
   vpc_dns_failover = join(".", [local.vpc_cidr_failover_split[0], local.vpc_cidr_failover_split[1], local.vpc_cidr_failover_split[2], "2"])
 
