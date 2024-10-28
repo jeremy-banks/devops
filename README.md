@@ -46,6 +46,9 @@ The Virtual Private Cloud and Transit Gateway layout is designed in accordance t
 | `vpc_failover_enabled` | boolean | `false` | A VPC will be provisioned in the Failover region. |
 
 In the Failover Enabled diagram above, the following options are `true`:
+
+| Account | Options |
+| --- | --- |
 | Network | `network_vpc_endpoint_services_enabled`, `vpc_enabled`, `vpc_failover_enabled` |
 | SDLC | `network_vpc_share_enabled` |
 | CustomerA | `network_tgw_share_enabled`, `vpc_enabled`, `vpc_failover_enabled` |
