@@ -21,7 +21,7 @@
 #### Org and Accounts
 <p align="center"><img src="drawings/org-and-account-layout.drawio.png"/></p>
 
-The organization, organization units, and accounts are created in a layout which follows the documented best practices for OUs in the [AWS Organizations User Guide](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_ous_best_practices.html). This codebase is can be expanded to accommodate additional OUs such as Sandbox, Suspended, Exceptions, etc.
+The organization, organization units, and accounts layout is designed in accordance to the documented best practices for OUs in the [AWS Organizations User Guide](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_ous_best_practices.html). This codebase is can be expanded to accommodate additional OUs such as Sandbox, Suspended, Exceptions, etc.
 
 #### VPC Options
 
@@ -31,7 +31,7 @@ The organization, organization units, and accounts are created in a layout which
 | :-: | :-: |
 | <img src="drawings/vpc-layout-failover.drawio.png" width="400"/> | <p align="center"><img src="drawings/vpc-layout.drawio.png" width="400"/> |
 
-The Virtual Private Cloud and Transit Gateways layout is designed in accordance to the Hub and Spoke model in the [Building a Scalable and Secure Multi-VPC AWS Network Infrastructure](https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/transit-gateway.html). This codebase offers Failover as an option when deploying by using `vpc_failover_enabled = true`.
+The Virtual Private Cloud and Transit Gateway layout is designed in accordance to the Hub and Spoke model in the [Building a Scalable and Secure Multi-VPC AWS Network Infrastructure](https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/transit-gateway.html). This codebase offers Failover as an option when deploying by using `vpc_failover_enabled = true`.
 
 ##### Subnet HA
 
