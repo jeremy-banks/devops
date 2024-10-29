@@ -171,19 +171,9 @@ Virtual Private Cloud Subnet layout is designed to provide 99.999% ("Five Nines"
    1. Deploy terraform/aws/workload-customerb
 
 ## To-Do
-- network and sdlc need different deployment options for whether a VPC is created
-   - sdlc needs an elegant way to create DNS records to point to VPC endpoints in the shared network VPC
-     - even if a VPC isn't created, a route would still need to exist for the account
-     - obviously if no VPC is being created then the endpoint wouldn't need ot be created either
+- sdlc needs an elegant way to create DNS records to point to VPC endpoints in the shared network VPC
    - needs to support multi-regional failover as well
-   - WELL LET'S TEST IT!!
-      - just start with making R53 entries first, this may be all that is needed
-   - bottom line is we have a few different permiations of account layout
-      - lowest level config is one shared vpc
-      - can then add a tgw
-      - can then add vpcs from other accounts
-      - all combinations have multi-region support
-      - all combination support either 2AZ or five9s 3AZ deployments
+   - just start with making R53 entries first, this may be all that is needed
 - Federated login for devops, operations, and developers
    - https://getstarted.awsworkshop.io/02-dev-fast-follow/02-federated-access-to-aws/02-aws-sso-ad.html
    - https://aws.amazon.com/blogs/architecture/field-notes-integrating-active-directory-federation-service-with-aws-single-sign-on/

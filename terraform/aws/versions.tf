@@ -10,21 +10,21 @@ terraform {
 provider "aws" {
   profile = var.cli_profile_name_aws
   region  = var.region.primary
-  default_tags { tags = local.default_tags }
+  default_tags { tags = local.default_tags_map }
 }
 
 provider "aws" {
   alias = "org"
   profile = var.cli_profile_name_aws
   region  = var.region.primary
-  default_tags { tags = local.default_tags }
+  default_tags { tags = local.default_tags_map }
 }
 
 provider "aws" {
   alias = "org_failover"
   profile = var.cli_profile_name_aws
   region  = var.region.failover
-  default_tags { tags = local.default_tags }
+  default_tags { tags = local.default_tags_map }
 }
 
 provider "aws" {
@@ -32,7 +32,7 @@ provider "aws" {
   profile = var.cli_profile_name_aws
   region  = var.region.primary
   assume_role { role_arn = "arn:aws:iam::${var.account_id.identity}:role/${var.provider_role_name}" }
-  default_tags { tags = local.default_tags }
+  default_tags { tags = local.default_tags_map }
 }
 
 provider "aws" {
@@ -40,7 +40,7 @@ provider "aws" {
   profile = var.cli_profile_name_aws
   region  = var.region.failover
   assume_role { role_arn = "arn:aws:iam::${var.account_id.identity}:role/${var.provider_role_name}" }
-  default_tags { tags = local.default_tags }
+  default_tags { tags = local.default_tags_map }
 }
 
 provider "aws" {
@@ -48,7 +48,7 @@ provider "aws" {
   profile = var.cli_profile_name_aws
   region  = var.region.primary
   assume_role { role_arn = "arn:aws:iam::${var.account_id.log_archive}:role/${var.provider_role_name}" }
-  default_tags { tags = local.default_tags }
+  default_tags { tags = local.default_tags_map }
 }
 
 provider "aws" {
@@ -56,7 +56,7 @@ provider "aws" {
   profile = var.cli_profile_name_aws
   region  = var.region.failover
   assume_role { role_arn = "arn:aws:iam::${var.account_id.log_archive}:role/${var.provider_role_name}" }
-  default_tags { tags = local.default_tags }
+  default_tags { tags = local.default_tags_map }
 }
 
 provider "aws" {
@@ -64,7 +64,7 @@ provider "aws" {
   profile = var.cli_profile_name_aws
   region  = var.region.primary
   assume_role { role_arn = "arn:aws:iam::${var.account_id.network}:role/${var.provider_role_name}" }
-  default_tags { tags = local.default_tags }
+  default_tags { tags = local.default_tags_map }
 }
 
 provider "aws" {
@@ -72,7 +72,7 @@ provider "aws" {
   profile = var.cli_profile_name_aws
   region  = var.region.failover
   assume_role { role_arn = "arn:aws:iam::${var.account_id.network}:role/${var.provider_role_name}" }
-  default_tags { tags = local.default_tags }
+  default_tags { tags = local.default_tags_map }
 }
 
 provider "aws" {
@@ -80,7 +80,7 @@ provider "aws" {
   profile = var.cli_profile_name_aws
   region  = var.region.primary
   assume_role { role_arn = "arn:aws:iam::${var.account_id.security_tooling}:role/${var.provider_role_name}" }
-  default_tags { tags = local.default_tags }
+  default_tags { tags = local.default_tags_map }
 }
 
 provider "aws" {
@@ -88,7 +88,7 @@ provider "aws" {
   profile = var.cli_profile_name_aws
   region  = var.region.failover
   assume_role { role_arn = "arn:aws:iam::${var.account_id.security_tooling}:role/${var.provider_role_name}" }
-  default_tags { tags = local.default_tags }
+  default_tags { tags = local.default_tags_map }
 }
 
 provider "aws" {
@@ -96,7 +96,7 @@ provider "aws" {
   profile = var.cli_profile_name_aws
   region  = var.region.primary
   assume_role { role_arn = "arn:aws:iam::${var.account_id.sdlc_prd}:role/${var.provider_role_name}" }
-  default_tags { tags = local.default_tags }
+  default_tags { tags = local.default_tags_map }
 }
 
 provider "aws" {
@@ -104,7 +104,7 @@ provider "aws" {
   profile = var.cli_profile_name_aws
   region  = var.region.failover
   assume_role { role_arn = "arn:aws:iam::${var.account_id.sdlc_prd}:role/${var.provider_role_name}" }
-  default_tags { tags = local.default_tags }
+  default_tags { tags = local.default_tags_map }
 }
 
 provider "aws" {
@@ -112,7 +112,7 @@ provider "aws" {
   profile = var.cli_profile_name_aws
   region  = var.region.primary
   assume_role { role_arn = "arn:aws:iam::${var.account_id.sdlc_stg}:role/${var.provider_role_name}" }
-  default_tags { tags = local.default_tags }
+  default_tags { tags = local.default_tags_map }
 }
 
 provider "aws" {
@@ -120,7 +120,7 @@ provider "aws" {
   profile = var.cli_profile_name_aws
   region  = var.region.failover
   assume_role { role_arn = "arn:aws:iam::${var.account_id.sdlc_stg}:role/${var.provider_role_name}" }
-  default_tags { tags = local.default_tags }
+  default_tags { tags = local.default_tags_map }
 }
 
 provider "aws" {
@@ -128,7 +128,7 @@ provider "aws" {
   profile = var.cli_profile_name_aws
   region  = var.region.primary
   assume_role { role_arn = "arn:aws:iam::${var.account_id.sdlc_tst}:role/${var.provider_role_name}" }
-  default_tags { tags = local.default_tags }
+  default_tags { tags = local.default_tags_map }
 }
 
 provider "aws" {
@@ -136,7 +136,7 @@ provider "aws" {
   profile = var.cli_profile_name_aws
   region  = var.region.failover
   assume_role { role_arn = "arn:aws:iam::${var.account_id.sdlc_tst}:role/${var.provider_role_name}" }
-  default_tags { tags = local.default_tags }
+  default_tags { tags = local.default_tags_map }
 }
 
 provider "aws" {
@@ -144,7 +144,7 @@ provider "aws" {
   profile = var.cli_profile_name_aws
   region  = var.region.primary
   assume_role { role_arn = "arn:aws:iam::${var.account_id.sdlc_dev}:role/${var.provider_role_name}" }
-  default_tags { tags = local.default_tags }
+  default_tags { tags = local.default_tags_map }
 }
 
 provider "aws" {
@@ -152,5 +152,5 @@ provider "aws" {
   profile = var.cli_profile_name_aws
   region  = var.region.failover
   assume_role { role_arn = "arn:aws:iam::${var.account_id.sdlc_dev}:role/${var.provider_role_name}" }
-  default_tags { tags = local.default_tags }
+  default_tags { tags = local.default_tags_map }
 }

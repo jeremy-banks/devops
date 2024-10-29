@@ -9,14 +9,20 @@ metadata:
 vpc:
   subnets:
     private:
-      private-one:    { id: subnet-0a62997396479ca89 }
-      private-two:    { id: subnet-02ce9165d2a310f17 }
-      private-three:  { id: subnet-0d1f5c7eef7f10895 }
+      private-one:    { id: subnet-id }
+      private-two:    { id: subnet-id }
+      # private-three:  { id: subnet-id }
+      # private-four:   { id: subnet-id }
+      # private-five:   { id: subnet-id }
+      # private-six:    { id: subnet-id }
     public:
-      public-one:     { id: subnet-07713dbed2a420d3e }
-      public-two:     { id: subnet-0f46ee578b946c6b0 }
-      public-three:   { id: subnet-0eee39e206f6d1ffd }
-  id: vpc-01b9c23b840fc7e0d
+      public-one:     { id: subnet-id }
+      public-two:     { id: subnet-id }
+      # public-three:   { id: subnet-id }
+      # public-four:    { id: subnet-id }
+      # public-five:    { id: subnet-id }
+      # public-six:     { id: subnet-id }
+  id: vpc-id
 
 # secretsEncryption:
 #   keyARN: 

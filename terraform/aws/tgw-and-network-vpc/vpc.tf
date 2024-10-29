@@ -20,9 +20,9 @@ module "vpc_primary" {
   public_subnets  = local.vpc_subnet_cidrs_pub_primary
   private_subnets = local.vpc_subnet_cidrs_pvt_primary
 
-  # public_subnet_tags  = local.subnet_pub_tags_primary
-  # private_subnet_tags = local.subnet_pvt_tags_primary
-  # vpc_tags            = merge({"Name" = "${local.vpc_name_primary}"}, local.vpc_tags_primary)
+  public_subnet_tags  = local.subnet_pub_tags_primary
+  private_subnet_tags = local.subnet_pvt_tags_primary
+  vpc_tags            = local.vpc_tags_primary
 
   manage_default_security_group   = true
   default_security_group_name     = "NEVER-USE-THIS-SECURITY-GROUP"
@@ -86,9 +86,9 @@ module "vpc_failover" {
   public_subnets  = local.vpc_subnet_cidrs_pub_failover
   private_subnets = local.vpc_subnet_cidrs_pvt_failover
 
-  # public_subnet_tags  = local.subnet_pub_tags_failover
-  # private_subnet_tags = local.subnet_pvt_tags_failover
-  # vpc_tags            = merge({"Name" = "${local.vpc_name_failover}"}, local.vpc_tags_primary)
+  public_subnet_tags  = local.subnet_pub_tags_failover
+  private_subnet_tags = local.subnet_pvt_tags_failover
+  vpc_tags            = local.vpc_tags_primary
 
   manage_default_security_group   = true
   default_security_group_name     = "NEVER-USE-THIS-SECURITY-GROUP"
