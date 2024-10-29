@@ -190,9 +190,9 @@ variable "vpc_cidr_clientvpn" {
   }
 }
 
-variable "ntp_server" {
-  type    = string
-  default = "169.254.169.123"
+variable "ntp_servers" {
+  type    = list(string)
+  default = ["169.254.169.123"]
 }
 
 variable "tgw_asn" {
@@ -224,16 +224,20 @@ variable "r53_zones" {
 }
 
 locals {
-  cli_profile_name_aws = var.cli_profile_name_aws
-  provider_role_name = var.provider_role_name
-
   org_owner_email = "${var.org_owner_email_prefix}@${var.org_owner_email_domain_tld}"
   resource_owner_email = var.resource_owner_email != "" ? var.resource_owner_email : local.org_owner_email
 
   resource_name_stub          = lower("${var.company_name_abbr}-${var.team_name_abbr}-${var.project_name_abbr}") #company - team - project - env
   resource_name_stub_primary  = lower("${local.resource_name_stub}-${var.region.primary_short}") #company - team - project - env
   resource_name_stub_failover = lower("${local.resource_name_stub}-${var.region.failover_short}") #company - team - project - env
-  this_slug = "${var.this_slug}"
+
+  vpc_name_primary  = "${local.resource_name_stub_primary}-${var.this_slug}-vpc"
+  vpc_subnet_pvt_name_primary = format("%s-pvt-", local.vpc_name_primary)
+  vpc_subnet_pub_name_primary = format("%s-pub-", local.vpc_name_primary)
+
+  vpc_name_failover = "${local.resource_name_stub_failover}-${var.this_slug}-vpc"
+  vpc_subnet_pvt_name_failover  = format("%s-pvt-", local.vpc_name_failover)
+  vpc_subnet_pub_name_failover  = format("%s-pub-", local.vpc_name_failover)
 
   vpc_cidr_primary = var.vpc_cidr_substitute
   #if vpc_cidr_substitute has been defined then increment major subnet for vpc_cidr_failover
@@ -243,8 +247,6 @@ locals {
     split(".", var.vpc_cidr_substitute)[2],
     split(".", var.vpc_cidr_substitute)[3]
   ]) : var.vpc_cidr_substitute
-
-  create_failover_region = var.create_failover_region
 
   #build lists of availability zones for each region based on number of availabiliy zones
   azs_used_num = var.availability_zones_used
@@ -287,7 +289,54 @@ locals {
     "2"
   ]) : local.vpc_cidr_failover
 
-  vpc_ntp_servers = [var.ntp_server]
+  vpc_tags_primary = merge(local.eks_tags_primary, {
+    "${local.resource_name_stub_primary}-blue"  = "shared"
+    "${local.resource_name_stub_primary}-green" = "shared"
+    "k8s.io/cluster-autoscaler/${local.resource_name_stub_primary}-blue"  = "shared"
+    "k8s.io/cluster-autoscaler/${local.resource_name_stub_primary}-green" = "shared"
+    "k8s.io/cluster-autoscaler/enabled" = "true"
+  })
+  vpc_tags_failover = merge(local.eks_tags_failover, {
+    "${local.resource_name_stub_failover}-blue"  = "shared"
+    "${local.resource_name_stub_failover}-green" = "shared"
+    "k8s.io/cluster-autoscaler/${local.resource_name_stub_failover}-blue"  = "shared"
+    "k8s.io/cluster-autoscaler/${local.resource_name_stub_failover}-green" = "shared"
+    "k8s.io/cluster-autoscaler/enabled" = "true"
+  })
+
+  subnet_pub_tags_primary = merge(local.eks_tags_primary, local.eks_tags_subnet_pub)
+  subnet_pvt_tags_primary = merge(local.eks_tags_primary, local.eks_tags_subnet_pvt)
+  subnet_pub_tags_failover = merge(local.eks_tags_failover, local.eks_tags_subnet_pub)
+  subnet_pvt_tags_failover = merge(local.eks_tags_failover, local.eks_tags_subnet_pvt)
+
+  eks_tags_primary = {
+    "kubernetes.io/cluster/${local.resource_name_stub_primary}-blue"  = "shared"
+    "kubernetes.io/cluster/${local.resource_name_stub_primary}-green" = "shared"
+  }
+  eks_tags_failover = {
+    "kubernetes.io/cluster/${local.resource_name_stub_failover}-blue"  = "shared"
+    "kubernetes.io/cluster/${local.resource_name_stub_failover}-green" = "shared"
+  }
+
+  eks_tags_subnet_pub = {
+    "kubernetes.io/role/alb-ingress"  = 1
+    "kubernetes.io/role/elb"          = 1    
+  }
+  eks_tags_subnet_pvt = {
+    "kubernetes.io/role/alb-ingress"  = 1
+    "kubernetes.io/role/internal-elb" = 1
+  }
+
+  acm_san_names = concat(
+    [
+      for zone in var.r53_zones : 
+      (var.deployment_environment != "prd" ? "${var.deployment_environment}.${zone}" : zone)
+    ],
+    [
+      for zone in var.r53_zones : 
+      (var.deployment_environment != "prd" ? "*.${var.deployment_environment}.${zone}" : "*.${zone}")
+    ]
+  )
 
   iam_access_management_tag_key = var.iam_access_management_tag_key
   iam_access_management_tag_value = "${local.resource_name_stub}"
@@ -303,15 +352,4 @@ locals {
   }
 
   default_tags = merge(local.default_tags_map, local.iam_access_management_tag_map)
-
-  acm_san_names = concat(
-    [
-      for zone in var.r53_zones : 
-      (var.deployment_environment != "prd" ? "${var.deployment_environment}.${zone}" : zone)
-    ],
-    [
-      for zone in var.r53_zones : 
-      (var.deployment_environment != "prd" ? "*.${var.deployment_environment}.${zone}" : "*.${zone}")
-    ]
-  )
 }

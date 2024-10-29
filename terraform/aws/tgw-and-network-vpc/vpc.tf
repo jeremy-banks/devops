@@ -1,51 +1,3 @@
-locals {
-  vpc_name_primary  = "${local.resource_name_stub_primary}-${local.this_slug}-vpc"
-  vpc_subnet_pvt_name_primary = format("%s-pvt-", local.vpc_name_primary)
-  vpc_subnet_pub_name_primary = format("%s-pub-", local.vpc_name_primary)
-
-  vpc_name_failover = "${local.resource_name_stub_failover}-${local.this_slug}-vpc"
-  vpc_subnet_pvt_name_failover  = format("%s-pvt-", local.vpc_name_failover)
-  vpc_subnet_pub_name_failover  = format("%s-pub-", local.vpc_name_failover)
-
-  eks_tags_primary = {
-    "kubernetes.io/cluster/${local.resource_name_stub_primary}-blue"  = "shared"
-    "kubernetes.io/cluster/${local.resource_name_stub_primary}-green" = "shared"
-  }
-  eks_tags_failover = {
-    "kubernetes.io/cluster/${local.resource_name_stub_failover}-blue"  = "shared"
-    "kubernetes.io/cluster/${local.resource_name_stub_failover}-green" = "shared"
-  }
-
-  eks_tags_subnet_pub = {
-    "kubernetes.io/role/alb-ingress"  = 1
-    "kubernetes.io/role/elb"          = 1    
-  }
-  eks_tags_subnet_pvt = {
-    "kubernetes.io/role/alb-ingress"  = 1
-    "kubernetes.io/role/internal-elb" = 1
-  }
-
-  vpc_tags_primary = merge(local.eks_tags_primary, {
-    "${local.resource_name_stub_primary}-blue"  = "shared"
-    "${local.resource_name_stub_primary}-green" = "shared"
-    "k8s.io/cluster-autoscaler/${local.resource_name_stub_primary}-blue"  = "shared"
-    "k8s.io/cluster-autoscaler/${local.resource_name_stub_primary}-green" = "shared"
-    "k8s.io/cluster-autoscaler/enabled" = "true"
-  })
-  vpc_tags_failover = merge(local.eks_tags_failover, {
-    "${local.resource_name_stub_failover}-blue"  = "shared"
-    "${local.resource_name_stub_failover}-green" = "shared"
-    "k8s.io/cluster-autoscaler/${local.resource_name_stub_failover}-blue"  = "shared"
-    "k8s.io/cluster-autoscaler/${local.resource_name_stub_failover}-green" = "shared"
-    "k8s.io/cluster-autoscaler/enabled" = "true"
-  })
-
-  subnet_pub_tags_primary = merge(local.eks_tags_primary, local.eks_tags_subnet_pub)
-  subnet_pvt_tags_primary = merge(local.eks_tags_primary, local.eks_tags_subnet_pvt)
-  subnet_pub_tags_failover = merge(local.eks_tags_failover, local.eks_tags_subnet_pub)
-  subnet_pvt_tags_failover = merge(local.eks_tags_failover, local.eks_tags_subnet_pvt)
-}
-
 module "vpc_primary" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.13.0"
@@ -60,17 +12,17 @@ module "vpc_primary" {
   external_nat_ips        = aws_eip.vpc_nat_primary[*].public_ip
 
   name  = local.vpc_name_primary
-  public_subnet_names   = [ "${local.vpc_subnet_pub_name_primary}0", "${local.vpc_subnet_pub_name_primary}1", "${local.vpc_subnet_pub_name_primary}2", "${local.vpc_subnet_pub_name_primary}3" ]
-  private_subnet_names  = [ "${local.vpc_subnet_pvt_name_primary}0", "${local.vpc_subnet_pvt_name_primary}1", "${local.vpc_subnet_pvt_name_primary}2", "${local.vpc_subnet_pvt_name_primary}3" ]
+  public_subnet_names   = [ for i in range(6) : "${local.vpc_subnet_pub_name_primary}${i}" ]
+  private_subnet_names  = [ for i in range(6) : "${local.vpc_subnet_pvt_name_primary}${i}" ]
 
   cidr            = local.vpc_cidr_primary
   azs             = local.azs_used_list_primary
   public_subnets  = local.vpc_subnet_cidrs_pub_primary
   private_subnets = local.vpc_subnet_cidrs_pvt_primary
 
-  public_subnet_tags  = local.subnet_pub_tags_primary
-  private_subnet_tags = local.subnet_pvt_tags_primary
-  vpc_tags            = merge({"Name" = "${local.vpc_name_primary}"}, local.vpc_tags_primary)
+  # public_subnet_tags  = local.subnet_pub_tags_primary
+  # private_subnet_tags = local.subnet_pvt_tags_primary
+  # vpc_tags            = merge({"Name" = "${local.vpc_name_primary}"}, local.vpc_tags_primary)
 
   manage_default_security_group   = true
   default_security_group_name     = "NEVER-USE-THIS-SECURITY-GROUP"
@@ -82,7 +34,7 @@ module "vpc_primary" {
 
   enable_dhcp_options               = true
   dhcp_options_domain_name_servers  = [local.vpc_dns_primary]
-  dhcp_options_ntp_servers          = local.vpc_ntp_servers
+  dhcp_options_ntp_servers          = var.ntp_servers
 }
 
 module "vpc_main_sg_primary" {
@@ -117,7 +69,7 @@ module "vpc_failover" {
   version = "5.13.0"
   providers = { aws = aws.network_failover }
 
-  count = local.create_failover_region ? 1 : 0
+  count = var.create_failover_region ? 1 : 0
 
   enable_nat_gateway      = true
   reuse_nat_ips           = true
@@ -126,17 +78,17 @@ module "vpc_failover" {
   external_nat_ips        = aws_eip.vpc_nat_failover[*].public_ip
 
   name  = local.vpc_name_failover
-  public_subnet_names   = [ "${local.vpc_subnet_pub_name_failover}0", "${local.vpc_subnet_pub_name_failover}1", "${local.vpc_subnet_pub_name_failover}2", "${local.vpc_subnet_pub_name_failover}3" ]
-  private_subnet_names  = [ "${local.vpc_subnet_pvt_name_failover}0", "${local.vpc_subnet_pvt_name_failover}1", "${local.vpc_subnet_pvt_name_failover}2", "${local.vpc_subnet_pvt_name_failover}3" ]
+  public_subnet_names   = [ for i in range(6) : "${local.vpc_subnet_pub_name_failover}${i}" ]
+  private_subnet_names  = [ for i in range(6) : "${local.vpc_subnet_pvt_name_failover}${i}" ]
 
   cidr            = local.vpc_cidr_failover
   azs             = local.azs_used_list_failover
   public_subnets  = local.vpc_subnet_cidrs_pub_failover
   private_subnets = local.vpc_subnet_cidrs_pvt_failover
 
-  public_subnet_tags  = local.subnet_pub_tags_failover
-  private_subnet_tags = local.subnet_pvt_tags_failover
-  vpc_tags            = merge({"Name" = "${local.vpc_name_failover}"}, local.vpc_tags_primary)
+  # public_subnet_tags  = local.subnet_pub_tags_failover
+  # private_subnet_tags = local.subnet_pvt_tags_failover
+  # vpc_tags            = merge({"Name" = "${local.vpc_name_failover}"}, local.vpc_tags_primary)
 
   manage_default_security_group   = true
   default_security_group_name     = "NEVER-USE-THIS-SECURITY-GROUP"
@@ -148,7 +100,7 @@ module "vpc_failover" {
 
   enable_dhcp_options               = true
   dhcp_options_domain_name_servers  = [local.vpc_dns_failover]
-  dhcp_options_ntp_servers          = local.vpc_ntp_servers
+  dhcp_options_ntp_servers          = var.ntp_servers
 }
 
 module "vpc_main_sg_failover" {
@@ -156,7 +108,7 @@ module "vpc_main_sg_failover" {
   version = "5.2.0"
   providers = { aws = aws.network_failover }
 
-  count = local.create_failover_region ? 1 : 0
+  count = var.create_failover_region ? 1 : 0
 
   name        = "${local.resource_name_stub_failover}-main"
   use_name_prefix = false

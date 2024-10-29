@@ -1,16 +1,9 @@
-data "aws_caller_identity" "current" {}
-
-locals {
-  unique_id = substr(sha256("foo${data.aws_caller_identity.current.account_id}"), 0, 8)
-}
-
-#primary bucket
 module "s3_primary" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "4.1.2"
   providers = { aws = aws.sdlc_prd }
 
-  bucket = "${local.resource_name_stub_primary}-${local.this_slug}-storage-blob-${local.unique_id}"
+  bucket = "${local.resource_name_stub_primary}-${var.this_slug}-storage-blob-${local.unique_id}"
 
   force_destroy = true
 
@@ -73,7 +66,6 @@ module "s3_primary" {
   attach_deny_unencrypted_object_uploads   = true
 }
 
-#iam policy for data transfer
 module "iam_policy_s3_primary_replicate_to_failover" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version = "5.45.0"
@@ -131,7 +123,6 @@ module "iam_policy_s3_primary_replicate_to_failover" {
 EOF
 }
 
-#iam role for data transfer
 module "iam_role_s3_primary_replicate_to_failover" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "5.45.0"
@@ -153,13 +144,12 @@ module "iam_role_s3_primary_replicate_to_failover" {
   ]
 }
 
-#failover bucket
 module "s3_failover" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "4.1.2"
   providers = { aws = aws.sdlc_prd_failover }
 
-  bucket = "${local.resource_name_stub_failover}-${local.this_slug}-storage-blob-${local.unique_id}"
+  bucket = "${local.resource_name_stub_failover}-${var.this_slug}-storage-blob-${local.unique_id}"
 
   force_destroy = true
 

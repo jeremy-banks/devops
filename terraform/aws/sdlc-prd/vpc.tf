@@ -1,13 +1,3 @@
-locals {
-  vpc_name_primary  = "${local.resource_name_stub_primary}-${local.this_slug}-vpc"
-  vpc_subnet_pvt_name_primary = format("%s-pvt-", local.vpc_name_primary)
-  vpc_subnet_pub_name_primary = format("%s-pub-", local.vpc_name_primary)
-
-  vpc_name_failover = "${local.resource_name_stub_failover}-${local.this_slug}-vpc"
-  vpc_subnet_pvt_name_failover  = format("%s-pvt-", local.vpc_name_failover)
-  vpc_subnet_pub_name_failover  = format("%s-pub-", local.vpc_name_failover)
-}
-
 module "vpc_primary" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.13.0"
@@ -44,7 +34,7 @@ module "vpc_primary" {
 
   enable_dhcp_options               = true
   dhcp_options_domain_name_servers  = [local.vpc_dns_primary]
-  dhcp_options_ntp_servers          = local.vpc_ntp_servers
+  dhcp_options_ntp_servers          = var.ntp_servers
 }
 
 module "vpc_main_sg_primary" {
@@ -79,7 +69,7 @@ module "vpc_failover" {
   version = "5.13.0"
   providers = { aws = aws.sdlc_prd_failover }
 
-  count = local.create_failover_region ? 1 : 0
+  count = var.create_failover_region ? 1 : 0
 
   enable_nat_gateway      = true
   reuse_nat_ips           = true
@@ -110,7 +100,7 @@ module "vpc_failover" {
 
   enable_dhcp_options               = true
   dhcp_options_domain_name_servers  = [local.vpc_dns_failover]
-  dhcp_options_ntp_servers          = local.vpc_ntp_servers
+  dhcp_options_ntp_servers          = var.ntp_servers
 }
 
 module "vpc_main_sg_failover" {
@@ -118,7 +108,7 @@ module "vpc_main_sg_failover" {
   version = "5.2.0"
   providers = { aws = aws.sdlc_prd_failover }
 
-  count = local.create_failover_region ? 1 : 0
+  count = var.create_failover_region ? 1 : 0
 
   name        = "${local.resource_name_stub_failover}-main"
   use_name_prefix = false

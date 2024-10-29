@@ -15,7 +15,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_primary" {
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_failover" {
   provider = aws.network_failover
 
-  count = local.create_failover_region ? 1 : 0
+  count = var.create_failover_region ? 1 : 0
 
   subnet_ids                                      = module.vpc_failover[0].private_subnets
   transit_gateway_id                              = aws_ec2_transit_gateway.tgw_failover[0].id

@@ -35,7 +35,7 @@ module "vpc_primary" {
 
   enable_dhcp_options               = true
   dhcp_options_domain_name_servers  = [local.vpc_dns_primary]
-  dhcp_options_ntp_servers          = local.vpc_ntp_servers
+  dhcp_options_ntp_servers          = var.ntp_servers
 }
 
 module "vpc_main_sg_primary" {
@@ -101,7 +101,7 @@ module "vpc_failover" {
 
   enable_dhcp_options               = true
   dhcp_options_domain_name_servers  = [local.vpc_dns_failover]
-  dhcp_options_ntp_servers          = local.vpc_ntp_servers
+  dhcp_options_ntp_servers          = var.ntp_servers
 }
 
 module "vpc_main_sg_failover" {
