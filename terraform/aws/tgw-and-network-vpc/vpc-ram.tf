@@ -59,7 +59,7 @@ resource "aws_ram_principal_association" "network_failover_security_ou" {
 resource "aws_ram_resource_association" "vpc_failover_subnets" {
   provider = aws.network_failover
 
-  count = local.create_failover_region != "" ? length(flatten(concat(
+  count = local.create_failover_region ? length(flatten(concat(
     module.vpc_failover[0].public_subnet_arns,
     module.vpc_failover[0].private_subnet_arns
   ))) : 0

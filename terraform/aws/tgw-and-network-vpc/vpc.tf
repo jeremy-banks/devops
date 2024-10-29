@@ -6,6 +6,44 @@ locals {
   vpc_name_failover = "${local.resource_name_stub_failover}-${local.this_slug}-vpc"
   vpc_subnet_pvt_name_failover  = format("%s-pvt-", local.vpc_name_failover)
   vpc_subnet_pub_name_failover  = format("%s-pub-", local.vpc_name_failover)
+
+  eks_tags_primary = {
+    "kubernetes.io/cluster/${local.resource_name_stub_primary}-blue"  = "shared"
+    "kubernetes.io/cluster/${local.resource_name_stub_primary}-green" = "shared"
+  }
+  eks_tags_failover = {
+    "kubernetes.io/cluster/${local.resource_name_stub_failover}-blue"  = "shared"
+    "kubernetes.io/cluster/${local.resource_name_stub_failover}-green" = "shared"
+  }
+
+  eks_tags_subnet_pub = {
+    "kubernetes.io/role/alb-ingress"  = 1
+    "kubernetes.io/role/elb"          = 1    
+  }
+  eks_tags_subnet_pvt = {
+    "kubernetes.io/role/alb-ingress"  = 1
+    "kubernetes.io/role/internal-elb" = 1
+  }
+
+  vpc_tags_primary = merge(local.eks_tags_primary, {
+    "${local.resource_name_stub_primary}-blue"  = "shared"
+    "${local.resource_name_stub_primary}-green" = "shared"
+    "k8s.io/cluster-autoscaler/${local.resource_name_stub_primary}-blue"  = "shared"
+    "k8s.io/cluster-autoscaler/${local.resource_name_stub_primary}-green" = "shared"
+    "k8s.io/cluster-autoscaler/enabled" = "true"
+  })
+  vpc_tags_failover = merge(local.eks_tags_failover, {
+    "${local.resource_name_stub_failover}-blue"  = "shared"
+    "${local.resource_name_stub_failover}-green" = "shared"
+    "k8s.io/cluster-autoscaler/${local.resource_name_stub_failover}-blue"  = "shared"
+    "k8s.io/cluster-autoscaler/${local.resource_name_stub_failover}-green" = "shared"
+    "k8s.io/cluster-autoscaler/enabled" = "true"
+  })
+
+  subnet_pub_tags_primary = merge(local.eks_tags_primary, local.eks_tags_subnet_pub)
+  subnet_pvt_tags_primary = merge(local.eks_tags_primary, local.eks_tags_subnet_pvt)
+  subnet_pub_tags_failover = merge(local.eks_tags_failover, local.eks_tags_subnet_pub)
+  subnet_pvt_tags_failover = merge(local.eks_tags_failover, local.eks_tags_subnet_pvt)
 }
 
 module "vpc_primary" {
@@ -79,7 +117,7 @@ module "vpc_failover" {
   version = "5.13.0"
   providers = { aws = aws.network_failover }
 
-  count = local.create_failover_region != "" ? 1 : 0
+  count = local.create_failover_region ? 1 : 0
 
   enable_nat_gateway      = true
   reuse_nat_ips           = true
@@ -118,7 +156,7 @@ module "vpc_main_sg_failover" {
   version = "5.2.0"
   providers = { aws = aws.network_failover }
 
-  count = local.create_failover_region != "" ? 1 : 0
+  count = local.create_failover_region ? 1 : 0
 
   name        = "${local.resource_name_stub_failover}-main"
   use_name_prefix = false

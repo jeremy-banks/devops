@@ -1,7 +1,7 @@
 resource "aws_vpc_endpoint" "primary" {
   provider = aws.network
 
-  count = local.vpc_cidr_primary != "" && length(var.network_vpc_endpoint_services_enabled) > 0 ? length(var.network_vpc_endpoint_services_enabled) : 0
+  count = local.vpc_cidr_primary != "" && var.network_vpc_endpoint_services_enabled != [] ? length(var.network_vpc_endpoint_services_enabled) : 0
 
   vpc_id            = module.vpc_primary[0].vpc_id
   service_name      = "com.amazonaws.${var.region.primary}.${var.network_vpc_endpoint_services_enabled[count.index]}"
@@ -13,7 +13,7 @@ resource "aws_vpc_endpoint" "primary" {
 resource "aws_vpc_endpoint" "failover" {
   provider = aws.network_failover
 
-  count = local.create_failover_region != "" && length(var.network_vpc_endpoint_services_enabled) > 0 ? length(var.network_vpc_endpoint_services_enabled) : 0
+  count = local.create_failover_region && var.network_vpc_endpoint_services_enabled != [] ? length(var.network_vpc_endpoint_services_enabled) : 0
 
   vpc_id            = module.vpc_failover[0].vpc_id
   service_name      = "com.amazonaws.${var.region.failover}.${var.network_vpc_endpoint_services_enabled[count.index]}"

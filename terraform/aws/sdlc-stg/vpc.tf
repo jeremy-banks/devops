@@ -18,8 +18,8 @@ module "vpc_primary" {
 
   cidr            = local.vpc_cidr_primary
   azs             = local.vpc_azs_primary
-  public_subnets  = local.vpc_subnets_public_primary
-  private_subnets = local.vpc_subnets_private_primary
+  public_subnets  = local.vpc_subnet_cidrs_pub_primary
+  private_subnets = local.vpc_subnet_cidrs_pvt_primary
 
   public_subnet_tags  = local.subnet_pub_tags_primary
   private_subnet_tags = local.subnet_pvt_tags_primary
@@ -84,8 +84,8 @@ module "vpc_failover" {
 
   cidr            = local.vpc_cidr_failover
   azs             = local.vpc_azs_failover
-  public_subnets  = local.vpc_subnets_public_failover
-  private_subnets = local.vpc_subnets_private_failover
+  public_subnets  = local.vpc_subnet_cidrs_pub_failover
+  private_subnets = local.vpc_subnet_cidrs_pvt_failover
 
   public_subnet_tags  = local.subnet_pub_tags_failover
   private_subnet_tags = local.subnet_pvt_tags_failover
