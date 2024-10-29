@@ -5,7 +5,7 @@ resource "aws_organizations_account" "sdlc_prd" {
   close_on_deletion           = true
   create_govcloud             = false
   iam_user_access_to_billing  = "ALLOW"
-  parent_id                   = aws_organizations_organizational_unit.workloads_prod.id
+  parent_id                   = aws_organizations_organizational_unit.sdlc.id
   role_name                   = var.assumable_role_name.superadmin
 }
 
@@ -20,7 +20,7 @@ resource "aws_organizations_account" "sdlc_stg" {
   close_on_deletion           = true
   create_govcloud             = false
   iam_user_access_to_billing  = "ALLOW"
-  parent_id                   = aws_organizations_organizational_unit.workloads_nonprod.id
+  parent_id                   = aws_organizations_organizational_unit.sdlc.id
   role_name                   = var.assumable_role_name.superadmin
 }
 
@@ -35,7 +35,7 @@ resource "aws_organizations_account" "sdlc_tst" {
   close_on_deletion           = true
   create_govcloud             = false
   iam_user_access_to_billing  = "ALLOW"
-  parent_id                   = aws_organizations_organizational_unit.workloads_nonprod.id
+  parent_id                   = aws_organizations_organizational_unit.sdlc.id
   role_name                   = var.assumable_role_name.superadmin
 }
 
@@ -50,7 +50,7 @@ resource "aws_organizations_account" "sdlc_dev" {
   close_on_deletion           = true
   create_govcloud             = false
   iam_user_access_to_billing  = "ALLOW"
-  parent_id                   = aws_organizations_organizational_unit.workloads_nonprod.id
+  parent_id                   = aws_organizations_organizational_unit.sdlc.id
   role_name                   = var.assumable_role_name.superadmin
 }
 

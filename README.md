@@ -171,6 +171,11 @@ Virtual Private Cloud Subnet layout is designed to provide 99.999% ("Five Nines"
    1. Deploy terraform/aws/workload-customerb
 
 ## To-Do
+- reorg the sdlc accounts unerneath the workloads ou / sdls ou
+   - make customera ou
+- need to share network VPC to sdlc
+- need code for share_vpc and share_tgw
+- need tags_all to populate tags in non-SDLC accounts for EKS requirements
 - sdlc needs an elegant way to create DNS records to point to VPC endpoints in the shared network VPC
    - needs to support multi-regional failover as well
    - just start with making R53 entries first, this may be all that is needed
