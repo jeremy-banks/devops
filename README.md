@@ -85,15 +85,10 @@ Virtual Private Cloud Subnet layout is designed to provide 99.999% ("Five Nines"
 ### Instructions
 1. Create AWS Account to be Organization root
 1. Update the terraform/variables.tf with your unique information
-   1. org_owner_email_prefix (billg)
-   1. org_owner_email_domain_tld (microsoft.com)
-   1. company_domain (windows.com)
-   1. company_name (microsoft)
-   1. company_name_abbr (ms)
-   1. team_name (blue)
-   1. team_name_abbr (blue)
-   1. project_name (windows13)
-   1. project_name_abbr (w13)
+   1. `org_owner_email_prefix` (billg) and `org_owner_email_domain_tld` (microsoft.com)
+   1. `company_name` (microsoft) and `company_name_abbr` (ms)
+   1. `team_name` (blue) and `team_name_abbr` (blu)
+   1. `project_name` (windows13) and `project_name_abbr` (w13)
 1. Create IAM User "superadmin"
    1. Attach AdministratorAccess policy
    1. Create an access key to be used in AWS CLI profile named "superadmin"
@@ -171,6 +166,7 @@ Virtual Private Cloud Subnet layout is designed to provide 99.999% ("Five Nines"
    1. Deploy terraform/aws/workload-customerb
 
 ## To-Do
+- need to expand IAM into new customer accounts and SDLC
 - reorg the sdlc accounts unerneath the workloads ou / sdls ou
    - make customera ou
 - need to share network VPC to sdlc
