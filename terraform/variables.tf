@@ -16,13 +16,13 @@ variable "account_id" {
 variable "org_owner_email_prefix" {
   description = "the 'billg' in 'billg@microsoft'"
   type        = string
-  default     = "billg"
+  default     = "jeremyb+devopstest"
 }
 
 variable "org_owner_email_domain_tld" {
   description = "the 'microsoft.com' in 'billg@microsoft.com'"
   type        = string
-  default     = "microsoft.com"
+  default     = "gmail.com"
 }
 
 variable "company_name" {

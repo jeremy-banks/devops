@@ -101,11 +101,11 @@ Virtual Private Cloud Subnet layout is designed to provide 99.999% ("Five Nines"
 1. Deploy `terraform/aws/tfstate-backend`
 1. Update the backend.tf files in `terraform/aws/` and subdirectories
    ```sh
-   find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDORGACCOUNTID,account_id,g' {} + &
-   find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDREGION,region,g' {} + &
-   find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDDYNAMODBTABLE,dynamodb_table,g' {} + &
-   find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDKMSARN,kms_key_arn,g' {} + &
-   find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDS3BUCKETNAME,bucket_name,g' {} + &
+   find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDORGACCOUNTID,600627360992,g' {} + &&\
+   find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDREGION,us-west-2,g' {} + &&\
+   find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDDYNAMODBTABLE,scc-blu-w12-usw2-tfstate,g' {} + &&\
+   find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDKMSARN,arn:aws:kms:us-west-2:600627360992:key/mrk-e42ea270137a4b6e9cea326d5435e5c2,g' {} + &&\
+   find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDS3BUCKETNAME,scc-blu-w12-usw2-tfstate-storage-blob-569d758c,g' {} +
    ```
 1. Uncomment `terraform/aws/tfstate-backend/backend.tf` and migrate state with `echo yes | terraform init -reconfigure`
 1. Open Support Case with Account and Billing in the Organization requesting `Default maximum number of accounts` increased to `1000`.
@@ -175,6 +175,10 @@ Virtual Private Cloud Subnet layout is designed to provide 99.999% ("Five Nines"
    1. Deploy terraform/aws/workload-customerb
 
 ## To-Do
+- SCP by OU to restrict
+   - using non-allowed regions
+   - editing IAC-tagged resources
+   - AI opt-out policy
 - need to expand IAM into new customer accounts and SDLC
 - reorg the sdlc accounts unerneath the workloads ou / sdls ou
    - make customera ou
