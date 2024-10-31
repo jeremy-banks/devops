@@ -1,3 +1,5 @@
 cli_profile_name_aws = "superadmin"
 
-deployment_environment = "prod"
+deployment_environment = "prd"
+
+this_slug = "tfstate"
