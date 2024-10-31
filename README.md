@@ -86,7 +86,7 @@ Virtual Private Cloud Subnet layout is designed to provide 99.999% ("Five Nines"
 
 #### Deploy Backend and Create Org
 1. Create AWS Account to be Organization root
-   1. During account creation be sure to enable Developer tier AWS Support, you will need to open a Support case for increasing your quote of `Default maximum number of accounts`.
+   1. During account creation be sure to enable Developer tier AWS Support, you will need to open a Support Case for increasing your quote of `Default maximum number of accounts`.
 1. Update the terraform/variables.tf with your unique information
    1. `org_owner_email_prefix` (billg) and `org_owner_email_domain_tld` (microsoft.com)
    1. `company_name` (microsoft) and `company_name_abbr` (ms)
@@ -101,11 +101,14 @@ Virtual Private Cloud Subnet layout is designed to provide 99.999% ("Five Nines"
 1. Deploy `terraform/aws/tfstate-backend`
 1. Update the backend.tf files in `terraform/aws/` and subdirectories
    ```sh
-   find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDORGACCOUNTID/123456789012/g' {} +
-   find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDREGION/us-west-2/g' {} +
-   find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDDYNAMODBTABLE/dynamodb-tfstate-lock/g' {} +
-   find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDS3BUCKETNAME/tfstate-bucket-name/g' {} +
+   find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDORGACCOUNTID,account_id,g' {} + &
+   find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDREGION,region,g' {} + &
+   find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDDYNAMODBTABLE,dynamodb_table,g' {} + &
+   find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDKMSARN,kms_key_arn,g' {} + &
+   find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDS3BUCKETNAME,bucket_name,g' {} + &
    ```
+1. Uncomment `terraform/aws/tfstate-backend/backend.tf` and migrate state with `echo yes | terraform init -reconfigure`
+1. Open Support Case with Account and Billing in the Organization requesting `Default maximum number of accounts` increased to `1000`.
 
 #### Deploy Org
 1. Deploy terraform/aws/org-ou-account-management to create additional AWS Organization Units and Accounts
