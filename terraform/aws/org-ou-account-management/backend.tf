@@ -6,7 +6,7 @@ terraform {
     bucket          = "TFSTATEBACKENDS3BUCKETNAME"
     key             = "superadmin/org-ou-account-management"
     encrypt         = true
-    kms_key_id      = "TFSTATEBACKENDKMSKEYARN"
+    kms_key_id      = "TFSTATEBACKENDKMSARN"
     dynamodb_table  = "TFSTATEBACKENDDYNAMODBTABLE"
   }
 }
