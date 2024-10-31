@@ -1,11 +1,12 @@
-# terraform {
-#   backend "s3" {
-#     profile         = "superadmin"
-#     bucket          = "TFSTATEBACKENDS3BUCKETNAME"
-#     key             = "org-ou-account-management"
-#     region          = "us-west-2"
-#     dynamodb_table  = "TFSTATEBACKENDDYNAMODBTABLE"
-#     encrypt         = true
-#     insecure        = false
-#   }
-# }
+terraform {
+  backend "s3" {
+    profile         = "superadmin"
+    insecure        = false
+    region          = "TFSTATEBACKENDREGION"
+    bucket          = "TFSTATEBACKENDS3BUCKETNAME"
+    key             = "superadmin/org-ou-account-management"
+    encrypt         = true
+    kms_key_id      = "TFSTATEBACKENDKMSKEYARN"
+    dynamodb_table  = "TFSTATEBACKENDDYNAMODBTABLE"
+  }
+}

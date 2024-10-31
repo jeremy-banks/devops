@@ -5,7 +5,7 @@ terraform {
     insecure        = false
     region          = "TFSTATEBACKENDREGION"
     bucket          = "TFSTATEBACKENDS3BUCKETNAME"
-    key             = "automation/r53-zones-and-records"
+    key             = "automation/enterprise-ad"
     encrypt         = true
     kms_key_id      = "TFSTATEBACKENDKMSKEYARN"
     dynamodb_table  = "TFSTATEBACKENDDYNAMODBTABLE"

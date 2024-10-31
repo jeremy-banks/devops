@@ -1,14 +1,13 @@
-# terraform {
-#   backend "s3" {
-#     profile         = "automation"
-#     assume_role = {
-#       role_arn = "arn:aws:iam::TFSTATEBACKENDORGACCOUNTID:role/automation"
-#     }
-#     bucket          = "TFSTATEBACKENDS3BUCKETNAME"
-#     key             = "project-demo-nonprod"
-#     region          = "us-west-2"
-#     dynamodb_table  = "TFSTATEBACKENDDYNAMODBTABLE"
-#     encrypt         = true
-#     insecure        = false
-#   }
-# }
+terraform {
+  backend "s3" {
+    profile         = "automation"
+    assume_role     = { role_arn = "arn:aws:iam::TFSTATEBACKENDORGACCOUNTID:role/automation" }
+    insecure        = false
+    region          = "TFSTATEBACKENDREGION"
+    bucket          = "TFSTATEBACKENDS3BUCKETNAME"
+    key             = "automation/sdlc-prd"
+    encrypt         = true
+    kms_key_id      = "TFSTATEBACKENDKMSKEYARN"
+    dynamodb_table  = "TFSTATEBACKENDDYNAMODBTABLE"
+  }
+}
