@@ -83,27 +83,30 @@ Virtual Private Cloud Subnet layout is designed to provide 99.999% ("Five Nines"
 - helm v3.16.1
 
 ### Instructions
+
+#### Deploy Backend and Create Org
+1. Create AWS Account to be Organization root
+   1. During account creation be sure to enable Developer tier AWS Support, you will need to open a Support case for increasing your quote of `Default maximum number of accounts`.
+1. Update the terraform/variables.tf with your unique information
+   1. `org_owner_email_prefix` (billg) and `org_owner_email_domain_tld` (microsoft.com)
+   1. `company_name` (microsoft) and `company_name_abbr` (ms)
+   1. `team_name` (blue) and `team_name_abbr` (blu)
+   1. `project_name` (windows13) and `project_name_abbr` (w13)
+1. Create IAM User "superadmin"
+   1. Attach AdministratorAccess policy
+   1. Create an access key to be used in AWS CLI profile named "superadmin"
+      ```sh
+      aws configure --profile superadmin
+      ```
 1. Deploy `terraform/aws/tfstate-backend`
-   1. Create AWS Account to be Organization root
-      1. During account creation be sure to enable Developer tier AWS Support, you will need to open a Support case for increasing your quote of `Default maximum number of accounts`.
-   1. Update the terraform/variables.tf with your unique information
-      1. `org_owner_email_prefix` (billg) and `org_owner_email_domain_tld` (microsoft.com)
-      1. `company_name` (microsoft) and `company_name_abbr` (ms)
-      1. `team_name` (blue) and `team_name_abbr` (blu)
-      1. `project_name` (windows13) and `project_name_abbr` (w13)
-   1. Create IAM User "superadmin"
-      1. Attach AdministratorAccess policy
-      1. Create an access key to be used in AWS CLI profile named "superadmin"
-         ```sh
-         aws configure --profile superadmin
-         ```
-   1. Deploy terraform/aws/tfstate-backend
-      1. Update the terraform/aws/*/backend.tf files
-         ```sh
-         org root account id   find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDORGACCOUNTID/123456789012/g' {} +
-         1. bucket:  find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDS3BUCKETNAME/tfstate-bucket-name/g' {} +
-         1. dynamodb table:  find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDDYNAMODBTABLE/dynamodb-tfstate-lock/g' {} +
-         ```
+1. Update the terraform/aws/*/backend.tf files
+   ```sh
+   org root account id   find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDORGACCOUNTID/123456789012/g' {} +
+   1. bucket:  find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDS3BUCKETNAME/tfstate-bucket-name/g' {} +
+   1. dynamodb table:  find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDDYNAMODBTABLE/dynamodb-tfstate-lock/g' {} +
+   ```
+
+#### Deploy Org
 1. Deploy terraform/aws/org-ou-account-management to create additional AWS Organization Units and Accounts
    1. Update the terraform/variables.tf account_id map with terraform output
 1. Deploy terraform/aws/iam-groups-and-roles
