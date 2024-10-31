@@ -99,12 +99,12 @@ Virtual Private Cloud Subnet layout is designed to provide 99.999% ("Five Nines"
       aws configure --profile superadmin
       ```
 1. Deploy `terraform/aws/tfstate-backend`
-1. Update the backend.tf files in `terraform/aws/*`
+1. Update the backend.tf files in `terraform/aws/` and subdirectories
    ```sh
-   org_account_id:         find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDORGACCOUNTID/123456789012/g' {} +
-   region:                 find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDREGION/us-west-2/g' {} +
-   tfstate_dynamodb_table: find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDDYNAMODBTABLE/dynamodb-tfstate-lock/g' {} +
-   tfstate_s3_arn:         find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDS3BUCKETNAME/tfstate-bucket-name/g' {} +
+   find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDORGACCOUNTID/123456789012/g' {} +
+   find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDREGION/us-west-2/g' {} +
+   find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDDYNAMODBTABLE/dynamodb-tfstate-lock/g' {} +
+   find . -name 'backend.tf' -exec sed -i 's/TFSTATEBACKENDS3BUCKETNAME/tfstate-bucket-name/g' {} +
    ```
 
 #### Deploy Org
