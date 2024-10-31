@@ -8,7 +8,7 @@ data "aws_iam_policy_document" "iam_user_automation" {
     condition {
       test     = "StringEquals"
       variable = "aws:PrincipalOrgID"
-      values = [data.aws_organizations_organization.current.id]
+      values = [data.aws_organizations_organization.this.id]
     }
   }
 }

@@ -76,12 +76,6 @@ variable "resource_owner_email" {
   default     = ""
 }
 
-variable "this_slug" {
-  description = "used to programatically declare resource names"
-  type        = string
-  default     = "YOU-FORGOT-TO-DECLARE-this_slug-AND-AS-A-RESULT-THIS-STRING-IS-SO-LONG-IT-WILL-HOPEFULLY-FAIL-PROMPTING-YOU-TO-DEFINE-IT"
-}
-
 variable "cli_profile_name_aws" {
   description = "aws profile name to be used"
   type        = string
@@ -116,6 +110,17 @@ variable "iam_immutable_tag_key" {
   default     = "immutable"
 }
 
+variable "org_aws_service_access_principals" {
+  type = list(string)
+  default = [
+    "cloudtrail.amazonaws.com",
+    "config-multiaccountsetup.amazonaws.com",
+    "config.amazonaws.com",
+    "ds.amazonaws.com", #enterprise active directory
+    "ram.amazonaws.com",
+  ]
+}
+
 variable "region" {
   description = "regions for the infrastructure"
   type        = map(string)
@@ -125,6 +130,12 @@ variable "region" {
     primary_short   = "usw2"
     failover_short  = "use1"
   }
+}
+
+variable "this_slug" {
+  description = "used to programatically declare resource names"
+  type        = string
+  default     = "YOU-FORGOT-TO-DECLARE-VARIABLE-this_slug-AND-AS-A-RESULT-THIS-STRING-IS-SO-LONG-IT-WILL-HOPEFULLY-FAIL-ANY-RESOURCE-CREATE-THUS-PROMPTING-YOU-TO-DEFINE-IT-IN-terraform.tfvars"
 }
 
 variable "create_failover_region" {

@@ -1,4 +1,4 @@
-data "aws_caller_identity" "current" {}
+data "aws_caller_identity" "this" {}
 
 data "aws_ec2_transit_gateway" "tgw_primary" {
   provider = aws.network
@@ -14,8 +14,4 @@ data "aws_ec2_transit_gateway" "tgw_failover" {
     name   = "options.amazon-side-asn"
     values = [var.tgw_asn.failover]
   }
-}
-
-locals {
-  unique_id = substr(sha256("foo${data.aws_caller_identity.current.account_id}"), 0, 8)
 }

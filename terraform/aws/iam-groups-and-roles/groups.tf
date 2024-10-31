@@ -29,7 +29,7 @@
 #     condition {
 #       test     = "StringEquals"
 #       variable = "aws:PrincipalOrgID"
-#       values = [data.aws_organizations_organization.current.id]
+#       values = [data.aws_organizations_organization.this.id]
 #     }
 #   }
 # }
@@ -63,7 +63,7 @@
 #     condition {
 #       test     = "StringEquals"
 #       variable = "aws:PrincipalOrgID"
-#       values = [data.aws_organizations_organization.current.id]
+#       values = [data.aws_organizations_organization.this.id]
 #     }
 #   }
 # }
@@ -97,7 +97,7 @@
 #     condition {
 #       test     = "StringEquals"
 #       variable = "aws:PrincipalOrgID"
-#       values = [data.aws_organizations_organization.current.id]
+#       values = [data.aws_organizations_organization.this.id]
 #     }
 #   }
 # }
@@ -131,7 +131,7 @@
 #     condition {
 #       test     = "StringEquals"
 #       variable = "aws:PrincipalOrgID"
-#       values = [data.aws_organizations_organization.current.id]
+#       values = [data.aws_organizations_organization.this.id]
 #     }
 #   }
 # }
@@ -165,7 +165,7 @@
 #     condition {
 #       test     = "StringEquals"
 #       variable = "aws:PrincipalOrgID"
-#       values = [data.aws_organizations_organization.current.id]
+#       values = [data.aws_organizations_organization.this.id]
 #     }
 #   }
 # }
@@ -201,7 +201,7 @@
 #     condition {
 #       test     = "StringEquals"
 #       variable = "aws:PrincipalOrgID"
-#       values = [data.aws_organizations_organization.current.id]
+#       values = [data.aws_organizations_organization.this.id]
 #     }
 #   }
 # }

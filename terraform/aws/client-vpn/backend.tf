@@ -7,7 +7,7 @@ terraform {
     bucket          = "TFSTATEBACKENDS3BUCKETNAME"
     key             = "automation/client-vpn"
     encrypt         = true
-    kms_key_id      = "TFSTATEBACKENDKMSKEYARN"
+    kms_key_id      = "TFSTATEBACKENDKMSARN"
     dynamodb_table  = "TFSTATEBACKENDDYNAMODBTABLE"
   }
 }

@@ -28,16 +28,12 @@ resource "aws_ec2_transit_gateway" "tgw_failover" {
   tags                                = { "Name" = "${local.resource_name_stub_failover}-${var.this_slug}-tgw"}
 }
 
-data "aws_caller_identity" "network" {
-  provider = aws.network
-}
-
 resource "aws_ec2_transit_gateway_peering_attachment" "tgw_peering" {
   provider = aws.network_failover
 
   count = var.create_failover_region ? 1 : 0
 
-  peer_account_id         = data.aws_caller_identity.network.account_id
+  peer_account_id         = data.aws_caller_identity.this.account_id
   peer_region             = var.region.primary
   peer_transit_gateway_id = aws_ec2_transit_gateway.tgw_primary[0].id
   transit_gateway_id      = aws_ec2_transit_gateway.tgw_failover[0].id

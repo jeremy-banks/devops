@@ -1,5 +1,5 @@
 #primary
-data "aws_caller_identity" "network" {
+data "aws_caller_identity" "this" {
   provider = aws.network
 }
 
