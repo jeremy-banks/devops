@@ -29,7 +29,7 @@ vpc:
 
 # cloudWatch:
 #   clusterLogging:
-#     enableTypes: [ "all" ]
+#     enableTypes: ["all"]
 #     logRetentionInDays: 1
 
 iam:
@@ -51,7 +51,7 @@ iam:
       createServiceAccount: true
       wellKnownPolicies:
         awsLoadBalancerController: true
-      permissionPolicyARNs: [ "arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess" ]
+      permissionPolicyARNs: ["arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess"]
 
     - namespace: kube-system
       serviceAccountName: external-dns

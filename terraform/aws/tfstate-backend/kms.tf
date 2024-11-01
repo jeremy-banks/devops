@@ -48,7 +48,7 @@ data "aws_iam_policy_document" "kms"  {
       ]
     }
     condition {
-      test     = "StringLike"
+      test     = "StringEquals"
       variable = "aws:PrincipalOrgID"
       values   = [
         "${aws_organizations_organization.this.id}",

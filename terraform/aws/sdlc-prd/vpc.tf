@@ -12,8 +12,8 @@ module "vpc_primary" {
   external_nat_ips        = aws_eip.vpc_nat_primary[*].public_ip
 
   name  = local.vpc_name_primary
-  public_subnet_names   = [ for i in range(6) : "${local.vpc_subnet_pub_name_primary}${i}" ]
-  private_subnet_names  = [ for i in range(6) : "${local.vpc_subnet_pvt_name_primary}${i}" ]
+  public_subnet_names   = [ for i in range(6) : "${local.vpc_subnet_pub_name_primary}${i}"]
+  private_subnet_names  = [ for i in range(6) : "${local.vpc_subnet_pvt_name_primary}${i}"]
 
   cidr            = local.vpc_cidr_primary
   azs             = local.azs_used_list_primary
@@ -78,8 +78,8 @@ module "vpc_failover" {
   external_nat_ips        = aws_eip.vpc_nat_failover[*].public_ip
 
   name  = local.vpc_name_failover
-  public_subnet_names   = [ for i in range(6) : "${local.vpc_subnet_pub_name_failover}${i}" ]
-  private_subnet_names  = [ for i in range(6) : "${local.vpc_subnet_pvt_name_failover}${i}" ]
+  public_subnet_names   = [ for i in range(6) : "${local.vpc_subnet_pub_name_failover}${i}"]
+  private_subnet_names  = [ for i in range(6) : "${local.vpc_subnet_pvt_name_failover}${i}"]
 
   cidr            = local.vpc_cidr_failover
   azs             = local.azs_used_list_failover

@@ -20,7 +20,7 @@ data "aws_iam_policy_document" "s3_primary"  {
       ]
     }
     condition {
-      test     = "StringLike"
+      test     = "StringEquals"
       variable = "aws:PrincipalOrgID"
       values   = [
         "${aws_organizations_organization.this.id}",
@@ -48,7 +48,7 @@ data "aws_iam_policy_document" "s3_primary"  {
       ]
     }
     condition {
-      test     = "StringLike"
+      test     = "StringEquals"
       variable = "aws:PrincipalOrgID"
       values   = [
         "${aws_organizations_organization.this.id}",
@@ -227,7 +227,7 @@ data "aws_iam_policy_document" "s3_failover"  {
       ]
     }
     condition {
-      test     = "StringLike"
+      test     = "StringEquals"
       variable = "aws:PrincipalOrgID"
       values   = [
         "${aws_organizations_organization.this.id}",
@@ -255,7 +255,7 @@ data "aws_iam_policy_document" "s3_failover"  {
       ]
     }
     condition {
-      test     = "StringLike"
+      test     = "StringEquals"
       variable = "aws:PrincipalOrgID"
       values   = [
         "${aws_organizations_organization.this.id}",
