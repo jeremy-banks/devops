@@ -1,3 +1,33 @@
+module "dynamodb_primary" {
+  source  = "terraform-aws-modules/dynamodb-table/aws"
+  version = "4.2.0"
+  providers = { aws = aws.org }
+
+  name     = "${local.resource_name_stub_primary}-tfstate"
+  hash_key       = "LockID"
+  attributes = [
+    {
+      name = "LockID"
+      type = "S"
+    }
+  ]
+}
+
+module "dynamodb_failover" {
+  source  = "terraform-aws-modules/dynamodb-table/aws"
+  version = "4.2.0"
+  providers = { aws = aws.org_failover }
+
+  name     = "${local.resource_name_stub_failover}-tfstate"
+  hash_key       = "LockID"
+  attributes = [
+    {
+      name = "LockID"
+      type = "S"
+    }
+  ]
+}
+
 data "aws_iam_policy_document" "s3_primary"  {
   statement {
     sid    = "Allow use of the key by role ${var.assumable_role_name.automation}"
@@ -62,7 +92,7 @@ module "s3_primary" {
   version = "4.2.1"
   providers = { aws = aws.org }
 
-  bucket = "${local.resource_name_stub_primary}-${var.this_slug}-storage-blob-${local.unique_id}"
+  bucket = "${local.resource_name_stub_primary}-tfstate-storage-blob-${local.unique_id}"
 
   force_destroy = true
 
@@ -119,6 +149,7 @@ module "s3_primary" {
 
   attach_policy                             = true
   policy                                    = data.aws_iam_policy_document.s3_primary.json
+  attach_deny_incorrect_encryption_headers  = true
   attach_deny_incorrect_kms_key_sse         = true
   allowed_kms_key_arn                       = module.kms_primary.key_arn
 }
@@ -265,7 +296,7 @@ module "s3_failover" {
   version = "4.2.1"
   providers = { aws = aws.org_failover }
 
-  bucket = "${local.resource_name_stub_failover}-${var.this_slug}-storage-blob-${local.unique_id}"
+  bucket = "${local.resource_name_stub_failover}-tfstate-storage-blob-${local.unique_id}"
 
   force_destroy = true
 
@@ -294,6 +325,7 @@ module "s3_failover" {
 
   attach_policy                             = true
   policy                                    = data.aws_iam_policy_document.s3_failover.json
+  attach_deny_incorrect_encryption_headers  = true
   attach_deny_incorrect_kms_key_sse         = true
   allowed_kms_key_arn                       = module.kms_failover.key_arn
 }

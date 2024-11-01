@@ -8,6 +8,7 @@
 ### Documentation Reference
 - Terraform providers and modules all version locked
 - Code written following AWS documentation
+  - Guidance to Render Unsecured PHI Unusable https://www.hhs.gov/hipaa/for-professionals/breach-notification/guidance/index.html
   - Well-Architected Framework  https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html
   - Prescriptive Guidance Security Reference Architecture https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture/org-management.html
   - Best practices for multi-account management https://docs.aws.amazon.com/organizations/latest/userguide/orgs_best-practices.html
@@ -119,6 +120,8 @@ Virtual Private Cloud Subnet layout is designed to provide 99.999% ("Five Nines"
       terraform output -json
       aws configure --profile automation
       ```
+
+#### Deploy Transit Gateway and Shared Network VPC
 1. Deploy terraform/aws/tgw-and-network-vpc
 1. Deploy sdlc accounts
    1. Deploy terraform/aws/sdlc-prd
@@ -170,24 +173,22 @@ Virtual Private Cloud Subnet layout is designed to provide 99.999% ("Five Nines"
    1. This deployment can take up to 2 hours and may fail several times due to AWS throttling, keep running plan and apply until complete
    1. Update the terraform/variables.tf ad_directory_id_connector_network and ad_directory_id_connector_network_failover strings with terraform output
 1. Deploy terraform/aws/client-vpn -->
-1. Deploy customer accounts
+<!-- 1. Deploy customer accounts
    1. Deploy terraform/aws/workload-customera
-   1. Deploy terraform/aws/workload-customerb
+   1. Deploy terraform/aws/workload-customerb -->
 
 ## To-Do
-- SCP by OU to restrict
-   - using non-allowed regions
-   - editing IAC-tagged resources
-   - AI opt-out policy
-- need to expand IAM into new customer accounts and SDLC
-- reorg the sdlc accounts unerneath the workloads ou / sdls ou
-   - make customera ou
-- need to share network VPC to sdlc
-- need code for share_vpc and share_tgw
-- need tags_all to populate tags in non-SDLC accounts for EKS requirements
-- sdlc needs an elegant way to create DNS records to point to VPC endpoints in the shared network VPC
-   - needs to support multi-regional failover as well
-   - just start with making R53 entries first, this may be all that is needed
+- SCP enforcing features
+   - S3 buckets never public
+   - aws_ebs_snapshot_block_public_access
+   - block public s3 access
+- Complete sdlc dev, tst, and stg
+   - need to expand IAM into new customer accounts and SDLC
+   - need to share network VPC to sdlc
+      - need code for share_vpc and share_tgw
+   - sdlc needs an elegant way to create DNS records to point to VPC endpoints in the shared network VPC
+      - needs to support multi-regional failover as well
+      - just start with making R53 entries first, this may be all that is needed
 - Federated login for devops, operations, and developers
    - https://getstarted.awsworkshop.io/02-dev-fast-follow/02-federated-access-to-aws/02-aws-sso-ad.html
    - https://aws.amazon.com/blogs/architecture/field-notes-integrating-active-directory-federation-service-with-aws-single-sign-on/
@@ -196,39 +197,30 @@ Virtual Private Cloud Subnet layout is designed to provide 99.999% ("Five Nines"
    - might need to make a separate DOMAIN.TLD for services like clientVPN and enterprise AD domains if any
 - Triggering a DR event
    - ACL allows no traffic in one subnet
-- Implement backend tfstate lock with dynamodb
-   - need bucket, table, and access set up uniquely for superadmin and automation users
-- Complete sdlc dev, tst, and stg
-- Need scalable solution to deploy security settings such as aws_ebs_snapshot_block_public_access, block public s3 access, default ebs encryption, etc
-   - probably need a step after account creation before iam to deploy org-security-settings
-- Opt out of all AI policy https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_ai-opt-out.html
-- Implement Rust server
+   - EKS autoscaling examples
+      - CPU
+      - Sessions
 - Implement the Well-Architected Tool https://docs.aws.amazon.com/whitepapers/latest/organizing-your-aws-environment/organizing-your-aws-environment.html
-- Complete some kind of automation to convert drawings into png for this documentation
 - Base docker images for all distros
    - initially just docker images which run apt-get upgrade or yum upgrade to get patches
-- Packer and ansible example for building base AMIs
+- Implement Rust server
+- Complete some kind of automation to convert drawings into png for this documentation
 - Centralized logging with compression and glacier archive
    - DNS logs sent to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
    - ALB logs send to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
-- EKS autoscaling examples
-   - CPU
-   - Sessions
-- SCP enforcing features
-   - EBS volume encryption
-   - S3 buckets never public
-   - Disable unlimited burstable instance credits
-   - delete all default VPCs in all regions of every account
-- AWS Backup with Multi-AZ and glacier
-- MFA enforced organization-wide
 - AD
    - Update directory AD and client VPN so groups in AD manage network access to AWS environments
    - Add Windows Server 2019 cheap instance to Directory for AD administration
-- move desired R53 healthcheck source locations to a var and local design
-- ALB sec group with cool way of allowing ingress (nonprod through private CVPN, prod through public)
+- StackSet Deployments
+   - Disable unlimited burstable instance credits
+   - delete all default VPCs in all regions of every account
+   - AWS config for hipaa, CIS, NIST
+      - aggregate to security account probably
+   - AWS Backup with Multi-AZ and glacier
 - Mozilla Secrets OPerationS (SOPS) protects secrets in code using Key Management System (KMS) Customer Managed Key (CMK)
 - break glass entry for accounts https://docs.aws.amazon.com/whitepapers/latest/organizing-your-aws-environment/break-glass-access.html
-- AWS config for hipaa, CIS, NIST
+- ALB sec group with cool way of allowing ingress (nonprod through private CVPN, prod through public)
+- MFA enforced organization-wide
 
 ## Known Issues
 - terraform/aws/org-ous-and-accounts/main.tf

@@ -1,32 +1,32 @@
 variable "account_id" {
   type    = map(string)
   default = {
-    customer_42069_dev = "864981725425"
-    customer_42069_prd = "724772059355"
-    customer_42069_stg = "182399709387"
-    customer_42069_tst = "539247490748"
-    identity = "140023364608"
-    log_archive = "135808935189"
-    network = "588738594376"
-    org = "600627360992"
-    sdlc_dev = "127214196728"
-    sdlc_prd = "418295702066"
-    sdlc_stg = "340752842225"
-    sdlc_tst = "442042544884"
-    security_tooling = "774305570005"
+    customer_42069_dev = ""
+    customer_42069_prd = ""
+    customer_42069_stg = ""
+    customer_42069_tst = ""
+    identity = ""
+    log_archive = ""
+    network = ""
+    org = ""
+    sdlc_dev = ""
+    sdlc_prd = ""
+    sdlc_stg = ""
+    sdlc_tst = ""
+    security_tooling = ""
   }
 }
 
 variable "org_owner_email_prefix" {
   description = "the 'billg' in 'billg@microsoft'"
   type        = string
-  default     = "jeremyb+devopstest"
+  default     = "billg"
 }
 
 variable "org_owner_email_domain_tld" {
   description = "the 'microsoft.com' in 'billg@microsoft.com'"
   type        = string
-  default     = "gmail.com"
+  default     = "microsoft.com"
 }
 
 variable "company_name" {

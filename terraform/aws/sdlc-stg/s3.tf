@@ -58,12 +58,9 @@ module "s3_primary" {
     ]
   }
 
-  attach_deny_insecure_transport_policy    = true
-  attach_require_latest_tls_policy         = true
   attach_deny_incorrect_encryption_headers = true
   attach_deny_incorrect_kms_key_sse        = true
   allowed_kms_key_arn                      = module.kms_primary.key_arn
-  attach_deny_unencrypted_object_uploads   = true
 }
 
 #iam policy for data transfer
@@ -179,10 +176,7 @@ module "s3_failover" {
 
   versioning = { enabled = true }
 
-  attach_deny_insecure_transport_policy    = true
-  attach_require_latest_tls_policy         = true
   attach_deny_incorrect_encryption_headers = true
   attach_deny_incorrect_kms_key_sse        = true
   allowed_kms_key_arn                      = module.kms_failover.key_arn
-  attach_deny_unencrypted_object_uploads   = true
 }

@@ -96,17 +96,17 @@ data "aws_iam_policy_document" "org_root" {
       values    = ["false"]
     }
   }
-  statement {
-    sid       = "PreventS3IncorrectEncryptionHeaders"
-    effect    = "Deny"
-    actions   = ["s3:PutObject"]
-    resources = ["*"]
-    condition {
-      test      = "StringNotEquals"
-      variable  = "s3:x-amz-server-side-encryption"
-      values    = ["aws:kms"]
-    }
-  }
+  # statement {
+  #   sid       = "PreventS3IncorrectEncryptionHeaders"
+  #   effect    = "Deny"
+  #   actions   = ["s3:PutObject"]
+  #   resources = ["*"]
+  #   condition {
+  #     test      = "StringNotEquals"
+  #     variable  = "s3:x-amz-server-side-encryption"
+  #     values    = ["aws:kms"]
+  #   }
+  # }
 }
 
 resource "aws_organizations_policy" "org_root" {
