@@ -40,6 +40,7 @@ The Virtual Private Cloud and Transit Gateway layout is designed in accordance t
 
 | Variable | Type | Default | Description |
 | --- | --- | --- | --- |
+| `availability_zones_num_used` | number | 2 | Number of availability zones used in the VPCs for this account, codebase supports 2-6. |
 | `network_tgw_share_enabled` | boolean | `false` | Network TGW will be shared to this account. |
 | `network_vpc_endpoint_services_enabled` | list(string) | `[""]` | Which endpoint services are attached to the Network VPC and shared through the TGW. |
 | `network_vpc_share_enabled` | boolean | `false` | Network VPC will be shared to this account. |
@@ -65,14 +66,6 @@ In the Failover Disabled diagram above the following options are defined:
 | CustomerA | `network_tgw_share_enabled`, `vpc_cidr_substitute` |
 | CustomerB | `network_tgw_share_enabled`, `vpc_cidr_substitute` |
 | CustomerC |  |
-
-#### Subnet HA
-
-| Five Nines | Four Nines |
-| :-: | :-: |
-| <img src="drawings/vpc-subnet-layout-five9s.drawio.png" width="400"/> | <p align="center"><img src="drawings/vpc-subnet-layout-four9s.drawio.png" width="400"/> |
-
-Virtual Private Cloud Subnet layout is designed to provide 99.999% ("Five Nines") availability using 3 Subnets across 3 Availability Zones as per the [recommendations and best practices for ECS](https://aws.amazon.com/blogs/containers/amazon-ecs-availability-best-practices/). Although the blog contains best practices for *ECS*, the same logic for providing 99.999% availability applies to EKS, RDS, S3, etc. This codebase also can be configured to provide 99.99% ("Four Nines") availability using 2 Subnets across 2 Availability Zones as a cost savings option by setting `foo = false`. This codebase will not provide 99.9999% ("Six Nines") availability using 4 Subnets across 4 Availability Zones is not in the scope of this codebase for various reasons, most noteably because AWS 
 
 ## Initial Setup
 
@@ -126,6 +119,7 @@ Virtual Private Cloud Subnet layout is designed to provide 99.999% ("Five Nines"
 1. Deploy sdlc accounts
    1. Deploy terraform/aws/sdlc-prd
       1. Update eksctl/sdlc-prd-blue.yaml and eksctl/sdlc-prd-failover-blue.yaml with vpc_id and private_subnets for primary and failover from terraform output
+   1. Deploy eksctl/blue.yaml
       1. Assume automation role in account
          ```sh
          # replace 012345678912 with the account id
@@ -139,7 +133,7 @@ Virtual Private Cloud Subnet layout is designed to provide 99.999% ("Five Nines"
          export AWS_SESSION_TOKEN=helloworld
          unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
          ```
-      1. Deploy EKS Cluster
+      1. Deploy Cluster
          Update the vpc-id and subnet-ids in blue.yml
          ```sh
          eksctl create cluster -f blue.yml &
