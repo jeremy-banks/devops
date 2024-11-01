@@ -78,7 +78,7 @@ In the Failover Disabled diagram above the following options are defined:
 
 ### Instructions
 
-#### Deploy Backend and Create Org
+#### Deploy Management Account
 1. Create AWS Account to be Organization root
    1. During account creation be sure to enable Developer tier AWS Support, you will need to open a Support Case for increasing your quote of `Default maximum number of accounts`.
 1. Update the terraform/variables.tf with your unique information
@@ -104,7 +104,7 @@ In the Failover Disabled diagram above the following options are defined:
 1. Uncomment `terraform/aws/management-account/backend.tf` and migrate state with `echo yes | terraform init -reconfigure`
 1. Open Support Case with Account and Billing in the Organization requesting `Default maximum number of accounts` increased to `1000`.
 
-#### Deploy Org
+#### Deploy OUs, Accounts, and SCPs
 1. Deploy terraform/aws/org-ous-and-accounts to create additional AWS Organization Units and Accounts
    1. Update the terraform/variables.tf account_id map with terraform output
 1. Deploy terraform/aws/iam-groups-and-roles
