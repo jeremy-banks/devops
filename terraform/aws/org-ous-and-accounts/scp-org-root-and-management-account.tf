@@ -52,7 +52,7 @@ data "aws_iam_policy_document" "org_root" {
     }
   }
   statement {
-    sid       = "OnlySuperAdminCanDeleteKMS"
+    sid       = "PreventKMSDeleteUnlessSuperAdmin"
     effect    = "Deny"
     actions   = ["kms:ScheduleKeyDeletion", "kms:Delete"]
     resources = ["*"]
@@ -72,6 +72,41 @@ data "aws_iam_policy_document" "org_root" {
       ]
     }
   }
+
+# S3 bucket controls from terraform modules
+  statement {
+    sid       = "PreventS3OutdatedTLS"
+    effect    = "Deny"
+    actions   = ["s3:*"]
+    resources = ["*"]
+    condition {
+      test      = "NumericLessThan"
+      variable  = "s3:TlsVersion"
+      values    = ["1.2"]
+    }
+  }
+  statement {
+    sid       = "PreventS3InsecureTransport"
+    effect    = "Deny"
+    actions   = ["s3:*"]
+    resources = ["*"]
+    condition {
+      test      = "Bool"
+      variable  = "aws:SecureTransport"
+      values    = ["false"]
+    }
+  }
+  statement {
+    sid       = "PreventS3IncorrectEncryptionHeaders"
+    effect    = "Deny"
+    actions   = ["s3:PutObject"]
+    resources = ["*"]
+    condition {
+      test      = "StringNotEquals"
+      variable  = "s3:x-amz-server-side-encryption"
+      values    = ["aws:kms"]
+    }
+  }
 }
 
 resource "aws_organizations_policy" "org_root" {
@@ -84,7 +119,7 @@ resource "aws_organizations_policy_attachment" "org_root" {
   target_id = data.aws_organizations_organization.this.roots[0].id
 }
 
-# resource "aws_organizations_policy_attachment" "management_account" {
-#   policy_id = aws_organizations_policy.org_root.id
-#   target_id = data.aws_caller_identity.this.account_id
-# }
+resource "aws_organizations_policy_attachment" "management_account" {
+  policy_id = aws_organizations_policy.org_root.id
+  target_id = data.aws_caller_identity.this.account_id
+}
