@@ -83,3 +83,8 @@ resource "aws_organizations_policy_attachment" "org_root" {
   policy_id = aws_organizations_policy.org_root.id
   target_id = data.aws_organizations_organization.this.roots[0].id
 }
+
+# resource "aws_organizations_policy_attachment" "management_account" {
+#   policy_id = aws_organizations_policy.org_root.id
+#   target_id = data.aws_caller_identity.this.account_id
+# }

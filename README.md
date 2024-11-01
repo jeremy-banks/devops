@@ -98,7 +98,7 @@ Virtual Private Cloud Subnet layout is designed to provide 99.999% ("Five Nines"
       ```sh
       aws configure --profile superadmin
       ```
-1. Deploy `terraform/aws/tfstate-backend`
+1. Deploy `terraform/aws/management-account`
 1. Update the backend.tf files in `terraform/aws/` and subdirectories
    ```sh
    find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDORGACCOUNTID,600627360992,g' {} + &&\
@@ -107,11 +107,11 @@ Virtual Private Cloud Subnet layout is designed to provide 99.999% ("Five Nines"
    find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDKMSARN,arn:aws:kms:us-west-2:600627360992:key/mrk-e42ea270137a4b6e9cea326d5435e5c2,g' {} + &&\
    find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDS3BUCKETNAME,scc-blu-w12-usw2-tfstate-storage-blob-569d758c,g' {} +
    ```
-1. Uncomment `terraform/aws/tfstate-backend/backend.tf` and migrate state with `echo yes | terraform init -reconfigure`
+1. Uncomment `terraform/aws/management-account/backend.tf` and migrate state with `echo yes | terraform init -reconfigure`
 1. Open Support Case with Account and Billing in the Organization requesting `Default maximum number of accounts` increased to `1000`.
 
 #### Deploy Org
-1. Deploy terraform/aws/org-ou-account-management to create additional AWS Organization Units and Accounts
+1. Deploy terraform/aws/org-ous-and-accounts to create additional AWS Organization Units and Accounts
    1. Update the terraform/variables.tf account_id map with terraform output
 1. Deploy terraform/aws/iam-groups-and-roles
    1. Create AWS CLI profile named "automation" with terraform output
@@ -231,7 +231,7 @@ Virtual Private Cloud Subnet layout is designed to provide 99.999% ("Five Nines"
 - AWS config for hipaa, CIS, NIST
 
 ## Known Issues
-- terraform/aws/org-ou-account-management/main.tf
+- terraform/aws/org-ous-and-accounts/main.tf
   resource "aws_servicequotas_service_quota" "ACCOUNT_NUMBER_LIMIT_EXCEEDED"
   https://github.com/hashicorp/terraform-provider-aws/issues/32638
   In the meantime request quota increases manually
