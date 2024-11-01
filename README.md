@@ -172,10 +172,6 @@ In the Failover Disabled diagram above the following options are defined:
    1. Deploy terraform/aws/workload-customerb -->
 
 ## To-Do
-- SCP enforcing features
-   - S3 buckets never public
-   - aws_ebs_snapshot_block_public_access
-   - block public s3 access
 - Complete sdlc dev, tst, and stg
    - need to expand IAM into new customer accounts and SDLC
    - need to share network VPC to sdlc
@@ -189,11 +185,24 @@ In the Failover Disabled diagram above the following options are defined:
    - Also need Windows Admin Server in some account
    - Goal is to have everyone log in to SSO and their priviledges to log in and assume roles will dynamically populate based on their groups in AD
    - might need to make a separate DOMAIN.TLD for services like clientVPN and enterprise AD domains if any
+   - AD
+      - Update directory AD and client VPN so groups in AD manage network access to AWS environments
+      - Add Windows Server 2019 cheap instance to Directory for AD administration
 - Triggering a DR event
    - ACL allows no traffic in one subnet
    - EKS autoscaling examples
       - CPU
       - Sessions
+- StackSet Deployments
+   - Disable unlimited burstable instance credits
+   - delete all default VPCs in all regions of every account
+   - AWS config for hipaa, CIS, NIST
+      - aggregate to security account probably
+   - AWS Backup with Multi-AZ and glacier
+   - SCP enforcing features
+      - S3 buckets never public
+      - aws_ebs_snapshot_block_public_access
+      - block public s3 access
 - Implement the Well-Architected Tool https://docs.aws.amazon.com/whitepapers/latest/organizing-your-aws-environment/organizing-your-aws-environment.html
 - Base docker images for all distros
    - initially just docker images which run apt-get upgrade or yum upgrade to get patches
@@ -202,15 +211,6 @@ In the Failover Disabled diagram above the following options are defined:
 - Centralized logging with compression and glacier archive
    - DNS logs sent to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
    - ALB logs send to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
-- AD
-   - Update directory AD and client VPN so groups in AD manage network access to AWS environments
-   - Add Windows Server 2019 cheap instance to Directory for AD administration
-- StackSet Deployments
-   - Disable unlimited burstable instance credits
-   - delete all default VPCs in all regions of every account
-   - AWS config for hipaa, CIS, NIST
-      - aggregate to security account probably
-   - AWS Backup with Multi-AZ and glacier
 - Mozilla Secrets OPerationS (SOPS) protects secrets in code using Key Management System (KMS) Customer Managed Key (CMK)
 - break glass entry for accounts https://docs.aws.amazon.com/whitepapers/latest/organizing-your-aws-environment/break-glass-access.html
 - ALB sec group with cool way of allowing ingress (nonprod through private CVPN, prod through public)
