@@ -95,10 +95,10 @@ In the Failover Disabled diagram above the following options are defined:
 1. Deploy `terraform/aws/management-account`
 1. Update the backend.tf files in `terraform/aws/` and subdirectories
    ```sh
-   find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDORGACCOUNTID,600627360992,g' {} + &&\
+   find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDORGACCOUNTID,012345678912,g' {} + &&\
    find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDREGION,us-west-2,g' {} + &&\
    find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDDYNAMODBTABLE,scc-blu-w12-usw2-tfstate,g' {} + &&\
-   find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDKMSARN,arn:aws:kms:us-west-2:600627360992:key/mrk-e42ea270137a4b6e9cea326d5435e5c2,g' {} + &&\
+   find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDKMSARN,KEY_ARN,g' {} + &&\
    find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDS3BUCKETNAME,scc-blu-w12-usw2-tfstate-storage-blob-569d758c,g' {} +
    ```
 1. Uncomment `terraform/aws/management-account/backend.tf` and migrate state with `echo yes | terraform init -reconfigure`
