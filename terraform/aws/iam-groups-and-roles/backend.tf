@@ -1,11 +1,12 @@
-# terraform {
-#   backend "s3" {
-#     profile         = "superadmin"
-#     bucket          = "TFSTATEBACKENDS3BUCKETNAME"
-#     key             = "iam-groups-and-roles"
-#     region          = "us-west-2"
-#     dynamodb_table  = "TFSTATEBACKENDDYNAMODBTABLE"
-#     encrypt         = true
-#     insecure        = false
-#   }
-# }
+terraform {
+  backend "s3" {
+    profile         = "superadmin"
+    insecure        = false
+    region          = "TFSTATEBACKENDREGION"
+    bucket          = "TFSTATEBACKENDS3BUCKETNAME"
+    key             = "superadmin/iam-groups-and-roles"
+    encrypt         = true
+    kms_key_id      = "TFSTATEBACKENDKMSARN"
+    dynamodb_table  = "TFSTATEBACKENDDYNAMODBTABLE"
+  }
+}

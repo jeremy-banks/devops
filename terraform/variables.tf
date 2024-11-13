@@ -1,6 +1,10 @@
 variable "account_id" {
   type    = map(string)
   default = {
+    customer_42069_dev = ""
+    customer_42069_prd = ""
+    customer_42069_stg = ""
+    customer_42069_tst = ""
     identity = ""
     log_archive = ""
     network = ""
@@ -19,7 +23,7 @@ variable "org_owner_email_prefix" {
   default     = "billg"
 }
 
-variable "org_owner_email_domain" {
+variable "org_owner_email_domain_tld" {
   description = "the 'microsoft.com' in 'billg@microsoft.com'"
   type        = string
   default     = "microsoft.com"
@@ -32,9 +36,8 @@ variable "company_name" {
 }
 
 variable "company_name_abbr" {
-  description = "abbreviation of the company name"
-  type        = string
-  default     = "scc"
+  type    = string
+  default = "scc"
 }
 
 variable "team_name" {
@@ -44,9 +47,8 @@ variable "team_name" {
 }
 
 variable "team_name_abbr" {
-  description = "abbreviation of the team name"
-  type        = string
-  default     = "blue"
+  type    = string
+  default = "blu"
 }
 
 variable "project_name" {
@@ -56,9 +58,14 @@ variable "project_name" {
 }
 
 variable "project_name_abbr" {
-  description = "abbreviation of the project name"
+  type    = string
+  default = "w12"
+}
+
+variable "cost_center" {
+  description = "for billing"
   type        = string
-  default     = "w12"
+  default     = "devops"
 }
 
 variable "deployment_environment" {
@@ -73,16 +80,49 @@ variable "resource_owner_email" {
   default     = ""
 }
 
-variable "this_slug" {
-  description = "used to programatically declare resource names"
-  type        = string
-  default     = "YOU-FORGOT-TO-DECLARE-this_slug-AND-AS-A-RESULT-THIS-STRING-IS-SO-LONG-IT-WILL-HOPEFULLY-FAIL-PROMPTING-YOU-TO-DEFINE-IT"
-}
-
 variable "cli_profile_name_aws" {
   description = "aws profile name to be used"
   type        = string
   default     = "automation"
+}
+
+variable "assumable_roles_name" {
+  type    = map(string)
+  default = {
+    admin     = "admin"
+    poweruser = "poweruser"
+    readonly  = "readonly"
+  }
+}
+
+variable "assumable_role_name" {
+  type    = map(string)
+  default = {
+    superadmin  = "superadmin"
+    automation  = "automation"
+  }
+}
+
+variable "provider_role_name" {
+  type    = string
+  default = "automation"
+}
+
+variable "iam_immutable_tag_key" {
+  description = "key used to prevent users from editing IaC"
+  type        = string
+  default     = "immutable"
+}
+
+variable "org_aws_service_access_principals" {
+  type = list(string)
+  default = [
+    "cloudtrail.amazonaws.com",
+    "config-multiaccountsetup.amazonaws.com",
+    "config.amazonaws.com",
+    "ds.amazonaws.com", #enterprise active directory
+    "ram.amazonaws.com",
+  ]
 }
 
 variable "region" {
@@ -96,126 +136,106 @@ variable "region" {
   }
 }
 
-variable "assumable_roles_name" {
-  description = ""
-  type        = map(string)
-  default     = {
-    admin       = "admin"
-    poweruser   = "poweruser"
-    readonly    = "readonly"
-  }
-}
-
-variable "assumable_role_name" {
-  description = ""
-  type        = map(string)
-  default     = {
-    superadmin  = "superadmin"
-    automation  = "automation"
-  }
-}
-
-variable "provider_role_name" {
-  description = "role name to use for terraform provider"
+variable "this_slug" {
+  description = "used to programatically declare resource names"
   type        = string
-  default     = "automation"
+  default     = "YOU-FORGOT-TO-DECLARE-VARIABLE-this_slug-AND-AS-A-RESULT-THIS-STRING-IS-SO-LONG-IT-WILL-HOPEFULLY-FAIL-ANY-RESOURCE-CREATE-THUS-PROMPTING-YOU-TO-DEFINE-IT-IN-terraform.tfvars"
 }
 
-variable "iam_access_management_tag_key" {
-  description = "iam_access_management_tag key"
-  type        = string
-  default     = "iam_access_management"
-}
-
-variable "tgw_asn" {
-  type  = map(number)
-  default = {
-    primary = 65434
-    failover = 65433
-  }
-}
-
-variable "vpc_enabled" {
-  type = bool
+variable "create_failover_region" {
+  type    = bool
   default = false
 }
 
-variable "vpc_cidr_primary_substitute" {
-  type = string
-  default = ""
+variable "availability_zones" {
+  type    = map(list(string))
+  default = {
+    primary = [
+      "usw2-az1",
+      "usw2-az4",
+      "usw2-az3",
+      "usw2-az2",
+    ]
+    failover = [
+      "use1-az5",
+      "use1-az2",
+      "use1-az4",
+      "use1-az1",
+    ]
+  }
 }
 
-variable "vpc_cidr_failover_substitute" {
-  type = string
-  default = ""
+variable "availability_zones_num_used" {
+  type    = number
+  default = 2
+}
+
+variable "network_tgw_share_enabled" {
+  type    = bool
+  default = false
+}
+
+variable "network_vpc_endpoint_services_enabled" {
+  type    = list(string)
+  default = []
+}
+
+variable "network_vpc_share_enabled" {
+  type    = bool
+  default = false
+}
+
+variable "vpc_cidr_substitute" {
+  description = "Primary Region VPC CIDR. Use the full network address and subnet mask, eg 10.31.0.0/16"
+  type        = string
+  default     = ""
+}
+
+variable "vpc_cidr_substitute_failover" {
+  description = "Failover Region VPC CIDR. Use the full network address and subnet mask, eg 10.32.0.0/16"
+  type        = string
+  default     = ""
 }
 
 variable "vpc_cidr_network" {
   default = {
-    primary = "10.41.0.0/16"
-    failover = "10.42.0.0/16"
+    primary   = "10.41.0.0/16"
+    failover  = "10.42.0.0/16"
   }
 }
 
 variable "vpc_cidr_clientvpn" {
   default = {
-    primary = "10.43.0.0/16"
-    failover = "10.44.0.0/16"
+    primary   = "10.43.0.0/16"
+    failover  = "10.44.0.0/16"
   }
 }
 
-# sdlc prd 10.51.0.0/16 10.52.0.0/16
-# sdlc stg 10.53.0.0/16 10.54.0.0/16
-# sdlc tst 10.55.0.0/16 10.56.0.0/16
-# sdlc dev 10.57.0/16 10.58.0.0/16
+variable "ntp_servers" {
+  type    = list(string)
+  default = ["169.254.169.123"]
+}
 
-variable "availability_zones_double" {
-  type = map(list(string))
+variable "tgw_asn" {
+  type    = map(number)
   default = {
-    primary = [
-      "usw2-az1",
-      "usw2-az3",
-    ]
-    failover = [
-      "use1-az2",
-      "use1-az4",
-    ]
+    primary   = 65434
+    failover  = 65433
   }
-}
-
-variable "availability_zones_triple" {
-  type = map(list(string))
-  default = {
-    primary = [
-      "usw2-az1",
-      "usw2-az3",
-      "usw2-az4",
-    ]
-    failover = [
-      "use1-az2",
-      "use1-az4",
-      "use1-az5",
-    ]
-  }
-}
-
-variable "ntp_server" {
-  type  = string
-  default = "169.254.169.123"
 }
 
 variable "ad_directory_admin_password" {
-  type  = string
+  type    = string
   default = "tempSuperSecretPassword123"
 }
 
 variable "ad_directory_id_connector_network" {
-  type  = string
+  type    = string
   default = ""
 }
 
 variable "ad_directory_id_connector_network_failover" {
-  type  = string
+  type    = string
   default = ""
 }
 
@@ -225,81 +245,106 @@ variable "r53_zones" {
 }
 
 locals {
-  cli_profile_name_aws = var.cli_profile_name_aws
-  provider_role_name = var.provider_role_name
+  org_owner_email = "${var.org_owner_email_prefix}@${var.org_owner_email_domain_tld}"
 
-  org_owner_email = "${var.org_owner_email_prefix}@${var.org_owner_email_domain}"
-  resource_owner_email = var.resource_owner_email != "" ? var.resource_owner_email : local.org_owner_email
+  resource_name_stub          = lower("${var.company_name_abbr}-${var.team_name_abbr}-${var.project_name_abbr}") #company - team - project - env
+  resource_name_stub_primary  = lower("${local.resource_name_stub}-${var.region.primary_short}") #company - team - project - env - primary
+  resource_name_stub_failover = lower("${local.resource_name_stub}-${var.region.failover_short}") #company - team - project - env - failover
 
-  resource_name_stub = "${var.company_name_abbr}-${var.team_name_abbr}-${var.project_name_abbr}" #company - team - project - env
-  this_slug = "${var.this_slug}"
+  vpc_name_primary  = "${local.resource_name_stub_primary}-${var.this_slug}-vpc"
+  vpc_subnet_pvt_name_primary = format("%s-pvt-", local.vpc_name_primary)
+  vpc_subnet_pub_name_primary = format("%s-pub-", local.vpc_name_primary)
 
-  vpc_cidr_primary = var.vpc_cidr_primary_substitute != "" ? var.vpc_cidr_primary_substitute : "0.0.0.0/0"
-  vpc_azs_primary = var.deployment_environment == "prd" || var.deployment_environment == "stg" ? var.availability_zones_triple.primary : var.availability_zones_double.primary
-  vpc_subnets_private_primary = [for k in range(length(local.vpc_azs_primary)) : cidrsubnet(local.vpc_cidr_primary, 2, k)]
-  vpc_subnets_public_primary = [for k in range(length(local.vpc_azs_primary)) : cidrsubnet(local.vpc_cidr_primary, 4, k + (4 * length(local.vpc_azs_primary)))]
-  vpc_cidr_primary_split = split(".", cidrsubnet(local.vpc_cidr_primary, 0, 0))
-  vpc_dns_primary = join(".", [local.vpc_cidr_primary_split[0], local.vpc_cidr_primary_split[1], local.vpc_cidr_primary_split[2], "2"])
+  vpc_name_failover = "${local.resource_name_stub_failover}-${var.this_slug}-vpc"
+  vpc_subnet_pvt_name_failover  = format("%s-pvt-", local.vpc_name_failover)
+  vpc_subnet_pub_name_failover  = format("%s-pub-", local.vpc_name_failover)
 
-  vpc_cidr_failover = var.vpc_cidr_failover_substitute != "" ? var.vpc_cidr_failover_substitute : "0.0.0.0/0"
-  vpc_azs_failover = var.deployment_environment == "prd" || var.deployment_environment == "stg" ? var.availability_zones_triple.failover : var.availability_zones_double.failover
-  vpc_subnets_private_failover = [for k in range(length(local.vpc_azs_failover)) : cidrsubnet(local.vpc_cidr_failover, 2, k)]
-  vpc_subnets_public_failover = [for k in range(length(local.vpc_azs_failover)) : cidrsubnet(local.vpc_cidr_failover, 4, k + (4 * length(local.vpc_azs_failover)))]
-  vpc_cidr_failover_split = split(".", cidrsubnet(local.vpc_cidr_failover, 0, 0))
-  vpc_dns_failover = join(".", [local.vpc_cidr_failover_split[0], local.vpc_cidr_failover_split[1], local.vpc_cidr_failover_split[2], "2"])
+  vpc_cidr_primary = var.vpc_cidr_substitute
+  #if vpc_cidr_substitute has been defined then increment major subnet for vpc_cidr_failover
+  vpc_cidr_failover = var.vpc_cidr_substitute != "" && var.create_failover_region ? join(".", [
+    split(".", var.vpc_cidr_substitute)[0],
+    tostring(tonumber(split(".", var.vpc_cidr_substitute)[1]) + 1),
+    split(".", var.vpc_cidr_substitute)[2],
+    split(".", var.vpc_cidr_substitute)[3]
+  ]) : var.vpc_cidr_substitute
 
-  vpc_ntp_servers = [var.ntp_server]
+  #build lists of availability zones for each region based on number of availabiliy zones
+  azs_used_list_primary = [for az in range(var.availability_zones_num_used) : var.availability_zones.primary[az]]
+  azs_used_list_failover = [for az in range(var.availability_zones_num_used) : var.availability_zones.failover[az]]
 
-  vpc_tags_primary = {
-    "${local.resource_name_stub}-${var.region.primary_short}-blue"  = "shared"
-    "${local.resource_name_stub}-${var.region.primary_short}-green" = "shared"
-    "k8s.io/cluster-autoscaler/${local.resource_name_stub}-${var.region.primary_short}-blue"  = "shared"
-    "k8s.io/cluster-autoscaler/${local.resource_name_stub}-${var.region.primary_short}-green" = "shared"
+  #dynamically generate subnet cidrs based on number of availability zones
+  vpc_subnet_cidrs_primary = local.vpc_cidr_primary != "" ? (
+    var.availability_zones_num_used == 6 ? cidrsubnets(local.vpc_cidr_primary, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5) :
+    var.availability_zones_num_used == 5 ? cidrsubnets(local.vpc_cidr_primary, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5) :
+    var.availability_zones_num_used == 4 ? cidrsubnets(local.vpc_cidr_primary, 3, 3, 3, 3, 5, 5, 5, 5) :
+    var.availability_zones_num_used == 3 ? cidrsubnets(local.vpc_cidr_primary, 2, 2, 2, 4, 4, 4) :
+    cidrsubnets(local.vpc_cidr_primary, 2, 2, 4, 4)
+  ) : []
+  vpc_subnet_cidrs_failover = local.vpc_cidr_failover != "" ? (
+    var.availability_zones_num_used == 6 ? cidrsubnets(local.vpc_cidr_failover, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5) :
+    var.availability_zones_num_used == 5 ? cidrsubnets(local.vpc_cidr_failover, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5) :
+    var.availability_zones_num_used == 4 ? cidrsubnets(local.vpc_cidr_failover, 3, 3, 3, 3, 5, 5, 5, 5) :
+    var.availability_zones_num_used == 3 ? cidrsubnets(local.vpc_cidr_failover, 2, 2, 2, 4, 4, 4) :
+    cidrsubnets(local.vpc_cidr_failover, 2, 2, 4, 4)
+  ) : []
+
+  #slice the subnets in 'half', first slice goes to pvt, second slice goes to pub
+  vpc_subnet_cidrs_pvt_primary = slice(local.vpc_subnet_cidrs_primary, 0, length(local.vpc_subnet_cidrs_primary) / 2) 
+  vpc_subnet_cidrs_pub_primary = slice(local.vpc_subnet_cidrs_primary, length(local.vpc_subnet_cidrs_primary) / 2, length(local.vpc_subnet_cidrs_primary))
+  vpc_subnet_cidrs_pvt_failover = slice(local.vpc_subnet_cidrs_failover, 0, length(local.vpc_subnet_cidrs_failover) / 2)
+  vpc_subnet_cidrs_pub_failover = slice(local.vpc_subnet_cidrs_failover, length(local.vpc_subnet_cidrs_failover) / 2, length(local.vpc_subnet_cidrs_failover))
+
+  #create addresses for VPC DNS
+  vpc_dns_primary = local.vpc_cidr_primary != "" ? join(".", [
+    split(".", cidrhost(local.vpc_cidr_primary, 0))[0],
+    split(".", cidrhost(local.vpc_cidr_primary, 0))[1],
+    split(".", cidrhost(local.vpc_cidr_primary, 0))[2],
+    "2"
+  ]) : local.vpc_cidr_primary
+  vpc_dns_failover = local.vpc_cidr_failover != "" ? join(".", [
+    split(".", cidrhost(local.vpc_cidr_failover, 0))[0],
+    split(".", cidrhost(local.vpc_cidr_failover, 0))[1],
+    split(".", cidrhost(local.vpc_cidr_failover, 0))[2],
+    "2"
+  ]) : local.vpc_cidr_failover
+
+  vpc_tags_primary = merge(local.eks_tags_primary, {
+    "${local.resource_name_stub_primary}-blue"  = "shared"
+    "${local.resource_name_stub_primary}-green" = "shared"
+    "k8s.io/cluster-autoscaler/${local.resource_name_stub_primary}-blue"  = "shared"
+    "k8s.io/cluster-autoscaler/${local.resource_name_stub_primary}-green" = "shared"
     "k8s.io/cluster-autoscaler/enabled" = "true"
-    "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.primary_short}-blue"  = "shared"
-    "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.primary_short}-green" = "shared"
+  })
+  vpc_tags_failover = merge(local.eks_tags_failover, {
+    "${local.resource_name_stub_failover}-blue"  = "shared"
+    "${local.resource_name_stub_failover}-green" = "shared"
+    "k8s.io/cluster-autoscaler/${local.resource_name_stub_failover}-blue"  = "shared"
+    "k8s.io/cluster-autoscaler/${local.resource_name_stub_failover}-green" = "shared"
+    "k8s.io/cluster-autoscaler/enabled" = "true"
+  })
+
+  subnet_pvt_tags_primary   = merge(local.eks_tags_primary, local.eks_tags_subnet_pvt)
+  subnet_pub_tags_primary   = merge(local.eks_tags_primary, local.eks_tags_subnet_pub)
+  subnet_pvt_tags_failover  = merge(local.eks_tags_failover, local.eks_tags_subnet_pvt)
+  subnet_pub_tags_failover  = merge(local.eks_tags_failover, local.eks_tags_subnet_pub)
+
+  eks_tags_primary = {
+    "kubernetes.io/cluster/${local.resource_name_stub_primary}-blue"  = "shared"
+    "kubernetes.io/cluster/${local.resource_name_stub_primary}-green" = "shared"
+  }
+  eks_tags_failover = {
+    "kubernetes.io/cluster/${local.resource_name_stub_failover}-blue"  = "shared"
+    "kubernetes.io/cluster/${local.resource_name_stub_failover}-green" = "shared"
   }
 
-  public_subnet_tags_primary = {
-    "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.primary_short}-blue"  = "shared"
-    "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.primary_short}-green" = "shared"
-    "kubernetes.io/role/alb-ingress"  = 1
-    "kubernetes.io/role/elb"          = 1
-  }
-
-  private_subnet_tags_primary = {
-    "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.primary_short}-blue"  = "shared"
-    "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.primary_short}-green" = "shared"
+  eks_tags_subnet_pvt = {
     "kubernetes.io/role/alb-ingress"  = 1
     "kubernetes.io/role/internal-elb" = 1
   }
-
-  vpc_tags_failover = {
-    "${local.resource_name_stub}-${var.region.failover_short}-blue"  = "shared"
-    "${local.resource_name_stub}-${var.region.failover_short}-green" = "shared"
-    "k8s.io/cluster-autoscaler/${local.resource_name_stub}-${var.region.failover_short}-blue"  = "shared"
-    "k8s.io/cluster-autoscaler/${local.resource_name_stub}-${var.region.failover_short}-green" = "shared"
-    "k8s.io/cluster-autoscaler/enabled" = "true"
-    "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.failover_short}-blue"  = "shared"
-    "kubernetes.io/cluster/${local.resource_name_stub}-${var.region.failover_short}-green" = "shared"
+  eks_tags_subnet_pub = {
+    "kubernetes.io/role/alb-ingress"  = 1
+    "kubernetes.io/role/elb"          = 1    
   }
-  public_subnet_tags_failover = local.public_subnet_tags_primary
-  private_subnet_tags_failover = local.private_subnet_tags_primary
-
-  iam_access_management_tag_key = var.iam_access_management_tag_key
-  iam_access_management_tag_value = "${local.resource_name_stub}"
-  iam_access_management_tag_map = { "${local.iam_access_management_tag_key}" = "${local.iam_access_management_tag_value}" }
-
-  default_tags_map = {
-    "company"         = var.company_name #Microsoft
-    "team"            = var.team_name #Blue
-    "project"         = var.project_name #Windows
-    "environment"     = var.deployment_environment #dev|tst|stg|prd
-    "resource_owner"  = local.resource_owner_email
-    "tool"            = "terraform"
-  }
-
-  default_tags = merge(local.default_tags_map, local.iam_access_management_tag_map)
 
   acm_san_names = concat(
     [
@@ -311,4 +356,14 @@ locals {
       (var.deployment_environment != "prd" ? "*.${var.deployment_environment}.${zone}" : "*.${zone}")
     ]
   )
+
+  default_tags_map = {
+    "company" = "${var.company_name}" #Microsoft
+    "team"  = "${var.team_name}" #Blue
+    "cost_center" = "${var.cost_center}"
+    "project" = "${var.project_name}" #Windows
+    "environment" = "${var.deployment_environment}" #dev|tst|stg|prd
+    "resource_owner"  = var.resource_owner_email != "" ? "${var.resource_owner_email}" : "${local.org_owner_email}"
+    "${var.iam_immutable_tag_key}" = "true"
+  }
 }

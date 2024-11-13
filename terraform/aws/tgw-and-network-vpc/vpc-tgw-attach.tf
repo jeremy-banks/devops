@@ -1,9 +1,11 @@
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_primary" {
   provider = aws.network
 
-  subnet_ids                                      = module.vpc_primary.private_subnets
-  transit_gateway_id                              = aws_ec2_transit_gateway.tgw_primary.id
-  vpc_id                                          = module.vpc_primary.vpc_id
+  count = local.vpc_cidr_primary != "" ? 1 : 0
+
+  subnet_ids                                      = module.vpc_primary[0].private_subnets
+  transit_gateway_id                              = aws_ec2_transit_gateway.tgw_primary[0].id
+  vpc_id                                          = module.vpc_primary[0].vpc_id
   dns_support                                     = "enable"
   security_group_referencing_support              = "enable"
   transit_gateway_default_route_table_association = true
@@ -13,9 +15,11 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_primary" {
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_failover" {
   provider = aws.network_failover
 
-  subnet_ids                                      = module.vpc_failover.private_subnets
-  transit_gateway_id                              = aws_ec2_transit_gateway.tgw_failover.id
-  vpc_id                                          = module.vpc_failover.vpc_id
+  count = var.create_failover_region ? 1 : 0
+
+  subnet_ids                                      = module.vpc_failover[0].private_subnets
+  transit_gateway_id                              = aws_ec2_transit_gateway.tgw_failover[0].id
+  vpc_id                                          = module.vpc_failover[0].vpc_id
   dns_support                                     = "enable"
   security_group_referencing_support              = "enable"
   transit_gateway_default_route_table_association = true

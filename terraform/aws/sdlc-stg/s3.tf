@@ -1,16 +1,9 @@
-data "aws_caller_identity" "current" {}
-
-locals {
-  unique_id = substr(sha256("foo${data.aws_caller_identity.current.account_id}"), 0, 8)
-}
-
-#primary bucket
 module "s3_primary" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "4.1.2"
   providers = { aws = aws.sdlc_stg }
 
-  bucket = "${local.resource_name_stub}-${var.region.primary_short}-${local.this_slug}-storage-blob-${local.unique_id}"
+  bucket = "${local.resource_name_stub_primary}-${var.this_slug}-storage-blob-${local.unique_id}"
 
   force_destroy = true
 
@@ -65,12 +58,9 @@ module "s3_primary" {
     ]
   }
 
-  attach_deny_insecure_transport_policy    = true
-  attach_require_latest_tls_policy         = true
   attach_deny_incorrect_encryption_headers = true
   attach_deny_incorrect_kms_key_sse        = true
   allowed_kms_key_arn                      = module.kms_primary.key_arn
-  attach_deny_unencrypted_object_uploads   = true
 }
 
 #iam policy for data transfer
@@ -159,7 +149,7 @@ module "s3_failover" {
   version = "4.1.2"
   providers = { aws = aws.sdlc_stg_failover }
 
-  bucket = "${local.resource_name_stub}-${var.region.failover_short}-${local.this_slug}-storage-blob-${local.unique_id}"
+  bucket = "${local.resource_name_stub_failover}-${var.this_slug}-storage-blob-${local.unique_id}"
 
   force_destroy = true
 
@@ -186,10 +176,7 @@ module "s3_failover" {
 
   versioning = { enabled = true }
 
-  attach_deny_insecure_transport_policy    = true
-  attach_require_latest_tls_policy         = true
   attach_deny_incorrect_encryption_headers = true
   attach_deny_incorrect_kms_key_sse        = true
   allowed_kms_key_arn                      = module.kms_failover.key_arn
-  attach_deny_unencrypted_object_uploads   = true
 }
