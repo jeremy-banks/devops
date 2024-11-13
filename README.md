@@ -1,26 +1,21 @@
 # DevOps
 
 ## Project Goals
-1. Create my ideal codebase to "lift and shift" a startup or small organization into AWS and EKS
+1. Create ideal codebase to "lift and shift" a startup or small organization into AWS and EKS
 1. Using minimal number tools with high market share utilization (eg terraform, eksctl, helm)
 1. Demo with k8s nginx welcome page
 
 ### Documentation Reference
-- Terraform providers and modules all version locked
-- Code written following AWS documentation
-  - Guidance to Render Unsecured PHI Unusable https://www.hhs.gov/hipaa/for-professionals/breach-notification/guidance/index.html
-  - Well-Architected Framework  https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html
-  - Prescriptive Guidance Security Reference Architecture https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture/org-management.html
-  - Best practices for multi-account management https://docs.aws.amazon.com/organizations/latest/userguide/orgs_best-practices.html
-  - Building a Scalable and Secure Multi-VPC AWS Network Infrastructure https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/welcome.html
-  - Latencies between AWS availability zones https://www.flashgrid.io/news/latencies-between-aws-availability-zones-what-are-they-and-how-to-minimize-them
+- Guidance to Render Unsecured PHI Unusable https://www.hhs.gov/hipaa/for-professionals/breach-notification/guidance/index.html
+- Well-Architected Framework  https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html
+- Prescriptive Guidance Security Reference Architecture https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture/org-management.html
 
 ## Architectural Overview
 
 ### Org and Accounts
 <p align="center"><img src="drawings/org-and-account-layout.drawio.png"/></p>
 
-The organization, organization units, and accounts layout is designed in accordance to the documented best practices for OUs in the [AWS Organizations User Guide](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_ous_best_practices.html). This codebase is can be expanded to accommodate additional OUs such as Sandbox, Suspended, Exceptions, etc.
+The organization, organization units, and accounts layout is designed in accordance to the documented (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_best-practices.html)[Best practices for a multi-account environment] and (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_ous_best_practices.html)[Best practices for managing organizational units (OUs) with AWS Organizations]. This codebase is can be expanded to accommodate additional OUs such as Sandbox, Suspended, Exceptions, etc.
 
 ### VPC Options
 
@@ -34,7 +29,7 @@ The Virtual Private Cloud and Transit Gateway layout is designed in accordance t
 
 - Service Endpoints are shared to the entire Organization through the Network VPCs and Transit Gateways
 - Private R53 zone `internal.` is attatched to the Network VPCs providing standard human-readable DNS for the Endpoints
-- SDLC Accounts have Network VPC shared to keep down cost
+- SDLC Accounts have Network VPC shared to keep cost low
 
 ##### Options
 
@@ -102,7 +97,7 @@ In the Failover Disabled diagram above the following options are defined:
    find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDS3BUCKETNAME,scc-blu-w12-usw2-tfstate-storage-blob-569d758c,g' {} +
    ```
 1. Uncomment `terraform/aws/management-account/backend.tf` and migrate state with `echo yes | terraform init -reconfigure`
-1. Open Support Case with Account and Billing in the Organization requesting `Default maximum number of accounts` increased to `1000`.
+1. Open an AWS Support Case with `Account and Billing` in category `Organization` requesting `Default maximum number of accounts` increased to `1000`.
 
 #### Deploy OUs, Accounts, and SCPs
 1. Deploy terraform/aws/org-ous-and-accounts to create additional AWS Organization Units and Accounts
@@ -173,9 +168,7 @@ In the Failover Disabled diagram above the following options are defined:
 
 ## To-Do
 - Complete sdlc dev, tst, and stg
-   - need to expand IAM into new customer accounts and SDLC
-   - need to share network VPC to sdlc
-      - need code for share_vpc and share_tgw
+   - need code for share_vpc and share_tgw
    - sdlc needs an elegant way to create DNS records to point to VPC endpoints in the shared network VPC
       - needs to support multi-regional failover as well
       - just start with making R53 entries first, this may be all that is needed
@@ -215,9 +208,3 @@ In the Failover Disabled diagram above the following options are defined:
 - break glass entry for accounts https://docs.aws.amazon.com/whitepapers/latest/organizing-your-aws-environment/break-glass-access.html
 - ALB sec group with cool way of allowing ingress (nonprod through private CVPN, prod through public)
 - MFA enforced organization-wide
-
-## Known Issues
-- terraform/aws/org-ous-and-accounts/main.tf
-  resource "aws_servicequotas_service_quota" "ACCOUNT_NUMBER_LIMIT_EXCEEDED"
-  https://github.com/hashicorp/terraform-provider-aws/issues/32638
-  In the meantime request quota increases manually
