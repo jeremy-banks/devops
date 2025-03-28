@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "kms"  {
+data "aws_iam_policy_document" "kms" {
   # https://docs.aws.amazon.com/kms/latest/prdeloperguide/key-policy-default.html
   statement {
     sid    = "Enable IAM User Permissions"
@@ -18,7 +18,7 @@ data "aws_iam_policy_document" "kms"  {
       type        = "AWS"
       identifiers = ["*"]
     }
-    actions   = [
+    actions = [
       "kms:DescribeKey",
       "kms:Decrypt",
       "kms:DescribeKey",
@@ -42,7 +42,7 @@ data "aws_iam_policy_document" "kms"  {
     condition {
       test     = "StringLike"
       variable = "aws:PrincipalArn"
-      values   = [
+      values = [
         "arn:aws:iam::*:role/${var.assumable_role_name.automation}",
         "arn:aws:iam::*:role/${var.assumable_role_name.superadmin}",
       ]
@@ -50,7 +50,7 @@ data "aws_iam_policy_document" "kms"  {
     condition {
       test     = "StringEquals"
       variable = "aws:PrincipalOrgID"
-      values   = [
+      values = [
         "${aws_organizations_organization.this.id}",
       ]
     }
@@ -58,8 +58,8 @@ data "aws_iam_policy_document" "kms"  {
 }
 
 module "kms_primary" {
-  source  = "terraform-aws-modules/kms/aws"
-  version = "3.1.1"
+  source    = "terraform-aws-modules/kms/aws"
+  version   = "3.1.1"
   providers = { aws = aws.org }
 
   deletion_window_in_days = 30
@@ -74,8 +74,8 @@ module "kms_primary" {
 }
 
 module "kms_failover" {
-  source  = "terraform-aws-modules/kms/aws"
-  version = "3.1.1"
+  source    = "terraform-aws-modules/kms/aws"
+  version   = "3.1.1"
   providers = { aws = aws.org_failover }
 
   deletion_window_in_days = 30
