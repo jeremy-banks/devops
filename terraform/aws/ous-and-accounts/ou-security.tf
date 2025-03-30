@@ -30,7 +30,17 @@ resource "aws_organizations_organizational_unit" "security_prd" {
 #   role_name                  = var.account_role_name
 # }
 
-resource "aws_organizations_organizational_unit" "security_stg" {
-  name      = "stg"
-  parent_id = aws_organizations_organizational_unit.security.id
-}
+# resource "aws_organizations_organizational_unit" "security_stg" {
+#   name      = "stg"
+#   parent_id = aws_organizations_organizational_unit.security.id
+# }
+
+# resource "aws_organizations_organizational_unit" "security_tst" {
+#   name      = "tst"
+#   parent_id = aws_organizations_organizational_unit.security.id
+# }
+
+# resource "aws_organizations_organizational_unit" "security_dev" {
+#   name      = "dev"
+#   parent_id = aws_organizations_organizational_unit.security.id
+# }
