@@ -12,48 +12,21 @@ data "aws_iam_policy_document" "kms" {
   }
 
   statement {
-    sid    = "Allow use of the key"
-    effect = "Allow"
-    principals {
-      type        = "AWS"
-      identifiers = ["*"]
+    sid    = "Explicit Deny Unintended Access"
+    effect = "Deny"
+    not_principals {
+      type = "AWS"
+      identifiers = concat(
+        [
+          "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
+          "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.superuser_names.superadmin}",
+          "${module.iam_user_admin.iam_user_arn}"
+        ],
+        [for user in module.iam_user_breakglass : user.iam_user_arn]
+      )
     }
-    actions = [
-      "kms:DescribeKey",
-      "kms:Decrypt",
-      "kms:DescribeKey",
-      "kms:Encrypt",
-      "kms:GenerateDataKey*",
-      "kms:ReEncrypt*",
-      "kms:Decrypt",
-      "kms:DeriveSharedSecret",
-      "kms:DescribeKey",
-      "kms:Encrypt",
-      "kms:GenerateDataKey*",
-      "kms:GenerateMac",
-      "kms:GetPublicKey",
-      "kms:ReEncrypt*",
-      "kms:ReEncrypt*",
-      "kms:Sign",
-      "kms:Verify",
-      "kms:VerifyMac",
-    ]
+    actions   = ["kms:*"]
     resources = ["*"]
-    condition {
-      test     = "StringLike"
-      variable = "aws:PrincipalArn"
-      values = [
-        "arn:aws:iam::*:role/${var.assumable_role_name.automation}",
-        "arn:aws:iam::*:role/${var.assumable_role_name.superadmin}",
-      ]
-    }
-    condition {
-      test     = "StringEquals"
-      variable = "aws:PrincipalOrgID"
-      values = [
-        "${aws_organizations_organization.this.id}",
-      ]
-    }
   }
 }
 

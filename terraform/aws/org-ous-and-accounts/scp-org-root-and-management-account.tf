@@ -1,5 +1,5 @@
 data "aws_iam_policy_document" "org_root" {
-# https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_general.html#example-scp-leave-org
+  # https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_general.html#example-scp-leave-org
   statement {
     sid       = "PreventMemberAccountsFromLeavingTheOrganization"
     actions   = ["organizations:LeaveOrganization"]
@@ -7,7 +7,7 @@ data "aws_iam_policy_document" "org_root" {
     effect    = "Deny"
   }
 
-# https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_ec2.html#example-ec2-3
+  # https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_ec2.html#example-ec2-3
   statement {
     sid       = "PreventDisablingOfDefaultAmazonEBSEncryption"
     effect    = "Deny"
@@ -15,29 +15,29 @@ data "aws_iam_policy_document" "org_root" {
     resources = ["*"]
   }
 
-# https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_s3.html#example-s3-1
+  # https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_s3.html#example-s3-1
   statement {
     sid       = "PreventAmazonS3UnencryptedObjectUploads"
     effect    = "Deny"
     actions   = ["s3:PutObject"]
     resources = ["*"]
     condition {
-      test      = "Null"
-      variable  = "s3:x-amz-server-side-encryption"
-      values    = ["true"]
+      test     = "Null"
+      variable = "s3:x-amz-server-side-encryption"
+      values   = ["true"]
     }
   }
 
-# https://aws.amazon.com/blogs/mt/identity-guide-preventive-controls-with-aws-identity-scps/
+  # https://aws.amazon.com/blogs/mt/identity-guide-preventive-controls-with-aws-identity-scps/
   statement {
     sid       = "PreventRDSUnencryptedDBCreation"
     effect    = "Deny"
     actions   = ["rds:CreateDBInstance"]
     resources = ["*"]
     condition {
-      test      = "Bool"
-      variable  = "rds:StorageEncrypted"
-      values    = ["false"]
+      test     = "Bool"
+      variable = "rds:StorageEncrypted"
+      values   = ["false"]
     }
   }
   statement {
@@ -46,9 +46,9 @@ data "aws_iam_policy_document" "org_root" {
     actions   = ["elasticfilesystem:CreateFileSystem"]
     resources = ["*"]
     condition {
-      test      = "Bool"
-      variable  = "elasticfilesystem:Encrypted"
-      values    = ["false"]
+      test     = "Bool"
+      variable = "elasticfilesystem:Encrypted"
+      values   = ["false"]
     }
   }
   statement {
@@ -59,7 +59,7 @@ data "aws_iam_policy_document" "org_root" {
     condition {
       test     = "StringNotLike"
       variable = "aws:PrincipalArn"
-      values   = [
+      values = [
         "arn:aws:iam::${data.aws_caller_identity.this.account_id}:user/${var.assumable_role_name.superadmin}",
         "arn:aws:iam::*:role/${var.assumable_role_name.superadmin}",
       ]
@@ -67,22 +67,22 @@ data "aws_iam_policy_document" "org_root" {
     condition {
       test     = "StringEquals"
       variable = "aws:PrincipalOrgID"
-      values   = [
+      values = [
         "${data.aws_organizations_organization.this.id}",
       ]
     }
   }
 
-# S3 bucket controls from terraform modules
+  # S3 bucket controls from terraform modules
   statement {
     sid       = "PreventS3OutdatedTLS"
     effect    = "Deny"
     actions   = ["s3:*"]
     resources = ["*"]
     condition {
-      test      = "NumericLessThan"
-      variable  = "s3:TlsVersion"
-      values    = ["1.2"]
+      test     = "NumericLessThan"
+      variable = "s3:TlsVersion"
+      values   = ["1.2"]
     }
   }
   statement {
@@ -91,9 +91,9 @@ data "aws_iam_policy_document" "org_root" {
     actions   = ["s3:*"]
     resources = ["*"]
     condition {
-      test      = "Bool"
-      variable  = "aws:SecureTransport"
-      values    = ["false"]
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values   = ["false"]
     }
   }
   # statement {
@@ -110,8 +110,8 @@ data "aws_iam_policy_document" "org_root" {
 }
 
 resource "aws_organizations_policy" "org_root" {
-  name        = "org-root"
-  content     = data.aws_iam_policy_document.org_root.json
+  name    = "org-root"
+  content = data.aws_iam_policy_document.org_root.json
 }
 
 resource "aws_organizations_policy_attachment" "org_root" {

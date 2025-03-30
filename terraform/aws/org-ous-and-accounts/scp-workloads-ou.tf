@@ -1,8 +1,8 @@
 data "aws_iam_policy_document" "workloads_ou" {
-# https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_general.html
+  # https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_general.html
   statement {
-    sid         = "DenyRestrictedRegions"
-    effect      = "Deny"
+    sid    = "DenyRestrictedRegions"
+    effect = "Deny"
     not_actions = [
       "a4b:*",
       "acm:*",
@@ -47,11 +47,11 @@ data "aws_iam_policy_document" "workloads_ou" {
       "wafv2:*",
       "wellarchitected:*"
     ]
-    resources   = ["*"]
+    resources = ["*"]
     condition {
-      test      = "StringNotEquals"
-      variable  = "aws:RequestedRegion"
-      values    = [var.region.primary, var.region.failover]
+      test     = "StringNotEquals"
+      variable = "aws:RequestedRegion"
+      values   = [var.region.primary, var.region.failover]
     }
   }
   statement {
@@ -61,11 +61,11 @@ data "aws_iam_policy_document" "workloads_ou" {
     effect    = "Deny"
   }
 
-# https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_config.html#example_config_1
+  # https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_config.html#example_config_1
   statement {
-    sid       = "PreventUsersFromDisablingAWSConfigOrChangingItsRules"
-    effect    = "Deny"
-    actions   = [
+    sid    = "PreventUsersFromDisablingAWSConfigOrChangingItsRules"
+    effect = "Deny"
+    actions = [
       "config:DeleteConfigRule",
       "config:DeleteConfigurationRecorder",
       "config:DeleteDeliveryChannel",
@@ -74,11 +74,11 @@ data "aws_iam_policy_document" "workloads_ou" {
     resources = ["*"]
   }
 
-# https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_guardduty.html#example_guardduty_1
+  # https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_guardduty.html#example_guardduty_1
   statement {
-    sid       = "PreventUsersFromDisablingGuardDutyOrModifyingItsConfiguration"
-    effect    = "Deny"
-    actions   = [
+    sid    = "PreventUsersFromDisablingGuardDutyOrModifyingItsConfiguration"
+    effect = "Deny"
+    actions = [
       "guardduty:AcceptInvitation",
       "guardduty:ArchiveFindings",
       "guardduty:CreateDetector",
@@ -114,23 +114,23 @@ data "aws_iam_policy_document" "workloads_ou" {
     resources = ["*"]
   }
 
-# https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_ram.html#example_ram_1
+  # https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_ram.html#example_ram_1
   statement {
     sid       = "PreventingExternalSharing"
     effect    = "Deny"
     actions   = ["ram:CreateResourceShare", "ram:UpdateResourceShare"]
     resources = ["*"]
     condition {
-      test      = "Bool"
-      variable  = "ram:RequestedAllowsExternalPrincipals"
-      values    = ["true"]
+      test     = "Bool"
+      variable = "ram:RequestedAllowsExternalPrincipals"
+      values   = ["true"]
     }
   }
 }
 
 resource "aws_organizations_policy" "workloads_ou" {
-  name        = "workloads-ou"
-  content     = data.aws_iam_policy_document.workloads_ou.json
+  name    = "workloads-ou"
+  content = data.aws_iam_policy_document.workloads_ou.json
 }
 
 resource "aws_organizations_policy_attachment" "workloads_ou" {

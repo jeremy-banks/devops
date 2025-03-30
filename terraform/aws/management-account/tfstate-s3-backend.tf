@@ -1,95 +1,76 @@
-module "dynamodb_primary" {
-  source    = "terraform-aws-modules/dynamodb-table/aws"
-  version   = "4.2.0"
-  providers = { aws = aws.org }
-
-  name     = "${local.resource_name_stub_primary}-tfstate"
-  hash_key = "LockID"
-  attributes = [
-    {
-      name = "LockID"
-      type = "S"
-    }
-  ]
-}
-
-module "dynamodb_failover" {
-  source    = "terraform-aws-modules/dynamodb-table/aws"
-  version   = "4.2.0"
-  providers = { aws = aws.org_failover }
-
-  name     = "${local.resource_name_stub_failover}-tfstate"
-  hash_key = "LockID"
-  attributes = [
-    {
-      name = "LockID"
-      type = "S"
-    }
-  ]
-}
-
 data "aws_iam_policy_document" "s3_primary" {
   statement {
-    sid    = "Allow use of the key by role ${var.assumable_role_name.automation}"
-    effect = "Allow"
-    principals {
-      type        = "AWS"
-      identifiers = ["*"]
+    sid    = "ExplicitDenyUnintendedAccessEntireBucket"
+    effect = "Deny"
+    not_principals {
+      type = "AWS"
+      identifiers = [
+        "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
+        "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.superuser_names.superadmin}",
+        "${module.iam_user_admin.iam_user_arn}",
+        # "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.superuser_names.breakglass}1",
+        # "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.superuser_names.breakglass}2",
+        # "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.superuser_names.breakglass}3",
+      ]
     }
     actions = ["s3:*"]
     resources = [
-      "${module.s3_primary.s3_bucket_arn}/${var.assumable_role_name.automation}",
-      "${module.s3_primary.s3_bucket_arn}/${var.assumable_role_name.automation}/*",
+      "${module.s3_primary.s3_bucket_arn}",
+      "${module.s3_primary.s3_bucket_arn}/*",
     ]
-    condition {
-      test     = "StringLike"
-      variable = "aws:PrincipalArn"
-      values = [
-        "arn:aws:iam::*:role/${var.assumable_role_name.automation}",
-        "arn:aws:iam::*:role/${var.assumable_role_name.superadmin}",
-      ]
-    }
-    condition {
-      test     = "StringEquals"
-      variable = "aws:PrincipalOrgID"
-      values = [
-        "${aws_organizations_organization.this.id}",
-      ]
-    }
   }
 
   statement {
-    sid    = "Allow use of the key by role ${var.assumable_role_name.superadmin}"
-    effect = "Allow"
-    principals {
-      type        = "AWS"
-      identifiers = ["*"]
+    sid    = "ExplicitDenyUnintendedAccessSuperadmin"
+    effect = "Deny"
+    not_principals {
+      type = "AWS"
+      identifiers = [
+        "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.superuser_names.superadmin}",
+        # "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.superuser_names.breakglass}1",
+        # "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.superuser_names.breakglass}2",
+        # "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.superuser_names.breakglass}3",
+      ]
     }
     actions = ["s3:*"]
     resources = [
-      "${module.s3_primary.s3_bucket_arn}/${var.assumable_role_name.superadmin}",
-      "${module.s3_primary.s3_bucket_arn}/${var.assumable_role_name.superadmin}/*",
+      "${module.s3_primary.s3_bucket_arn}/${var.superuser_names.superadmin}",
+      "${module.s3_primary.s3_bucket_arn}/${var.superuser_names.superadmin}/*",
     ]
-    condition {
-      test     = "StringLike"
-      variable = "aws:PrincipalArn"
-      values = [
-        "arn:aws:iam::*:role/${var.assumable_role_name.superadmin}",
-      ]
-    }
-    condition {
-      test     = "StringEquals"
-      variable = "aws:PrincipalOrgID"
-      values = [
-        "${aws_organizations_organization.this.id}",
-      ]
-    }
   }
+
+  # statement {
+  #   sid    = "Allow use of the key by role ${var.assumable_role_name.superadmin}"
+  #   effect = "Allow"
+  #   principals {
+  #     type        = "AWS"
+  #     identifiers = ["*"]
+  #   }
+  #   actions = ["s3:*"]
+  #   resources = [
+  #     "${module.s3_primary.s3_bucket_arn}/${var.assumable_role_name.superadmin}",
+  #     "${module.s3_primary.s3_bucket_arn}/${var.assumable_role_name.superadmin}/*",
+  #   ]
+  #   condition {
+  #     test     = "StringLike"
+  #     variable = "aws:PrincipalArn"
+  #     values = [
+  #       "arn:aws:iam::*:role/${var.assumable_role_name.superadmin}",
+  #     ]
+  #   }
+  #   condition {
+  #     test     = "StringEquals"
+  #     variable = "aws:PrincipalOrgID"
+  #     values = [
+  #       "${aws_organizations_organization.this.id}",
+  #     ]
+  #   }
+  # }
 }
 
 module "s3_primary" {
   source    = "terraform-aws-modules/s3-bucket/aws"
-  version   = "4.2.1"
+  version   = "4.6.0"
   providers = { aws = aws.org }
 
   bucket = "${local.resource_name_stub_primary}-tfstate-storage-blob-${local.unique_id}"
@@ -111,9 +92,8 @@ module "s3_primary" {
       id                                     = "intelligent-tier"
       enabled                                = true
       abort_incomplete_multipart_upload_days = 7
-
-      transition                    = [{ storage_class = "INTELLIGENT_TIERING" }]
-      noncurrent_version_transition = [{ storage_class = "INTELLIGENT_TIERING" }]
+      transition                             = [{ days = 1, storage_class = "INTELLIGENT_TIERING" }]
+      noncurrent_version_transition          = [{ days = 1, storage_class = "INTELLIGENT_TIERING" }]
     }
   ]
 
@@ -156,7 +136,7 @@ module "s3_primary" {
 
 module "iam_policy_s3_primary_replicate_to_failover" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version   = "5.47.1"
+  version   = "5.54.0"
   providers = { aws = aws.org }
 
   name = "s3-primary-replicate-to-failover"
@@ -213,7 +193,7 @@ EOF
 
 module "iam_role_s3_primary_replicate_to_failover" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version   = "5.47.1"
+  version   = "5.54.0"
   providers = { aws = aws.org }
 
   trusted_role_services = [
@@ -250,7 +230,7 @@ data "aws_iam_policy_document" "s3_failover" {
       variable = "aws:PrincipalArn"
       values = [
         "arn:aws:iam::*:role/${var.assumable_role_name.automation}",
-        "arn:aws:iam::*:role/${var.assumable_role_name.superadmin}",
+        # "arn:aws:iam::*:role/${var.assumable_role_name.superadmin}",
       ]
     }
     condition {
@@ -293,7 +273,7 @@ data "aws_iam_policy_document" "s3_failover" {
 
 module "s3_failover" {
   source    = "terraform-aws-modules/s3-bucket/aws"
-  version   = "4.2.1"
+  version   = "4.6.0"
   providers = { aws = aws.org_failover }
 
   bucket = "${local.resource_name_stub_failover}-tfstate-storage-blob-${local.unique_id}"
@@ -315,16 +295,15 @@ module "s3_failover" {
       id                                     = "intelligent-tier"
       enabled                                = true
       abort_incomplete_multipart_upload_days = 7
-
-      transition                    = [{ storage_class = "INTELLIGENT_TIERING" }]
-      noncurrent_version_transition = [{ storage_class = "INTELLIGENT_TIERING" }]
+      transition                             = [{ days = 1, storage_class = "INTELLIGENT_TIERING" }]
+      noncurrent_version_transition          = [{ days = 1, storage_class = "INTELLIGENT_TIERING" }]
     }
   ]
 
   versioning = { enabled = true }
 
-  attach_policy                            = true
-  policy                                   = data.aws_iam_policy_document.s3_failover.json
+  # attach_policy                            = true
+  # policy                                   = data.aws_iam_policy_document.s3_failover.json
   attach_deny_incorrect_encryption_headers = true
   attach_deny_incorrect_kms_key_sse        = true
   allowed_kms_key_arn                      = module.kms_failover.key_arn

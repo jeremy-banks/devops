@@ -1,17 +1,17 @@
 resource "aws_organizations_policy" "ai_services_opt_out" {
-# https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_ai-opt-out_syntax.html
+  # https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_ai-opt-out_syntax.html
   name        = "ai-services-opt-out"
   description = "Opt out of all AI services for all accounts in the organization"
   type        = "AISERVICES_OPT_OUT_POLICY"
-  content     = jsonencode(
+  content = jsonencode(
     {
-      "services": {
-        "@@operators_allowed_for_child_policies": ["@@none"],
-        "default": {
-          "@@operators_allowed_for_child_policies": ["@@none"],
-          "opt_out_policy": {
-            "@@operators_allowed_for_child_policies": ["@@none"],
-            "@@assign": "optOut"
+      "services" : {
+        "@@operators_allowed_for_child_policies" : ["@@none"],
+        "default" : {
+          "@@operators_allowed_for_child_policies" : ["@@none"],
+          "opt_out_policy" : {
+            "@@operators_allowed_for_child_policies" : ["@@none"],
+            "@@assign" : "optOut"
           }
         }
       }
