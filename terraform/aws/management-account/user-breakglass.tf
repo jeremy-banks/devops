@@ -10,8 +10,5 @@ module "iam_user_breakglass" {
   create_iam_user_login_profile = true
   password_reset_required       = false
   create_iam_access_key         = false
-  policy_arns = [
-    module.iam_user_admin_policy.arn,
-    "arn:aws:iam::aws:policy/AdministratorAccess",
-  ]
+  policy_arns                   = ["arn:aws:iam::aws:policy/AdministratorAccess"]
 }

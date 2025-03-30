@@ -1,3 +1,65 @@
+data "aws_iam_policy_document" "kms_tfstate_backend" {
+  # https://docs.aws.amazon.com/kms/latest/prdeloperguide/key-policy-default.html
+  statement {
+    sid    = "Enable IAM User Permissions"
+    effect = "Allow"
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.this.account_id}:root"]
+    }
+    actions   = ["kms:*"]
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "Explicit Deny Unintended Access"
+    effect = "Deny"
+    not_principals {
+      type = "AWS"
+      identifiers = concat(
+        [
+          "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
+          "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.superuser_names.superadmin}",
+          "${module.iam_user_admin.iam_user_arn}"
+        ],
+        [for user in module.iam_user_breakglass : user.iam_user_arn]
+      )
+    }
+    actions   = ["kms:*"]
+    resources = ["*"]
+  }
+}
+
+module "kms_tfstate_backend_primary" {
+  source    = "terraform-aws-modules/kms/aws"
+  version   = "3.1.1"
+  providers = { aws = aws.org }
+
+  deletion_window_in_days = 30
+  enable_key_rotation     = true
+  is_enabled              = true
+  key_usage               = "ENCRYPT_DECRYPT"
+  multi_region            = true
+
+  aliases = ["${local.resource_name_stub_primary}-${var.this_slug}"]
+
+  policy = data.aws_iam_policy_document.kms_tfstate_backend.json
+}
+
+module "kms_tfstate_backend_failover" {
+  source    = "terraform-aws-modules/kms/aws"
+  version   = "3.1.1"
+  providers = { aws = aws.org_failover }
+
+  deletion_window_in_days = 30
+  create_replica          = true
+  primary_key_arn         = module.kms_tfstate_backend_primary.key_arn
+
+  aliases = ["${local.resource_name_stub_failover}-${var.this_slug}"]
+
+  policy = data.aws_iam_policy_document.kms_tfstate_backend.json
+}
+
 data "aws_iam_policy_document" "s3_tfstate_backend_primary" {
   statement {
     sid    = "denyUnintendedAccessToEntireBucket"
@@ -67,7 +129,7 @@ module "s3_tfstate_backend_primary" {
   server_side_encryption_configuration = {
     rule = {
       apply_server_side_encryption_by_default = {
-        kms_master_key_id = module.kms_primary.key_arn
+        kms_master_key_id = module.kms_tfstate_backend_primary.key_arn
         sse_algorithm     = "aws:kms"
       }
       bucket_key_enabled = true
@@ -104,7 +166,7 @@ module "s3_tfstate_backend_primary" {
         destination = {
           bucket             = module.s3_tfstate_backend_failover.s3_bucket_arn
           storage_class      = "INTELLIGENT_TIERING"
-          replica_kms_key_id = module.kms_failover.key_arn
+          replica_kms_key_id = module.kms_tfstate_backend_failover.key_arn
         }
       },
     ]
@@ -114,7 +176,7 @@ module "s3_tfstate_backend_primary" {
   policy                                   = data.aws_iam_policy_document.s3_tfstate_backend_primary.json
   attach_deny_incorrect_encryption_headers = true
   attach_deny_incorrect_kms_key_sse        = true
-  allowed_kms_key_arn                      = module.kms_primary.key_arn
+  allowed_kms_key_arn                      = module.kms_tfstate_backend_primary.key_arn
 }
 
 data "aws_iam_policy_document" "s3_tfstate_backend_primary_replicate_to_failover" {
@@ -155,8 +217,8 @@ data "aws_iam_policy_document" "s3_tfstate_backend_primary_replicate_to_failover
       "kms:Decrypt"
     ]
     resources = [
-      "${module.kms_primary.key_arn}",
-      "${module.kms_failover.key_arn}"
+      "${module.kms_tfstate_backend_primary.key_arn}",
+      "${module.kms_tfstate_backend_failover.key_arn}"
     ]
   }
 }
@@ -259,7 +321,7 @@ module "s3_tfstate_backend_failover" {
   server_side_encryption_configuration = {
     rule = {
       apply_server_side_encryption_by_default = {
-        kms_master_key_id = module.kms_failover.key_arn
+        kms_master_key_id = module.kms_tfstate_backend_failover.key_arn
         sse_algorithm     = "aws:kms"
       }
       bucket_key_enabled = true
@@ -282,5 +344,5 @@ module "s3_tfstate_backend_failover" {
   policy                                   = data.aws_iam_policy_document.s3_tfstate_backend_failover.json
   attach_deny_incorrect_encryption_headers = true
   attach_deny_incorrect_kms_key_sse        = true
-  allowed_kms_key_arn                      = module.kms_failover.key_arn
+  allowed_kms_key_arn                      = module.kms_tfstate_backend_failover.key_arn
 }
