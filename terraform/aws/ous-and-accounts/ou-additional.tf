@@ -3,8 +3,13 @@ resource "aws_organizations_organizational_unit" "sandbox" {
   parent_id = data.aws_organizations_organization.this.roots[0].id
 }
 
-resource "aws_organizations_organizational_unit" "workloads" {
-  name      = "workloads"
+resource "aws_organizations_organizational_unit" "exceptions" {
+  name      = "exceptions"
+  parent_id = data.aws_organizations_organization.this.roots[0].id
+}
+
+resource "aws_organizations_organizational_unit" "transitional" {
+  name      = "transitional"
   parent_id = data.aws_organizations_organization.this.roots[0].id
 }
 
@@ -23,18 +28,8 @@ resource "aws_organizations_organizational_unit" "individual_business_users" {
   parent_id = data.aws_organizations_organization.this.roots[0].id
 }
 
-resource "aws_organizations_organizational_unit" "exceptions" {
-  name      = "exceptions"
-  parent_id = data.aws_organizations_organization.this.roots[0].id
-}
-
 resource "aws_organizations_organizational_unit" "deployments" {
   name      = "deployments"
-  parent_id = data.aws_organizations_organization.this.roots[0].id
-}
-
-resource "aws_organizations_organizational_unit" "transactional" {
-  name      = "transactional"
   parent_id = data.aws_organizations_organization.this.roots[0].id
 }
 
