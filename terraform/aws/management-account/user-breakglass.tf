@@ -5,7 +5,7 @@ module "iam_user_breakglass" {
 
   count = 3
 
-  name = "${var.superuser_names.breakglass}${count.index + 1}"
+  name = "${var.admin_user_names.breakglass}${count.index + 1}"
 
   create_iam_user_login_profile = true
   password_reset_required       = false

@@ -3,7 +3,7 @@ data "aws_iam_policy_document" "iam_user_admin" {
     sid       = "AllowAssumeRolesInOrg"
     effect    = "Allow"
     actions   = ["sts:AssumeRole"]
-    resources = ["arn:aws:iam::*:role/${var.superuser_names.admin}"]
+    resources = ["arn:aws:iam::*:role/${var.admin_user_names.admin}"]
     condition {
       test     = "StringEquals"
       variable = "aws:PrincipalOrgID"
@@ -16,10 +16,10 @@ data "aws_iam_policy_document" "iam_user_admin" {
     effect  = "Allow"
     actions = ["s3:*"]
     resources = [
-      "arn:aws:s3:::${local.resource_name_stub_primary}-tfstate-storage-blob-${local.unique_id}/${var.superuser_names.admin}",
-      "arn:aws:s3:::${local.resource_name_stub_primary}-tfstate-storage-blob-${local.unique_id}/${var.superuser_names.admin}/*",
-      "arn:aws:s3:::${local.resource_name_stub_failover}-tfstate-storage-blob-${local.unique_id}/${var.superuser_names.admin}",
-      "arn:aws:s3:::${local.resource_name_stub_failover}-tfstate-storage-blob-${local.unique_id}/${var.superuser_names.admin}/*",
+      "arn:aws:s3:::${local.resource_name_stub_primary}-tfstate-storage-blob-${local.unique_id}/${var.admin_user_names.admin}",
+      "arn:aws:s3:::${local.resource_name_stub_primary}-tfstate-storage-blob-${local.unique_id}/${var.admin_user_names.admin}/*",
+      "arn:aws:s3:::${local.resource_name_stub_failover}-tfstate-storage-blob-${local.unique_id}/${var.admin_user_names.admin}",
+      "arn:aws:s3:::${local.resource_name_stub_failover}-tfstate-storage-blob-${local.unique_id}/${var.admin_user_names.admin}/*",
     ]
   }
 
@@ -68,7 +68,7 @@ module "iam_user_admin" {
   version   = "5.54.0"
   providers = { aws = aws.org }
 
-  name = var.superuser_names.admin
+  name = var.admin_user_names.admin
 
   create_iam_user_login_profile = false
   create_iam_access_key         = true

@@ -60,8 +60,8 @@ data "aws_iam_policy_document" "org_root" {
       test     = "StringNotLike"
       variable = "aws:PrincipalArn"
       values = [
-        "arn:aws:iam::${data.aws_caller_identity.this.account_id}:user/${var.assumable_role_name.superadmin}",
-        "arn:aws:iam::*:role/${var.assumable_role_name.superadmin}",
+        "arn:aws:iam::${data.aws_caller_identity.this.account_id}:user/${var.admin_user_names.superadmin}",
+        "arn:aws:iam::*:role/${var.superadmin_role_name}",
       ]
     }
     condition {
@@ -96,17 +96,6 @@ data "aws_iam_policy_document" "org_root" {
       values   = ["false"]
     }
   }
-  # statement {
-  #   sid       = "PreventS3IncorrectEncryptionHeaders"
-  #   effect    = "Deny"
-  #   actions   = ["s3:PutObject"]
-  #   resources = ["*"]
-  #   condition {
-  #     test      = "StringNotEquals"
-  #     variable  = "s3:x-amz-server-side-encryption"
-  #     values    = ["aws:kms"]
-  #   }
-  # }
 }
 
 resource "aws_organizations_policy" "org_root" {

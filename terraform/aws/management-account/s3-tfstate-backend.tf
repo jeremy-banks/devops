@@ -19,7 +19,7 @@ data "aws_iam_policy_document" "kms_tfstate_backend" {
       identifiers = concat(
         [
           "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
-          "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.superuser_names.superadmin}",
+          "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
           "${module.iam_user_admin.iam_user_arn}"
         ],
         [for user in module.iam_user_breakglass : user.iam_user_arn]
@@ -68,7 +68,7 @@ data "aws_iam_policy_document" "s3_tfstate_backend_primary" {
       type = "AWS"
       identifiers = concat([
         "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.superuser_names.superadmin}",
+        "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
         ],
       [for user in module.iam_user_breakglass : user.iam_user_arn])
     }
@@ -86,14 +86,14 @@ data "aws_iam_policy_document" "s3_tfstate_backend_primary" {
       type = "AWS"
       identifiers = concat([
         "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.superuser_names.superadmin}",
+        "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
         ],
       [for user in module.iam_user_breakglass : user.iam_user_arn])
     }
     actions = ["s3:*"]
     resources = [
-      "${module.s3_tfstate_backend_primary.s3_bucket_arn}/${var.superuser_names.superadmin}",
-      "${module.s3_tfstate_backend_primary.s3_bucket_arn}/${var.superuser_names.superadmin}/*",
+      "${module.s3_tfstate_backend_primary.s3_bucket_arn}/${var.admin_user_names.superadmin}",
+      "${module.s3_tfstate_backend_primary.s3_bucket_arn}/${var.admin_user_names.superadmin}/*",
     ]
   }
 
@@ -104,15 +104,15 @@ data "aws_iam_policy_document" "s3_tfstate_backend_primary" {
       type = "AWS"
       identifiers = concat([
         "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.superuser_names.superadmin}",
+        "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
         "${module.iam_user_admin.iam_user_arn}",
         ],
       [for user in module.iam_user_breakglass : user.iam_user_arn])
     }
     actions = ["s3:*"]
     resources = [
-      "${module.s3_tfstate_backend_primary.s3_bucket_arn}/${var.superuser_names.admin}",
-      "${module.s3_tfstate_backend_primary.s3_bucket_arn}/${var.superuser_names.admin}/*",
+      "${module.s3_tfstate_backend_primary.s3_bucket_arn}/${var.admin_user_names.admin}",
+      "${module.s3_tfstate_backend_primary.s3_bucket_arn}/${var.admin_user_names.admin}/*",
     ]
   }
 }
@@ -260,7 +260,7 @@ data "aws_iam_policy_document" "s3_tfstate_backend_failover" {
       type = "AWS"
       identifiers = concat([
         "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.superuser_names.superadmin}",
+        "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
         ],
       [for user in module.iam_user_breakglass : user.iam_user_arn])
     }
@@ -278,14 +278,14 @@ data "aws_iam_policy_document" "s3_tfstate_backend_failover" {
       type = "AWS"
       identifiers = concat([
         "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.superuser_names.superadmin}",
+        "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
         ],
       [for user in module.iam_user_breakglass : user.iam_user_arn])
     }
     actions = ["s3:*"]
     resources = [
-      "${module.s3_tfstate_backend_failover.s3_bucket_arn}/${var.superuser_names.superadmin}",
-      "${module.s3_tfstate_backend_failover.s3_bucket_arn}/${var.superuser_names.superadmin}/*",
+      "${module.s3_tfstate_backend_failover.s3_bucket_arn}/${var.admin_user_names.superadmin}",
+      "${module.s3_tfstate_backend_failover.s3_bucket_arn}/${var.admin_user_names.superadmin}/*",
     ]
   }
 
@@ -296,15 +296,15 @@ data "aws_iam_policy_document" "s3_tfstate_backend_failover" {
       type = "AWS"
       identifiers = concat([
         "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.superuser_names.superadmin}",
+        "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
         "${module.iam_user_admin.iam_user_arn}",
         ],
       [for user in module.iam_user_breakglass : user.iam_user_arn])
     }
     actions = ["s3:*"]
     resources = [
-      "${module.s3_tfstate_backend_failover.s3_bucket_arn}/${var.superuser_names.admin}",
-      "${module.s3_tfstate_backend_failover.s3_bucket_arn}/${var.superuser_names.admin}/*",
+      "${module.s3_tfstate_backend_failover.s3_bucket_arn}/${var.admin_user_names.admin}",
+      "${module.s3_tfstate_backend_failover.s3_bucket_arn}/${var.admin_user_names.admin}/*",
     ]
   }
 }
