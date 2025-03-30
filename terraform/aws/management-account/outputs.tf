@@ -25,3 +25,11 @@ output "iam_user_admin_iam_access_key_secret" {
   value       = module.iam_user_admin.iam_access_key_secret
   sensitive   = true
 }
+
+output "iam_user_breakglass_credentials" {
+  description = "Map of IAM usernames and passwords"
+  value = { for idx, user in module.iam_user_breakglass :
+    user.iam_user_name => user.iam_user_login_profile_password
+  }
+  sensitive = true
+}
