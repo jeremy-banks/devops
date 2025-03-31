@@ -4,6 +4,18 @@
 
 ## Account Management
 
+### Accessing Accounts
+superadmin user assumes superadmin roles and manages
+    the Organization
+    top-level OUs
+    all resources in Foundational OUs
+    IAM and other security resources in all accounts
+    superadmin allowed to assume all roles
+admin user assumes admin roles and manages resources in Additional OUs
+admin-STRING optional user assumes admin-STRING role for managing resources in strict-access OUs
+breakglass1, 2, 3 users have same access as superadmin in event of IDP failure
+
+
 ### Replacing an Account
 1. Remove old Account from tfstate
    - `terraform state rm aws_organizations_account.RESOURCE`

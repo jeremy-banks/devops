@@ -3,52 +3,52 @@
 # Initial Setup
 
 ## Prerequisites
-- aws-cli/2.17.65
-- Terraform v1.9.7
+- aws-cli/2.25.5
+- Terraform v1.11.3
 - eksctl version 0.191.0
 - kubectl v1.31.1
 - helm v3.16.1
 
 ## Instructions
 
-### Deploy Management Account
-1. Create AWS Account to be Organization root
-   1. During account creation be sure to enable Developer tier AWS Support, you will need to open a Support Case for increasing your quote of `Default maximum number of accounts`.
-   1. Open an AWS Support Case with `Account and Billing` in category `Organization` requesting `Default maximum number of accounts` increased to `1000`.
+### Deploy Org Management / Root Account
+1. Create AWS Account to be Org Management / Root
+   1. During account creation enable Developer tier AWS Support.
 1. Update the terraform/variables.tf with your unique information
    1. `org_owner_email_prefix` (billg) and `org_owner_email_domain_tld` (microsoft.com)
    1. `company_name` (microsoft) and `company_name_abbr` (ms)
    1. `team_name` (blue) and `team_name_abbr` (blu)
    1. `project_name` (windows13) and `project_name_abbr` (w13)
+   1. `cost_center` for billing
 1. Create IAM User "superadmin"
    1. Attach AdministratorAccess policy
-   1. Create an access key to be used in AWS CLI profile named "superadmin"
-      ```sh
-      aws configure --profile superadmin
-      ```
+   1. Create an access key and AWS CLI profile named "superadmin" `aws configure --profile superadmin`
 1. Deploy `terraform/aws/management-account`
 1. Update the backend.tf files in `terraform/aws/` and subdirectories
    ```sh
-   find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDORGACCOUNTID,012345678912,g' {} + &&\
-   find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDREGION,us-west-2,g' {} + &&\
-   find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDDYNAMODBTABLE,scc-blu-w12-usw2-tfstate,g' {} + &&\
-   find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDKMSARN,KEY_ARN,g' {} + &&\
-   find . -name 'backend.tf' -exec sed -i 's,TFSTATEBACKENDS3BUCKETNAME,scc-blu-w12-usw2-tfstate-storage-blob-569d758c,g' {} +
+   find . -name 'backend.tf' -exec sed -i '' 's,TFSTATEBACKENDORGACCOUNTID,012345678912,g' {} + &&\
+   find . -name 'backend.tf' -exec sed -i '' 's,TFSTATEBACKENDREGION,us-west-2,g' {} + &&\
+   find . -name 'backend.tf' -exec sed -i '' 's,TFSTATEBACKENDDYNAMODBTABLE,scc-blu-w12-usw2-tfstate,g' {} + &&\
+   find . -name 'backend.tf' -exec sed -i '' 's,TFSTATEBACKENDKMSARN,KEY_ARN,g' {} + &&\
+   find . -name 'backend.tf' -exec sed -i '' 's,TFSTATEBACKENDS3BUCKETNAME,scc-blu-w12-usw2-tfstate-storage-blob-569d758c,g' {} +
    ```
-1. Uncomment `terraform/aws/management-account/backend.tf` and migrate state with `echo yes | terraform init -reconfigure`
+1. Uncomment `terraform/aws/management-account/backend.tf` and migrate state with `terraform init -force-copy`
+1. Open a `Chat` AWS Support Case with `Account and Billing` in category `Organization` requesting `Default maximum number of accounts` increased to `1000`.
 
 ### Deploy OUs, Accounts, and SCPs
-1. Deploy terraform/aws/org-ous-and-accounts to create additional AWS Organization Units and Accounts
-   1. Update the terraform/variables.tf account_id map with terraform output
-1. Deploy terraform/aws/iam-groups-and-roles
-   1. Create AWS CLI profile named "automation" with terraform output
-      ```sh
-      terraform output -json
-      aws configure --profile automation
-      ```
+1. Deploy `terraform/aws/org-ous-and-accounts`
+1. Update the terraform/variables.tf `account_id` map with the output
+
+### Deploy IAM Groups and Roles
+1. Deploy `terraform/aws/iam-groups-and-roles`
+1. Create AWS CLI profile named "automation" with the output
+   ```sh
+   terraform output -json
+   aws configure --profile automation
+   ```
 
 ### Deploy Transit Gateway and Shared Network VPC
-1. Deploy terraform/aws/tgw-and-network-vpc
+1. Deploy `terraform/aws/tgw-and-network-vpc`
 1. Deploy sdlc accounts
    1. Deploy terraform/aws/sdlc-prd
       1. Update eksctl/sdlc-prd-blue.yaml and eksctl/sdlc-prd-failover-blue.yaml with vpc_id and private_subnets for primary and failover from terraform output
