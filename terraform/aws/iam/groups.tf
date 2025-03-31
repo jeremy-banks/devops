@@ -1,6 +1,6 @@
 # module "iam_group_admin" {
 #   source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-policies"
-#   version = "5.45.0"
+#   version = "5.54.0"
 #   providers = { aws = aws.identity }
 
 #   name = var.assumable_roles_name.admin
@@ -36,7 +36,7 @@
 
 # module "iam_group_devops" {
 #   source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-policies"
-#   version = "5.45.0"
+#   version = "5.54.0"
 #   providers = { aws = aws.identity }
 
 #   name = "devops"
@@ -70,7 +70,7 @@
 
 # module "iam_group_dev" {
 #   source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-policies"
-#   version = "5.45.0"
+#   version = "5.54.0"
 #   providers = { aws = aws.identity }
   
 #   name = "dev"
@@ -104,7 +104,7 @@
 
 # module "iam_group_ops" {
 #   source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-policies"
-#   version = "5.45.0"
+#   version = "5.54.0"
 #   providers = { aws = aws.identity }
   
 #   name = "ops"
@@ -138,7 +138,7 @@
 
 # module "iam_group_qa" {
 #   source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-policies"
-#   version = "5.45.0"
+#   version = "5.54.0"
 #   providers = { aws = aws.identity }
   
 #   name = "qa"
@@ -172,7 +172,7 @@
 
 # module "iam_group_billing" {
 #   source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-policies"
-#   version = "5.45.0"
+#   version = "5.54.0"
 #   providers = { aws = aws.identity }
   
 #   name = "billing"

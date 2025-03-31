@@ -1,15 +1,15 @@
 variable "account_id" {
   type = map(string)
   default = {
-    identity_prd         = ""
-    log_archive_prd      = ""
-    network_prd          = ""
-    management           = ""
-    sdlc_dev             = ""
-    sdlc_prd             = ""
-    sdlc_stg             = ""
-    sdlc_tst             = ""
-    security_tooling_prd = ""
+    # identity_prd         = ""
+    # log_archive_prd      = ""
+    network_prd = "615426854926"
+    # management           = ""
+    # sdlc_dev             = ""
+    # sdlc_prd             = ""
+    # sdlc_stg             = ""
+    # sdlc_tst             = ""
+    # security_tooling_prd = ""
   }
 }
 
@@ -92,11 +92,15 @@ variable "admin_user_names" {
 }
 
 variable "account_role_name" {
+  default = "superadmin"
+}
+
+variable "admin_role_name" {
   default = "admin"
 }
 
-variable "superadmin_role_name" {
-  default = "superadmin"
+variable "provider_role_name" {
+  default = "admin"
 }
 
 variable "iam_immutable_tag_key" {
@@ -117,6 +121,12 @@ variable "org_aws_service_access_principals" {
   ]
 }
 
+variable "this_slug" {
+  description = "used to programatically declare resource names"
+  type        = string
+  default     = "YOU-FORGOT-TO-DECLARE-VARIABLE-this_slug-AND-AS-A-RESULT-THIS-STRING-IS-SO-LONG-IT-WILL-HOPEFULLY-FAIL-ANY-RESOURCE-CREATE-THUS-PROMPTING-YOU-TO-DEFINE-IT-IN-terraform.tfvars"
+}
+
 variable "region" {
   description = "regions for the infrastructure"
   type        = map(string)
@@ -126,12 +136,6 @@ variable "region" {
     primary_short  = "usw2"
     failover_short = "use1"
   }
-}
-
-variable "this_slug" {
-  description = "used to programatically declare resource names"
-  type        = string
-  default     = "YOU-FORGOT-TO-DECLARE-VARIABLE-this_slug-AND-AS-A-RESULT-THIS-STRING-IS-SO-LONG-IT-WILL-HOPEFULLY-FAIL-ANY-RESOURCE-CREATE-THUS-PROMPTING-YOU-TO-DEFINE-IT-IN-terraform.tfvars"
 }
 
 variable "create_failover_region" {

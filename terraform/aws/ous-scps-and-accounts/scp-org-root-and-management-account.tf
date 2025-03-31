@@ -61,7 +61,7 @@ data "aws_iam_policy_document" "org_root" {
       variable = "aws:PrincipalArn"
       values = [
         "arn:aws:iam::${data.aws_caller_identity.this.account_id}:user/${var.admin_user_names.superadmin}",
-        "arn:aws:iam::*:role/${var.superadmin_role_name}",
+        "arn:aws:iam::*:role/${var.account_role_name}",
       ]
     }
     condition {
