@@ -3,7 +3,7 @@ variable "account_id" {
   default = {
     # identity_prd         = ""
     # log_archive_prd      = ""
-    network_prd = "615426854926"
+    network_prd = "421954349749"
     # management           = ""
     # sdlc_dev             = ""
     # sdlc_prd             = ""
@@ -76,10 +76,10 @@ variable "resource_owner_email" {
   default     = ""
 }
 
-variable "cli_profile_name_aws" {
+variable "cli_profile_name" {
   description = "aws profile name to be used"
   type        = string
-  default     = "automation"
+  default     = "admin"
 }
 
 variable "admin_user_names" {
@@ -109,7 +109,7 @@ variable "iam_immutable_tag_key" {
   default     = "immutable"
 }
 
-variable "org_aws_service_access_principals" {
+variable "org_service_access_principals" {
   type = list(string)
   default = [
     "account.amazonaws.com", #account management

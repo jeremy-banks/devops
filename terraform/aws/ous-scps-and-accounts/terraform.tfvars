@@ -1,4 +1,4 @@
-cli_profile_name_aws = "superadmin"
+cli_profile_name = "superadmin"
 
 deployment_environment = "prd"
 

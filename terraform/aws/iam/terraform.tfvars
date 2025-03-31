@@ -1,4 +1,4 @@
-cli_profile_name_aws = "superadmin"
+cli_profile_name = "superadmin"
 
 provider_role_name = "superadmin"
 
