@@ -36,3 +36,19 @@ module "vpc_inspection_failover" {
 
   vpc_tags = local.vpc_tags_failover
 }
+
+resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inspection_to_tgw_failover" {
+  provider = aws.network_prd_failover
+
+  count = var.create_failover_region ? 1 : 0
+
+  subnet_ids                                      = module.vpc_inspection_failover[0].private_subnets
+  transit_gateway_id                              = aws_ec2_transit_gateway.tgw_failover[0].id
+  vpc_id                                          = module.vpc_inspection_failover[0].vpc_id
+  dns_support                                     = "enable"
+  security_group_referencing_support              = "enable"
+  transit_gateway_default_route_table_association = true
+  transit_gateway_default_route_table_propagation = true
+
+  tags = { Name = "inspection-vpc-attach-tgw-failover" }
+}

@@ -3,6 +3,8 @@ module "vpc_outbound_failover" {
   version   = "5.19.0"
   providers = { aws = aws.network_prd_failover }
 
+  count = var.create_failover_region ? 1 : 0
+
   enable_nat_gateway     = true
   reuse_nat_ips          = true
   one_nat_gateway_per_az = true
@@ -39,4 +41,20 @@ module "vpc_outbound_failover" {
   dhcp_options_ntp_servers         = var.ntp_servers
 
   vpc_tags = local.vpc_tags_failover
+}
+
+resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_outbound_to_tgw_failover" {
+  provider = aws.network_prd_failover
+
+  count = var.create_failover_region ? 1 : 0
+
+  subnet_ids                                      = module.vpc_outbound_failover[0].public_subnets
+  transit_gateway_id                              = aws_ec2_transit_gateway.tgw_failover[0].id
+  vpc_id                                          = module.vpc_outbound_failover[0].vpc_id
+  dns_support                                     = "enable"
+  security_group_referencing_support              = "enable"
+  transit_gateway_default_route_table_association = true
+  transit_gateway_default_route_table_propagation = true
+
+  tags = { Name = "outbound-vpc-attach-tgw-failover" }
 }

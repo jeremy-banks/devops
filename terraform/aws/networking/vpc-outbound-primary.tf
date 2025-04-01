@@ -40,3 +40,17 @@ module "vpc_outbound_primary" {
 
   vpc_tags = local.vpc_tags_primary
 }
+
+resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_outbound_to_tgw_primary" {
+  provider = aws.network_prd
+
+  subnet_ids                                      = module.vpc_outbound_primary.public_subnets
+  transit_gateway_id                              = aws_ec2_transit_gateway.tgw_primary.id
+  vpc_id                                          = module.vpc_outbound_primary.vpc_id
+  dns_support                                     = "enable"
+  security_group_referencing_support              = "enable"
+  transit_gateway_default_route_table_association = true
+  transit_gateway_default_route_table_propagation = true
+
+  tags = { Name = "outbound-vpc-attach-tgw-primary" }
+}

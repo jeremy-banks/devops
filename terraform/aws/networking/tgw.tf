@@ -34,6 +34,8 @@ resource "aws_ec2_transit_gateway_peering_attachment" "tgw_peering" {
   peer_region             = var.region.primary
   peer_transit_gateway_id = aws_ec2_transit_gateway.tgw_primary.id
   transit_gateway_id      = aws_ec2_transit_gateway.tgw_failover[0].id
+
+  tags = { Name = "tgw-peer-${var.region.primary_short}-to-${var.region.failover_short}-requester" }
 }
 
 resource "aws_ec2_transit_gateway_peering_attachment_accepter" "tgw_peering" {
@@ -42,4 +44,6 @@ resource "aws_ec2_transit_gateway_peering_attachment_accepter" "tgw_peering" {
   count = var.create_failover_region ? 1 : 0
 
   transit_gateway_attachment_id = aws_ec2_transit_gateway_peering_attachment.tgw_peering[0].id
+
+  tags = { Name = "tgw-peer-${var.region.primary_short}-to-${var.region.failover_short}-accepter" }
 }
