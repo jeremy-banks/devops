@@ -14,13 +14,13 @@ variable "account_id" {
 }
 
 variable "org_owner_email_prefix" {
-  description = "the 'billg' in 'billg@microsoft'"
+  description = "the 'billg+aws' in 'billg+aws@microsoft.com'"
   type        = string
   default     = "workjeremyb+newtestbed"
 }
 
 variable "org_owner_email_domain_tld" {
-  description = "the 'microsoft.com' in 'billg@microsoft.com'"
+  description = "the 'microsoft.com' in 'billg+aws@microsoft.com'"
   type        = string
   default     = "gmail.com"
 }
@@ -140,7 +140,7 @@ variable "region" {
 
 variable "create_failover_region" {
   type    = bool
-  default = false
+  default = true
 }
 
 variable "availability_zones" {
@@ -162,8 +162,9 @@ variable "availability_zones" {
 }
 
 variable "availability_zones_num_used" {
-  type    = number
-  default = 2
+  description = "This codebase supports from 2 to 6 AZs"
+  type        = number
+  default     = 2
 }
 
 variable "network_tgw_share_enabled" {
@@ -276,6 +277,18 @@ variable "account_email_substitute" {
   }
 }
 
+variable "vpc_cidr_infrastructure" {
+  type = map(string)
+  default = {
+    inbound_failover    = "10.3.0.0/16"
+    inbound_primary     = "10.0.0.0/16"
+    inspection_failover = "10.4.0.0/16"
+    inspection_primary  = "10.1.0.0/16"
+    outbound_failover   = "10.5.0.0/16"
+    outbound_primary    = "10.2.0.0/16"
+  }
+}
+
 locals {
   org_owner_email = "${var.org_owner_email_prefix}@${var.org_owner_email_domain_tld}"
 
@@ -289,6 +302,11 @@ locals {
   resource_name_stub          = lower("${var.company_name_abbr}-${var.team_name_abbr}-${var.project_name_abbr}") #company - team - project - env
   resource_name_stub_primary  = lower("${local.resource_name_stub}-${var.region.primary_short}")                 #company - team - project - env - primary
   resource_name_stub_failover = lower("${local.resource_name_stub}-${var.region.failover_short}")                #company - team - project - env - failover
+
+
+
+
+
 
   vpc_name_primary            = "${local.resource_name_stub_primary}-${var.this_slug}-vpc"
   vpc_subnet_pvt_name_primary = format("%s-pvt-", local.vpc_name_primary)

@@ -19,8 +19,6 @@ module "vpc_inbound_primary" {
     cidrsubnets(var.vpc_cidr_infrastructure.inbound_primary, 1, 1)
   )
 
-  create_private_nat_gateway_route = false
-
   manage_default_security_group  = true
   default_security_group_name    = "NEVER-USE-THIS-SECURITY-GROUP"
   default_security_group_ingress = []

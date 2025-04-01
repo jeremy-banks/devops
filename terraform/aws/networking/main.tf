@@ -1,3 +1,5 @@
+data "aws_caller_identity" "this" {}
+
 # data "aws_organizations_organization" "this" { provider = aws.org }
 
 # data "aws_organizations_organizational_unit" "infrastructure" {
