@@ -171,16 +171,6 @@ variable "network_tgw_share_enabled" {
   default = false
 }
 
-variable "network_vpc_endpoint_services_enabled" {
-  type    = list(string)
-  default = []
-}
-
-variable "network_vpc_share_enabled" {
-  type    = bool
-  default = false
-}
-
 variable "vpc_cidr_substitute" {
   description = "Primary Region VPC CIDR. Use the full network address and subnet mask, eg 10.31.0.0/16"
   type        = string
@@ -193,11 +183,25 @@ variable "vpc_cidr_substitute_failover" {
   default     = ""
 }
 
-variable "vpc_cidr_network" {
+variable "vpc_cidr_network_primary" {
   default = {
-    primary  = "10.41.0.0/16"
-    failover = "10.42.0.0/16"
+    inbound    = "10.0.0.0/16"
+    outbound   = "10.1.0.0/16"
+    inspection = "10.2.0.0/16"
   }
+}
+
+variable "vpc_cidr_network_failover" {
+  default = {
+    inbound    = "10.3.0.0/16"
+    outbound   = "10.4.0.0/16"
+    inspection = "10.5.0.0/16"
+  }
+}
+
+variable "network_vpc_share_enabled" {
+  type    = bool
+  default = false
 }
 
 variable "vpc_cidr_clientvpn" {
@@ -206,6 +210,18 @@ variable "vpc_cidr_clientvpn" {
     failover = "10.44.0.0/16"
   }
 }
+
+# variable "network_vpc_endpoint_services_enabled" {
+#   type    = list(string)
+#   default = []
+# }
+
+# variable "vpc_cidr_network" {
+#   default = {
+#     primary  = "10.41.0.0/16"
+#     failover = "10.42.0.0/16"
+#   }
+# }
 
 variable "ntp_servers" {
   type    = list(string)
@@ -240,8 +256,35 @@ variable "r53_zones" {
   default = []
 }
 
+variable "account_email_slug" {
+  type = map(string)
+  default = {
+    identity_prd         = "identity-prd"
+    log_archive_prd      = "log_archive_prd"
+    network_prd          = "network-prd"
+    security_tooling_prd = "security_tooling_prd"
+  }
+}
+
+variable "account_email_substitute" {
+  type = map(string)
+  default = {
+    identity_prd         = ""
+    log_archive_prd      = ""
+    network_prd          = ""
+    security_tooling_prd = ""
+  }
+}
+
 locals {
   org_owner_email = "${var.org_owner_email_prefix}@${var.org_owner_email_domain_tld}"
+
+  account_owner_email = {
+    identity_prd         = var.account_email_substitute.identity_prd != "" ? var.account_email_substitute.identity_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.identity_prd}@${var.org_owner_email_domain_tld}"
+    log_archive_prd      = var.account_email_substitute.log_archive_prd != "" ? var.account_email_substitute.log_archive_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.log_archive_prd}@${var.org_owner_email_domain_tld}"
+    network_prd          = var.account_email_substitute.network_prd != "" ? var.account_email_substitute.network_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.network_prd}@${var.org_owner_email_domain_tld}"
+    security_tooling_prd = var.account_email_substitute.security_tooling_prd != "" ? var.account_email_substitute.security_tooling_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.security_tooling_prd}@${var.org_owner_email_domain_tld}"
+  }
 
   resource_name_stub          = lower("${var.company_name_abbr}-${var.team_name_abbr}-${var.project_name_abbr}") #company - team - project - env
   resource_name_stub_primary  = lower("${local.resource_name_stub}-${var.region.primary_short}")                 #company - team - project - env - primary

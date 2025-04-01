@@ -10,7 +10,7 @@ resource "aws_organizations_organizational_unit" "security_prd" {
 
 # resource "aws_organizations_account" "log_archive_prd" {
 #   name  = "log-archive-prd"
-#   email = "${var.org_owner_email_prefix}-log-archive-prd@${var.org_owner_email_domain_tld}"
+#   email = local.account_owner_email.log_archive_prd
 
 #   close_on_deletion          = true
 #   create_govcloud            = false
@@ -21,7 +21,7 @@ resource "aws_organizations_organizational_unit" "security_prd" {
 
 # resource "aws_organizations_account" "security_tooling_prd" {
 #   name  = "security-tooling-prd"
-#   email = "${var.org_owner_email_prefix}-security-tooling-prd@${var.org_owner_email_domain_tld}"
+#   email = local.account_owner_email.security_tooling_prd
 
 #   close_on_deletion          = true
 #   create_govcloud            = false

@@ -1,7 +1,6 @@
 module "iam_user_breakglass" {
-  source    = "terraform-aws-modules/iam/aws//modules/iam-user"
-  version   = "5.54.0"
-  providers = { aws = aws.org }
+  source  = "terraform-aws-modules/iam/aws//modules/iam-user"
+  version = "5.54.0"
 
   count = 3
 

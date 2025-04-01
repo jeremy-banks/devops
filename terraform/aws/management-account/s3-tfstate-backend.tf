@@ -31,9 +31,8 @@ data "aws_iam_policy_document" "kms_tfstate_backend" {
 }
 
 module "kms_tfstate_backend_primary" {
-  source    = "terraform-aws-modules/kms/aws"
-  version   = "3.1.1"
-  providers = { aws = aws.org }
+  source  = "terraform-aws-modules/kms/aws"
+  version = "3.1.1"
 
   deletion_window_in_days = 30
   enable_key_rotation     = true
@@ -49,7 +48,7 @@ module "kms_tfstate_backend_primary" {
 module "kms_tfstate_backend_failover" {
   source    = "terraform-aws-modules/kms/aws"
   version   = "3.1.1"
-  providers = { aws = aws.org_failover }
+  providers = { aws = aws.management_failover }
 
   deletion_window_in_days = 30
   create_replica          = true
@@ -118,9 +117,8 @@ data "aws_iam_policy_document" "s3_tfstate_backend_primary" {
 }
 
 module "s3_tfstate_backend_primary" {
-  source    = "terraform-aws-modules/s3-bucket/aws"
-  version   = "4.6.0"
-  providers = { aws = aws.org }
+  source  = "terraform-aws-modules/s3-bucket/aws"
+  version = "4.6.0"
 
   bucket = "${local.resource_name_stub_primary}-tfstate-storage-blob-${local.unique_id}"
 
@@ -224,19 +222,17 @@ data "aws_iam_policy_document" "s3_tfstate_backend_primary_replicate_to_failover
 }
 
 module "iam_policy_s3_tfstate_backend_primary_replicate_to_failover" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version = "5.54.0"
 
   name = "s3-tfstate-backend-primary-replicate-to-failover"
-  # path        = "/"
-  # description = "My example policy"
 
   policy = data.aws_iam_policy_document.s3_tfstate_backend_primary_replicate_to_failover.json
 }
 
 module "iam_role_s3_tfstate_backend_primary_replicate_to_failover" {
-  source    = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version   = "5.54.0"
-  providers = { aws = aws.org }
+  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
+  version = "5.54.0"
 
   trusted_role_services = [
     "s3.amazonaws.com",
@@ -312,7 +308,7 @@ data "aws_iam_policy_document" "s3_tfstate_backend_failover" {
 module "s3_tfstate_backend_failover" {
   source    = "terraform-aws-modules/s3-bucket/aws"
   version   = "4.6.0"
-  providers = { aws = aws.org_failover }
+  providers = { aws = aws.management_failover }
 
   bucket = "${local.resource_name_stub_failover}-tfstate-storage-blob-${local.unique_id}"
 

@@ -14,14 +14,14 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias   = "org"
+  alias   = "management"
   profile = var.cli_profile_name
   region  = var.region.primary
   default_tags { tags = local.default_tags_map }
 }
 
 provider "aws" {
-  alias   = "org_failover"
+  alias   = "management_failover"
   profile = var.cli_profile_name
   region  = var.region.failover
   default_tags { tags = local.default_tags_map }
