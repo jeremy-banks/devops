@@ -45,6 +45,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inspection_to_tgw_failove
   subnet_ids                                      = module.vpc_inspection_failover[0].private_subnets
   transit_gateway_id                              = aws_ec2_transit_gateway.tgw_failover[0].id
   vpc_id                                          = module.vpc_inspection_failover[0].vpc_id
+  appliance_mode_support                          = "enable"
   dns_support                                     = "enable"
   security_group_referencing_support              = "enable"
   transit_gateway_default_route_table_association = true
