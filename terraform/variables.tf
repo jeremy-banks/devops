@@ -200,6 +200,16 @@ variable "vpc_cidr_network_failover" {
   }
 }
 
+variable "vpc_endpoint_services_enabled" {
+  type = list(string)
+  default = [
+    # "dynamodb",
+    # "ec2",
+    # "kms",
+    # "s3",
+  ]
+}
+
 variable "network_vpc_share_enabled" {
   type    = bool
   default = false
@@ -211,11 +221,6 @@ variable "vpc_cidr_clientvpn" {
     failover = "10.44.0.0/16"
   }
 }
-
-# variable "network_vpc_endpoint_services_enabled" {
-#   type    = list(string)
-#   default = []
-# }
 
 # variable "vpc_cidr_network" {
 #   default = {
