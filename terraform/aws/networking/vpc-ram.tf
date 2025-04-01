@@ -26,12 +26,12 @@
 #     module.vpc_primary[0].public_subnet_arns,
 #     module.vpc_primary[0].private_subnet_arns
 #   ))) : 0
-  
+
 #   resource_arn = flatten(concat(
 #     module.vpc_primary[0].public_subnet_arns,
 #     module.vpc_primary[0].private_subnet_arns
 #   ))[count.index]
-  
+
 #   resource_share_arn = aws_ram_resource_share.network_primary.id
 # }
 
@@ -63,11 +63,11 @@
 #     module.vpc_failover[0].public_subnet_arns,
 #     module.vpc_failover[0].private_subnet_arns
 #   ))) : 0
-  
+
 #   resource_arn = flatten(concat(
 #     module.vpc_failover[0].public_subnet_arns,
 #     module.vpc_failover[0].private_subnet_arns
 #   ))[count.index]
-  
+
 #   resource_share_arn = aws_ram_resource_share.network_failover.id
 # }

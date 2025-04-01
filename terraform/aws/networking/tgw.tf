@@ -41,7 +41,7 @@
 
 # resource "aws_ec2_transit_gateway_peering_attachment_accepter" "tgw_peering" {
 #   provider = aws.network
-  
+
 #   count = var.create_failover_region ? 1 : 0
 
 #   transit_gateway_attachment_id = aws_ec2_transit_gateway_peering_attachment.tgw_peering[0].id
