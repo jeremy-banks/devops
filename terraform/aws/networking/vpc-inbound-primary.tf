@@ -63,7 +63,7 @@ module "vpc_inbound_primary" {
 
   enable_nat_gateway = false
 
-  create_igw = false
+  # create_igw = false
 
   enable_dhcp_options              = true
   dhcp_options_domain_name_servers = [replace(var.vpc_cidr_infrastructure.inbound_primary, "0/16", "2")]
@@ -91,21 +91,50 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inbound_to_tgw_primary" {
 import {
   provider = aws.network_prd
 
-  for_each = module.vpc_inbound_primary.public_route_table_ids
+  for_each = local.azs_primary
 
   to = aws_route.vpc_inbound_primary_pub_local[each.key]
-  id = "${each.value}_${var.vpc_cidr_infrastructure.inbound_primary}"
+  id = "${module.vpc_inbound_primary.public_route_table_ids[each.key]}_${var.vpc_cidr_infrastructure.inbound_primary}"
 }
 
 resource "aws_route" "vpc_inbound_primary_pub_local" {
   provider = aws.network_prd
 
-  count = length(module.vpc_inbound_primary.public_route_table_ids)
+  count = length(local.azs_primary)
 
   route_table_id         = module.vpc_inbound_primary.public_route_table_ids[count.index]
   destination_cidr_block = var.vpc_cidr_infrastructure.inbound_primary
   gateway_id             = "local"
 }
+
+resource "aws_route" "vpc_inbound_primary_pub_tgw" {
+  provider = aws.network_prd
+
+  count = var.azs_used
+
+  route_table_id         = module.vpc_inbound_primary.public_route_table_ids[count.index]
+  destination_cidr_block = var.vpc_cidr_infrastructure.transit_gateway
+  transit_gateway_id     = aws_ec2_transit_gateway.tgw_primary.id
+}
+
+# import {
+#   provider = aws.network_prd
+
+#   for_each =  toset(local.azs_primary)
+
+#   to = aws_route.vpc_inbound_primary_pub_igw[each.key]
+#   id = "${module.vpc_inbound_primary.public_route_table_ids[each.key]}_${var.vpc_cidr_infrastructure.inbound_primary}"
+# }
+
+# resource "aws_route" "vpc_inbound_primary_pub_igw" {
+#   provider = aws.network_prd
+
+#   count = var.azs_used
+
+#   route_table_id         = module.vpc_inbound_primary.public_route_table_ids[count.index]
+#   destination_cidr_block = "0.0.0.0/0"
+#   gateway_id             = module.vpc_inbound_primary.igw_id
+# }
 
 # intra_route_table_ids
 # private_route_table_ids
