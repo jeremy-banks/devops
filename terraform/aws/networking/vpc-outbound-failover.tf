@@ -1,3 +1,28 @@
+locals {
+  vpc_outbound_cidrsubnets_failover = (
+    var.azs_used == 4 ? cidrsubnets(var.vpc_cidr_infrastructure.outbound_failover, 3, 3, 3, 3, 12, 12, 12, 12) :
+    var.azs_used == 3 ? cidrsubnets(var.vpc_cidr_infrastructure.outbound_failover, 2, 2, 2, 12, 12, 12) :
+    var.azs_used == 2 ? cidrsubnets(var.vpc_cidr_infrastructure.outbound_failover, 2, 2, 12, 12) :
+    null
+  )
+
+  vpc_outbound_public_subnets_failover = (
+    var.azs_used == 4 ? [local.vpc_outbound_cidrsubnets_failover[0], local.vpc_outbound_cidrsubnets_failover[1], local.vpc_outbound_cidrsubnets_failover[2], local.vpc_outbound_cidrsubnets_failover[3]] :
+    var.azs_used == 3 ? [local.vpc_outbound_cidrsubnets_failover[0], local.vpc_outbound_cidrsubnets_failover[1], local.vpc_outbound_cidrsubnets_failover[2]] :
+    var.azs_used == 2 ? [local.vpc_outbound_cidrsubnets_failover[0], local.vpc_outbound_cidrsubnets_failover[1]] :
+    null
+  )
+
+  vpc_outbound_intra_subnets_failover = (
+    var.azs_used == 4 ? [local.vpc_outbound_cidrsubnets_failover[4], local.vpc_outbound_cidrsubnets_failover[5], local.vpc_outbound_cidrsubnets_failover[6], local.vpc_outbound_cidrsubnets_failover[7]] :
+    var.azs_used == 3 ? [local.vpc_outbound_cidrsubnets_failover[3], local.vpc_outbound_cidrsubnets_failover[4], local.vpc_outbound_cidrsubnets_failover[5]] :
+    var.azs_used == 2 ? [local.vpc_outbound_cidrsubnets_failover[2], local.vpc_outbound_cidrsubnets_failover[3]] :
+    null
+  )
+
+  vpc_outbound_tags_failover = {}
+}
+
 module "vpc_outbound_failover" {
   source    = "terraform-aws-modules/vpc/aws"
   version   = "5.19.0"
@@ -5,29 +30,29 @@ module "vpc_outbound_failover" {
 
   count = var.create_failover_region ? 1 : 0
 
-  enable_nat_gateway     = true
-  reuse_nat_ips          = true
-  one_nat_gateway_per_az = true
-  external_nat_ip_ids    = aws_eip.vpc_outbound_failover_nat[*].id
-  external_nat_ips       = aws_eip.vpc_outbound_failover_nat[*].public_ip
-
-  name                = "${local.resource_name_stub_failover}-vpc-outbound-failover"
-  public_subnet_names = [for i in range(6) : "${format("%s-pub-", "${local.resource_name_stub_failover}-vpc-outbound-failover")}${i}"]
-
+  name = "${local.resource_name_stub_failover}-vpc-outbound-failover"
   cidr = var.vpc_cidr_infrastructure.outbound_failover
-  azs  = slice(var.availability_zones.failover, 0, var.availability_zones_num_used)
 
-  public_subnets = (
-    var.availability_zones_num_used == 6 ? cidrsubnets(var.vpc_cidr_infrastructure.outbound_failover, 4, 4, 4, 4, 4, 4) :
-    var.availability_zones_num_used == 5 ? cidrsubnets(var.vpc_cidr_infrastructure.outbound_failover, 4, 4, 4, 4, 4) :
-    var.availability_zones_num_used == 4 ? cidrsubnets(var.vpc_cidr_infrastructure.outbound_failover, 2, 2, 2, 2) :
-    var.availability_zones_num_used == 3 ? cidrsubnets(var.vpc_cidr_infrastructure.outbound_failover, 2, 2, 2) :
-    cidrsubnets(var.vpc_cidr_infrastructure.outbound_failover, 1, 1)
-  )
+  azs                 = local.azs_failover
+  private_subnets     = []
+  public_subnets      = local.vpc_outbound_public_subnets_failover
+  database_subnets    = []
+  elasticache_subnets = []
+  redshift_subnets    = []
+  intra_subnets       = local.vpc_outbound_intra_subnets_failover
 
-  create_private_nat_gateway_route = false
+  public_subnet_names = [for i in range(4) : "${format("%s-pub-", "${local.resource_name_stub_failover}-vpc-outbound-failover")}${i}"]
+  intra_subnet_names  = [for i in range(4) : "${format("%s-tgw-", "${local.resource_name_stub_failover}-vpc-outbound-failover")}${i}"]
 
-  manage_default_security_group  = true
+  create_database_subnet_group    = false
+  create_elasticache_subnet_group = false
+  create_redshift_subnet_group    = false
+
+  manage_default_network_acl = true
+
+  manage_default_route_table = false
+
+  manage_default_security_group  = false
   default_security_group_name    = "NEVER-USE-THIS-SECURITY-GROUP"
   default_security_group_ingress = []
   default_security_group_egress  = []
@@ -36,11 +61,18 @@ module "vpc_outbound_failover" {
   enable_dns_hostnames = true
   enable_dns_support   = true
 
+  enable_nat_gateway               = true
+  one_nat_gateway_per_az           = true
+  reuse_nat_ips                    = true
+  external_nat_ip_ids              = aws_eip.vpc_outbound_failover_nat[*].id
+  external_nat_ips                 = aws_eip.vpc_outbound_failover_nat[*].public_ip
+  create_private_nat_gateway_route = false
+
   enable_dhcp_options              = true
   dhcp_options_domain_name_servers = [replace(var.vpc_cidr_infrastructure.outbound_failover, "0/16", "2")]
   dhcp_options_ntp_servers         = var.ntp_servers
 
-  vpc_tags = local.vpc_tags_failover
+  vpc_tags = local.vpc_outbound_tags_failover
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_outbound_to_tgw_failover" {
@@ -48,10 +80,11 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_outbound_to_tgw_failover"
 
   count = var.create_failover_region ? 1 : 0
 
-  subnet_ids                                      = module.vpc_outbound_failover[0].public_subnets
-  transit_gateway_id                              = aws_ec2_transit_gateway.tgw_failover[0].id
-  vpc_id                                          = module.vpc_outbound_failover[0].vpc_id
-  appliance_mode_support                          = "enable"
+  subnet_ids         = module.vpc_outbound_failover[0].intra_subnets
+  transit_gateway_id = aws_ec2_transit_gateway.tgw_failover[0].id
+  vpc_id             = module.vpc_outbound_failover[0].vpc_id
+
+  appliance_mode_support                          = "disable"
   dns_support                                     = "enable"
   security_group_referencing_support              = "enable"
   transit_gateway_default_route_table_association = true
