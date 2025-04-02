@@ -1,54 +1,89 @@
-# module "vpc_inspection_failover" {
-#   source    = "terraform-aws-modules/vpc/aws"
-#   version   = "5.19.0"
-#   providers = { aws = aws.network_prd_failover }
+locals {
+  vpc_inspection_cidrsubnets_failover = (
+    var.azs_used == 4 ? cidrsubnets(var.vpc_cidr_infrastructure.inspection_failover, 3, 3, 3, 3, 12, 12, 12, 12) :
+    var.azs_used == 3 ? cidrsubnets(var.vpc_cidr_infrastructure.inspection_failover, 2, 2, 2, 12, 12, 12) :
+    var.azs_used == 2 ? cidrsubnets(var.vpc_cidr_infrastructure.inspection_failover, 2, 2, 12, 12) :
+    null
+  )
 
-#   count = var.create_failover_region ? 1 : 0
+  vpc_inspection_private_subnets_failover = (
+    var.azs_used == 4 ? [local.vpc_inspection_cidrsubnets_failover[0], local.vpc_inspection_cidrsubnets_failover[1], local.vpc_inspection_cidrsubnets_failover[2], local.vpc_inspection_cidrsubnets_failover[3]] :
+    var.azs_used == 3 ? [local.vpc_inspection_cidrsubnets_failover[0], local.vpc_inspection_cidrsubnets_failover[1], local.vpc_inspection_cidrsubnets_failover[2]] :
+    var.azs_used == 2 ? [local.vpc_inspection_cidrsubnets_failover[0], local.vpc_inspection_cidrsubnets_failover[1]] :
+    null
+  )
 
-#   name = "${local.resource_name_stub_failover}-vpc-inspection-failover"
+  vpc_inspection_intra_subnets_failover = (
+    var.azs_used == 4 ? [local.vpc_inspection_cidrsubnets_failover[4], local.vpc_inspection_cidrsubnets_failover[5], local.vpc_inspection_cidrsubnets_failover[6], local.vpc_inspection_cidrsubnets_failover[7]] :
+    var.azs_used == 3 ? [local.vpc_inspection_cidrsubnets_failover[3], local.vpc_inspection_cidrsubnets_failover[4], local.vpc_inspection_cidrsubnets_failover[5]] :
+    var.azs_used == 2 ? [local.vpc_inspection_cidrsubnets_failover[2], local.vpc_inspection_cidrsubnets_failover[3]] :
+    null
+  )
 
-#   cidr = var.vpc_cidr_infrastructure.inspection_failover
-#   azs  = slice(var.availability_zones.failover, 0, var.availability_zones_num_used)
+  vpc_inspection_tags_failover = {}
+}
 
-#   private_subnet_names = [for i in range(6) : "${format("%s-pvt-", "${local.resource_name_stub_failover}-vpc-inspection-failover")}${i}"]
-#   private_subnets = (
-#     var.availability_zones_num_used == 6 ? cidrsubnets(var.vpc_cidr_infrastructure.inspection_failover, 4, 4, 4, 4, 4, 4) :
-#     var.availability_zones_num_used == 5 ? cidrsubnets(var.vpc_cidr_infrastructure.inspection_failover, 4, 4, 4, 4, 4) :
-#     var.availability_zones_num_used == 4 ? cidrsubnets(var.vpc_cidr_infrastructure.inspection_failover, 2, 2, 2, 2) :
-#     var.availability_zones_num_used == 3 ? cidrsubnets(var.vpc_cidr_infrastructure.inspection_failover, 2, 2, 2) :
-#     cidrsubnets(var.vpc_cidr_infrastructure.inspection_failover, 1, 1)
-#   )
+module "vpc_inspection_failover" {
+  source    = "terraform-aws-modules/vpc/aws"
+  version   = "5.19.0"
+  providers = { aws = aws.network_prd_failover }
 
-#   manage_default_security_group  = true
-#   default_security_group_name    = "NEVER-USE-THIS-SECURITY-GROUP"
-#   default_security_group_ingress = []
-#   default_security_group_egress  = []
-#   default_security_group_tags    = {}
+  count = var.create_failover_region ? 1 : 0
 
-#   enable_dns_hostnames = true
-#   enable_dns_support   = true
+  name = "${local.resource_name_stub_failover}-vpc-inspection-failover"
+  cidr = var.vpc_cidr_infrastructure.inspection_failover
 
-#   enable_dhcp_options              = true
-#   dhcp_options_domain_name_servers = [replace(var.vpc_cidr_infrastructure.inspection_failover, "0/16", "2")]
-#   dhcp_options_ntp_servers         = var.ntp_servers
+  azs                 = local.azs_failover
+  private_subnets     = local.vpc_inspection_private_subnets_failover
+  public_subnets      = []
+  database_subnets    = []
+  elasticache_subnets = []
+  redshift_subnets    = []
+  intra_subnets       = local.vpc_inspection_intra_subnets_failover
 
-#   vpc_tags = local.vpc_tags_failover
-# }
+  private_subnet_names = [for i in range(4) : "${format("%s-firewall-", "${local.resource_name_stub_failover}-vpc-inspection-failover")}${i}"]
+  intra_subnet_names   = [for i in range(4) : "${format("%s-tgw-", "${local.resource_name_stub_failover}-vpc-inspection-failover")}${i}"]
 
-# resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inspection_to_tgw_failover" {
-#   provider = aws.network_prd_failover
+  create_database_subnet_group    = false
+  create_elasticache_subnet_group = false
+  create_redshift_subnet_group    = false
 
-#   count = var.create_failover_region ? 1 : 0
+  manage_default_network_acl = true
 
-#   subnet_ids                                      = module.vpc_inspection_failover[0].private_subnets
-#   transit_gateway_id                              = aws_ec2_transit_gateway.tgw_failover[0].id
-#   vpc_id                                          = module.vpc_inspection_failover[0].vpc_id
+  manage_default_route_table = false
 
-#   appliance_mode_support                          = "enable"
-#   dns_support                                     = "enable"
-#   security_group_referencing_support              = "enable"
-#   transit_gateway_default_route_table_association = true
-#   transit_gateway_default_route_table_propagation = true
+  manage_default_security_group  = false
+  default_security_group_name    = "NEVER-USE-THIS-SECURITY-GROUP"
+  default_security_group_ingress = []
+  default_security_group_egress  = []
+  default_security_group_tags    = {}
 
-#   tags = { Name = "inspection-vpc-attach-tgw-failover" }
-# }
+  enable_dns_hostnames = true
+  enable_dns_support   = true
+
+  enable_nat_gateway = false
+
+  enable_dhcp_options              = true
+  dhcp_options_domain_name_servers = [replace(var.vpc_cidr_infrastructure.inspection_failover, "0/16", "2")]
+  dhcp_options_ntp_servers         = var.ntp_servers
+
+  vpc_tags = local.vpc_inspection_tags_failover
+}
+
+resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inspection_to_tgw_failover" {
+  provider = aws.network_prd_failover
+
+  count = var.create_failover_region ? 1 : 0
+
+  subnet_ids         = module.vpc_inspection_failover[0].intra_subnets
+  transit_gateway_id = aws_ec2_transit_gateway.tgw_failover[0].id
+  vpc_id             = module.vpc_inspection_failover[0].vpc_id
+
+  appliance_mode_support                          = "enable"
+  dns_support                                     = "enable"
+  security_group_referencing_support              = "enable"
+  transit_gateway_default_route_table_association = true
+  transit_gateway_default_route_table_propagation = true
+
+  tags = { Name = "inspection-vpc-attach-tgw-failover" }
+}
