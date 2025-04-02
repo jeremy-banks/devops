@@ -48,9 +48,11 @@ module "vpc_inbound_primary" {
 
   manage_default_network_acl = true
 
-  manage_default_route_table = false
+  manage_default_route_table          = true
+  create_multiple_intra_route_tables  = true
+  create_multiple_public_route_tables = true
 
-  manage_default_security_group  = false
+  manage_default_security_group  = true
   default_security_group_name    = "NEVER-USE-THIS-SECURITY-GROUP"
   default_security_group_ingress = []
   default_security_group_egress  = []
@@ -60,6 +62,8 @@ module "vpc_inbound_primary" {
   enable_dns_support   = true
 
   enable_nat_gateway = false
+
+  create_igw = false
 
   enable_dhcp_options              = true
   dhcp_options_domain_name_servers = [replace(var.vpc_cidr_infrastructure.inbound_primary, "0/16", "2")]
@@ -83,3 +87,55 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inbound_to_tgw_primary" {
 
   tags = { Name = "inbound-vpc-attach-tgw-primary" }
 }
+
+import {
+  provider = aws.network_prd
+
+  for_each = module.vpc_inbound_primary.public_route_table_ids
+
+  to = aws_route.vpc_inbound_primary_pub_local[each.key]
+  id = "${each.value}_${var.vpc_cidr_infrastructure.inbound_primary}"
+}
+
+resource "aws_route" "vpc_inbound_primary_pub_local" {
+  provider = aws.network_prd
+
+  count = length(module.vpc_inbound_primary.public_route_table_ids)
+
+  route_table_id         = module.vpc_inbound_primary.public_route_table_ids[count.index]
+  destination_cidr_block = var.vpc_cidr_infrastructure.inbound_primary
+  gateway_id             = "local"
+}
+
+# intra_route_table_ids
+# private_route_table_ids
+# public_route_table_ids
+
+# resource "aws_route_table" "vpc_inbound_primary_pub" {
+#   provider = aws.network_prd
+
+#   vpc_id = module.vpc_inbound_primary.vpc_id
+
+#   #local
+#   # route {
+#   #   cidr_block = var.vpc_cidr_infrastructure.inbound_primary
+#   #   gateway_id = "local"
+#   # }
+
+#   #tgw
+
+#   #igw
+#   # route {
+#   #   cidr_block = "10.0.0.0/8"
+#   #   gateway_id = aws_internet_gateway.example.id
+#   # }
+# }
+
+# resource "aws_route_table_association" "vpc_inbound_primary_pub" {
+#   provider = aws.network_prd
+
+#   count = var.azs_used
+
+#   subnet_id      = module.vpc_inbound_primary.public_subnets[count.index]
+#   route_table_id = aws_route_table.vpc_inbound_primary_pub.id
+# }

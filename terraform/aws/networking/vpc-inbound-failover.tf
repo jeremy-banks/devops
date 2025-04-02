@@ -50,9 +50,9 @@ module "vpc_inbound_failover" {
 
   manage_default_network_acl = true
 
-  manage_default_route_table = false
+  manage_default_route_table = true
 
-  manage_default_security_group  = false
+  manage_default_security_group  = true
   default_security_group_name    = "NEVER-USE-THIS-SECURITY-GROUP"
   default_security_group_ingress = []
   default_security_group_egress  = []
@@ -62,6 +62,8 @@ module "vpc_inbound_failover" {
   enable_dns_support   = true
 
   enable_nat_gateway = false
+
+  create_igw = false
 
   enable_dhcp_options              = true
   dhcp_options_domain_name_servers = [replace(var.vpc_cidr_infrastructure.inbound_failover, "0/16", "2")]

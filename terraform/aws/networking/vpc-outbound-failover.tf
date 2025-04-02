@@ -50,9 +50,9 @@ module "vpc_outbound_failover" {
 
   manage_default_network_acl = true
 
-  manage_default_route_table = false
+  manage_default_route_table = true
 
-  manage_default_security_group  = false
+  manage_default_security_group  = true
   default_security_group_name    = "NEVER-USE-THIS-SECURITY-GROUP"
   default_security_group_ingress = []
   default_security_group_egress  = []
