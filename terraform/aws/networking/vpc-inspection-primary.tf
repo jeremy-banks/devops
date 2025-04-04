@@ -72,6 +72,38 @@ module "vpc_inspection_primary" {
   vpc_tags = local.vpc_inspection_tags_primary
 }
 
+module "vpc_inspection_endpoints_primary" {
+  source    = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
+  version   = "5.19.0"
+  providers = { aws = aws.network_prd }
+
+  vpc_id = module.vpc_inspection_primary.vpc_id
+
+  create_security_group      = true
+  security_group_name_prefix = "${local.resource_name_stub_primary}-vpc-endpoints-"
+  security_group_rules = {
+    ingress_https = {
+      # description = "HTTPS from VPC"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+    # egress_https = {
+    #   # description = "HTTPS from VPC"
+    #   cidr_blocks = ["0.0.0.0/0"]
+    # }
+  }
+
+  endpoints = {
+    network-firewall = {
+      service             = "network-firewall"
+      private_dns_enabled = true
+      subnet_ids          = module.vpc_inspection_primary.private_subnets
+      dns_options = {
+        private_dns_only_for_inbound_resolver_endpoint = true
+      }
+    }
+  }
+}
+
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inspection_to_tgw_primary" {
   provider = aws.network_prd
 
