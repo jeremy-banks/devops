@@ -39,8 +39,8 @@ module "vpc_inbound_primary" {
   redshift_subnets    = []
   intra_subnets       = local.vpc_inbound_intra_subnets_primary
 
-  public_subnet_names = [for i in range(4) : "${format("%s-pub-", "${local.resource_name_stub_primary}-vpc-inbound-primary")}${i}"]
-  intra_subnet_names  = [for i in range(4) : "${format("%s-tgw-", "${local.resource_name_stub_primary}-vpc-inbound-primary")}${i}"]
+  public_subnet_suffix = "pub"
+  intra_subnet_suffix  = "tgw"
 
   create_database_subnet_group    = false
   create_elasticache_subnet_group = false
@@ -48,12 +48,12 @@ module "vpc_inbound_primary" {
 
   manage_default_network_acl = true
 
-  manage_default_route_table          = true
-  create_multiple_intra_route_tables  = true
-  create_multiple_public_route_tables = true
+  manage_default_route_table = true
+  default_route_table_name   = "DO-NOT-USE"
+  default_route_table_routes = []
 
   manage_default_security_group  = true
-  default_security_group_name    = "NEVER-USE-THIS-SECURITY-GROUP"
+  default_security_group_name    = "DO-NOT-USE"
   default_security_group_ingress = []
   default_security_group_egress  = []
   default_security_group_tags    = {}
@@ -82,89 +82,28 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inbound_to_tgw_primary" {
   appliance_mode_support                          = "disable"
   dns_support                                     = "enable"
   security_group_referencing_support              = "enable"
-  transit_gateway_default_route_table_association = true
+  transit_gateway_default_route_table_association = false
   transit_gateway_default_route_table_propagation = true
 
   tags = { Name = "inbound-vpc-attach-tgw-primary" }
 }
 
-import {
+resource "aws_route" "inbound_pub_to_tgw_primary" {
   provider = aws.network_prd
 
-  for_each = local.azs_primary
-
-  to = aws_route.vpc_inbound_primary_pub_local[each.key]
-  id = "${module.vpc_inbound_primary.public_route_table_ids[each.key]}_${var.vpc_cidr_infrastructure.inbound_primary}"
-}
-
-resource "aws_route" "vpc_inbound_primary_pub_local" {
-  provider = aws.network_prd
-
-  count = length(local.azs_primary)
-
-  route_table_id         = module.vpc_inbound_primary.public_route_table_ids[count.index]
-  destination_cidr_block = var.vpc_cidr_infrastructure.inbound_primary
-  gateway_id             = "local"
-}
-
-resource "aws_route" "vpc_inbound_primary_pub_tgw" {
-  provider = aws.network_prd
-
-  count = var.azs_used
+  count = length(module.vpc_inbound_primary.public_route_table_ids)
 
   route_table_id         = module.vpc_inbound_primary.public_route_table_ids[count.index]
   destination_cidr_block = var.vpc_cidr_infrastructure.transit_gateway
   transit_gateway_id     = aws_ec2_transit_gateway.tgw_primary.id
 }
 
-# import {
-#   provider = aws.network_prd
+resource "aws_route" "inbound_intra_to_tgw_primary" {
+  provider = aws.network_prd
 
-#   for_each =  toset(local.azs_primary)
+  count = length(module.vpc_inbound_primary.intra_route_table_ids)
 
-#   to = aws_route.vpc_inbound_primary_pub_igw[each.key]
-#   id = "${module.vpc_inbound_primary.public_route_table_ids[each.key]}_${var.vpc_cidr_infrastructure.inbound_primary}"
-# }
-
-# resource "aws_route" "vpc_inbound_primary_pub_igw" {
-#   provider = aws.network_prd
-
-#   count = var.azs_used
-
-#   route_table_id         = module.vpc_inbound_primary.public_route_table_ids[count.index]
-#   destination_cidr_block = "0.0.0.0/0"
-#   gateway_id             = module.vpc_inbound_primary.igw_id
-# }
-
-# intra_route_table_ids
-# private_route_table_ids
-# public_route_table_ids
-
-# resource "aws_route_table" "vpc_inbound_primary_pub" {
-#   provider = aws.network_prd
-
-#   vpc_id = module.vpc_inbound_primary.vpc_id
-
-#   #local
-#   # route {
-#   #   cidr_block = var.vpc_cidr_infrastructure.inbound_primary
-#   #   gateway_id = "local"
-#   # }
-
-#   #tgw
-
-#   #igw
-#   # route {
-#   #   cidr_block = "10.0.0.0/8"
-#   #   gateway_id = aws_internet_gateway.example.id
-#   # }
-# }
-
-# resource "aws_route_table_association" "vpc_inbound_primary_pub" {
-#   provider = aws.network_prd
-
-#   count = var.azs_used
-
-#   subnet_id      = module.vpc_inbound_primary.public_subnets[count.index]
-#   route_table_id = aws_route_table.vpc_inbound_primary_pub.id
-# }
+  route_table_id         = module.vpc_inbound_primary.intra_route_table_ids[count.index]
+  destination_cidr_block = var.vpc_cidr_infrastructure.transit_gateway
+  transit_gateway_id     = aws_ec2_transit_gateway.tgw_primary.id
+}

@@ -41,8 +41,8 @@ module "vpc_inspection_failover" {
   redshift_subnets    = []
   intra_subnets       = local.vpc_inspection_intra_subnets_failover
 
-  private_subnet_names = [for i in range(4) : "${format("%s-firewall-", "${local.resource_name_stub_failover}-vpc-inspection-failover")}${i}"]
-  intra_subnet_names   = [for i in range(4) : "${format("%s-tgw-", "${local.resource_name_stub_failover}-vpc-inspection-failover")}${i}"]
+  private_subnet_suffix = "firewall"
+  intra_subnet_suffix   = "tgw"
 
   create_database_subnet_group    = false
   create_elasticache_subnet_group = false
@@ -51,9 +51,11 @@ module "vpc_inspection_failover" {
   manage_default_network_acl = true
 
   manage_default_route_table = true
+  default_route_table_name   = "DO-NOT-USE"
+  default_route_table_routes = []
 
   manage_default_security_group  = true
-  default_security_group_name    = "NEVER-USE-THIS-SECURITY-GROUP"
+  default_security_group_name    = "DO-NOT-USE"
   default_security_group_ingress = []
   default_security_group_egress  = []
   default_security_group_tags    = {}
@@ -62,6 +64,8 @@ module "vpc_inspection_failover" {
   enable_dns_support   = true
 
   enable_nat_gateway = false
+
+  create_igw = false
 
   enable_dhcp_options              = true
   dhcp_options_domain_name_servers = [replace(var.vpc_cidr_infrastructure.inspection_failover, "0/16", "2")]
@@ -79,11 +83,31 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inspection_to_tgw_failove
   transit_gateway_id = aws_ec2_transit_gateway.tgw_failover[0].id
   vpc_id             = module.vpc_inspection_failover[0].vpc_id
 
-  appliance_mode_support                          = "enable"
+  appliance_mode_support                          = "disable"
   dns_support                                     = "enable"
   security_group_referencing_support              = "enable"
-  transit_gateway_default_route_table_association = true
+  transit_gateway_default_route_table_association = false
   transit_gateway_default_route_table_propagation = true
 
   tags = { Name = "inspection-vpc-attach-tgw-failover" }
+}
+
+resource "aws_route" "inspection_private_to_tgw_failover" {
+  provider = aws.network_prd_failover
+
+  count = var.create_failover_region ? length(module.vpc_inspection_failover[0].private_route_table_ids) : 0
+
+  route_table_id         = module.vpc_inspection_failover[0].private_route_table_ids[count.index]
+  destination_cidr_block = var.vpc_cidr_infrastructure.transit_gateway
+  transit_gateway_id     = aws_ec2_transit_gateway.tgw_failover[0].id
+}
+
+resource "aws_route" "inspection_intra_to_tgw_failover" {
+  provider = aws.network_prd_failover
+
+  count = var.create_failover_region ? length(module.vpc_inspection_failover[0].intra_route_table_ids) : 0
+
+  route_table_id         = module.vpc_inspection_failover[0].intra_route_table_ids[count.index]
+  destination_cidr_block = var.vpc_cidr_infrastructure.transit_gateway
+  transit_gateway_id     = aws_ec2_transit_gateway.tgw_failover[0].id
 }
