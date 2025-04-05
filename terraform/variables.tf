@@ -167,7 +167,7 @@ variable "azs_failover" {
 variable "azs_used" {
   description = "this codebase supports 2, 3, or 4 availability zones"
   type        = number
-  default     = 3
+  default     = 2
 }
 
 variable "network_tgw_share_enabled" {
