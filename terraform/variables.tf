@@ -147,19 +147,19 @@ variable "azs_primary" {
   description = "availability zones to use"
   default = [
     "usw2-az1",
-    # "usw2-az4", firewall-fips not supported
     "usw2-az2",
     "usw2-az3",
+    # "usw2-az4", firewall-fips not supported
   ]
 }
 
 variable "azs_failover" {
   default = [
-    # "use1-az5", firewall-fips not supported
-    "use1-az2",
     "use1-az1",
-    # "use1-az4", firewall-fips not supported
+    "use1-az2",
     # "use1-az3", firewall-fips not supported
+    # "use1-az4", firewall-fips not supported
+    # "use1-az5", firewall-fips not supported
     "use1-az6",
   ]
 }
