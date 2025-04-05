@@ -52,7 +52,8 @@ module "vpc_outbound_primary" {
   default_route_table_name   = "DO-NOT-USE"
   default_route_table_routes = []
 
-  create_multiple_intra_route_tables = true
+  create_multiple_intra_route_tables  = true
+  create_multiple_public_route_tables = true
 
   manage_default_security_group  = true
   default_security_group_name    = "DO-NOT-USE"
@@ -69,7 +70,6 @@ module "vpc_outbound_primary" {
   external_nat_ip_ids              = aws_eip.vpc_outbound_primary_nat[*].id
   external_nat_ips                 = aws_eip.vpc_outbound_primary_nat[*].public_ip
   create_private_nat_gateway_route = false
-  # create_igw = false
 
   enable_dhcp_options              = true
   dhcp_options_domain_name_servers = [replace(var.vpc_cidr_infrastructure.outbound_primary, "0/16", "2")]
@@ -88,7 +88,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_outbound_to_tgw_primary" 
   appliance_mode_support                          = "disable"
   dns_support                                     = "enable"
   security_group_referencing_support              = "enable"
-  transit_gateway_default_route_table_association = false
+  transit_gateway_default_route_table_association = true
   transit_gateway_default_route_table_propagation = true
 
   tags = { Name = "outbound-vpc-attach-tgw-primary" }

@@ -52,6 +52,10 @@ module "vpc_inspection_primary" {
   default_route_table_name   = "DO-NOT-USE"
   default_route_table_routes = []
 
+  create_igw = false
+
+  create_multiple_intra_route_tables = true
+
   manage_default_security_group  = true
   default_security_group_name    = "DO-NOT-USE"
   default_security_group_ingress = []
@@ -62,8 +66,6 @@ module "vpc_inspection_primary" {
   enable_dns_support   = true
 
   enable_nat_gateway = false
-
-  create_igw = false
 
   enable_dhcp_options              = true
   dhcp_options_domain_name_servers = [replace(var.vpc_cidr_infrastructure.inspection_primary, "0/16", "2")]
@@ -84,11 +86,6 @@ module "vpc_inspection_endpoints_primary" {
   security_group_rules       = { ingress_https = { cidr_blocks = ["0.0.0.0/0"] } }
 
   endpoints = {
-    # network-firewall = {
-    #   service             = "network-firewall"
-    #   private_dns_enabled = true
-    #   subnet_ids          = module.vpc_inspection_primary.private_subnets
-    # }
     network-firewall-fips = {
       service             = "network-firewall-fips"
       private_dns_enabled = true
@@ -104,23 +101,13 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inspection_to_tgw_primary
   transit_gateway_id = aws_ec2_transit_gateway.tgw_primary.id
   vpc_id             = module.vpc_inspection_primary.vpc_id
 
-  appliance_mode_support                          = "disable"
+  appliance_mode_support                          = "enable"
   dns_support                                     = "enable"
   security_group_referencing_support              = "enable"
-  transit_gateway_default_route_table_association = false
+  transit_gateway_default_route_table_association = true
   transit_gateway_default_route_table_propagation = true
 
   tags = { Name = "inspection-vpc-attach-tgw-primary" }
-}
-
-resource "aws_route" "inspection_private_to_tgw_primary" {
-  provider = aws.network_prd
-
-  count = length(module.vpc_inspection_primary.private_route_table_ids)
-
-  route_table_id         = module.vpc_inspection_primary.private_route_table_ids[count.index]
-  destination_cidr_block = var.vpc_cidr_infrastructure.transit_gateway
-  transit_gateway_id     = aws_ec2_transit_gateway.tgw_primary.id
 }
 
 resource "aws_route" "inspection_intra_to_tgw_primary" {
@@ -129,6 +116,20 @@ resource "aws_route" "inspection_intra_to_tgw_primary" {
   count = length(module.vpc_inspection_primary.intra_route_table_ids)
 
   route_table_id         = module.vpc_inspection_primary.intra_route_table_ids[count.index]
-  destination_cidr_block = var.vpc_cidr_infrastructure.transit_gateway
+  destination_cidr_block = "0.0.0.0/0"
+  network_interface_id   = tolist(module.vpc_inspection_endpoints_primary.endpoints.network-firewall-fips.network_interface_ids)[count.index]
+}
+
+# output "foo" {
+#   value = module.vpc_inspection_endpoints_primary.endpoints
+# }
+
+resource "aws_route" "inspection_private_to_tgw_primary" {
+  provider = aws.network_prd
+
+  count = length(module.vpc_inspection_primary.private_route_table_ids)
+
+  route_table_id         = module.vpc_inspection_primary.private_route_table_ids[count.index]
+  destination_cidr_block = "0.0.0.0/0"
   transit_gateway_id     = aws_ec2_transit_gateway.tgw_primary.id
 }
