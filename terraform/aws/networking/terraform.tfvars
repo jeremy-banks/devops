@@ -5,3 +5,5 @@ provider_role_name = "superadmin"
 deployment_environment = "prd"
 
 this_slug = "network"
+
+create_failover_region = true

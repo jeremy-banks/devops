@@ -140,31 +140,34 @@ variable "region" {
 
 variable "create_failover_region" {
   type    = bool
-  default = true
+  default = false
 }
 
-variable "availability_zones" {
-  type = map(list(string))
-  default = {
-    primary = [
-      "usw2-az1",
-      "usw2-az4",
-      "usw2-az3",
-      "usw2-az2",
-    ]
-    failover = [
-      "use1-az5",
-      "use1-az2",
-      "use1-az4",
-      "use1-az1",
-    ]
-  }
+variable "azs_primary" {
+  description = "availability zones to use"
+  default = [
+    "usw2-az1",
+    # "usw2-az4", firewall-fips not supported
+    "usw2-az2",
+    "usw2-az3",
+  ]
 }
 
-variable "availability_zones_num_used" {
-  description = "This codebase supports from 2 to 6 AZs"
+variable "azs_failover" {
+  default = [
+    # "use1-az5", firewall-fips not supported
+    "use1-az2",
+    "use1-az1",
+    # "use1-az4", firewall-fips not supported
+    # "use1-az3", firewall-fips not supported
+    "use1-az6",
+  ]
+}
+
+variable "azs_used" {
+  description = "this codebase supports 2, 3, or 4 availability zones"
   type        = number
-  default     = 2
+  default     = 3
 }
 
 variable "network_tgw_share_enabled" {
@@ -222,13 +225,6 @@ variable "vpc_cidr_clientvpn" {
   }
 }
 
-# variable "vpc_cidr_network" {
-#   default = {
-#     primary  = "10.41.0.0/16"
-#     failover = "10.42.0.0/16"
-#   }
-# }
-
 variable "ntp_servers" {
   type    = list(string)
   default = ["169.254.169.123"]
@@ -285,6 +281,7 @@ variable "account_email_substitute" {
 variable "vpc_cidr_infrastructure" {
   type = map(string)
   default = {
+    transit_gateway     = "10.0.0.0/8"
     inbound_failover    = "10.3.0.0/16"
     inbound_primary     = "10.0.0.0/16"
     inspection_failover = "10.4.0.0/16"
@@ -308,116 +305,98 @@ locals {
   resource_name_stub_primary  = lower("${local.resource_name_stub}-${var.region.primary_short}")                 #company - team - project - env - primary
   resource_name_stub_failover = lower("${local.resource_name_stub}-${var.region.failover_short}")                #company - team - project - env - failover
 
+  azs_primary  = slice(var.azs_primary, 0, var.azs_used)
+  azs_failover = slice(var.azs_failover, 0, var.azs_used)
 
 
+  # #build lists of availability zones for each region based on number of availabiliy zones
+  # # azs_used_list_primary  = [for az in range(var.availability_zones_num_used) : var.availability_zones.primary[az]]
+  # azs_used_list_failover = [for az in range(var.availability_zones_num_used) : var.availability_zones.failover[az]]
 
+  # #dynamically generate subnet cidrs based on number of availability zones
+  # vpc_subnet_cidrs_primary = local.vpc_cidr_primary != "" ? (
+  #   var.availability_zones_num_used == 6 ? cidrsubnets(local.vpc_cidr_primary, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5) :
+  #   var.availability_zones_num_used == 5 ? cidrsubnets(local.vpc_cidr_primary, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5) :
+  #   var.availability_zones_num_used == 4 ? cidrsubnets(local.vpc_cidr_primary, 3, 3, 3, 3, 5, 5, 5, 5) :
+  #   var.availability_zones_num_used == 3 ? cidrsubnets(local.vpc_cidr_primary, 2, 2, 2, 4, 4, 4) :
+  #   cidrsubnets(local.vpc_cidr_primary, 2, 2, 4, 4)
+  # ) : []
+  # vpc_subnet_cidrs_failover = local.vpc_cidr_failover != "" ? (
+  #   var.availability_zones_num_used == 6 ? cidrsubnets(local.vpc_cidr_failover, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5) :
+  #   var.availability_zones_num_used == 5 ? cidrsubnets(local.vpc_cidr_failover, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5) :
+  #   var.availability_zones_num_used == 4 ? cidrsubnets(local.vpc_cidr_failover, 3, 3, 3, 3, 5, 5, 5, 5) :
+  #   var.availability_zones_num_used == 3 ? cidrsubnets(local.vpc_cidr_failover, 2, 2, 2, 4, 4, 4) :
+  #   cidrsubnets(local.vpc_cidr_failover, 2, 2, 4, 4)
+  # ) : []
 
+  # #slice the subnets in 'half', first slice goes to pvt, second slice goes to pub
+  # vpc_subnet_cidrs_pvt_primary  = slice(local.vpc_subnet_cidrs_primary, 0, length(local.vpc_subnet_cidrs_primary) / 2)
+  # vpc_subnet_cidrs_pub_primary  = slice(local.vpc_subnet_cidrs_primary, length(local.vpc_subnet_cidrs_primary) / 2, length(local.vpc_subnet_cidrs_primary))
+  # vpc_subnet_cidrs_pvt_failover = slice(local.vpc_subnet_cidrs_failover, 0, length(local.vpc_subnet_cidrs_failover) / 2)
+  # vpc_subnet_cidrs_pub_failover = slice(local.vpc_subnet_cidrs_failover, length(local.vpc_subnet_cidrs_failover) / 2, length(local.vpc_subnet_cidrs_failover))
 
-  vpc_name_primary            = "${local.resource_name_stub_primary}-${var.this_slug}-vpc"
-  vpc_subnet_pvt_name_primary = format("%s-pvt-", local.vpc_name_primary)
-  vpc_subnet_pub_name_primary = format("%s-pub-", local.vpc_name_primary)
+  # #create addresses for VPC DNS
+  # vpc_dns_primary = local.vpc_cidr_primary != "" ? join(".", [
+  #   split(".", cidrhost(local.vpc_cidr_primary, 0))[0],
+  #   split(".", cidrhost(local.vpc_cidr_primary, 0))[1],
+  #   split(".", cidrhost(local.vpc_cidr_primary, 0))[2],
+  #   "2"
+  # ]) : local.vpc_cidr_primary
+  # vpc_dns_failover = local.vpc_cidr_failover != "" ? join(".", [
+  #   split(".", cidrhost(local.vpc_cidr_failover, 0))[0],
+  #   split(".", cidrhost(local.vpc_cidr_failover, 0))[1],
+  #   split(".", cidrhost(local.vpc_cidr_failover, 0))[2],
+  #   "2"
+  # ]) : local.vpc_cidr_failover
 
-  vpc_name_failover            = "${local.resource_name_stub_failover}-${var.this_slug}-vpc"
-  vpc_subnet_pvt_name_failover = format("%s-pvt-", local.vpc_name_failover)
-  vpc_subnet_pub_name_failover = format("%s-pub-", local.vpc_name_failover)
+  # vpc_tags_primary = merge(local.eks_tags_primary, {
+  #   "${local.resource_name_stub_primary}-blue"                            = "shared"
+  #   "${local.resource_name_stub_primary}-green"                           = "shared"
+  #   "k8s.io/cluster-autoscaler/${local.resource_name_stub_primary}-blue"  = "shared"
+  #   "k8s.io/cluster-autoscaler/${local.resource_name_stub_primary}-green" = "shared"
+  #   "k8s.io/cluster-autoscaler/enabled"                                   = "true"
+  # })
+  # vpc_tags_failover = merge(local.eks_tags_failover, {
+  #   "${local.resource_name_stub_failover}-blue"                            = "shared"
+  #   "${local.resource_name_stub_failover}-green"                           = "shared"
+  #   "k8s.io/cluster-autoscaler/${local.resource_name_stub_failover}-blue"  = "shared"
+  #   "k8s.io/cluster-autoscaler/${local.resource_name_stub_failover}-green" = "shared"
+  #   "k8s.io/cluster-autoscaler/enabled"                                    = "true"
+  # })
 
-  vpc_cidr_primary = var.vpc_cidr_substitute
-  #if vpc_cidr_substitute has been defined then increment major subnet for vpc_cidr_failover
-  vpc_cidr_failover = var.vpc_cidr_substitute != "" && var.create_failover_region ? join(".", [
-    split(".", var.vpc_cidr_substitute)[0],
-    tostring(tonumber(split(".", var.vpc_cidr_substitute)[1]) + 1),
-    split(".", var.vpc_cidr_substitute)[2],
-    split(".", var.vpc_cidr_substitute)[3]
-  ]) : var.vpc_cidr_substitute
+  # subnet_pvt_tags_primary  = merge(local.eks_tags_primary, local.eks_tags_subnet_pvt)
+  # subnet_pub_tags_primary  = merge(local.eks_tags_primary, local.eks_tags_subnet_pub)
+  # subnet_pvt_tags_failover = merge(local.eks_tags_failover, local.eks_tags_subnet_pvt)
+  # subnet_pub_tags_failover = merge(local.eks_tags_failover, local.eks_tags_subnet_pub)
 
-  #build lists of availability zones for each region based on number of availabiliy zones
-  azs_used_list_primary  = [for az in range(var.availability_zones_num_used) : var.availability_zones.primary[az]]
-  azs_used_list_failover = [for az in range(var.availability_zones_num_used) : var.availability_zones.failover[az]]
+  # eks_tags_primary = {
+  #   "kubernetes.io/cluster/${local.resource_name_stub_primary}-blue"  = "shared"
+  #   "kubernetes.io/cluster/${local.resource_name_stub_primary}-green" = "shared"
+  # }
+  # eks_tags_failover = {
+  #   "kubernetes.io/cluster/${local.resource_name_stub_failover}-blue"  = "shared"
+  #   "kubernetes.io/cluster/${local.resource_name_stub_failover}-green" = "shared"
+  # }
 
-  #dynamically generate subnet cidrs based on number of availability zones
-  vpc_subnet_cidrs_primary = local.vpc_cidr_primary != "" ? (
-    var.availability_zones_num_used == 6 ? cidrsubnets(local.vpc_cidr_primary, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5) :
-    var.availability_zones_num_used == 5 ? cidrsubnets(local.vpc_cidr_primary, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5) :
-    var.availability_zones_num_used == 4 ? cidrsubnets(local.vpc_cidr_primary, 3, 3, 3, 3, 5, 5, 5, 5) :
-    var.availability_zones_num_used == 3 ? cidrsubnets(local.vpc_cidr_primary, 2, 2, 2, 4, 4, 4) :
-    cidrsubnets(local.vpc_cidr_primary, 2, 2, 4, 4)
-  ) : []
-  vpc_subnet_cidrs_failover = local.vpc_cidr_failover != "" ? (
-    var.availability_zones_num_used == 6 ? cidrsubnets(local.vpc_cidr_failover, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5) :
-    var.availability_zones_num_used == 5 ? cidrsubnets(local.vpc_cidr_failover, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5) :
-    var.availability_zones_num_used == 4 ? cidrsubnets(local.vpc_cidr_failover, 3, 3, 3, 3, 5, 5, 5, 5) :
-    var.availability_zones_num_used == 3 ? cidrsubnets(local.vpc_cidr_failover, 2, 2, 2, 4, 4, 4) :
-    cidrsubnets(local.vpc_cidr_failover, 2, 2, 4, 4)
-  ) : []
+  # eks_tags_subnet_pvt = {
+  #   "kubernetes.io/role/alb-ingress"  = 1
+  #   "kubernetes.io/role/internal-elb" = 1
+  # }
+  # eks_tags_subnet_pub = {
+  #   "kubernetes.io/role/alb-ingress" = 1
+  #   "kubernetes.io/role/elb"         = 1
+  # }
 
-  #slice the subnets in 'half', first slice goes to pvt, second slice goes to pub
-  vpc_subnet_cidrs_pvt_primary  = slice(local.vpc_subnet_cidrs_primary, 0, length(local.vpc_subnet_cidrs_primary) / 2)
-  vpc_subnet_cidrs_pub_primary  = slice(local.vpc_subnet_cidrs_primary, length(local.vpc_subnet_cidrs_primary) / 2, length(local.vpc_subnet_cidrs_primary))
-  vpc_subnet_cidrs_pvt_failover = slice(local.vpc_subnet_cidrs_failover, 0, length(local.vpc_subnet_cidrs_failover) / 2)
-  vpc_subnet_cidrs_pub_failover = slice(local.vpc_subnet_cidrs_failover, length(local.vpc_subnet_cidrs_failover) / 2, length(local.vpc_subnet_cidrs_failover))
-
-  #create addresses for VPC DNS
-  vpc_dns_primary = local.vpc_cidr_primary != "" ? join(".", [
-    split(".", cidrhost(local.vpc_cidr_primary, 0))[0],
-    split(".", cidrhost(local.vpc_cidr_primary, 0))[1],
-    split(".", cidrhost(local.vpc_cidr_primary, 0))[2],
-    "2"
-  ]) : local.vpc_cidr_primary
-  vpc_dns_failover = local.vpc_cidr_failover != "" ? join(".", [
-    split(".", cidrhost(local.vpc_cidr_failover, 0))[0],
-    split(".", cidrhost(local.vpc_cidr_failover, 0))[1],
-    split(".", cidrhost(local.vpc_cidr_failover, 0))[2],
-    "2"
-  ]) : local.vpc_cidr_failover
-
-  vpc_tags_primary = merge(local.eks_tags_primary, {
-    "${local.resource_name_stub_primary}-blue"                            = "shared"
-    "${local.resource_name_stub_primary}-green"                           = "shared"
-    "k8s.io/cluster-autoscaler/${local.resource_name_stub_primary}-blue"  = "shared"
-    "k8s.io/cluster-autoscaler/${local.resource_name_stub_primary}-green" = "shared"
-    "k8s.io/cluster-autoscaler/enabled"                                   = "true"
-  })
-  vpc_tags_failover = merge(local.eks_tags_failover, {
-    "${local.resource_name_stub_failover}-blue"                            = "shared"
-    "${local.resource_name_stub_failover}-green"                           = "shared"
-    "k8s.io/cluster-autoscaler/${local.resource_name_stub_failover}-blue"  = "shared"
-    "k8s.io/cluster-autoscaler/${local.resource_name_stub_failover}-green" = "shared"
-    "k8s.io/cluster-autoscaler/enabled"                                    = "true"
-  })
-
-  subnet_pvt_tags_primary  = merge(local.eks_tags_primary, local.eks_tags_subnet_pvt)
-  subnet_pub_tags_primary  = merge(local.eks_tags_primary, local.eks_tags_subnet_pub)
-  subnet_pvt_tags_failover = merge(local.eks_tags_failover, local.eks_tags_subnet_pvt)
-  subnet_pub_tags_failover = merge(local.eks_tags_failover, local.eks_tags_subnet_pub)
-
-  eks_tags_primary = {
-    "kubernetes.io/cluster/${local.resource_name_stub_primary}-blue"  = "shared"
-    "kubernetes.io/cluster/${local.resource_name_stub_primary}-green" = "shared"
-  }
-  eks_tags_failover = {
-    "kubernetes.io/cluster/${local.resource_name_stub_failover}-blue"  = "shared"
-    "kubernetes.io/cluster/${local.resource_name_stub_failover}-green" = "shared"
-  }
-
-  eks_tags_subnet_pvt = {
-    "kubernetes.io/role/alb-ingress"  = 1
-    "kubernetes.io/role/internal-elb" = 1
-  }
-  eks_tags_subnet_pub = {
-    "kubernetes.io/role/alb-ingress" = 1
-    "kubernetes.io/role/elb"         = 1
-  }
-
-  acm_san_names = concat(
-    [
-      for zone in var.r53_zones :
-      (var.deployment_environment != "prd" ? "${var.deployment_environment}.${zone}" : zone)
-    ],
-    [
-      for zone in var.r53_zones :
-      (var.deployment_environment != "prd" ? "*.${var.deployment_environment}.${zone}" : "*.${zone}")
-    ]
-  )
+  # acm_san_names = concat(
+  #   [
+  #     for zone in var.r53_zones :
+  #     (var.deployment_environment != "prd" ? "${var.deployment_environment}.${zone}" : zone)
+  #   ],
+  #   [
+  #     for zone in var.r53_zones :
+  #     (var.deployment_environment != "prd" ? "*.${var.deployment_environment}.${zone}" : "*.${zone}")
+  #   ]
+  # )
 
   default_tags_map = {
     "company"                      = "${var.company_name}" #Microsoft

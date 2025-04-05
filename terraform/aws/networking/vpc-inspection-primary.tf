@@ -80,26 +80,19 @@ module "vpc_inspection_endpoints_primary" {
   vpc_id = module.vpc_inspection_primary.vpc_id
 
   create_security_group      = true
-  security_group_name_prefix = "${local.resource_name_stub_primary}-vpc-endpoints-"
-  security_group_rules = {
-    ingress_https = {
-      # description = "HTTPS from VPC"
-      cidr_blocks = ["0.0.0.0/0"]
-    }
-    # egress_https = {
-    #   # description = "HTTPS from VPC"
-    #   cidr_blocks = ["0.0.0.0/0"]
-    # }
-  }
+  security_group_name_prefix = "${local.resource_name_stub_primary}-vpc-endpoint-network-firewall"
+  security_group_rules       = { ingress_https = { cidr_blocks = ["0.0.0.0/0"] } }
 
   endpoints = {
-    network-firewall = {
-      service             = "network-firewall"
+    # network-firewall = {
+    #   service             = "network-firewall"
+    #   private_dns_enabled = true
+    #   subnet_ids          = module.vpc_inspection_primary.private_subnets
+    # }
+    network-firewall-fips = {
+      service             = "network-firewall-fips"
       private_dns_enabled = true
       subnet_ids          = module.vpc_inspection_primary.private_subnets
-      dns_options = {
-        private_dns_only_for_inbound_resolver_endpoint = true
-      }
     }
   }
 }
