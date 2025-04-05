@@ -88,12 +88,11 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_outbound_to_tgw_primary" 
   appliance_mode_support             = "disable"
   dns_support                        = "enable"
   security_group_referencing_support = "enable"
-  # transit_gateway_default_route_table_association = true
-  # transit_gateway_default_route_table_propagation = true
+
   transit_gateway_default_route_table_association = false
   transit_gateway_default_route_table_propagation = false
 
-  tags = { Name = "outbound-vpc-attach-tgw-primary" }
+  tags = { Name = "${local.resource_name_stub_primary}-${var.this_slug}-tgw-attach-outbound-vpc" }
 }
 
 resource "aws_route" "outbound_pub_to_tgw_primary" {

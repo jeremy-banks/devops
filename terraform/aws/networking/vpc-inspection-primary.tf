@@ -104,12 +104,11 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inspection_to_tgw_primary
   appliance_mode_support             = "enable"
   dns_support                        = "enable"
   security_group_referencing_support = "enable"
-  # transit_gateway_default_route_table_association = true
-  # transit_gateway_default_route_table_propagation = true
+
   transit_gateway_default_route_table_association = false
   transit_gateway_default_route_table_propagation = false
 
-  tags = { Name = "inspection-vpc-attach-tgw-primary" }
+  tags = { Name = "${local.resource_name_stub_primary}-${var.this_slug}-tgw-attach-inspection-vpc" }
 }
 
 resource "aws_route" "inspection_intra_to_tgw_primary" {
@@ -121,10 +120,6 @@ resource "aws_route" "inspection_intra_to_tgw_primary" {
   destination_cidr_block = "0.0.0.0/0"
   network_interface_id   = tolist(module.vpc_inspection_endpoints_primary.endpoints.network-firewall-fips.network_interface_ids)[count.index]
 }
-
-# output "foo" {
-#   value = module.vpc_inspection_endpoints_primary.endpoints
-# }
 
 resource "aws_route" "inspection_private_to_tgw_primary" {
   provider = aws.network_prd

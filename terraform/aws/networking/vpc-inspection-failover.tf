@@ -110,12 +110,11 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inspection_to_tgw_failove
   appliance_mode_support             = "enable"
   dns_support                        = "enable"
   security_group_referencing_support = "enable"
-  # transit_gateway_default_route_table_association = true
-  # transit_gateway_default_route_table_propagation = true
+
   transit_gateway_default_route_table_association = false
   transit_gateway_default_route_table_propagation = false
 
-  tags = { Name = "inspection-vpc-attach-tgw-failover" }
+  tags = { Name = "${local.resource_name_stub_failover}-${var.this_slug}-tgw-attach-inspection-vpc" }
 }
 
 resource "aws_route" "inspection_intra_to_tgw_failover" {

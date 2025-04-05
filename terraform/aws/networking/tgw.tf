@@ -41,7 +41,7 @@ resource "aws_ec2_transit_gateway_peering_attachment" "tgw_peering" {
   peer_transit_gateway_id = aws_ec2_transit_gateway.tgw_primary.id
   transit_gateway_id      = aws_ec2_transit_gateway.tgw_failover[0].id
 
-  tags = { Name = "tgw-peer-${var.region.primary_short}-to-${var.region.failover_short}-requester" }
+  tags = { Name = "${local.resource_name_stub_failover}-${var.this_slug}-tgw-peer-requester" }
 }
 
 resource "aws_ec2_transit_gateway_peering_attachment_accepter" "tgw_peering" {
@@ -51,7 +51,7 @@ resource "aws_ec2_transit_gateway_peering_attachment_accepter" "tgw_peering" {
 
   transit_gateway_attachment_id = aws_ec2_transit_gateway_peering_attachment.tgw_peering[0].id
 
-  tags = { Name = "tgw-peer-${var.region.primary_short}-to-${var.region.failover_short}-accepter" }
+  tags = { Name = "${local.resource_name_stub_primary}-${var.this_slug}-tgw-peer-accepter" }
 }
 
 resource "aws_ec2_transit_gateway_route_table" "pre_inspection_primary" {
