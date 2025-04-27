@@ -89,11 +89,12 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_outbound_to_tgw_failover"
   transit_gateway_id = aws_ec2_transit_gateway.tgw_failover[0].id
   vpc_id             = module.vpc_outbound_failover[0].vpc_id
 
-  appliance_mode_support                          = "disable"
-  dns_support                                     = "enable"
-  security_group_referencing_support              = "enable"
-  transit_gateway_default_route_table_association = false
-  transit_gateway_default_route_table_propagation = false
+  appliance_mode_support             = "disable"
+  dns_support                        = "enable"
+  security_group_referencing_support = "enable"
+
+  # transit_gateway_default_route_table_association = false
+  # transit_gateway_default_route_table_propagation = false
 
   tags = { Name = "${local.resource_name_stub_failover}-${var.this_slug}-tgw-attach-outbound-vpc" }
 }

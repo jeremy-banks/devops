@@ -92,8 +92,8 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_workload_spoke_a_to_tgw_p
   dns_support                        = "enable"
   security_group_referencing_support = "enable"
 
-  transit_gateway_default_route_table_association = false
-  transit_gateway_default_route_table_propagation = false
+  # transit_gateway_default_route_table_association = false
+  # transit_gateway_default_route_table_propagation = false
 
   tags = { Name = "${local.resource_name_stub_primary}-${var.this_slug}-tgw-attach" }
 }

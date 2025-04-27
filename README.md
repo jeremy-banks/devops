@@ -31,7 +31,7 @@ inbound
     tgw
     spoke vpc
 
-outbount
+outbound
     spoke vpc
     tgw
     inspection vpc

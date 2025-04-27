@@ -6,4 +6,4 @@ deployment_environment = "prd"
 
 this_slug = "spoke-a"
 
-# create_failover_region = true
+create_failover_region = true
