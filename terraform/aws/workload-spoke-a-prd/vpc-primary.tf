@@ -28,8 +28,6 @@ module "vpc_primary" {
   version   = "5.21.0"
   providers = { aws = aws.workload_spoke_a_prd }
 
-  # count = var.create_primary_region ? 1 : 0
-
   name = "${local.resource_name_stub_primary}-${var.this_slug}-vpc-primary"
   cidr = var.vpc_cidr_infrastructure.workload_spoke_a_prd_primary
 
@@ -55,7 +53,6 @@ module "vpc_primary" {
   default_route_table_routes = []
 
   create_multiple_intra_route_tables = true
-  # create_multiple_private_route_tables = true
 
   manage_default_security_group  = true
   default_security_group_name    = "DO-NOT-USE"
@@ -75,41 +72,48 @@ module "vpc_primary" {
   vpc_tags = local.vpc_workload_spoke_a_tags_primary
 }
 
-# resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inbound_to_tgw_primary" {
-#   provider = aws.network_prd
+data "aws_ec2_transit_gateway" "tgw_primary" {
+  provider = aws.networking_prd
 
-#   # count = var.create_primary_region ? 1 : 0
+  filter {
+    name   = "options.amazon-side-asn"
+    values = [var.tgw_asn.primary]
+  }
+}
 
-#   subnet_ids         = module.vpc_inbound_primary[0].intra_subnets
-#   transit_gateway_id = aws_ec2_transit_gateway.tgw_primary[0].id
-#   vpc_id             = module.vpc_inbound_primary[0].vpc_id
+resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_workload_spoke_a_to_tgw_primary" {
+  provider = aws.workload_spoke_a_prd
 
-#   appliance_mode_support             = "disable"
-#   dns_support                        = "enable"
-#   security_group_referencing_support = "enable"
+  subnet_ids         = module.vpc_primary.intra_subnets
+  transit_gateway_id = data.aws_ec2_transit_gateway.tgw_primary.id
+  vpc_id             = module.vpc_primary.vpc_id
 
-#   transit_gateway_default_route_table_association = false
-#   transit_gateway_default_route_table_propagation = false
+  appliance_mode_support             = "disable"
+  dns_support                        = "enable"
+  security_group_referencing_support = "enable"
 
-#   tags = { Name = "${local.resource_name_stub_primary}-${var.this_slug}-tgw-attach-inbound-vpc" }
-# }
+  transit_gateway_default_route_table_association = false
+  transit_gateway_default_route_table_propagation = false
 
-# resource "aws_route" "inbound_pub_to_tgw_primary" {
-#   provider = aws.network_prd
+  tags = { Name = "${local.resource_name_stub_primary}-${var.this_slug}-tgw-attach" }
+}
 
-#   # count = var.create_primary_region ? length(module.vpc_inbound_primary[0].public_route_table_ids) : 0
+resource "aws_route" "private_to_tgw_primary" {
+  provider = aws.workload_spoke_a_prd
 
-#   route_table_id         = module.vpc_inbound_primary[0].public_route_table_ids[count.index]
-#   destination_cidr_block = var.vpc_cidr_infrastructure.transit_gateway
-#   transit_gateway_id     = aws_ec2_transit_gateway.tgw_primary[0].id
-# }
+  count = length(module.vpc_primary.private_route_table_ids)
 
-# resource "aws_route" "inbound_intra_to_tgw_primary" {
-#   provider = aws.network_prd
+  route_table_id         = module.vpc_primary.private_route_table_ids[count.index]
+  destination_cidr_block = var.vpc_cidr_infrastructure.transit_gateway
+  transit_gateway_id     = data.aws_ec2_transit_gateway.tgw_primary.id
+}
 
-#   # count = var.create_primary_region ? length(module.vpc_inbound_primary[0].intra_route_table_ids) : 0
+resource "aws_route" "intra_to_tgw_primary" {
+  provider = aws.workload_spoke_a_prd
 
-#   route_table_id         = module.vpc_inbound_primary[0].intra_route_table_ids[count.index]
-#   destination_cidr_block = var.vpc_cidr_infrastructure.transit_gateway
-#   transit_gateway_id     = aws_ec2_transit_gateway.tgw_primary[0].id
-# }
+  count = length(module.vpc_primary.intra_route_table_ids)
+
+  route_table_id         = module.vpc_primary.intra_route_table_ids[count.index]
+  destination_cidr_block = var.vpc_cidr_infrastructure.transit_gateway
+  transit_gateway_id     = data.aws_ec2_transit_gateway.tgw_primary.id
+}
