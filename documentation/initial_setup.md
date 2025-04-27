@@ -36,11 +36,11 @@
 1. Open a `Chat` AWS Support Case with `Account and Billing` in category `Organization` requesting `Default maximum number of accounts` increased to `1000`.
 
 ### Deploy OUs, Accounts, and SCPs
-1. Deploy `terraform/aws/org-ous-and-accounts`
+1. Deploy `terraform/aws/ous-and-accounts`
 1. Update the terraform/variables.tf `account_id` map with the output
 
 ### Deploy IAM Groups and Roles
-1. Deploy `terraform/aws/iam-groups-and-roles`
+1. Deploy `terraform/aws/iam`
 1. Create AWS CLI profile named "automation" with the output
    ```sh
    terraform output -json
@@ -48,7 +48,8 @@
    ```
 
 ### Deploy Transit Gateway and Shared Network VPC
-1. Deploy `terraform/aws/tgw-and-network-vpc`
+1. Deploy `terraform/aws/network`
+   1. Uncomment ???
 1. Deploy sdlc accounts
    1. Deploy terraform/aws/sdlc-prd
       1. Update eksctl/sdlc-prd-blue.yaml and eksctl/sdlc-prd-failover-blue.yaml with vpc_id and private_subnets for primary and failover from terraform output

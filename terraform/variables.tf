@@ -10,6 +10,7 @@ variable "account_id" {
     # sdlc_stg             = ""
     # sdlc_tst             = ""
     # security_tooling_prd = ""
+    workload_spoke_prd = "236147389059"
   }
 }
 
@@ -112,12 +113,12 @@ variable "iam_immutable_tag_key" {
 variable "org_service_access_principals" {
   type = list(string)
   default = [
-    "account.amazonaws.com", #account management
-    "cloudtrail.amazonaws.com",
-    "config-multiaccountsetup.amazonaws.com",
-    "config.amazonaws.com",
-    "ds.amazonaws.com", #enterprise active directory
-    "ram.amazonaws.com",
+    "account.amazonaws.com",                  #account management
+    "cloudtrail.amazonaws.com",               #cloudtrail
+    "config-multiaccountsetup.amazonaws.com", #config
+    "config.amazonaws.com",                   #config
+    "ds.amazonaws.com",                       #enterprise active directory
+    "ram.amazonaws.com",                      #resource access manager
   ]
 }
 
@@ -265,6 +266,7 @@ variable "account_email_slug" {
     log_archive_prd      = "log_archive_prd"
     network_prd          = "network-prd"
     security_tooling_prd = "security_tooling_prd"
+    workload_spoke_prd   = "workload-spoke-prd"
   }
 }
 
@@ -275,19 +277,23 @@ variable "account_email_substitute" {
     log_archive_prd      = ""
     network_prd          = ""
     security_tooling_prd = ""
+    workload_spoke_prd   = ""
   }
 }
 
 variable "vpc_cidr_infrastructure" {
   type = map(string)
   default = {
-    transit_gateway     = "10.0.0.0/8"
-    inbound_failover    = "10.3.0.0/16"
-    inbound_primary     = "10.0.0.0/16"
-    inspection_failover = "10.4.0.0/16"
-    inspection_primary  = "10.1.0.0/16"
-    outbound_failover   = "10.5.0.0/16"
-    outbound_primary    = "10.2.0.0/16"
+    transit_gateway             = "10.0.0.0/8"
+    inbound_failover            = "10.3.0.0/16"
+    inbound_primary             = "10.0.0.0/16"
+    inspection_failover         = "10.4.0.0/16"
+    inspection_primary          = "10.1.0.0/16"
+    outbound_failover           = "10.5.0.0/16"
+    outbound_primary            = "10.2.0.0/16"
+    workload_spoke_prd_failover = "10.5.0.0/16"
+    workload_spoke_prd_primary  = "10.2.0.0/16"
+
   }
 }
 
@@ -299,6 +305,7 @@ locals {
     log_archive_prd      = var.account_email_substitute.log_archive_prd != "" ? var.account_email_substitute.log_archive_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.log_archive_prd}@${var.org_owner_email_domain_tld}"
     network_prd          = var.account_email_substitute.network_prd != "" ? var.account_email_substitute.network_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.network_prd}@${var.org_owner_email_domain_tld}"
     security_tooling_prd = var.account_email_substitute.security_tooling_prd != "" ? var.account_email_substitute.security_tooling_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.security_tooling_prd}@${var.org_owner_email_domain_tld}"
+    workload_spoke_prd   = var.account_email_substitute.workload_spoke_prd != "" ? var.account_email_substitute.workload_spoke_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.workload_spoke_prd}@${var.org_owner_email_domain_tld}"
   }
 
   resource_name_stub          = lower("${var.company_name_abbr}-${var.team_name_abbr}-${var.project_name_abbr}") #company - team - project - env

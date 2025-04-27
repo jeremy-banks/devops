@@ -16,6 +16,15 @@ admin-STRING optional user assumes admin-STRING role for managing resources in s
 breakglass1, 2, 3 users have same access as superadmin in event of IDP failure
 
 
+Create New Workload Account
+1. deploy new account
+   1. copy ou-workloads-spoke-example into a new directory
+   1. replace providers with new account into
+   1. Create new strings in the lists `account_email_slug`, `account_email_substitute`, `vpc_cidr_infrastructure`
+   1. update account id in variable ``
+1. deploy new iam roles
+1. deploy infra
+
 ### Replacing an Account
 1. Remove old Account from tfstate
    - `terraform state rm aws_organizations_account.RESOURCE`

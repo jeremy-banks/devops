@@ -1,8 +1,9 @@
 # DevOps
 
-## Project Details
-1. Codebase to demonstrate documented best practice use of Terraform, EKS, and Helm in AWS
-1. Repo includes nginx welcome page deployed to EKS
+## Project Goals
+1. Create ideal and comprehensive codebase to "lift and shift" an org into AWS and EKS
+1. Also to demonstrate my expertise in the tool and provide a framework for mentorship
+1. Follow documented best practice use of Terraform, EKS, and Helm in AWS
 
 ## Documentation
 - [Architectural Overview](./documentation/architectural_overview.md)
@@ -23,33 +24,41 @@
 
 ## Notes
 
-public = public
-intra = tgw /28
-private = private
-private = firewall
+inbound
+    inbound vpc
+    tgw
+    inspection vpc
+    tgw
+    spoke vpc
+
+outbount
+    spoke vpc
+    tgw
+    inspection vpc
+    tgw
+    outbound vpc
+
+
+you need to establish and define what a "spoke" is now
+
+and its interaction with the network vpc
+especially the connection with the post-inspection route table
+
+then you need to identify a firewall policy that 'works for now' so you can esablish a k8s cluster
+
+*inbound routes
+*pre-inspection tgw routes
+*    routes
+    associations
+post-inspection tgw routes
+    routes
+    associations
+*inspection  vpc
+*outbound routes
+
+outbound endpoints
 
 workloads vpc
-    pre-inspection route table to inspection vpc
-
-inspection vpc
-    post-inspection route table to outgoing vpc
-
-
-
-
-vpc
-    ingress
-        /16, 2 pub subnets
-    egress
-        /16, 2 pub subnets
-    inspection
-        /16, 2 pvt subnets
-    tgw
-    example deployment
-        /16, 2 pvt subnets
-    route tables for all
-    ram sharing ingress and maybe egress??
-    lots of testing
 
 rework the eks stuff
 append k8s 'bare meta'

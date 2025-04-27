@@ -65,7 +65,7 @@ module "s3_primary" {
 
 module "iam_policy_s3_primary_replicate_to_failover" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.45.0"
+  version = "5.54.0"
   providers = { aws = aws.sdlc_prd }
 
   name  = "s3-primary-replicate-to-failover"
@@ -122,7 +122,7 @@ EOF
 
 module "iam_role_s3_primary_replicate_to_failover" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.45.0"
+  version = "5.54.0"
   providers = { aws = aws.sdlc_prd }
 
   trusted_role_services = [
