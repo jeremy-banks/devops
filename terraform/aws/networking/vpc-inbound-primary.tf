@@ -25,7 +25,7 @@ locals {
 
 module "vpc_inbound_primary" {
   source    = "terraform-aws-modules/vpc/aws"
-  version   = "5.19.0"
+  version   = "5.21.0"
   providers = { aws = aws.network_prd }
 
   name = "${local.resource_name_stub_primary}-vpc-inbound-primary"
