@@ -1,4 +1,4 @@
-data "aws_caller_identity" "this" {}
+data "aws_caller_identity" "this" { provider = aws.networking_prd }
 
 data "aws_organizations_organization" "this" {}
 

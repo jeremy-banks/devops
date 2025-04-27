@@ -26,7 +26,7 @@ locals {
 module "vpc_outbound_failover" {
   source    = "terraform-aws-modules/vpc/aws"
   version   = "5.21.0"
-  providers = { aws = aws.network_prd_failover }
+  providers = { aws = aws.networking_prd_failover }
 
   count = var.create_failover_region ? 1 : 0
 
@@ -81,7 +81,7 @@ module "vpc_outbound_failover" {
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_outbound_to_tgw_failover" {
-  provider = aws.network_prd_failover
+  provider = aws.networking_prd_failover
 
   count = var.create_failover_region ? 1 : 0
 
@@ -99,7 +99,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_outbound_to_tgw_failover"
 }
 
 resource "aws_route" "outbound_pub_to_tgw_failover" {
-  provider = aws.network_prd_failover
+  provider = aws.networking_prd_failover
 
   count = var.create_failover_region ? length(module.vpc_outbound_failover[0].public_route_table_ids) : 0
 
@@ -109,7 +109,7 @@ resource "aws_route" "outbound_pub_to_tgw_failover" {
 }
 
 resource "aws_route" "outbound_intra_to_tgw_failover" {
-  provider = aws.network_prd_failover
+  provider = aws.networking_prd_failover
 
   count = var.create_failover_region ? length(module.vpc_outbound_failover[0].intra_route_table_ids) : 0
 
@@ -119,7 +119,7 @@ resource "aws_route" "outbound_intra_to_tgw_failover" {
 }
 
 resource "aws_route" "outbound_intra_to_nat_failover" {
-  provider = aws.network_prd_failover
+  provider = aws.networking_prd_failover
 
   count = var.create_failover_region ? length(module.vpc_outbound_failover[0].intra_route_table_ids) : 0
 

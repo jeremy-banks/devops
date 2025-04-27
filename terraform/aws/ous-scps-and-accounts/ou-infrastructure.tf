@@ -19,9 +19,9 @@ resource "aws_organizations_account" "identity_prd" {
   role_name                  = var.account_role_name
 }
 
-resource "aws_organizations_account" "network_prd" {
+resource "aws_organizations_account" "networking_prd" {
   name  = "network-prd"
-  email = local.account_owner_email.network_prd
+  email = local.account_owner_email.networking_prd
 
   close_on_deletion          = true
   create_govcloud            = false

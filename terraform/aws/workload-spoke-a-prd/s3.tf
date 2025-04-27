@@ -1,7 +1,7 @@
 module "s3_primary" {
-  source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "4.1.2"
-  providers = { aws = aws.sdlc_prd }
+  source    = "terraform-aws-modules/s3-bucket/aws"
+  version   = "4.7.0"
+  providers = { aws = aws.workload_spoke_a_prd }
 
   bucket = "${local.resource_name_stub_primary}-${var.this_slug}-storage-blob-${local.unique_id}"
 
@@ -17,16 +17,13 @@ module "s3_primary" {
     }
   }
 
-  lifecycle_rule = [
-    {
-      id      = "intelligent-tier"
-      enabled = true
-      abort_incomplete_multipart_upload_days = 7
-
-      transition = [ { storage_class = "INTELLIGENT_TIERING" } ]
-      noncurrent_version_transition = [ { storage_class = "INTELLIGENT_TIERING" } ]
+  intelligent_tiering = {
+    general = {
+      status  = "Enabled"
+      filter  = { prefix = "/" }
+      tiering = { ARCHIVE_ACCESS = { days = 90 } }
     }
-  ]
+  }
 
   versioning = { enabled = true }
 
@@ -50,8 +47,8 @@ module "s3_primary" {
         }
 
         destination = {
-          bucket        = module.s3_failover.s3_bucket_arn
-          storage_class = "INTELLIGENT_TIERING"
+          bucket             = module.s3_failover.s3_bucket_arn
+          storage_class      = "INTELLIGENT_TIERING"
           replica_kms_key_id = module.kms_failover.key_arn
         }
       },
@@ -64,11 +61,11 @@ module "s3_primary" {
 }
 
 module "iam_policy_s3_primary_replicate_to_failover" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.54.0"
-  providers = { aws = aws.sdlc_prd }
+  source    = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version   = "5.55.0"
+  providers = { aws = aws.workload_spoke_a_prd }
 
-  name  = "s3-primary-replicate-to-failover"
+  name = "s3-primary-replicate-to-failover"
 
   policy = <<EOF
 {
@@ -121,9 +118,9 @@ EOF
 }
 
 module "iam_role_s3_primary_replicate_to_failover" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.54.0"
-  providers = { aws = aws.sdlc_prd }
+  source    = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
+  version   = "5.55.0"
+  providers = { aws = aws.workload_spoke_a_prd }
 
   trusted_role_services = [
     "s3.amazonaws.com",
@@ -132,8 +129,8 @@ module "iam_role_s3_primary_replicate_to_failover" {
 
   create_role = true
 
-  role_name = "s3-primary-replicate-to-failover"
-  role_requires_mfa = false
+  role_name           = "s3-primary-replicate-to-failover"
+  role_requires_mfa   = false
   attach_admin_policy = false
 
   custom_role_policy_arns = [
@@ -142,9 +139,9 @@ module "iam_role_s3_primary_replicate_to_failover" {
 }
 
 module "s3_failover" {
-  source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "4.1.2"
-  providers = { aws = aws.sdlc_prd_failover }
+  source    = "terraform-aws-modules/s3-bucket/aws"
+  version   = "4.7.0"
+  providers = { aws = aws.workload_spoke_a_prd_failover }
 
   bucket = "${local.resource_name_stub_failover}-${var.this_slug}-storage-blob-${local.unique_id}"
 
@@ -160,16 +157,13 @@ module "s3_failover" {
     }
   }
 
-  lifecycle_rule = [
-    {
-      id      = "intelligent-tier"
-      enabled = true
-      abort_incomplete_multipart_upload_days = 7
-
-      transition = [ { storage_class = "INTELLIGENT_TIERING" } ]
-      noncurrent_version_transition = [ { storage_class = "INTELLIGENT_TIERING" } ]
+  intelligent_tiering = {
+    general = {
+      status  = "Enabled"
+      filter  = { prefix = "/" }
+      tiering = { ARCHIVE_ACCESS = { days = 90 } }
     }
-  ]
+  }
 
   versioning = { enabled = true }
 

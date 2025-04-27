@@ -26,7 +26,7 @@ locals {
 module "vpc_inspection_primary" {
   source    = "terraform-aws-modules/vpc/aws"
   version   = "5.21.0"
-  providers = { aws = aws.network_prd }
+  providers = { aws = aws.networking_prd }
 
   name = "${local.resource_name_stub_primary}-vpc-inspection-primary"
   cidr = var.vpc_cidr_infrastructure.inspection_primary
@@ -77,7 +77,7 @@ module "vpc_inspection_primary" {
 module "vpc_inspection_endpoints_primary" {
   source    = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
   version   = "5.21.0"
-  providers = { aws = aws.network_prd }
+  providers = { aws = aws.networking_prd }
 
   vpc_id = module.vpc_inspection_primary.vpc_id
 
@@ -95,7 +95,7 @@ module "vpc_inspection_endpoints_primary" {
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inspection_to_tgw_primary" {
-  provider = aws.network_prd
+  provider = aws.networking_prd
 
   subnet_ids         = module.vpc_inspection_primary.intra_subnets
   transit_gateway_id = aws_ec2_transit_gateway.tgw_primary.id
@@ -112,7 +112,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inspection_to_tgw_primary
 }
 
 resource "aws_route" "inspection_intra_to_tgw_primary" {
-  provider = aws.network_prd
+  provider = aws.networking_prd
 
   count = length(module.vpc_inspection_primary.intra_route_table_ids)
 
@@ -122,7 +122,7 @@ resource "aws_route" "inspection_intra_to_tgw_primary" {
 }
 
 resource "aws_route" "inspection_private_to_tgw_primary" {
-  provider = aws.network_prd
+  provider = aws.networking_prd
 
   count = length(module.vpc_inspection_primary.private_route_table_ids)
 

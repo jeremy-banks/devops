@@ -1,5 +1,5 @@
 resource "aws_ec2_transit_gateway_route_table" "pre_inspection_primary" {
-  provider = aws.network_prd
+  provider = aws.networking_prd
 
   transit_gateway_id = aws_ec2_transit_gateway.tgw_primary.id
 
@@ -7,7 +7,7 @@ resource "aws_ec2_transit_gateway_route_table" "pre_inspection_primary" {
 }
 
 resource "aws_ec2_transit_gateway_route" "pre_inspection_primary" {
-  provider = aws.network_prd
+  provider = aws.networking_prd
 
   destination_cidr_block         = "0.0.0.0/0"
   transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.vpc_inspection_to_tgw_primary.id
@@ -15,7 +15,7 @@ resource "aws_ec2_transit_gateway_route" "pre_inspection_primary" {
 }
 
 resource "aws_ec2_transit_gateway_route_table" "pre_inspection_failover" {
-  provider = aws.network_prd_failover
+  provider = aws.networking_prd_failover
 
   count = var.create_failover_region ? 1 : 0
 
@@ -25,7 +25,7 @@ resource "aws_ec2_transit_gateway_route_table" "pre_inspection_failover" {
 }
 
 resource "aws_ec2_transit_gateway_route" "pre_inspection_failover" {
-  provider = aws.network_prd_failover
+  provider = aws.networking_prd_failover
 
   count = var.create_failover_region ? 1 : 0
 
@@ -35,7 +35,7 @@ resource "aws_ec2_transit_gateway_route" "pre_inspection_failover" {
 }
 
 # resource "aws_ec2_transit_gateway_route_table" "post_inspection_primary" {
-#   provider = aws.network_prd
+#   provider = aws.networking_prd
 
 #   transit_gateway_id = aws_ec2_transit_gateway.tgw_primary.id
 
@@ -43,7 +43,7 @@ resource "aws_ec2_transit_gateway_route" "pre_inspection_failover" {
 # }
 
 # resource "aws_ec2_transit_gateway_route" "post_inspection_primary_outbound" {
-#   provider = aws.network_prd
+#   provider = aws.networking_prd
 
 #   destination_cidr_block         = "0.0.0.0/0"
 #   transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.vpc_outbound_to_tgw_primary.id
@@ -51,7 +51,7 @@ resource "aws_ec2_transit_gateway_route" "pre_inspection_failover" {
 # }
 
 # resource "aws_ec2_transit_gateway_route_table" "pre_inspection_failover" {
-#   provider = aws.network_prd_failover
+#   provider = aws.networking_prd_failover
 
 #   count = var.create_failover_region ? 1 : 0
 
@@ -61,7 +61,7 @@ resource "aws_ec2_transit_gateway_route" "pre_inspection_failover" {
 # }
 
 # resource "aws_ec2_transit_gateway_route" "pre_inspection_failover" {
-#   provider = aws.network_prd_failover
+#   provider = aws.networking_prd_failover
 
 #   count = var.create_failover_region ? 1 : 0
 
@@ -71,7 +71,7 @@ resource "aws_ec2_transit_gateway_route" "pre_inspection_failover" {
 # }
 
 # resource "aws_ec2_transit_gateway_route_table" "post_inspection_failover" {
-#   provider = aws.network_prd_failover
+#   provider = aws.networking_prd_failover
 
 #   count = var.create_failover_region ? 1 : 0
 

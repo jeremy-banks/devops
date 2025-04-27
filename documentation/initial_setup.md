@@ -47,8 +47,8 @@
    aws configure --profile automation
    ```
 
-### Deploy Transit Gateway and Shared Network VPC
-1. Deploy `terraform/aws/network`
+### Deploy Networking
+1. Deploy `terraform/aws/networking`
    1. Uncomment ???
 1. Deploy sdlc accounts
    1. Deploy terraform/aws/sdlc-prd
@@ -104,3 +104,6 @@
 <!-- 1. Deploy customer accounts
    1. Deploy terraform/aws/workload-customera
    1. Deploy terraform/aws/workload-customerb -->
+
+### Deploy Workload Spoke A
+1. Deploy `terraform/aws/workload_spoke_a`

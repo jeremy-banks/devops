@@ -1,5 +1,5 @@
 resource "aws_ec2_transit_gateway" "tgw_primary" {
-  provider = aws.network_prd
+  provider = aws.networking_prd
 
   amazon_side_asn                = var.tgw_asn.primary
   auto_accept_shared_attachments = "enable"
@@ -15,7 +15,7 @@ resource "aws_ec2_transit_gateway" "tgw_primary" {
 }
 
 resource "aws_ec2_transit_gateway" "tgw_failover" {
-  provider = aws.network_prd_failover
+  provider = aws.networking_prd_failover
 
   count = var.create_failover_region ? 1 : 0
 
@@ -33,7 +33,7 @@ resource "aws_ec2_transit_gateway" "tgw_failover" {
 }
 
 resource "aws_ec2_transit_gateway_peering_attachment" "tgw_peering" {
-  provider = aws.network_prd_failover
+  provider = aws.networking_prd_failover
 
   count = var.create_failover_region ? 1 : 0
 
@@ -45,7 +45,7 @@ resource "aws_ec2_transit_gateway_peering_attachment" "tgw_peering" {
 }
 
 resource "aws_ec2_transit_gateway_peering_attachment_accepter" "tgw_peering" {
-  provider = aws.network_prd
+  provider = aws.networking_prd
 
   count = var.create_failover_region ? 1 : 0
 

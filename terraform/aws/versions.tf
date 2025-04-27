@@ -60,18 +60,18 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias   = "network_prd"
+  alias   = "networking_prd"
   profile = var.cli_profile_name
   region  = var.region.primary
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.network_prd}:role/${var.provider_role_name}" }
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.networking_prd}:role/${var.provider_role_name}" }
   default_tags { tags = local.default_tags_map }
 }
 
 provider "aws" {
-  alias   = "network_prd_failover"
+  alias   = "networking_prd_failover"
   profile = var.cli_profile_name
   region  = var.region.failover
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.network_prd}:role/${var.provider_role_name}" }
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.networking_prd}:role/${var.provider_role_name}" }
   default_tags { tags = local.default_tags_map }
 }
 
@@ -92,17 +92,17 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias   = "workload_spoke_prd"
+  alias   = "workload_spoke_a_prd"
   profile = var.cli_profile_name
   region  = var.region.primary
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.workload_spoke_prd}:role/${var.provider_role_name}" }
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.workload_spoke_a_prd}:role/${var.provider_role_name}" }
   default_tags { tags = local.default_tags_map }
 }
 
 provider "aws" {
-  alias   = "workload_spoke_prd_failover"
+  alias   = "workload_spoke_a_prd_failover"
   profile = var.cli_profile_name
   region  = var.region.failover
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.workload_spoke_prd}:role/${var.provider_role_name}" }
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.workload_spoke_a_prd}:role/${var.provider_role_name}" }
   default_tags { tags = local.default_tags_map }
 }

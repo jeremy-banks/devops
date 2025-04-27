@@ -26,7 +26,7 @@ locals {
 module "vpc_inbound_primary" {
   source    = "terraform-aws-modules/vpc/aws"
   version   = "5.21.0"
-  providers = { aws = aws.network_prd }
+  providers = { aws = aws.networking_prd }
 
   name = "${local.resource_name_stub_primary}-vpc-inbound-primary"
   cidr = var.vpc_cidr_infrastructure.inbound_primary
@@ -74,7 +74,7 @@ module "vpc_inbound_primary" {
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inbound_to_tgw_primary" {
-  provider = aws.network_prd
+  provider = aws.networking_prd
 
   subnet_ids         = module.vpc_inbound_primary.intra_subnets
   transit_gateway_id = aws_ec2_transit_gateway.tgw_primary.id
@@ -91,7 +91,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inbound_to_tgw_primary" {
 }
 
 resource "aws_route" "inbound_pub_to_tgw_primary" {
-  provider = aws.network_prd
+  provider = aws.networking_prd
 
   count = length(module.vpc_inbound_primary.public_route_table_ids)
 
@@ -101,7 +101,7 @@ resource "aws_route" "inbound_pub_to_tgw_primary" {
 }
 
 resource "aws_route" "inbound_intra_to_tgw_primary" {
-  provider = aws.network_prd
+  provider = aws.networking_prd
 
   count = length(module.vpc_inbound_primary.intra_route_table_ids)
 
