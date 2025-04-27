@@ -118,7 +118,7 @@ data "aws_iam_policy_document" "s3_tfstate_backend_primary" {
 
 module "s3_tfstate_backend_primary" {
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "4.6.0"
+  version = "4.7.0"
 
   bucket = "${local.resource_name_stub_primary}-tfstate-storage-blob-${local.unique_id}"
 
@@ -134,15 +134,13 @@ module "s3_tfstate_backend_primary" {
     }
   }
 
-  lifecycle_rule = [
-    {
-      id                                     = "intelligent-tier"
-      enabled                                = true
-      abort_incomplete_multipart_upload_days = 7
-      transition                             = [{ days = 1, storage_class = "INTELLIGENT_TIERING" }]
-      noncurrent_version_transition          = [{ days = 1, storage_class = "INTELLIGENT_TIERING" }]
+  intelligent_tiering = {
+    general = {
+      status = "Enabled"
+      filter = { prefix = "/" }
+      tiering = { ARCHIVE_ACCESS = { days = 90 } }
     }
-  ]
+  }
 
   versioning = { enabled = true }
 
@@ -307,7 +305,7 @@ data "aws_iam_policy_document" "s3_tfstate_backend_failover" {
 
 module "s3_tfstate_backend_failover" {
   source    = "terraform-aws-modules/s3-bucket/aws"
-  version   = "4.6.0"
+  version   = "4.7.0"
   providers = { aws = aws.management_failover }
 
   bucket = "${local.resource_name_stub_failover}-tfstate-storage-blob-${local.unique_id}"
@@ -324,15 +322,13 @@ module "s3_tfstate_backend_failover" {
     }
   }
 
-  lifecycle_rule = [
-    {
-      id                                     = "intelligent-tier"
-      enabled                                = true
-      abort_incomplete_multipart_upload_days = 7
-      transition                             = [{ days = 1, storage_class = "INTELLIGENT_TIERING" }]
-      noncurrent_version_transition          = [{ days = 1, storage_class = "INTELLIGENT_TIERING" }]
+  intelligent_tiering = {
+    general = {
+      status = "Enabled"
+      filter = { prefix = "/" }
+      tiering = { ARCHIVE_ACCESS = { days = 90 } }
     }
-  ]
+  }
 
   versioning = { enabled = true }
 
