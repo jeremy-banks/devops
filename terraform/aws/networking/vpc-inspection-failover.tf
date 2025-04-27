@@ -117,7 +117,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inspection_to_tgw_failove
   tags = { Name = "${local.resource_name_stub_failover}-${var.this_slug}-tgw-attach-inspection-vpc" }
 }
 
-resource "aws_route" "inspection_intra_to_tgw_failover" {
+resource "aws_route" "inspection_intra_to_firewall_endpoint_failover" {
   provider = aws.networking_prd_failover
 
   count = var.create_failover_region ? length(module.vpc_inspection_failover[0].intra_route_table_ids) : 0

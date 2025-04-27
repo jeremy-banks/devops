@@ -111,7 +111,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inspection_to_tgw_primary
   tags = { Name = "${local.resource_name_stub_primary}-${var.this_slug}-tgw-attach-inspection-vpc" }
 }
 
-resource "aws_route" "inspection_intra_to_tgw_primary" {
+resource "aws_route" "inspection_intra_to_firewall_endpoint_primary" {
   provider = aws.networking_prd
 
   count = length(module.vpc_inspection_primary.intra_route_table_ids)
