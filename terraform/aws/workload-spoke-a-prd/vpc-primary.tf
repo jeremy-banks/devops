@@ -72,6 +72,26 @@ module "vpc_primary" {
   vpc_tags = local.vpc_workload_spoke_a_tags_primary
 }
 
+resource "aws_route" "private_to_tgw_primary" {
+  provider = aws.workload_spoke_a_prd
+
+  count = length(module.vpc_primary.private_route_table_ids)
+
+  route_table_id         = module.vpc_primary.private_route_table_ids[count.index]
+  destination_cidr_block = "0.0.0.0/0"
+  transit_gateway_id     = data.aws_ec2_transit_gateway.tgw_primary.id
+}
+
+resource "aws_route" "intra_to_tgw_primary" {
+  provider = aws.workload_spoke_a_prd
+
+  count = length(module.vpc_primary.intra_route_table_ids)
+
+  route_table_id         = module.vpc_primary.intra_route_table_ids[count.index]
+  destination_cidr_block = "0.0.0.0/0"
+  transit_gateway_id     = data.aws_ec2_transit_gateway.tgw_primary.id
+}
+
 data "aws_ec2_transit_gateway" "tgw_primary" {
   provider = aws.networking_prd
 
@@ -98,22 +118,49 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_workload_spoke_a_to_tgw_p
   tags = { Name = "${local.resource_name_stub_primary}-${var.this_slug}-tgw-attach" }
 }
 
-resource "aws_route" "private_to_tgw_primary" {
-  provider = aws.workload_spoke_a_prd
+data "aws_ec2_transit_gateway_vpc_attachment" "tgw_post_inspection_primary" {
+  provider = aws.networking_prd
 
-  count = length(module.vpc_primary.private_route_table_ids)
-
-  route_table_id         = module.vpc_primary.private_route_table_ids[count.index]
-  destination_cidr_block = "0.0.0.0/0"
-  transit_gateway_id     = data.aws_ec2_transit_gateway.tgw_primary.id
+  filter {
+    name   = "tag:Name"
+    values = ["${local.resource_name_stub_primary}-network-tgw-attach-inspection-vpc"]
+  }
 }
 
-resource "aws_route" "intra_to_tgw_primary" {
-  provider = aws.workload_spoke_a_prd
+data "aws_ec2_transit_gateway_route_table" "tgw_post_inspection_primary" {
+  provider = aws.networking_prd
 
-  count = length(module.vpc_primary.intra_route_table_ids)
+  filter {
+    name   = "tag:Name"
+    values = ["${local.resource_name_stub_primary}-network-tgw-post-inspection"]
+  }
+}
 
-  route_table_id         = module.vpc_primary.intra_route_table_ids[count.index]
-  destination_cidr_block = "0.0.0.0/0"
-  transit_gateway_id     = data.aws_ec2_transit_gateway.tgw_primary.id
+data "aws_ec2_transit_gateway_peering_attachment" "tgw_peer_primary" {
+  provider = aws.networking_prd
+
+  count = var.create_failover_region ? 1 : 0
+
+  filter {
+    name   = "tag:Name"
+    values = ["${local.resource_name_stub_primary}-network-tgw-peer-accepter"]
+  }
+}
+
+resource "aws_ec2_transit_gateway_route" "post_inspection_workload_spoke_a_primary_primary" {
+  provider = aws.networking_prd
+
+  destination_cidr_block         = var.vpc_cidr_infrastructure.workload_spoke_a_prd_primary
+  transit_gateway_attachment_id  = data.aws_ec2_transit_gateway_vpc_attachment.tgw_post_inspection_primary.id
+  transit_gateway_route_table_id = data.aws_ec2_transit_gateway_route_table.tgw_post_inspection_primary.id
+}
+
+resource "aws_ec2_transit_gateway_route" "post_inspection_workload_spoke_a_primary_failover" {
+  provider = aws.networking_prd
+
+  count = var.create_failover_region ? 1 : 0
+
+  destination_cidr_block         = var.vpc_cidr_infrastructure.workload_spoke_a_prd_failover
+  transit_gateway_attachment_id  = data.aws_ec2_transit_gateway_peering_attachment.tgw_peer_failover[0].id
+  transit_gateway_route_table_id = data.aws_ec2_transit_gateway_route_table.tgw_post_inspection_primary.id
 }

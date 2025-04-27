@@ -74,6 +74,26 @@ module "vpc_failover" {
   vpc_tags = local.vpc_workload_spoke_a_tags_failover
 }
 
+resource "aws_route" "private_to_tgw_failover" {
+  provider = aws.workload_spoke_a_prd_failover
+
+  count = var.create_failover_region ? length(module.vpc_failover[0].private_route_table_ids) : 0
+
+  route_table_id         = module.vpc_failover[0].private_route_table_ids[count.index]
+  destination_cidr_block = "0.0.0.0/0"
+  transit_gateway_id     = data.aws_ec2_transit_gateway.tgw_failover.id
+}
+
+resource "aws_route" "intra_to_tgw_failover" {
+  provider = aws.workload_spoke_a_prd_failover
+
+  count = var.create_failover_region ? length(module.vpc_failover[0].intra_route_table_ids) : 0
+
+  route_table_id         = module.vpc_failover[0].intra_route_table_ids[count.index]
+  destination_cidr_block = "0.0.0.0/0"
+  transit_gateway_id     = data.aws_ec2_transit_gateway.tgw_failover.id
+}
+
 data "aws_ec2_transit_gateway" "tgw_failover" {
   provider = aws.networking_prd_failover
 
@@ -102,22 +122,55 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_workload_spoke_a_to_tgw_f
   tags = { Name = "${local.resource_name_stub_failover}-${var.this_slug}-tgw-attach" }
 }
 
-resource "aws_route" "private_to_tgw_failover" {
-  provider = aws.workload_spoke_a_prd_failover
+data "aws_ec2_transit_gateway_vpc_attachment" "tgw_post_inspection_failover" {
+  provider = aws.networking_prd_failover
 
-  count = var.create_failover_region ? length(module.vpc_failover[0].private_route_table_ids) : 0
+  count = var.create_failover_region ? 1 : 0
 
-  route_table_id         = module.vpc_failover[0].private_route_table_ids[count.index]
-  destination_cidr_block = "0.0.0.0/0"
-  transit_gateway_id     = data.aws_ec2_transit_gateway.tgw_failover.id
+  filter {
+    name   = "tag:Name"
+    values = ["${local.resource_name_stub_failover}-network-tgw-attach-inspection-vpc"]
+  }
 }
 
-resource "aws_route" "intra_to_tgw_failover" {
-  provider = aws.workload_spoke_a_prd_failover
+data "aws_ec2_transit_gateway_route_table" "tgw_post_inspection_failover" {
+  provider = aws.networking_prd_failover
 
-  count = var.create_failover_region ? length(module.vpc_failover[0].intra_route_table_ids) : 0
+  count = var.create_failover_region ? 1 : 0
 
-  route_table_id         = module.vpc_failover[0].intra_route_table_ids[count.index]
-  destination_cidr_block = "0.0.0.0/0"
-  transit_gateway_id     = data.aws_ec2_transit_gateway.tgw_failover.id
+  filter {
+    name   = "tag:Name"
+    values = ["${local.resource_name_stub_failover}-network-tgw-post-inspection"]
+  }
+}
+
+data "aws_ec2_transit_gateway_peering_attachment" "tgw_peer_failover" {
+  provider = aws.networking_prd_failover
+
+  count = var.create_failover_region ? 1 : 0
+
+  filter {
+    name   = "tag:Name"
+    values = ["${local.resource_name_stub_failover}-network-tgw-peer-requester"]
+  }
+}
+
+resource "aws_ec2_transit_gateway_route" "post_inspection_workload_spoke_a_failover_failover" {
+  provider = aws.networking_prd_failover
+
+  count = var.create_failover_region ? 1 : 0
+
+  destination_cidr_block         = var.vpc_cidr_infrastructure.workload_spoke_a_prd_failover
+  transit_gateway_attachment_id  = data.aws_ec2_transit_gateway_vpc_attachment.tgw_post_inspection_failover[0].id
+  transit_gateway_route_table_id = data.aws_ec2_transit_gateway_route_table.tgw_post_inspection_failover[0].id
+}
+
+resource "aws_ec2_transit_gateway_route" "post_inspection_workload_spoke_a_failover_primary" {
+  provider = aws.networking_prd_failover
+
+  count = var.create_failover_region ? 1 : 0
+
+  destination_cidr_block         = var.vpc_cidr_infrastructure.workload_spoke_a_prd_primary
+  transit_gateway_attachment_id  = data.aws_ec2_transit_gateway_peering_attachment.tgw_peer_primary[0].id
+  transit_gateway_route_table_id = data.aws_ec2_transit_gateway_route_table.tgw_post_inspection_failover[0].id
 }

@@ -25,7 +25,7 @@ resource "aws_ec2_transit_gateway_route_table" "post_inspection_failover" {
 
   transit_gateway_id = aws_ec2_transit_gateway.tgw_failover[0].id
 
-  tags = { Name = "${local.resource_name_stub_primary}-${var.this_slug}-tgw-post-inspection" }
+  tags = { Name = "${local.resource_name_stub_failover}-${var.this_slug}-tgw-post-inspection" }
 }
 
 resource "aws_ec2_transit_gateway_route" "post_inspection_inbound_failover" {
