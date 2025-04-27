@@ -1,6 +1,6 @@
 module "iam_assumable_roles_workload_spoke_prd" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-assumable-roles"
-  version   = "5.54.0"
+  version   = "5.55.0"
   providers = { aws = aws.workload_spoke_prd_primary }
 
   trusted_role_arns = [

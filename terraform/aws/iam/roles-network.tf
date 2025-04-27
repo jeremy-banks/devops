@@ -1,6 +1,6 @@
 module "iam_assumable_roles_network_prd" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-assumable-roles"
-  version   = "5.54.0"
+  version   = "5.55.0"
   providers = { aws = aws.network_prd }
 
   trusted_role_arns = [
