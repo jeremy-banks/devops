@@ -136,8 +136,8 @@ module "s3_tfstate_backend_primary" {
 
   intelligent_tiering = {
     general = {
-      status = "Enabled"
-      filter = { prefix = "/" }
+      status  = "Enabled"
+      filter  = { prefix = "/" }
       tiering = { ARCHIVE_ACCESS = { days = 90 } }
     }
   }
@@ -324,8 +324,8 @@ module "s3_tfstate_backend_failover" {
 
   intelligent_tiering = {
     general = {
-      status = "Enabled"
-      filter = { prefix = "/" }
+      status  = "Enabled"
+      filter  = { prefix = "/" }
       tiering = { ARCHIVE_ACCESS = { days = 90 } }
     }
   }
