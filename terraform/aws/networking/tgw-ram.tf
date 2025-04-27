@@ -1,49 +1,94 @@
-# resource "aws_ram_resource_share" "tgw_primary" {
-#   provider = aws.network_prd
+resource "aws_ram_resource_share" "tgw_primary" {
+  provider = aws.networking_prd
 
-#   name                      = "tgw-${var.region.primary_short}"
-#   allow_external_principals = false
-# }
+  name                      = "tgw-${var.region.primary_short}"
+  allow_external_principals = false
+}
 
-# resource "aws_ram_resource_association" "tgw_primary_ram" {
-#   provider = aws.network_prd
+resource "aws_ram_resource_association" "tgw_ram_primary" {
+  provider = aws.networking_prd
 
-#   resource_arn       = aws_ec2_transit_gateway.tgw_primary.arn
-#   resource_share_arn = aws_ram_resource_share.tgw_primary.arn
-# }
+  resource_arn       = aws_ec2_transit_gateway.tgw_primary.arn
+  resource_share_arn = aws_ram_resource_share.tgw_primary.arn
+}
 
-# resource "aws_ram_principal_association" "tgw_primary_ous" {
-#   provider = aws.network_prd
+data "aws_organizations_organizational_unit" "infrastructure" {
+  parent_id = data.aws_organizations_organization.this.roots[0].id
+  name      = "infrastructure"
+}
 
-#   count = length(data.aws_organizations_organizational_units.top_level.children[*].arn)
+data "aws_organizations_organizational_unit" "security" {
+  parent_id = data.aws_organizations_organization.this.roots[0].id
+  name      = "security"
+}
 
-#   principal          = data.aws_organizations_organizational_units.top_level.children[count.index].arn
-#   resource_share_arn = aws_ram_resource_share.tgw_primary.arn
-# }
+data "aws_organizations_organizational_unit" "workloads" {
+  parent_id = data.aws_organizations_organization.this.roots[0].id
+  name      = "workloads"
+}
 
-# resource "aws_ram_resource_share" "tgw_failover" {
-#   provider = aws.network_prd_failover
+resource "aws_ram_principal_association" "tgw_ram_ou_infrastructure_primary" {
+  provider = aws.networking_prd
 
-#   count = var.create_failover_region ? 1 : 0
+  principal          = data.aws_organizations_organizational_unit.infrastructure.arn
+  resource_share_arn = aws_ram_resource_share.tgw_primary.arn
+}
 
-#   name                      = "tgw-${var.region.failover_short}"
-#   allow_external_principals = false
-# }
+resource "aws_ram_principal_association" "tgw_ram_ou_security_primary" {
+  provider = aws.networking_prd
 
-# resource "aws_ram_resource_association" "tgw_failover_ram" {
-#   provider = aws.network_prd_failover
+  principal          = data.aws_organizations_organizational_unit.security.arn
+  resource_share_arn = aws_ram_resource_share.tgw_primary.arn
+}
 
-#   count = var.create_failover_region ? 1 : 0
+resource "aws_ram_principal_association" "tgw_ram_ou_workloads_primary" {
+  provider = aws.networking_prd
 
-#   resource_arn       = aws_ec2_transit_gateway.tgw_failover[0].arn
-#   resource_share_arn = aws_ram_resource_share.tgw_failover[0].arn
-# }
+  principal          = data.aws_organizations_organizational_unit.workloads.arn
+  resource_share_arn = aws_ram_resource_share.tgw_primary.arn
+}
 
-# resource "aws_ram_principal_association" "tgw_failover_ous" {
-#   provider = aws.network_prd_failover
+resource "aws_ram_resource_share" "tgw_failover" {
+  provider = aws.networking_prd_failover
 
-#   count = var.create_failover_region && length(data.aws_organizations_organizational_units.top_level.children[*].arn) > 0 ? length(data.aws_organizations_organizational_units.top_level.children[*].arn) : 0
+  count = var.create_failover_region ? 1 : 0
 
-#   principal          = data.aws_organizations_organizational_units.top_level.children[count.index].arn
-#   resource_share_arn = aws_ram_resource_share.tgw_failover[0].arn
-# }
+  name                      = "tgw-${var.region.failover_short}"
+  allow_external_principals = false
+}
+
+resource "aws_ram_resource_association" "tgw_ram_failover" {
+  provider = aws.networking_prd_failover
+
+  count = var.create_failover_region ? 1 : 0
+
+  resource_arn       = aws_ec2_transit_gateway.tgw_failover[0].arn
+  resource_share_arn = aws_ram_resource_share.tgw_failover[0].arn
+}
+
+resource "aws_ram_principal_association" "tgw_ram_ou_infrastructure_failover" {
+  provider = aws.networking_prd_failover
+
+  count = var.create_failover_region ? 1 : 0
+
+  principal          = data.aws_organizations_organizational_unit.infrastructure.arn
+  resource_share_arn = aws_ram_resource_share.tgw_failover[0].arn
+}
+
+resource "aws_ram_principal_association" "tgw_ram_ou_security_failover" {
+  provider = aws.networking_prd_failover
+
+  count = var.create_failover_region ? 1 : 0
+
+  principal          = data.aws_organizations_organizational_unit.security.arn
+  resource_share_arn = aws_ram_resource_share.tgw_failover[0].arn
+}
+
+resource "aws_ram_principal_association" "tgw_ram_ou_workloads_failover" {
+  provider = aws.networking_prd_failover
+
+  count = var.create_failover_region ? 1 : 0
+
+  principal          = data.aws_organizations_organizational_unit.workloads.arn
+  resource_share_arn = aws_ram_resource_share.tgw_failover[0].arn
+}
