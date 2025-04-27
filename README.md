@@ -23,42 +23,11 @@
 - [Guidance to Render Unsecured PHI Unusable](https://www.hhs.gov/hipaa/for-professionals/breach-notification/guidance/index.html)
 
 ## Notes
+you need to identify a firewall policy that 'works for now' so you can esablish a k8s cluster
 
-inbound
-    inbound vpc
-    tgw
-    inspection vpc
-    tgw
-    spoke vpc
+'sharing' public subnets so k8s can make albs?
 
-outbound
-    spoke vpc
-    tgw
-    inspection vpc
-    tgw
-    outbound vpc
-
-
-you need to establish and define what a "spoke" is now
-
-and its interaction with the network vpc
-especially the connection with the post-inspection route table
-
-then you need to identify a firewall policy that 'works for now' so you can esablish a k8s cluster
-
-*inbound routes
-*pre-inspection tgw routes
-*    routes
-    associations
-post-inspection tgw routes
-    routes
-    associations
-*inspection  vpc
-*outbound routes
-
-outbound endpoints
-
-workloads vpc
+outbound endpoints for s3, kms, rds
 
 rework the eks stuff
 append k8s 'bare meta'
