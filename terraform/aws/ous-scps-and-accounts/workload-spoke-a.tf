@@ -1,6 +1,6 @@
-resource "aws_organizations_account" "workload_spoke_prd" {
-  name  = "spoke-prd"
-  email = local.account_owner_email.workload_spoke_prd
+resource "aws_organizations_account" "workload_spoke_a_prd" {
+  name  = "spoke-a-prd"
+  email = local.account_owner_email.workload_spoke_a_prd
 
   close_on_deletion          = true
   create_govcloud            = false

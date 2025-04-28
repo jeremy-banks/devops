@@ -13,3 +13,11 @@ output "networking_prd" {
 # output "security_tooling_prd" {
 #   value = aws_organizations_account.security_tooling_prd.id
 # }
+
+output "workload_spoke_a_prd" {
+  value = aws_organizations_account.workload_spoke_a_prd.id
+}
+
+output "workload_spoke_b_prd" {
+  value = aws_organizations_account.workload_spoke_b_prd.id
+}

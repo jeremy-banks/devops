@@ -85,15 +85,17 @@ module "vpc_inspection_endpoints_failover" {
 
   vpc_id = module.vpc_inspection_failover[0].vpc_id
 
-  create_security_group      = true
-  security_group_name_prefix = "${local.resource_name_stub_failover}-vpc-endpoint-network-firewall"
-  security_group_rules       = { ingress_https = { cidr_blocks = ["0.0.0.0/0"] } }
+  create_security_group = false
+  # create_security_group      = true
+  # security_group_name_prefix = "${local.resource_name_stub_failover}-${var.this_slug}-inspection-firewall-sg"
+  # security_group_rules       = { ingress_https = { cidr_blocks = ["0.0.0.0/0"] } }
 
   endpoints = {
     network-firewall-fips = {
       service             = "network-firewall-fips"
       private_dns_enabled = true
       subnet_ids          = module.vpc_inspection_failover[0].private_subnets
+      security_group_ids  = [module.sg_inspection_main_failover[0].security_group_id]
     }
   }
 }
