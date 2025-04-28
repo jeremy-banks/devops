@@ -1,11 +1,11 @@
 #!/bin/bash
 
 #asynchronous self termination for cost conservation
-(
-  sleep 55
-  THIS_INSTANCE_ID=$(ec2-metadata --instance-id | awk '{print $2}')
+nohup bash -c '
+  sleep 240
+  THIS_INSTANCE_ID=$(ec2-metadata --instance-id | awk "{print \$2}")
   aws ec2 terminate-instances --instance-ids "$THIS_INSTANCE_ID" --region ${this_instance_region}
-) &
+' >/dev/null 2>&1 &
 
 #install, configure, and start awslogs
 sudo yum update -y
