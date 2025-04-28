@@ -6,11 +6,11 @@ cat > /etc/awslogs/awslogs.conf <<CONFIG
 [general]
 state_file = /var/lib/awslogs/agent-state
 
-[/var/log/cloud-init.log]
-file = /var/log/cloud-init.log
-log_group_name = /ec2/user-data-output
+[/var/log/userdata.log]
+file = /var/log/userdata.log
+log_group_name = tests-networking
 log_stream_name = ${instance_name}
-datetime_format = %Y-%m-%dT%H:%M:%S
+datetime_format = %Y-%m-%d %H:%M:%S
 CONFIG
 
 sed -i "s/region = .*/region = ${instance_region}/" /etc/awslogs/awscli.conf
@@ -18,7 +18,9 @@ sed -i "s/region = .*/region = ${instance_region}/" /etc/awslogs/awscli.conf
 sudo systemctl enable awslogsd
 sudo systemctl start awslogsd
 
-ping google.com
+exec > >(tee /var/log/userdata.log | logger -t user-data -s 2>/dev/console) 2>&1
+
+ping -c 10 google.com
 
 THIS_INSTANCE_ID=$(ec2-metadata --instance-id | awk '{print $2}')
 

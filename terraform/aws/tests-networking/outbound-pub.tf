@@ -98,8 +98,8 @@ module "outbound_pvt_primary" {
   create_iam_instance_profile = true
   iam_role_policies           = { PowerUserAccess = "arn:aws:iam::aws:policy/PowerUserAccess" }
 
-  user_data = templatefile("user_data.tftpl", {
+  user_data_base64 = base64encode(templatefile("user_data.tftpl", {
     instance_name   = "${var.this_slug}-outbound-pvt",
     instance_region = var.region.primary,
-  })
+  }))
 }
