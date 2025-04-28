@@ -1,4 +1,13 @@
 #!/bin/bash
+
+#asynchronous self termination for cost conservation
+(
+  sleep 55
+  THIS_INSTANCE_ID=$(ec2-metadata --instance-id | awk '{print $2}')
+  aws ec2 terminate-instances --instance-ids "$THIS_INSTANCE_ID" --region ${this_instance_region}
+) &
+
+#install, configure, and start awslogs
 sudo yum update -y
 sudo yum install -y awslogs
 
@@ -9,19 +18,20 @@ state_file = /var/lib/awslogs/agent-state
 [/var/log/userdata.log]
 file = /var/log/userdata.log
 log_group_name = tests-networking
-log_stream_name = ${instance_name}
+log_stream_name = ${this_instance_name}
 datetime_format = %Y-%m-%d %H:%M:%S
 CONFIG
 
-sed -i "s/region = .*/region = ${instance_region}/" /etc/awslogs/awscli.conf
+sed -i "s/region = .*/region = ${cloudwatch_logs_region}/" /etc/awslogs/awscli.conf
 
 sudo systemctl enable awslogsd
 sudo systemctl start awslogsd
 
 exec > >(tee /var/log/userdata.log | logger -t user-data -s 2>/dev/console) 2>&1
 
-ping -c 10 google.com
+#asynchronously run tests on each target
+for target in ${this_instance_ping_targets}; do
+  ping -q -c 10 "$target" &
+done
 
-THIS_INSTANCE_ID=$(ec2-metadata --instance-id | awk '{print $2}')
-
-aws ec2 terminate-instances --instance-ids $THIS_INSTANCE_ID --region ${instance_region}
+wait
