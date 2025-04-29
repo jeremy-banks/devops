@@ -24,8 +24,7 @@ module "inbound_primary" {
   associate_public_ip_address = true
   key_name                    = "me"
 
-  create_iam_instance_profile = true
-  iam_role_policies           = { PowerUserAccess = "arn:aws:iam::aws:policy/PowerUserAccess" }
+  iam_instance_profile = aws_iam_role.tests_networking_prd.name
 
   user_data = templatefile("user_data.tftpl", {
     cloudwatch_logs_region = var.region.primary,
@@ -61,8 +60,7 @@ module "inspection_primary" {
   #   associate_public_ip_address = true
   key_name = "me"
 
-  create_iam_instance_profile = true
-  iam_role_policies           = { PowerUserAccess = "arn:aws:iam::aws:policy/PowerUserAccess" }
+  iam_instance_profile = aws_iam_role.tests_networking_prd.name
 
   user_data = templatefile("user_data.tftpl", {
     cloudwatch_logs_region = var.region.primary,
@@ -128,8 +126,7 @@ module "outbound_primary" {
   associate_public_ip_address = true
   key_name                    = "me"
 
-  create_iam_instance_profile = true
-  iam_role_policies           = { PowerUserAccess = "arn:aws:iam::aws:policy/PowerUserAccess" }
+  iam_instance_profile = aws_iam_role.tests_networking_prd.name
 
   user_data = templatefile("user_data.tftpl", {
     cloudwatch_logs_region = var.region.primary,
