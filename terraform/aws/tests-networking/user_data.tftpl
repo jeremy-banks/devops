@@ -53,6 +53,7 @@ STOP_SLEEP_SECONDS=$((STOP_TARGET_TIME - CURRENT_TIME))
 
 # if there are stop sleep seconds we wait
 if [ "$STOP_SLEEP_SECONDS" -gt 0 ]; then
+  echo "terminating instance in $STOP_SLEEP_SECONDS seconds at $STOP_TARGET_TIME"
   sleep "$STOP_SLEEP_SECONDS"
 fi
 
