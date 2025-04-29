@@ -13,7 +13,7 @@ module "inbound_primary" {
 
   name = "inbound-primary-${local.test_start}"
 
-  ami           = data.aws_ami.amazon_linux.id
+  ami           = data.aws_ami.amazon_linux_primary.id
   instance_type = "t4g.nano"
 
   subnet_id              = data.aws_subnets.inbound_primary.ids[0]
@@ -49,7 +49,7 @@ module "inspection_primary" {
 
   name = "inspection-primary-${local.test_start}"
 
-  ami           = data.aws_ami.amazon_linux.id
+  ami           = data.aws_ami.amazon_linux_primary.id
   instance_type = "t4g.nano"
 
   subnet_id              = data.aws_subnets.inspection_primary.ids[0]
@@ -85,7 +85,7 @@ module "inspection_failover" {
 
   name = "inspection-failover-${local.test_start}"
 
-  ami           = data.aws_ami.amazon_linux.id
+  ami           = data.aws_ami.amazon_linux_failover.id
   instance_type = "t4g.nano"
 
   subnet_id              = element(data.aws_subnets.inspection_failover[0].ids, 0)
@@ -121,7 +121,7 @@ module "outbound_primary" {
 
   name = "outbound-primary-${local.test_start}"
 
-  ami           = data.aws_ami.amazon_linux.id
+  ami           = data.aws_ami.amazon_linux_primary.id
   instance_type = "t4g.nano"
 
   subnet_id              = data.aws_subnets.outbound_primary.ids[0]
@@ -156,7 +156,7 @@ module "spoke_a_prd_primary" {
 
   name = "spoke-a-prd-primary-${local.test_start}"
 
-  ami           = data.aws_ami.amazon_linux.id
+  ami           = data.aws_ami.amazon_linux_primary.id
   instance_type = "t4g.nano"
 
   subnet_id              = data.aws_subnets.spoke_a_prd_primary.ids[0]
@@ -191,7 +191,7 @@ module "spoke_a_prd_failover" {
 
   name = "spoke-a-prd-failover-${local.test_start}"
 
-  ami           = data.aws_ami.amazon_linux.id
+  ami           = data.aws_ami.amazon_linux_failover.id
   instance_type = "t4g.nano"
 
   subnet_id              = data.aws_subnets.spoke_a_prd_failover[0].ids[0]
@@ -226,7 +226,7 @@ module "spoke_b_prd_primary" {
 
   name = "spoke-b-prd-primary-${local.test_start}"
 
-  ami           = data.aws_ami.amazon_linux.id
+  ami           = data.aws_ami.amazon_linux_primary.id
   instance_type = "t4g.nano"
 
   subnet_id              = data.aws_subnets.spoke_b_prd_primary.ids[0]

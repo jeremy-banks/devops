@@ -6,12 +6,29 @@ locals {
   test_stop    = formatdate("YYYYMMDDhhmmss", timeadd(local.current_time, "120s"))
 }
 
-data "aws_ami" "amazon_linux" {
+data "aws_ami" "amazon_linux_primary" {
   provider = aws.networking_prd
 
   filter {
     name   = "image-id"
     values = ["ami-03887e047a13b89aa"]
+  }
+
+  #   most_recent = true
+  #   owners      = ["amazon"]
+
+  #   filter {
+  #     name   = "name"
+  #     values = ["amzn2-ami-hvm-*-arm64-gp2"]
+  #   }
+}
+
+data "aws_ami" "amazon_linux_failover" {
+  provider = aws.networking_prd_failover
+
+  filter {
+    name   = "image-id"
+    values = ["ami-0f79869174a04921d"]
   }
 
   #   most_recent = true

@@ -93,6 +93,6 @@ resource "aws_iam_role_policy_attachment" "tests_workload_spoke_b_prd" {
 resource "aws_iam_instance_profile" "tests_workload_spoke_b_prd" {
   provider = aws.workload_spoke_b_prd
 
-  name = "ec2-poweruser-instance-profile"
+  name = "tests-networking"
   role = aws_iam_role.tests_workload_spoke_b_prd.name
 }
