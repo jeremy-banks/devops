@@ -11,7 +11,7 @@ state_file = /var/lib/awslogs/agent-state
 [/var/log/userdata.log]
 file = /var/log/userdata.log
 log_group_name = tests-networking
-log_stream_name = ${this_instance_name}
+log_stream_name = ${this_instance_name}-${test_start_time}
 datetime_format = %Y-%m-%d %H:%M:%S
 CONFIG
 

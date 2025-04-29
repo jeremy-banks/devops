@@ -29,7 +29,8 @@ module "inbound_primary" {
 
   user_data = templatefile("user_data.tftpl", {
     cloudwatch_logs_region = var.region.primary,
-    this_instance_name     = "inbound-primary-${local.formatted_timestamp}",
+    test_start_time        = local.formatted_timestamp
+    this_instance_name     = "inbound-primary",
     this_instance_region   = var.region.primary,
     this_instance_ping_targets = join(" ", [
       "127.0.0.1",
@@ -64,7 +65,8 @@ module "inspection_primary" {
 
   user_data = templatefile("user_data.tftpl", {
     cloudwatch_logs_region = var.region.primary,
-    this_instance_name     = "inspection-primary-${local.formatted_timestamp}",
+    test_start_time        = local.formatted_timestamp
+    this_instance_name     = "inspection-primary",
     this_instance_region   = var.region.primary,
     this_instance_ping_targets = join(" ", [
       "127.0.0.1",
@@ -129,7 +131,8 @@ module "outbound_primary" {
 
   user_data = templatefile("user_data.tftpl", {
     cloudwatch_logs_region = var.region.primary,
-    this_instance_name     = "outbound-primary-${local.formatted_timestamp}",
+    test_start_time        = local.formatted_timestamp
+    this_instance_name     = "outbound-primary",
     this_instance_region   = var.region.primary,
     this_instance_ping_targets = join(" ", [
       "127.0.0.1",
