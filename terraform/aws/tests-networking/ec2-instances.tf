@@ -13,7 +13,7 @@ module "inbound_primary" {
 
   #   count = var.azs_used
 
-  name = "inbound-primary-${local.formatted_timestamp}"
+  name = "inbound-primary-${local.test_start}"
 
   ami           = data.aws_ami.amazon_linux.id
   instance_type = "t4g.nano"
@@ -29,7 +29,8 @@ module "inbound_primary" {
 
   user_data = templatefile("user_data.tftpl", {
     cloudwatch_logs_region = var.region.primary,
-    test_start_time        = local.formatted_timestamp
+    test_start             = local.test_start
+    test_stop              = local.test_stop
     this_instance_name     = "inbound-primary",
     this_instance_region   = var.region.primary,
     this_instance_ping_targets = join(" ", [
@@ -49,7 +50,7 @@ module "inspection_primary" {
 
   #   count = var.azs_used
 
-  name = "inspection-primary-${local.formatted_timestamp}"
+  name = "inspection-primary-${local.test_start}"
 
   ami           = data.aws_ami.amazon_linux.id
   instance_type = "t4g.nano"
@@ -65,7 +66,8 @@ module "inspection_primary" {
 
   user_data = templatefile("user_data.tftpl", {
     cloudwatch_logs_region = var.region.primary,
-    test_start_time        = local.formatted_timestamp
+    test_start             = local.test_start
+    test_stop              = local.test_stop
     this_instance_name     = "inspection-primary",
     this_instance_region   = var.region.primary,
     this_instance_ping_targets = join(" ", [
@@ -85,7 +87,7 @@ module "inspection_primary" {
 
 #   #   count = var.azs_used
 
-#   name = "inspection-failover-${local.formatted_timestamp}"
+#   name = "inspection-failover-${local.test_start}"
 
 #   ami           = data.aws_ami.amazon_linux.id
 #   instance_type = "t4g.nano"
@@ -101,7 +103,7 @@ module "inspection_primary" {
 
 #   user_data = templatefile("user_data.tftpl", {
 #     cloudwatch_logs_region     = var.region.primary,
-#     this_instance_name         = "inspection-failover-${local.formatted_timestamp}",
+#     this_instance_name         = "inspection-failover-${local.test_start}",
 #     this_instance_region       = var.region.failover,
 #     this_instance_ping_targets = "google.com",
 #   })
@@ -115,7 +117,7 @@ module "outbound_primary" {
 
   #   count = var.azs_used
 
-  name = "outbound-primary-${local.formatted_timestamp}"
+  name = "outbound-primary-${local.test_start}"
 
   ami           = data.aws_ami.amazon_linux.id
   instance_type = "t4g.nano"
@@ -131,7 +133,8 @@ module "outbound_primary" {
 
   user_data = templatefile("user_data.tftpl", {
     cloudwatch_logs_region = var.region.primary,
-    test_start_time        = local.formatted_timestamp
+    test_start             = local.test_start
+    test_stop              = local.test_stop
     this_instance_name     = "outbound-primary",
     this_instance_region   = var.region.primary,
     this_instance_ping_targets = join(" ", [
@@ -150,7 +153,7 @@ module "outbound_primary" {
 
 #   #   count = var.azs_used
 
-#   name = "spoke-a-primary-${local.formatted_timestamp}"
+#   name = "spoke-a-primary-${local.test_start}"
 
 #   ami           = data.aws_ami.amazon_linux.id
 #   instance_type = "t4g.nano"
@@ -166,7 +169,7 @@ module "outbound_primary" {
 
 #   user_data = templatefile("user_data.tftpl", {
 #     cloudwatch_logs_region = var.region.primary,
-#     this_instance_name     = "spoke-a-primary-${local.formatted_timestamp}",
+#     this_instance_name     = "spoke-a-primary-${local.test_start}",
 #     this_instance_region   = var.region.primary,
 #     this_instance_ping_targets = join(" ", [
 #       module.inspection_primary.private_dns,
@@ -184,7 +187,7 @@ module "outbound_primary" {
 
 #   #   count = var.azs_used
 
-#   name = "spoke-a-failover-${local.formatted_timestamp}"
+#   name = "spoke-a-failover-${local.test_start}"
 
 #   ami           = data.aws_ami.amazon_linux.id
 #   instance_type = "t4g.nano"
@@ -200,7 +203,7 @@ module "outbound_primary" {
 
 #   user_data = templatefile("user_data.tftpl", {
 #     cloudwatch_logs_region     = var.region.primary,
-#     this_instance_name         = "spoke-a-failover-${local.formatted_timestamp}",
+#     this_instance_name         = "spoke-a-failover-${local.test_start}",
 #     this_instance_region       = var.region.failover,
 #     this_instance_ping_targets = "google.com",
 #   })
@@ -214,7 +217,7 @@ module "outbound_primary" {
 
 #   #   count = var.azs_used
 
-#   name = "spoke-b-primary-${local.formatted_timestamp}"
+#   name = "spoke-b-primary-${local.test_start}"
 
 #   ami           = data.aws_ami.amazon_linux.id
 #   instance_type = "t4g.nano"
@@ -230,7 +233,7 @@ module "outbound_primary" {
 
 #   user_data = templatefile("user_data.tftpl", {
 #     cloudwatch_logs_region     = var.region.primary,
-#     this_instance_name         = "spoke-b-primary-${local.formatted_timestamp}",
+#     this_instance_name         = "spoke-b-primary-${local.test_start}",
 #     this_instance_region       = var.region.primary,
 #     this_instance_ping_targets = "google.com",
 #   })

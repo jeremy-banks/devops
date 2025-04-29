@@ -1,6 +1,9 @@
 data "aws_caller_identity" "networking" { provider = aws.networking_prd }
 
-locals { formatted_timestamp = formatdate("YYYYMMDDhhmmss", timestamp()) }
+locals {
+  test_start = formatdate("YYYYMMDDhhmmss", timeadd(timestamp(), "3m"))
+  test_stop  = formatdate("YYYYMMDDhhmmss", timeadd(timestamp(), "4m"))
+}
 
 data "aws_ami" "amazon_linux" {
   provider = aws.networking_prd

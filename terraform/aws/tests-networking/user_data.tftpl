@@ -11,7 +11,7 @@ state_file = /var/lib/awslogs/agent-state
 [/var/log/userdata.log]
 file = /var/log/userdata.log
 log_group_name = tests-networking
-log_stream_name = ${this_instance_name}-${test_start_time}
+log_stream_name = ${this_instance_name}-${test_start}
 datetime_format = %Y-%m-%d %H:%M:%S
 CONFIG
 
@@ -22,14 +22,40 @@ sudo systemctl start awslogsd
 
 exec > >(tee /var/log/userdata.log | logger -t user-data -s 2>/dev/console) 2>&1
 
-#run tests on each target
-for target in ${this_instance_ping_targets}; do
-  ping -q -c 10 -t 2 "$target"
-done
+# wait until current time reaches ${test_start}
+CURRENT_TIME=$(date +'%Y%m%d%H%M%S')
+START_TARGET_TIME="${test_start}"
 
-# wait
+# calculate sleep duration
+START_SLEEP_SECONDS=$((START_TARGET_TIME - CURRENT_TIME))
 
-#asynchronous self termination for cost conservation
+# if there are start sleep seconds we wait
+if [ "$START_SLEEP_SECONDS" -gt 0 ]; then
+  echo "starting tests in $START_SLEEP_SECONDS seconds at $START_TARGET_TIME"
+  sleep "$START_SLEEP_SECONDS"
+
+  # asynchronously run tests on each target
+  for target in ${this_instance_ping_targets}; do
+    ping -q -c 10 -t 2 "$target"
+  done
+
+# if not this is unexpected behavior
+else
+  echo "aborting tests, the target time has already passed"
+fi
+
+# wait until current time reaches ${test_stop} 
+CURRENT_TIME=$(date +'%Y%m%d%H%M%S')
+STOP_TARGET_TIME="${test_stop}"
+
+# calculate sleep duration
+STOP_SLEEP_SECONDS=$((STOP_TARGET_TIME - CURRENT_TIME))
+
+# if there are stop sleep seconds we wait
+if [ "$STOP_SLEEP_SECONDS" -gt 0 ]; then
+  sleep "$STOP_SLEEP_SECONDS"
+fi
+
+# i cannot self terminate, you must lower me into the steel
 THIS_INSTANCE_ID=$(ec2-metadata --instance-id | awk "{print \$2}")
-
 aws ec2 terminate-instances --instance-ids "$THIS_INSTANCE_ID" --region ${this_instance_region}
