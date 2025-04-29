@@ -25,11 +25,11 @@ module "inbound_primary" {
   iam_instance_profile = aws_iam_role.tests_networking_prd.name
 
   user_data = templatefile("user_data.tftpl", {
-    cloudwatch_logs_region = var.region.primary,
+    cloudwatch_logs_region = var.region.primary
     test_start             = local.test_start
     test_stop              = local.test_stop
-    this_instance_name     = "inbound-primary",
-    this_instance_region   = var.region.primary,
+    this_instance_name     = "inbound-primary"
+    this_instance_region   = var.region.primary
     this_instance_ping_targets = join(" ", [
       "127.0.0.1",
       module.outbound_primary.private_dns,
@@ -61,11 +61,11 @@ module "inspection_primary" {
   iam_instance_profile = aws_iam_role.tests_networking_prd.name
 
   user_data = templatefile("user_data.tftpl", {
-    cloudwatch_logs_region = var.region.primary,
+    cloudwatch_logs_region = var.region.primary
     test_start             = local.test_start
     test_stop              = local.test_stop
-    this_instance_name     = "inspection-primary",
-    this_instance_region   = var.region.primary,
+    this_instance_name     = "inspection-primary"
+    this_instance_region   = var.region.primary
     this_instance_ping_targets = join(" ", [
       "127.0.0.1",
       module.outbound_primary.private_dns,
@@ -97,11 +97,11 @@ module "inspection_failover" {
   iam_instance_profile = aws_iam_role.tests_networking_prd.name
 
   user_data = templatefile("user_data.tftpl", {
-    cloudwatch_logs_region = var.region.primary,
+    cloudwatch_logs_region = var.region.primary
     test_start             = local.test_start
     test_stop              = local.test_stop
-    this_instance_name     = "inspection-failover",
-    this_instance_region   = var.region.failover,
+    this_instance_name     = "inspection-failover"
+    this_instance_region   = var.region.failover
     this_instance_ping_targets = join(" ", [
       "127.0.0.1",
       #   module.outbound_failover.private_dns,
@@ -133,11 +133,11 @@ module "outbound_primary" {
   iam_instance_profile = aws_iam_role.tests_networking_prd.name
 
   user_data = templatefile("user_data.tftpl", {
-    cloudwatch_logs_region = var.region.primary,
+    cloudwatch_logs_region = var.region.primary
     test_start             = local.test_start
     test_stop              = local.test_stop
-    this_instance_name     = "outbound-primary",
-    this_instance_region   = var.region.primary,
+    this_instance_name     = "outbound-primary"
+    this_instance_region   = var.region.primary
     this_instance_ping_targets = join(" ", [
       "127.0.0.1",
       "google.com",
@@ -168,11 +168,11 @@ module "spoke_a_prd_primary" {
   iam_instance_profile = aws_iam_role.tests_networking_prd.name
 
   user_data = templatefile("user_data.tftpl", {
-    cloudwatch_logs_region = var.region.primary,
+    cloudwatch_logs_region = var.region.primary
     test_start             = local.test_start
     test_stop              = local.test_stop
-    this_instance_name     = "spoke-a-prd-primary",
-    this_instance_region   = var.region.primary,
+    this_instance_name     = "spoke-a-prd-primary"
+    this_instance_region   = var.region.primary
     this_instance_ping_targets = join(" ", [
       "127.0.0.1",
       "google.com",
@@ -203,11 +203,11 @@ module "spoke_a_prd_failover" {
   iam_instance_profile = aws_iam_role.tests_networking_prd.name
 
   user_data = templatefile("user_data.tftpl", {
-    cloudwatch_logs_region = var.region.primary,
+    cloudwatch_logs_region = var.region.primary
     test_start             = local.test_start
     test_stop              = local.test_stop
-    this_instance_name     = "spoke-a-prd-failover",
-    this_instance_region   = var.region.failover,
+    this_instance_name     = "spoke-a-prd-failover"
+    this_instance_region   = var.region.failover
     this_instance_ping_targets = join(" ", [
       "127.0.0.1",
       "google.com",
@@ -238,11 +238,11 @@ module "spoke_b_prd_primary" {
   iam_instance_profile = aws_iam_role.tests_networking_prd.name
 
   user_data = templatefile("user_data.tftpl", {
-    cloudwatch_logs_region = var.region.primary,
+    cloudwatch_logs_region = var.region.primary
     test_start             = local.test_start
     test_stop              = local.test_stop
-    this_instance_name     = "spoke-b-prd-primary",
-    this_instance_region   = var.region.primary,
+    this_instance_name     = "spoke-b-prd-primary"
+    this_instance_region   = var.region.primary
     this_instance_ping_targets = join(" ", [
       "127.0.0.1",
       "google.com",
