@@ -16,7 +16,7 @@ module "inbound_primary" {
   ami           = data.aws_ami.amazon_linux.id
   instance_type = "t4g.nano"
 
-  subnet_id              = element(data.aws_subnets.inbound_primary.ids, 0)
+  subnet_id              = data.aws_subnets.inbound_primary.ids[0]
   vpc_security_group_ids = [data.aws_security_group.inbound_primary.id]
 
   associate_public_ip_address = true
@@ -52,7 +52,7 @@ module "inspection_primary" {
   ami           = data.aws_ami.amazon_linux.id
   instance_type = "t4g.nano"
 
-  subnet_id              = element(data.aws_subnets.inspection_primary.ids, 0)
+  subnet_id              = data.aws_subnets.inspection_primary.ids[0]
   vpc_security_group_ids = [data.aws_security_group.inspection_primary.id]
 
   #   associate_public_ip_address = true
@@ -124,7 +124,7 @@ module "outbound_primary" {
   ami           = data.aws_ami.amazon_linux.id
   instance_type = "t4g.nano"
 
-  subnet_id              = element(data.aws_subnets.outbound_primary.ids, 0)
+  subnet_id              = data.aws_subnets.outbound_primary.ids[0]
   vpc_security_group_ids = [data.aws_security_group.outbound_primary.id]
 
   associate_public_ip_address = true
