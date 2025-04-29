@@ -36,7 +36,7 @@ if [ "$START_SLEEP_SECONDS" -gt 0 ]; then
 
   # asynchronously run tests on each target
   for target in ${this_instance_ping_targets}; do
-    ping -q -c 10 -t 2 "$target"
+    ping -q -c 10 -t 2 "$target" &
   done
 
 # if not this is unexpected behavior
