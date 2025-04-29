@@ -139,12 +139,28 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_workload_spoke_a_to_tgw_p
   tags = { Name = "${local.resource_name_stub_primary}-${var.this_slug}-tgw-attach" }
 }
 
+resource "aws_ec2_transit_gateway_route_table_association" "vpc_workload_spoke_a_to_tgw_primary" {
+  provider = aws.networking_prd
+
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.vpc_workload_spoke_a_to_tgw_primary.id
+  transit_gateway_route_table_id = data.aws_ec2_transit_gateway_route_table.tgw_pre_inspection_primary.id
+}
+
 data "aws_ec2_transit_gateway_vpc_attachment" "tgw_post_inspection_primary" {
   provider = aws.networking_prd
 
   filter {
     name   = "tag:Name"
     values = ["${local.resource_name_stub_primary}-network-tgw-attach-inspection-vpc"]
+  }
+}
+
+data "aws_ec2_transit_gateway_route_table" "tgw_pre_inspection_primary" {
+  provider = aws.networking_prd
+
+  filter {
+    name   = "tag:Name"
+    values = ["${local.resource_name_stub_primary}-network-tgw-pre-inspection"]
   }
 }
 

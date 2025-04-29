@@ -104,7 +104,7 @@ resource "aws_route" "private_to_tgw_failover" {
 
   route_table_id         = module.vpc_failover[0].private_route_table_ids[count.index]
   destination_cidr_block = "0.0.0.0/0"
-  transit_gateway_id     = data.aws_ec2_transit_gateway.tgw_failover.id
+  transit_gateway_id     = data.aws_ec2_transit_gateway.tgw_failover[0].id
 }
 
 resource "aws_route" "intra_to_tgw_failover" {
@@ -114,11 +114,13 @@ resource "aws_route" "intra_to_tgw_failover" {
 
   route_table_id         = module.vpc_failover[0].intra_route_table_ids[count.index]
   destination_cidr_block = "0.0.0.0/0"
-  transit_gateway_id     = data.aws_ec2_transit_gateway.tgw_failover.id
+  transit_gateway_id     = data.aws_ec2_transit_gateway.tgw_failover[0].id
 }
 
 data "aws_ec2_transit_gateway" "tgw_failover" {
   provider = aws.networking_prd_failover
+
+  count = var.create_failover_region ? 1 : 0
 
   filter {
     name   = "options.amazon-side-asn"
@@ -132,7 +134,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_workload_spoke_a_to_tgw_f
   count = var.create_failover_region ? 1 : 0
 
   subnet_ids         = module.vpc_failover[0].intra_subnets
-  transit_gateway_id = data.aws_ec2_transit_gateway.tgw_failover.id
+  transit_gateway_id = data.aws_ec2_transit_gateway.tgw_failover[0].id
   vpc_id             = module.vpc_failover[0].vpc_id
 
   appliance_mode_support             = "disable"
@@ -145,6 +147,15 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_workload_spoke_a_to_tgw_f
   tags = { Name = "${local.resource_name_stub_failover}-${var.this_slug}-tgw-attach" }
 }
 
+resource "aws_ec2_transit_gateway_route_table_association" "vpc_workload_spoke_a_to_tgw_failover" {
+  provider = aws.networking_prd_failover
+
+  count = var.create_failover_region ? 1 : 0
+
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.vpc_workload_spoke_a_to_tgw_failover[0].id
+  transit_gateway_route_table_id = data.aws_ec2_transit_gateway_route_table.tgw_pre_inspection_failover[0].id
+}
+
 data "aws_ec2_transit_gateway_vpc_attachment" "tgw_post_inspection_failover" {
   provider = aws.networking_prd_failover
 
@@ -153,6 +164,17 @@ data "aws_ec2_transit_gateway_vpc_attachment" "tgw_post_inspection_failover" {
   filter {
     name   = "tag:Name"
     values = ["${local.resource_name_stub_failover}-network-tgw-attach-inspection-vpc"]
+  }
+}
+
+data "aws_ec2_transit_gateway_route_table" "tgw_pre_inspection_failover" {
+  provider = aws.networking_prd_failover
+
+  count = var.create_failover_region ? 1 : 0
+
+  filter {
+    name   = "tag:Name"
+    values = ["${local.resource_name_stub_failover}-network-tgw-pre-inspection"]
   }
 }
 

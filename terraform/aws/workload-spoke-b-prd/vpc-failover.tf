@@ -145,6 +145,15 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_workload_spoke_b_to_tgw_f
   tags = { Name = "${local.resource_name_stub_failover}-${var.this_slug}-tgw-attach" }
 }
 
+resource "aws_ec2_transit_gateway_route_table_association" "vpc_workload_spoke_b_to_tgw_failover" {
+  provider = aws.networking_prd_failover
+
+  count = var.create_failover_region ? 1 : 0
+
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.vpc_workload_spoke_b_to_tgw_failover[0].id
+  transit_gateway_route_table_id = data.aws_ec2_transit_gateway_route_table.tgw_pre_inspection_failover[0].id
+}
+
 data "aws_ec2_transit_gateway_vpc_attachment" "tgw_post_inspection_failover" {
   provider = aws.networking_prd_failover
 
@@ -153,6 +162,17 @@ data "aws_ec2_transit_gateway_vpc_attachment" "tgw_post_inspection_failover" {
   filter {
     name   = "tag:Name"
     values = ["${local.resource_name_stub_failover}-network-tgw-attach-inspection-vpc"]
+  }
+}
+
+data "aws_ec2_transit_gateway_route_table" "tgw_pre_inspection_failover" {
+  provider = aws.networking_prd_failover
+
+  count = var.create_failover_region ? 1 : 0
+
+  filter {
+    name   = "tag:Name"
+    values = ["${local.resource_name_stub_failover}-network-tgw-pre-inspection"]
   }
 }
 
