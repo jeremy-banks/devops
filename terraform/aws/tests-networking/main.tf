@@ -5,13 +5,18 @@ locals { formatted_timestamp = formatdate("YYYYMMDDhhmmss", timestamp()) }
 data "aws_ami" "amazon_linux" {
   provider = aws.networking_prd
 
-  most_recent = true
-  owners      = ["amazon"]
-
   filter {
-    name   = "name"
-    values = ["amzn2-ami-hvm-*-arm64-gp2"]
+    name   = "image-id"
+    values = ["ami-03887e047a13b89aa"]
   }
+
+  #   most_recent = true
+  #   owners      = ["amazon"]
+
+  #   filter {
+  #     name   = "name"
+  #     values = ["amzn2-ami-hvm-*-arm64-gp2"]
+  #   }
 }
 
 #keypairs

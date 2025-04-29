@@ -1,15 +1,8 @@
 #!/bin/bash
 
-#asynchronous self termination for cost conservation
-nohup bash -c '
-  sleep 240
-  THIS_INSTANCE_ID=$(ec2-metadata --instance-id | awk "{print \$2}")
-  aws ec2 terminate-instances --instance-ids "$THIS_INSTANCE_ID" --region ${this_instance_region}
-' >/dev/null 2>&1 &
-
 #install, configure, and start awslogs
-sudo yum update -y
-sudo yum install -y awslogs
+# sudo yum update -y
+# sudo yum install -y awslogs
 
 cat > /etc/awslogs/awslogs.conf <<CONFIG
 [general]
@@ -29,9 +22,14 @@ sudo systemctl start awslogsd
 
 exec > >(tee /var/log/userdata.log | logger -t user-data -s 2>/dev/console) 2>&1
 
-#asynchronously run tests on each target
+#run tests on each target
 for target in ${this_instance_ping_targets}; do
-  ping -q -c 10 "$target" &
+  ping -q -c 10 -t 2 "$target"
 done
 
-wait
+# wait
+
+#asynchronous self termination for cost conservation
+THIS_INSTANCE_ID=$(ec2-metadata --instance-id | awk "{print \$2}")
+
+aws ec2 terminate-instances --instance-ids "$THIS_INSTANCE_ID" --region ${this_instance_region}
