@@ -36,25 +36,25 @@ data "aws_key_pair" "network_failover" {
   key_name = "me"
 }
 
-data "aws_key_pair" "spoke_a_primary" {
+data "aws_key_pair" "spoke_a_prd_primary" {
   provider = aws.workload_spoke_a_prd
 
   key_name = "me"
 }
 
-data "aws_key_pair" "spoke_a_failover" {
+data "aws_key_pair" "spoke_a_prd_failover" {
   provider = aws.workload_spoke_a_prd_failover
 
   key_name = "me"
 }
 
-data "aws_key_pair" "spoke_b_primary" {
+data "aws_key_pair" "spoke_b_prd_primary" {
   provider = aws.workload_spoke_b_prd
 
   key_name = "me"
 }
 
-data "aws_key_pair" "spoke_b_failover" {
+data "aws_key_pair" "spoke_b_prd_failover" {
   provider = aws.workload_spoke_b_prd_failover
 
   key_name = "me"
@@ -128,6 +128,8 @@ data "aws_security_group" "inspection_primary" {
 data "aws_vpc" "inspection_failover" {
   provider = aws.networking_prd_failover
 
+  count = var.create_failover_region ? 1 : 0
+
   filter {
     name   = "cidr-block"
     values = [var.vpc_cidr_infrastructure.inspection_failover]
@@ -137,9 +139,11 @@ data "aws_vpc" "inspection_failover" {
 data "aws_subnets" "inspection_failover" {
   provider = aws.networking_prd_failover
 
+  count = var.create_failover_region ? 1 : 0
+
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.inspection_failover.id]
+    values = [data.aws_vpc.inspection_failover[0].id]
   }
 
   tags = { Name = "*-firewall-*" }
@@ -148,9 +152,11 @@ data "aws_subnets" "inspection_failover" {
 data "aws_security_group" "inspection_failover" {
   provider = aws.networking_prd_failover
 
+  count = var.create_failover_region ? 1 : 0
+
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.inspection_failover.id]
+    values = [data.aws_vpc.inspection_failover[0].id]
   }
 
   tags = { Name = "*-main-sg" }
@@ -189,7 +195,7 @@ data "aws_security_group" "outbound_primary" {
 }
 
 #spoke-a-primary
-data "aws_vpc" "spoke_a_primary" {
+data "aws_vpc" "spoke_a_prd_primary" {
   provider = aws.workload_spoke_a_prd
 
   filter {
@@ -198,31 +204,33 @@ data "aws_vpc" "spoke_a_primary" {
   }
 }
 
-data "aws_subnets" "spoke_a_primary" {
+data "aws_subnets" "spoke_a_prd_primary" {
   provider = aws.workload_spoke_a_prd
 
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.spoke_a_primary.id]
+    values = [data.aws_vpc.spoke_a_prd_primary.id]
   }
 
   tags = { Name = "*-pvt-*" }
 }
 
-data "aws_security_group" "spoke_a_primary" {
+data "aws_security_group" "spoke_a_prd_primary" {
   provider = aws.workload_spoke_a_prd
 
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.spoke_a_primary.id]
+    values = [data.aws_vpc.spoke_a_prd_primary.id]
   }
 
   tags = { Name = "*-main-sg" }
 }
 
 #spoke-a-failover
-data "aws_vpc" "spoke_a_failover" {
+data "aws_vpc" "spoke_a_prd_failover" {
   provider = aws.workload_spoke_a_prd_failover
+
+  count = var.create_failover_region ? 1 : 0
 
   filter {
     name   = "cidr-block"
@@ -230,30 +238,34 @@ data "aws_vpc" "spoke_a_failover" {
   }
 }
 
-data "aws_subnets" "spoke_a_failover" {
+data "aws_subnets" "spoke_a_prd_failover" {
   provider = aws.workload_spoke_a_prd_failover
+
+  count = var.create_failover_region ? 1 : 0
 
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.spoke_a_failover.id]
+    values = [data.aws_vpc.spoke_a_prd_failover[0].id]
   }
 
   tags = { Name = "*-pvt-*" }
 }
 
-data "aws_security_group" "spoke_a_failover" {
+data "aws_security_group" "spoke_a_prd_failover" {
   provider = aws.workload_spoke_a_prd_failover
+
+  count = var.create_failover_region ? 1 : 0
 
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.spoke_a_failover.id]
+    values = [data.aws_vpc.spoke_a_prd_failover[0].id]
   }
 
   tags = { Name = "*-main-sg" }
 }
 
 #spoke-b-primary
-data "aws_vpc" "spoke_b_primary" {
+data "aws_vpc" "spoke_b_prd_primary" {
   provider = aws.workload_spoke_b_prd
 
   filter {
@@ -262,23 +274,23 @@ data "aws_vpc" "spoke_b_primary" {
   }
 }
 
-data "aws_subnets" "spoke_b_primary" {
+data "aws_subnets" "spoke_b_prd_primary" {
   provider = aws.workload_spoke_b_prd
 
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.spoke_b_primary.id]
+    values = [data.aws_vpc.spoke_b_prd_primary.id]
   }
 
   tags = { Name = "*-pvt-*" }
 }
 
-data "aws_security_group" "spoke_b_primary" {
+data "aws_security_group" "spoke_b_prd_primary" {
   provider = aws.workload_spoke_b_prd
 
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.spoke_b_primary.id]
+    values = [data.aws_vpc.spoke_b_prd_primary.id]
   }
 
   tags = { Name = "*-main-sg" }
