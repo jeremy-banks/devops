@@ -76,29 +76,29 @@ module "vpc_inspection_failover" {
   vpc_tags = local.vpc_inspection_tags_failover
 }
 
-module "vpc_inspection_endpoints_failover" {
-  source    = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
-  version   = "5.21.0"
-  providers = { aws = aws.networking_prd_failover }
+# module "vpc_inspection_endpoints_failover" {
+#   source    = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
+#   version   = "5.21.0"
+#   providers = { aws = aws.networking_prd_failover }
 
-  count = var.create_failover_region ? 1 : 0
+#   count = var.create_failover_region ? 1 : 0
 
-  vpc_id = module.vpc_inspection_failover[0].vpc_id
+#   vpc_id = module.vpc_inspection_failover[0].vpc_id
 
-  create_security_group = false
-  # create_security_group      = true
-  # security_group_name_prefix = "${local.resource_name_stub_failover}-${var.this_slug}-inspection-firewall-sg"
-  # security_group_rules       = { ingress_https = { cidr_blocks = ["0.0.0.0/0"] } }
+#   create_security_group = false
+#   # create_security_group      = true
+#   # security_group_name_prefix = "${local.resource_name_stub_failover}-${var.this_slug}-inspection-firewall-sg"
+#   # security_group_rules       = { ingress_https = { cidr_blocks = ["0.0.0.0/0"] } }
 
-  endpoints = {
-    network-firewall-fips = {
-      service             = "network-firewall-fips"
-      private_dns_enabled = true
-      subnet_ids          = module.vpc_inspection_failover[0].private_subnets
-      security_group_ids  = [module.sg_inspection_main_failover[0].security_group_id]
-    }
-  }
-}
+#   endpoints = {
+#     network-firewall-fips = {
+#       service             = "network-firewall-fips"
+#       private_dns_enabled = true
+#       subnet_ids          = module.vpc_inspection_failover[0].private_subnets
+#       security_group_ids  = [module.sg_inspection_main_failover[0].security_group_id]
+#     }
+#   }
+# }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inspection_to_tgw_failover" {
   provider = aws.networking_prd_failover
@@ -119,15 +119,19 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inspection_to_tgw_failove
   tags = { Name = "${local.resource_name_stub_failover}-${var.this_slug}-tgw-attach-inspection-vpc" }
 }
 
-resource "aws_route" "inspection_intra_to_firewall_endpoint_failover" {
-  provider = aws.networking_prd_failover
+# resource "aws_route" "inspection_intra_to_firewall_endpoint" {
+#   provider = aws.networking_prd_failover
 
-  count = var.create_failover_region ? length(module.vpc_inspection_failover[0].intra_route_table_ids) : 0
+#   count    = var.create_failover_region ? length(module.vpc_inspection_failover[0].intra_route_table_ids) : 0
 
-  route_table_id         = module.vpc_inspection_failover[0].intra_route_table_ids[count.index]
-  destination_cidr_block = "0.0.0.0/0"
-  network_interface_id   = tolist(module.vpc_inspection_endpoints_failover[0].endpoints.network-firewall-fips.network_interface_ids)[count.index]
-}
+#   route_table_id         = module.vpc_inspection_failover[0].intra_route_table_ids[count.index]
+#   destination_cidr_block = "0.0.0.0/0"
+#   vpc_endpoint_id        = flatten([
+#     for s in tolist(module.network_firewall[0].status[0].sync_states) : [
+#       for a in s.attachment : a.endpoint_id
+#     ]
+#   ])[count.index]
+# }
 
 resource "aws_route" "inspection_private_to_tgw_failover" {
   provider = aws.networking_prd_failover

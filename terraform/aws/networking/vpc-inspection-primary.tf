@@ -74,27 +74,27 @@ module "vpc_inspection_primary" {
   vpc_tags = local.vpc_inspection_tags_primary
 }
 
-module "vpc_inspection_endpoints_primary" {
-  source    = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
-  version   = "5.21.0"
-  providers = { aws = aws.networking_prd }
+# module "vpc_inspection_endpoints_primary" {
+#   source    = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
+#   version   = "5.21.0"
+#   providers = { aws = aws.networking_prd }
 
-  vpc_id = module.vpc_inspection_primary.vpc_id
+#   vpc_id = module.vpc_inspection_primary.vpc_id
 
-  create_security_group = false
-  # create_security_group      = true
-  # security_group_name_prefix = "${local.resource_name_stub_primary}-${var.this_slug}-inspection-firewall-sg"
-  # security_group_rules       = { ingress_https = { cidr_blocks = ["0.0.0.0/0"] } }
+#   create_security_group = false
+#   # create_security_group      = true
+#   # security_group_name_prefix = "${local.resource_name_stub_primary}-${var.this_slug}-inspection-firewall-sg"
+#   # security_group_rules       = { ingress_https = { cidr_blocks = ["0.0.0.0/0"] } }
 
-  endpoints = {
-    network-firewall-fips = {
-      service             = "network-firewall-fips"
-      private_dns_enabled = true
-      subnet_ids          = module.vpc_inspection_primary.private_subnets
-      security_group_ids  = [module.sg_inspection_main_primary.security_group_id]
-    }
-  }
-}
+#   endpoints = {
+#     network-firewall-fips = {
+#       service             = "network-firewall-fips"
+#       private_dns_enabled = true
+#       subnet_ids          = module.vpc_inspection_primary.private_subnets
+#       security_group_ids  = [module.sg_inspection_main_primary.security_group_id]
+#     }
+#   }
+# }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inspection_to_tgw_primary" {
   provider = aws.networking_prd
@@ -113,14 +113,17 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inspection_to_tgw_primary
   tags = { Name = "${local.resource_name_stub_primary}-${var.this_slug}-tgw-attach-inspection-vpc" }
 }
 
-resource "aws_route" "inspection_intra_to_firewall_endpoint_primary" {
+resource "aws_route" "inspection_intra_to_firewall_endpoint" {
   provider = aws.networking_prd
-
-  count = length(module.vpc_inspection_primary.intra_route_table_ids)
+  count    = length(module.vpc_inspection_primary.intra_route_table_ids)
 
   route_table_id         = module.vpc_inspection_primary.intra_route_table_ids[count.index]
   destination_cidr_block = "0.0.0.0/0"
-  network_interface_id   = tolist(module.vpc_inspection_endpoints_primary.endpoints.network-firewall-fips.network_interface_ids)[count.index]
+  vpc_endpoint_id = flatten([
+    for s in tolist(module.network_firewall.status[0].sync_states) : [
+      for a in s.attachment : a.endpoint_id
+    ]
+  ])[count.index]
 }
 
 resource "aws_route" "inspection_private_to_tgw_primary" {
