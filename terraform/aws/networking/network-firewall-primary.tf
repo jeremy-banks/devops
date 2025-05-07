@@ -45,18 +45,18 @@ module "network_firewall" {
   policy_name        = "${local.resource_name_stub_primary}-${var.this_slug}-policy-primary"
   policy_description = "Example network firewall policy"
 
-  policy_stateful_rule_group_reference = {
-    one = { resource_arn = module.network_firewall_rule_group_stateful.arn }
-  }
+  # policy_stateful_rule_group_reference = {
+  #   one = { resource_arn = module.network_firewall_rule_group_stateful.arn }
+  # }
 
   policy_stateless_default_actions          = ["aws:pass"]
-  policy_stateless_fragment_default_actions = ["aws:drop"]
-  policy_stateless_rule_group_reference = {
-    one = {
-      priority     = 1
-      resource_arn = module.network_firewall_rule_group_stateless.arn
-    }
-  }
+  policy_stateless_fragment_default_actions = ["aws:pass"]
+  # policy_stateless_rule_group_reference = {
+  #   one = {
+  #     priority     = 1
+  #     resource_arn = module.network_firewall_rule_group_stateless.arn
+  #   }
+  # }
 
   #   tags = local.tags
 }

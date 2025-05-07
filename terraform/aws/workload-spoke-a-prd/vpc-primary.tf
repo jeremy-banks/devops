@@ -188,7 +188,7 @@ resource "aws_ec2_transit_gateway_route" "post_inspection_workload_spoke_a_prima
   provider = aws.networking_prd
 
   destination_cidr_block         = var.vpc_cidr_infrastructure.workload_spoke_a_prd_primary
-  transit_gateway_attachment_id  = data.aws_ec2_transit_gateway_vpc_attachment.tgw_post_inspection_primary.id
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.vpc_workload_spoke_a_to_tgw_primary.id
   transit_gateway_route_table_id = data.aws_ec2_transit_gateway_route_table.tgw_post_inspection_primary.id
 }
 
