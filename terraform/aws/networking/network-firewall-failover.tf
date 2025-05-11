@@ -1,10 +1,13 @@
-module "network_firewall_primary" {
+
+module "network_firewall_failover" {
   source    = "terraform-aws-modules/network-firewall/aws"
   version   = "1.0.2"
-  providers = { aws = aws.networking_prd }
+  providers = { aws = aws.networking_prd_failover }
+
+  count = var.create_failover_region ? 1 : 0
 
   # Firewall
-  name        = "${local.resource_name_stub_primary}-${var.this_slug}-primary"
+  name        = "${local.resource_name_stub_failover}-${var.this_slug}-failover"
   description = "Example network firewall"
 
   # Only for example
@@ -12,10 +15,10 @@ module "network_firewall_primary" {
   firewall_policy_change_protection = false
   subnet_change_protection          = false
 
-  vpc_id = module.vpc_inspection_primary.vpc_id
+  vpc_id = module.vpc_inspection_failover[0].vpc_id
   subnet_mapping = { for i in range(0, var.azs_used) :
     "subnet-${i}" => {
-      subnet_id       = element(module.vpc_inspection_primary.private_subnets, i)
+      subnet_id       = element(module.vpc_inspection_failover[0].private_subnets, i)
       ip_address_type = "IPV4"
     }
   }
@@ -25,15 +28,15 @@ module "network_firewall_primary" {
   logging_configuration_destination_config = [
     {
       log_destination = {
-        logGroup = aws_cloudwatch_log_group.logs_primary.name
+        logGroup = aws_cloudwatch_log_group.logs_failover[0].name
       }
       log_destination_type = "CloudWatchLogs"
       log_type             = "ALERT"
     },
     {
       log_destination = {
-        bucketName = aws_s3_bucket.network_firewall_logs_primary.id
-        prefix     = "${local.resource_name_stub_primary}-${var.this_slug}"
+        bucketName = aws_s3_bucket.network_firewall_logs_failover[0].id
+        prefix     = "${local.resource_name_stub_failover}-${var.this_slug}"
       }
       log_destination_type = "S3"
       log_type             = "FLOW"
@@ -41,7 +44,7 @@ module "network_firewall_primary" {
   ]
 
   # Policy
-  policy_name        = "${local.resource_name_stub_primary}-${var.this_slug}-policy-primary"
+  policy_name        = "${local.resource_name_stub_failover}-${var.this_slug}-policy-failover"
   policy_description = "Example network firewall policy"
 
   # policy_stateful_rule_group_reference = {
@@ -70,12 +73,14 @@ module "network_firewall_primary" {
 # Network Firewall Rule Group
 ################################################################################
 
-module "network_firewall_rule_group_stateful_primary" {
+module "network_firewall_rule_group_stateful_failover" {
   source    = "terraform-aws-modules/network-firewall/aws//modules/rule-group"
   version   = "1.0.2"
-  providers = { aws = aws.networking_prd }
+  providers = { aws = aws.networking_prd_failover }
 
-  name        = "${local.resource_name_stub_primary}-${var.this_slug}-rule-group-stateful-primary"
+  count = var.create_failover_region ? 1 : 0
+
+  name        = "${local.resource_name_stub_failover}-${var.this_slug}-rule-group-stateful-failover"
   description = "Stateful Inspection for denying access to a domain"
   type        = "STATEFUL"
   capacity    = 100
@@ -98,12 +103,14 @@ module "network_firewall_rule_group_stateful_primary" {
   #   tags = local.tags
 }
 
-module "network_firewall_rule_group_stateless_primary" {
+module "network_firewall_rule_group_stateless_failover" {
   source    = "terraform-aws-modules/network-firewall/aws//modules/rule-group"
   version   = "1.0.2"
-  providers = { aws = aws.networking_prd }
+  providers = { aws = aws.networking_prd_failover }
 
-  name        = "${local.resource_name_stub_primary}-${var.this_slug}-rule-group-stateless-primary"
+  count = var.create_failover_region ? 1 : 0
+
+  name        = "${local.resource_name_stub_failover}-${var.this_slug}-rule-group-stateless-failover"
   description = "Stateless Inspection with a Custom Action"
   type        = "STATELESS"
   capacity    = 100
