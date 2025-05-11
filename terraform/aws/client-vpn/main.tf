@@ -1,7 +1,5 @@
 #primary
-data "aws_caller_identity" "this" {
-  provider = aws.network
-}
+data "aws_caller_identity" "this" { provider = aws.network }
 
 resource "aws_ec2_client_vpn_endpoint" "client_vpn_primary" {
   provider = aws.network

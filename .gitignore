@@ -35,3 +35,6 @@ override.tf.json
 terraform.rc
 
 backend.tf
+
+# Mac OS
+.DS_Store

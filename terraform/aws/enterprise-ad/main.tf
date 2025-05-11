@@ -35,9 +35,7 @@ resource "aws_directory_service_directory" "ad_primary" {
   }
 }
 
-data "aws_organizations_organization" "org" {
-  provider = aws.identity
-}
+data "aws_organizations_organization" "org" { provider = aws.identity }
 
 data "aws_route53_zone" "company_domain" {
   provider  = aws.network

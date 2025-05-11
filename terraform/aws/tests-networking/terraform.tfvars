@@ -4,4 +4,6 @@ provider_role_name = "superadmin"
 
 deployment_environment = "prd"
 
-this_slug = "management-account"
+this_slug = "tests-networking"
+
+create_failover_region = true
