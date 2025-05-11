@@ -184,7 +184,7 @@ data "aws_ec2_transit_gateway_peering_attachment" "tgw_peer_primary" {
   }
 }
 
-resource "aws_ec2_transit_gateway_route" "post_inspection_workload_spoke_b_primary_primary" {
+resource "aws_ec2_transit_gateway_route" "post_inspection_workload_spoke_b_primary_to_primary" {
   provider = aws.networking_prd
 
   destination_cidr_block         = var.vpc_cidr_infrastructure.workload_spoke_b_prd_primary
@@ -192,7 +192,7 @@ resource "aws_ec2_transit_gateway_route" "post_inspection_workload_spoke_b_prima
   transit_gateway_route_table_id = data.aws_ec2_transit_gateway_route_table.tgw_post_inspection_primary.id
 }
 
-resource "aws_ec2_transit_gateway_route" "post_inspection_workload_spoke_b_primary_failover" {
+resource "aws_ec2_transit_gateway_route" "post_inspection_workload_spoke_b_primary_to_failover" {
   provider = aws.networking_prd
 
   count = var.create_failover_region ? 1 : 0

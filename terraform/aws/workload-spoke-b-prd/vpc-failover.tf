@@ -198,7 +198,7 @@ data "aws_ec2_transit_gateway_peering_attachment" "tgw_peer_failover" {
   }
 }
 
-resource "aws_ec2_transit_gateway_route" "post_inspection_workload_spoke_b_failover_failover" {
+resource "aws_ec2_transit_gateway_route" "post_inspection_workload_spoke_b_failover_to_failover" {
   provider = aws.networking_prd_failover
 
   count = var.create_failover_region ? 1 : 0
@@ -208,7 +208,7 @@ resource "aws_ec2_transit_gateway_route" "post_inspection_workload_spoke_b_failo
   transit_gateway_route_table_id = data.aws_ec2_transit_gateway_route_table.tgw_post_inspection_failover[0].id
 }
 
-resource "aws_ec2_transit_gateway_route" "post_inspection_workload_spoke_b_failover_primary" {
+resource "aws_ec2_transit_gateway_route" "post_inspection_workload_spoke_b_failover_to_primary" {
   provider = aws.networking_prd_failover
 
   count = var.create_failover_region ? 1 : 0

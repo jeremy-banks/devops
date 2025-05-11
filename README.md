@@ -23,15 +23,11 @@
 - [Guidance to Render Unsecured PHI Unusable](https://www.hhs.gov/hipaa/for-professionals/breach-notification/guidance/index.html)
 
 ## Notes
-provision and test networking
-
-'sharing' public subnets so k8s can make albs?
-
-you need to identify a firewall policy that 'works for now' so you can esablish a k8s cluster
+'sharing' public subnets so k8s can make albs
 
 outbound endpoints for s3, kms, rds
 
 rework the eks stuff
 append k8s 'bare meta'
 
-impelement federated access using active directory and windows server???
+impelement federated access using active directory and windows server
