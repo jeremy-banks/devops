@@ -2,7 +2,7 @@
 module "inbound_failover" {
   source    = "terraform-aws-modules/ec2-instance/aws"
   version   = "5.8.0"
-  providers = { aws = aws.networking_prd }
+  providers = { aws = aws.networking_prd_failover }
 
   count = var.create_failover_region ? 1 : 0
 
@@ -40,7 +40,7 @@ module "inbound_failover" {
 module "inspection_failover" {
   source    = "terraform-aws-modules/ec2-instance/aws"
   version   = "5.8.0"
-  providers = { aws = aws.networking_prd }
+  providers = { aws = aws.networking_prd_failover }
 
   count = var.create_failover_region ? 1 : 0
 
@@ -77,7 +77,7 @@ module "inspection_failover" {
 module "outbound_failover" {
   source    = "terraform-aws-modules/ec2-instance/aws"
   version   = "5.8.0"
-  providers = { aws = aws.networking_prd }
+  providers = { aws = aws.networking_prd_failover }
 
   count = var.create_failover_region ? 1 : 0
 
@@ -112,7 +112,7 @@ module "outbound_failover" {
 module "spoke_a_prd_failover" {
   source    = "terraform-aws-modules/ec2-instance/aws"
   version   = "5.8.0"
-  providers = { aws = aws.workload_spoke_a_prd }
+  providers = { aws = aws.workload_spoke_a_prd_failover }
 
   count = var.create_failover_region ? 1 : 0
 
@@ -150,7 +150,7 @@ module "spoke_a_prd_failover" {
 module "spoke_b_prd_failover" {
   source    = "terraform-aws-modules/ec2-instance/aws"
   version   = "5.8.0"
-  providers = { aws = aws.workload_spoke_b_prd }
+  providers = { aws = aws.workload_spoke_b_prd_failover }
 
   count = var.create_failover_region ? 1 : 0
 
