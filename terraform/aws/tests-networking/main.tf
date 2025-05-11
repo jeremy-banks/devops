@@ -2,8 +2,8 @@ data "aws_caller_identity" "networking" { provider = aws.networking_prd }
 
 locals {
   current_time = timestamp()
-  test_start   = formatdate("YYYYMMDDhhmmss", timeadd(local.current_time, "60s"))
-  test_stop    = formatdate("YYYYMMDDhhmmss", timeadd(local.current_time, "120s"))
+  test_start   = formatdate("YYYYMMDDhhmmss", timeadd(local.current_time, "120s"))
+  test_stop    = formatdate("YYYYMMDDhhmmss", timeadd(local.current_time, "240s"))
 }
 
 data "aws_ami" "amazon_linux_primary" {
@@ -104,6 +104,44 @@ data "aws_security_group" "inbound_primary" {
   filter {
     name   = "vpc-id"
     values = [data.aws_vpc.inbound_primary.id]
+  }
+
+  tags = { Name = "*-main-sg" }
+}
+
+#inbound-failover
+data "aws_vpc" "inbound_failover" {
+  provider = aws.networking_prd_failover
+
+  count = var.create_failover_region ? 1 : 0
+
+  filter {
+    name   = "cidr-block"
+    values = [var.vpc_cidr_infrastructure.inbound_failover]
+  }
+}
+
+data "aws_subnets" "inbound_failover" {
+  provider = aws.networking_prd_failover
+
+  count = var.create_failover_region ? 1 : 0
+
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.inbound_failover[0].id]
+  }
+
+  tags = { Name = "*-pub-*" }
+}
+
+data "aws_security_group" "inbound_failover" {
+  provider = aws.networking_prd_failover
+
+  count = var.create_failover_region ? 1 : 0
+
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.inbound_failover[0].id]
   }
 
   tags = { Name = "*-main-sg" }
@@ -211,6 +249,44 @@ data "aws_security_group" "outbound_primary" {
   tags = { Name = "*-main-sg" }
 }
 
+#outbound-failover
+data "aws_vpc" "outbound_failover" {
+  provider = aws.networking_prd_failover
+
+  count = var.create_failover_region ? 1 : 0
+
+  filter {
+    name   = "cidr-block"
+    values = [var.vpc_cidr_infrastructure.outbound_failover]
+  }
+}
+
+data "aws_subnets" "outbound_failover" {
+  provider = aws.networking_prd_failover
+
+  count = var.create_failover_region ? 1 : 0
+
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.outbound_failover[0].id]
+  }
+
+  tags = { Name = "*-pub-*" }
+}
+
+data "aws_security_group" "outbound_failover" {
+  provider = aws.networking_prd_failover
+
+  count = var.create_failover_region ? 1 : 0
+
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.outbound_failover[0].id]
+  }
+
+  tags = { Name = "*-main-sg" }
+}
+
 #spoke-a-primary
 data "aws_vpc" "spoke_a_prd_primary" {
   provider = aws.workload_spoke_a_prd
@@ -308,6 +384,44 @@ data "aws_security_group" "spoke_b_prd_primary" {
   filter {
     name   = "vpc-id"
     values = [data.aws_vpc.spoke_b_prd_primary.id]
+  }
+
+  tags = { Name = "*-main-sg" }
+}
+
+#spoke-b-failover
+data "aws_vpc" "spoke_b_prd_failover" {
+  provider = aws.workload_spoke_b_prd_failover
+
+  count = var.create_failover_region ? 1 : 0
+
+  filter {
+    name   = "cidr-block"
+    values = [var.vpc_cidr_infrastructure.workload_spoke_b_prd_failover]
+  }
+}
+
+data "aws_subnets" "spoke_b_prd_failover" {
+  provider = aws.workload_spoke_b_prd_failover
+
+  count = var.create_failover_region ? 1 : 0
+
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.spoke_b_prd_failover[0].id]
+  }
+
+  tags = { Name = "*-pvt-*" }
+}
+
+data "aws_security_group" "spoke_b_prd_failover" {
+  provider = aws.workload_spoke_b_prd_failover
+
+  count = var.create_failover_region ? 1 : 0
+
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.spoke_b_prd_failover[0].id]
   }
 
   tags = { Name = "*-main-sg" }
