@@ -2,12 +2,12 @@
 
 ## Project Goals
 1. Create ideal and comprehensive codebase to "lift and shift" an org into AWS and EKS
-1. Using Centralized Inspection Architecture, the repo dynamically supports 2-6 AZs, and optional failover region for all deployments
-1. Demonstrate expertise in the tools used and provide a framework for mentorship
-1. Follow documented best practice use of Terraform, EKS, and Helm in AWS
+1. Use Centralized Inspection Architecture, dynamically supports 2-6 AZs, including optional failover region for all deployments
+1. Follow documented best practices and demonstrate expertise in use of Terraform, EKS, and Helm in AWS
+1. Write documentation which is readable to others and and a framework for mentorship and skills transfer
 
 ## Documentation
-- [Architectural Overview (North-South, pg.5)](https://d1.awsstatic.com/architecture-diagrams/ArchitectureDiagrams/inspection-deployment-models-with-AWS-network-firewall-ra.pdf)
+- [Architectural Overview](https://d1.awsstatic.com/architecture-diagrams/ArchitectureDiagrams/inspection-deployment-models-with-AWS-network-firewall-ra.pdf)
 - [Initial Setup](./documentation/initial_setup.md)
 - [To-Do](./documentation/to_do.md)
 
