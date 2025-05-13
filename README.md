@@ -2,13 +2,13 @@
 
 ## Project Goals
 1. Create ideal and comprehensive codebase to "lift and shift" an org into AWS and EKS
-1. Also to demonstrate my expertise in the tool and provide a framework for mentorship
+1. Using Centralized Inspection Architecture, the repo dynamically supports 2-6 AZs, and optional failover region for all deployments
+1. Demonstrate expertise in the tools used and provide a framework for mentorship
 1. Follow documented best practice use of Terraform, EKS, and Helm in AWS
 
 ## Documentation
-- [Architectural Overview](./documentation/architectural_overview.md)
+- [Architectural Overview (North-South, pg.5)](https://d1.awsstatic.com/architecture-diagrams/ArchitectureDiagrams/inspection-deployment-models-with-AWS-network-firewall-ra.pdf)
 - [Initial Setup](./documentation/initial_setup.md)
-- [Processes](./documentation/processes.md)
 - [To-Do](./documentation/to_do.md)
 
 ## Reference Materials
@@ -21,13 +21,3 @@
 - [How Transit Gateways Work in Appliance Mode](https://docs.aws.amazon.com/vpc/latest/tgw/how-transit-gateways-work.html#transit-gateway-appliance-scenario)
 - [Prescriptive Guidance Security Reference Architecture](https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture/org-management.html)
 - [Guidance to Render Unsecured PHI Unusable](https://www.hhs.gov/hipaa/for-professionals/breach-notification/guidance/index.html)
-
-## Notes
-'sharing' public subnets so k8s can make albs
-
-outbound endpoints for s3, kms, rds
-
-rework the eks stuff
-append k8s 'bare meta'
-
-impelement federated access using active directory and windows server

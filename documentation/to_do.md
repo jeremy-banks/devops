@@ -1,12 +1,16 @@
 [Return Home](../README.md#documentation)
 
 # To-Do
-- Complete sdlc dev, tst, and stg
-   - need code for share_vpc and share_tgw
-   - sdlc needs an elegant way to create DNS records to point to VPC endpoints in the shared network VPC
-      - needs to support multi-regional failover as well
-      - just start with making R53 entries first, this may be all that is needed
-- Federated login for devops, operations, and developers
+- get a job because this repo isn't cheap to develop
+
+- 'sharing' public subnets from inbound VPC in networking account so k8s in spokes can make and/or manipulate ALBs
+
+- outbound endpoints for s3, kms, rds so that all org traffic to those services is privately routes for security and cost savings
+
+- rework the eks stuff
+   append k8s 'bare metal' to demonstrate skill and pass CKA
+
+- impelement federated access using active directory and windows server
    - https://getstarted.awsworkshop.io/02-dev-fast-follow/02-federated-access-to-aws/02-aws-sso-ad.html
    - https://aws.amazon.com/blogs/architecture/field-notes-integrating-active-directory-federation-service-with-aws-single-sign-on/
    - Also need Windows Admin Server in some account
@@ -15,11 +19,19 @@
    - AD
       - Update directory AD and client VPN so groups in AD manage network access to AWS environments
       - Add Windows Server 2019 cheap instance to Directory for AD administration
-- Triggering a DR event
+
+- trigger a faux DR event
    - ACL allows no traffic in one subnet
    - EKS autoscaling examples
       - CPU
       - Sessions
+
+- Centralized logging with compression and glacier archive
+   - DNS logs sent to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
+   - ALB logs send to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
+
+- Mozilla Secrets OPerationS (SOPS) protects secrets in code using Key Management System (KMS) Customer Managed Key (CMK)
+
 - StackSet Deployments
    - Disable unlimited burstable instance credits
    - delete all default VPCs in all regions of every account
@@ -30,15 +42,4 @@
       - S3 buckets never public
       - aws_ebs_snapshot_block_public_access
       - block public s3 access
-- Implement the Well-Architected Tool https://docs.aws.amazon.com/whitepapers/latest/organizing-your-aws-environment/organizing-your-aws-environment.html
-- Base docker images for all distros
-   - initially just docker images which run apt-get upgrade or yum upgrade to get patches
-- Implement Rust server
-- Complete some kind of automation to convert drawings into png for this documentation
-- Centralized logging with compression and glacier archive
-   - DNS logs sent to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
-   - ALB logs send to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
-- Mozilla Secrets OPerationS (SOPS) protects secrets in code using Key Management System (KMS) Customer Managed Key (CMK)
-- break glass entry for accounts https://docs.aws.amazon.com/whitepapers/latest/organizing-your-aws-environment/break-glass-access.html
-- ALB sec group with cool way of allowing ingress (nonprod through private CVPN, prod through public)
-- MFA enforced organization-wide
+   - MFA enforced organization-wide
