@@ -1,4 +1,5 @@
 # DevOps
+Author: Jeremy B [https://www.linkedin.com/in/hire-jeremyb/](https://www.linkedin.com/in/hire-jeremyb/)
 
 ## Project Goals
 1. Create ideal and comprehensive codebase to "lift and shift" an org into AWS and EKS
