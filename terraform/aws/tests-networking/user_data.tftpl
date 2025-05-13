@@ -52,11 +52,11 @@ STOP_TARGET_TIME="${test_stop}"
 STOP_SLEEP_SECONDS=$((STOP_TARGET_TIME - CURRENT_TIME))
 
 # if there are stop sleep seconds we wait
-# if [ "$STOP_SLEEP_SECONDS" -gt 0 ]; then
-#   echo "terminating instance in $STOP_SLEEP_SECONDS seconds at $STOP_TARGET_TIME"
-#   sleep "$STOP_SLEEP_SECONDS"
-# fi
+if [ "$STOP_SLEEP_SECONDS" -gt 0 ]; then
+  echo "terminating instance in $STOP_SLEEP_SECONDS seconds at $STOP_TARGET_TIME"
+  sleep "$STOP_SLEEP_SECONDS"
+fi
 
 # i cannot self terminate, you must lower me into the steel
-# THIS_INSTANCE_ID=$(ec2-metadata --instance-id | awk "{print \$2}")
-# aws ec2 terminate-instances --instance-ids "$THIS_INSTANCE_ID" --region ${this_instance_region}
+THIS_INSTANCE_ID=$(ec2-metadata --instance-id | awk "{print \$2}")
+aws ec2 terminate-instances --instance-ids "$THIS_INSTANCE_ID" --region ${this_instance_region}

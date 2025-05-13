@@ -1,13 +1,13 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0" version="27.0.3">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0" version="27.0.5">
   <diagram name="Page-1" id="8dme3r4rEovwQsCIeJ7b">
-    <mxGraphModel dx="1186" dy="688" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1694" dy="983" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-1" value="Management Account" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_management_account2;labelBackgroundColor=default;" vertex="1" parent="1">
-          <mxGeometry x="220" y="40" width="80" height="80" as="geometry" />
+        <mxCell id="Slsmk4MWAJygMvaAlCCI-1" value="Management Account" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_management_account2;labelBackgroundColor=default;" parent="1" vertex="1">
+          <mxGeometry x="320" y="40" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=default;fontColor=#000000;strokeColor=#000000;endArrow=none;endFill=0;fontStyle=1" edge="1" parent="1" source="Slsmk4MWAJygMvaAlCCI-4" target="Slsmk4MWAJygMvaAlCCI-10">
+        <mxCell id="ACRTSKjvpaFHhOblRnGd-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;startFill=0;" edge="1" parent="1" source="Slsmk4MWAJygMvaAlCCI-4" target="ACRTSKjvpaFHhOblRnGd-17">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="140" y="270" />
@@ -15,7 +15,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=default;fontColor=#000000;strokeColor=#000000;endArrow=none;endFill=0;fontStyle=1" edge="1" parent="1" source="Slsmk4MWAJygMvaAlCCI-4" target="Slsmk4MWAJygMvaAlCCI-11">
+        <mxCell id="ACRTSKjvpaFHhOblRnGd-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;startFill=0;" edge="1" parent="1" source="Slsmk4MWAJygMvaAlCCI-4" target="ACRTSKjvpaFHhOblRnGd-16">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="140" y="270" />
@@ -23,157 +23,155 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-4" value="Infrastructure OU" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;" vertex="1" parent="1">
+        <mxCell id="Slsmk4MWAJygMvaAlCCI-4" value="Security OU" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;" parent="1" vertex="1">
           <mxGeometry x="100" y="160" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=default;fontColor=#000000;strokeColor=#000000;endArrow=none;endFill=0;fontStyle=1" edge="1" parent="1" source="Slsmk4MWAJygMvaAlCCI-7" target="Slsmk4MWAJygMvaAlCCI-9">
+        <mxCell id="ACRTSKjvpaFHhOblRnGd-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;startFill=0;" edge="1" parent="1" source="Slsmk4MWAJygMvaAlCCI-7" target="ACRTSKjvpaFHhOblRnGd-5">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="380" y="270" />
-              <mxPoint x="320" y="270" />
+              <mxPoint x="480" y="270" />
+              <mxPoint x="420" y="270" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=default;fontColor=#000000;strokeColor=#000000;endArrow=none;endFill=0;fontStyle=1" edge="1" parent="1" source="Slsmk4MWAJygMvaAlCCI-7" target="Slsmk4MWAJygMvaAlCCI-8">
+        <mxCell id="ACRTSKjvpaFHhOblRnGd-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;startFill=0;" edge="1" parent="1" source="Slsmk4MWAJygMvaAlCCI-7" target="ACRTSKjvpaFHhOblRnGd-4">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="380" y="270" />
-              <mxPoint x="440" y="270" />
+              <mxPoint x="480" y="270" />
+              <mxPoint x="540" y="270" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-7" value="Security OU" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;" vertex="1" parent="1">
-          <mxGeometry x="340" y="160" width="80" height="80" as="geometry" />
+        <mxCell id="Slsmk4MWAJygMvaAlCCI-7" value="Infrastructure OU" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;" parent="1" vertex="1">
+          <mxGeometry x="440" y="160" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-8" value="Security Tooling" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_account2;labelBackgroundColor=default;" vertex="1" parent="1">
-          <mxGeometry x="400" y="280" width="80" height="80" as="geometry" />
+        <mxCell id="Slsmk4MWAJygMvaAlCCI-10" value="Identity prd" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_account2;labelBackgroundColor=default;" parent="1" vertex="1">
+          <mxGeometry x="440" y="400" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-9" value="&lt;div&gt;Log Archive&lt;/div&gt;" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_account2;labelBackgroundColor=default;" vertex="1" parent="1">
-          <mxGeometry x="280" y="280" width="80" height="80" as="geometry" />
+        <mxCell id="Slsmk4MWAJygMvaAlCCI-11" value="&lt;div&gt;Network prd&lt;/div&gt;" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_account2;labelBackgroundColor=default;" parent="1" vertex="1">
+          <mxGeometry x="560" y="400" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-10" value="Identity" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_account2;labelBackgroundColor=default;" vertex="1" parent="1">
-          <mxGeometry x="40" y="280" width="80" height="80" as="geometry" />
+        <mxCell id="Slsmk4MWAJygMvaAlCCI-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;" parent="1" source="Slsmk4MWAJygMvaAlCCI-14" target="Slsmk4MWAJygMvaAlCCI-17" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="820" y="270" />
+              <mxPoint x="760" y="270" />
+            </Array>
+          </mxGeometry>
         </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-11" value="&lt;div&gt;Network&lt;/div&gt;" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_account2;labelBackgroundColor=default;" vertex="1" parent="1">
+        <mxCell id="Slsmk4MWAJygMvaAlCCI-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;" parent="1" source="Slsmk4MWAJygMvaAlCCI-14" target="Slsmk4MWAJygMvaAlCCI-20" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="820" y="270" />
+              <mxPoint x="880" y="270" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Slsmk4MWAJygMvaAlCCI-14" value="&lt;div&gt;WorkloadsOU&lt;/div&gt;" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;" parent="1" vertex="1">
+          <mxGeometry x="780" y="160" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Slsmk4MWAJygMvaAlCCI-17" value="dev | tst | stg OU" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;" parent="1" vertex="1">
+          <mxGeometry x="720" y="280" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ACRTSKjvpaFHhOblRnGd-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;startFill=0;" edge="1" parent="1" source="Slsmk4MWAJygMvaAlCCI-20" target="Slsmk4MWAJygMvaAlCCI-32">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="880" y="390" />
+              <mxPoint x="820" y="390" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ACRTSKjvpaFHhOblRnGd-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;startFill=0;" edge="1" parent="1" source="Slsmk4MWAJygMvaAlCCI-20" target="Slsmk4MWAJygMvaAlCCI-33">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="880" y="390" />
+              <mxPoint x="940" y="390" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Slsmk4MWAJygMvaAlCCI-20" value="prd OU" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;" parent="1" vertex="1">
+          <mxGeometry x="840" y="280" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Slsmk4MWAJygMvaAlCCI-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;endArrow=none;endFill=0;labelBackgroundColor=default;fontColor=#000000;fontStyle=1" parent="1" source="Slsmk4MWAJygMvaAlCCI-27" target="Slsmk4MWAJygMvaAlCCI-7" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Slsmk4MWAJygMvaAlCCI-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;endArrow=none;endFill=0;labelBackgroundColor=default;fontColor=#000000;fontStyle=1" parent="1" source="Slsmk4MWAJygMvaAlCCI-27" target="Slsmk4MWAJygMvaAlCCI-4" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="480" y="150" />
+              <mxPoint x="180" y="150" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Slsmk4MWAJygMvaAlCCI-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;endArrow=none;endFill=0;labelBackgroundColor=default;fontColor=#000000;fontStyle=1" parent="1" source="Slsmk4MWAJygMvaAlCCI-27" target="Slsmk4MWAJygMvaAlCCI-1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Slsmk4MWAJygMvaAlCCI-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;" parent="1" source="Slsmk4MWAJygMvaAlCCI-27" target="Slsmk4MWAJygMvaAlCCI-14" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="480" y="150" />
+              <mxPoint x="820" y="150" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Slsmk4MWAJygMvaAlCCI-27" value="Root" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;" parent="1" vertex="1">
+          <mxGeometry x="440" y="40" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Slsmk4MWAJygMvaAlCCI-32" value="Spoke A prd" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_account2;labelBackgroundColor=default;" parent="1" vertex="1">
+          <mxGeometry x="780" y="400" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Slsmk4MWAJygMvaAlCCI-33" value="Spoke B prd" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_account2;labelBackgroundColor=default;" parent="1" vertex="1">
+          <mxGeometry x="900" y="400" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ACRTSKjvpaFHhOblRnGd-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;startFill=0;" edge="1" parent="1" source="ACRTSKjvpaFHhOblRnGd-4" target="Slsmk4MWAJygMvaAlCCI-10">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="540" y="390" />
+              <mxPoint x="480" y="390" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ACRTSKjvpaFHhOblRnGd-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;startFill=0;" edge="1" parent="1" source="ACRTSKjvpaFHhOblRnGd-4" target="Slsmk4MWAJygMvaAlCCI-11">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="540" y="390" />
+              <mxPoint x="600" y="390" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ACRTSKjvpaFHhOblRnGd-4" value="prd OU" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;" vertex="1" parent="1">
+          <mxGeometry x="500" y="280" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ACRTSKjvpaFHhOblRnGd-5" value="dev | tst | stg OU" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;" vertex="1" parent="1">
+          <mxGeometry x="380" y="280" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ACRTSKjvpaFHhOblRnGd-12" value="Log Archive prd" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_account2;labelBackgroundColor=default;" vertex="1" parent="1">
+          <mxGeometry x="100" y="400" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ACRTSKjvpaFHhOblRnGd-13" value="Security Tooling prd" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_account2;labelBackgroundColor=default;" vertex="1" parent="1">
+          <mxGeometry x="220" y="400" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ACRTSKjvpaFHhOblRnGd-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;startFill=0;" edge="1" parent="1" source="ACRTSKjvpaFHhOblRnGd-16" target="ACRTSKjvpaFHhOblRnGd-12">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="200" y="390" />
+              <mxPoint x="140" y="390" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ACRTSKjvpaFHhOblRnGd-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;startFill=0;" edge="1" parent="1" source="ACRTSKjvpaFHhOblRnGd-16" target="ACRTSKjvpaFHhOblRnGd-13">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="200" y="390" />
+              <mxPoint x="260" y="390" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ACRTSKjvpaFHhOblRnGd-16" value="prd OU" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;" vertex="1" parent="1">
           <mxGeometry x="160" y="280" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;" edge="1" parent="1" source="Slsmk4MWAJygMvaAlCCI-14" target="Slsmk4MWAJygMvaAlCCI-17">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="740" y="270" />
-              <mxPoint x="620" y="270" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;" edge="1" parent="1" source="Slsmk4MWAJygMvaAlCCI-14" target="Slsmk4MWAJygMvaAlCCI-20">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="740" y="270" />
-              <mxPoint x="850" y="270" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-14" value="&lt;div&gt;WorkloadsOU&lt;/div&gt;" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;" vertex="1" parent="1">
-          <mxGeometry x="700" y="160" width="80" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;" edge="1" parent="1" source="Slsmk4MWAJygMvaAlCCI-17" target="Slsmk4MWAJygMvaAlCCI-29">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="560" y="390" />
-              <mxPoint x="500" y="390" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;" edge="1" parent="1" source="Slsmk4MWAJygMvaAlCCI-17" target="Slsmk4MWAJygMvaAlCCI-31">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="620" y="390" />
-              <mxPoint x="680" y="390" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-17" value="Spoke A" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;" vertex="1" parent="1">
-          <mxGeometry x="580" y="280" width="80" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;" edge="1" parent="1" source="Slsmk4MWAJygMvaAlCCI-20" target="Slsmk4MWAJygMvaAlCCI-35">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="860" y="390" />
-              <mxPoint x="800" y="390" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;" edge="1" parent="1" source="Slsmk4MWAJygMvaAlCCI-20" target="Slsmk4MWAJygMvaAlCCI-37">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="860" y="390" />
-              <mxPoint x="920" y="390" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-20" value="Spoke B" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;" vertex="1" parent="1">
-          <mxGeometry x="820" y="280" width="80" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-21" value="dev | tst | stg" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_account2;labelBackgroundColor=default;" vertex="1" parent="1">
-          <mxGeometry x="520" y="520" width="80" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-22" value="prd" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_account2;labelBackgroundColor=default;" vertex="1" parent="1">
-          <mxGeometry x="640" y="520" width="80" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;endArrow=none;endFill=0;labelBackgroundColor=default;fontColor=#000000;fontStyle=1" edge="1" parent="1" source="Slsmk4MWAJygMvaAlCCI-27" target="Slsmk4MWAJygMvaAlCCI-7">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;endArrow=none;endFill=0;labelBackgroundColor=default;fontColor=#000000;fontStyle=1" edge="1" parent="1" source="Slsmk4MWAJygMvaAlCCI-27" target="Slsmk4MWAJygMvaAlCCI-4">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="380" y="150" />
-              <mxPoint x="140" y="150" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;endArrow=none;endFill=0;labelBackgroundColor=default;fontColor=#000000;fontStyle=1" edge="1" parent="1" source="Slsmk4MWAJygMvaAlCCI-27" target="Slsmk4MWAJygMvaAlCCI-1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;" edge="1" parent="1" source="Slsmk4MWAJygMvaAlCCI-27" target="Slsmk4MWAJygMvaAlCCI-14">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="380" y="150" />
-              <mxPoint x="740" y="150" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-27" value="Root" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;" vertex="1" parent="1">
-          <mxGeometry x="340" y="40" width="80" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;" edge="1" parent="1" source="Slsmk4MWAJygMvaAlCCI-29" target="Slsmk4MWAJygMvaAlCCI-21">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-29" value="Nonprod OU" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;" vertex="1" parent="1">
-          <mxGeometry x="520" y="400" width="80" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;" edge="1" parent="1" source="Slsmk4MWAJygMvaAlCCI-31" target="Slsmk4MWAJygMvaAlCCI-22">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-31" value="Prod OU" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;" vertex="1" parent="1">
-          <mxGeometry x="640" y="400" width="80" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-32" value="dev | tst | stg" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_account2;labelBackgroundColor=default;" vertex="1" parent="1">
-          <mxGeometry x="760" y="520" width="80" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-33" value="prd" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_account2;labelBackgroundColor=default;" vertex="1" parent="1">
-          <mxGeometry x="880" y="520" width="80" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;" edge="1" parent="1" source="Slsmk4MWAJygMvaAlCCI-35" target="Slsmk4MWAJygMvaAlCCI-32">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-35" value="Nonprod OU" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;" vertex="1" parent="1">
-          <mxGeometry x="760" y="400" width="80" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-36" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;" edge="1" parent="1" source="Slsmk4MWAJygMvaAlCCI-37" target="Slsmk4MWAJygMvaAlCCI-33">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="Slsmk4MWAJygMvaAlCCI-37" value="Prod OU" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;" vertex="1" parent="1">
-          <mxGeometry x="880" y="400" width="80" height="80" as="geometry" />
+        <mxCell id="ACRTSKjvpaFHhOblRnGd-17" value="dev | tst | stg OU" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;" vertex="1" parent="1">
+          <mxGeometry x="40" y="280" width="80" height="80" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

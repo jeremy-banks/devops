@@ -167,10 +167,10 @@ variable "azs_used" {
   default     = 2
 }
 
-variable "network_tgw_share_enabled" {
-  type    = bool
-  default = false
-}
+# variable "network_tgw_share_enabled" {
+#   type    = bool
+#   default = false
+# }
 
 variable "vpc_cidr_substitute" {
   description = "Primary Region VPC CIDR. Use the full network address and subnet mask, eg 10.31.0.0/16"
@@ -200,27 +200,27 @@ variable "vpc_cidr_network_failover" {
   }
 }
 
-variable "vpc_endpoint_services_enabled" {
-  type = list(string)
-  default = [
-    # "dynamodb",
-    # "ec2",
-    # "kms",
-    # "s3",
-  ]
-}
+# variable "vpc_endpoint_services_enabled" {
+#   type = list(string)
+#   default = [
+#     # "dynamodb",
+#     # "ec2",
+#     # "kms",
+#     # "s3",
+#   ]
+# }
 
-variable "network_vpc_share_enabled" {
-  type    = bool
-  default = false
-}
+# variable "network_vpc_share_enabled" {
+#   type    = bool
+#   default = false
+# }
 
-variable "vpc_cidr_clientvpn" {
-  default = {
-    primary  = "10.43.0.0/16"
-    failover = "10.44.0.0/16"
-  }
-}
+# variable "vpc_cidr_clientvpn" {
+#   default = {
+#     primary  = "10.43.0.0/16"
+#     failover = "10.44.0.0/16"
+#   }
+# }
 
 variable "ntp_servers" {
   type    = list(string)
@@ -235,25 +235,25 @@ variable "tgw_asn" {
   }
 }
 
-variable "ad_directory_admin_password" {
-  type    = string
-  default = "tempSuperSecretPassword123"
-}
+# variable "ad_directory_admin_password" {
+#   type    = string
+#   default = "tempSuperSecretPassword123"
+# }
 
-variable "ad_directory_id_connector_network" {
-  type    = string
-  default = ""
-}
+# variable "ad_directory_id_connector_network" {
+#   type    = string
+#   default = ""
+# }
 
-variable "ad_directory_id_connector_network_failover" {
-  type    = string
-  default = ""
-}
+# variable "ad_directory_id_connector_network_failover" {
+#   type    = string
+#   default = ""
+# }
 
-variable "r53_zones" {
-  type    = list(string)
-  default = []
-}
+# variable "r53_zones" {
+#   type    = list(string)
+#   default = []
+# }
 
 variable "account_email_slug" {
   type = map(string)
