@@ -1,10 +1,12 @@
 # DevOps
-Thank you for visiting! Please consider leaving a [![GitHub stars](https://img.shields.io/github/stars/jeremy-banks/devops?style=social)](https://github.com/your-username/your-repo)
+Thank you for visiting my repo and please consider leaving a Star!
 
-The goal of this repo is to provide a comprehensive codebase for me to lift-and-shift any organinzation into an ideal AWS and EKS deployment using documented best practices.
+The goal of this repo is to provide a comprehensive codebase for me to lift-and-shift an organinzation into an ideal AWS and EKS deployment using documented best practices.
 
 ## My Education and Certifications
-[![Bachelor's: Genetics and Cell Biology - Washington State University](https://img.shields.io/badge/Bachelor's-Genetics_and_Cell_Biology_--_WSU_(CURRENTLY_PURSUING)-rgb(152,36,49))](https://degrees.wsu.edu/degree/genetics-cell-biology/) [![Terraform Associate](https://img.shields.io/badge/Certificate-HashiCorp_Certified:_Terraform_Associate-rgb(115,73,182))](https://www.credly.com/badges/736aae79-b1fd-4567-a3d2-d1e1a27ff182) [![Certified Kubernetes Administrator](https://img.shields.io/badge/Certificate-Certified_Kubernetes_Administrator-rgb(77,134,235))](https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/) [![Unity Prototyping UW](https://img.shields.io/badge/Certificate-Specialization_in_Game_Prototyping_with_Unity-white)](https://badgr.com/public/assertions/HtqMeP7NSSaEzOeMzOowCA)
+[![Bachelor's: Genetics and Cell Biology - Washington State University](https://img.shields.io/badge/Bachelor's-Genetics_and_Cell_Biology_--_WSU_(PURSUING)-rgb(152,36,49)?style=plastic)](https://degrees.wsu.edu/degree/genetics-cell-biology/)
+
+[![Terraform Associate](https://img.shields.io/badge/Certificate-HashiCorp_Certified:_Terraform_Associate-rgb(115,73,182)?style=plastic)](https://www.credly.com/badges/736aae79-b1fd-4567-a3d2-d1e1a27ff182) [![Certified Kubernetes Administrator](https://img.shields.io/badge/Certificate-Certified_Kubernetes_Administrator_(PURSUING)-rgb(77,134,235)?style=plastic)](https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/) [![Unity Prototyping UW](https://img.shields.io/badge/Certificate-Specialization_in_Game_Prototyping_with_Unity-rgb(255,255,255)?style=plastic)](https://badgr.com/public/assertions/HtqMeP7NSSaEzOeMzOowCA)
 
 ## Repo Features
 
@@ -29,3 +31,8 @@ For maximum security and scalability the [Multi-Region Inspection with AWS Netwo
 - [How Transit Gateways Work in Appliance Mode](https://docs.aws.amazon.com/vpc/latest/tgw/how-transit-gateways-work.html#transit-gateway-appliance-scenario)
 - [Prescriptive Guidance Security Reference Architecture](https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture/org-management.html)
 - [Guidance to Render Unsecured PHI Unusable](https://www.hhs.gov/hipaa/for-professionals/breach-notification/guidance/index.html)
+
+## License
+This project is licensed under the [Creative Commons Attribution-NonCommercial 4.0 International License](https://creativecommons.org/licenses/by-nc/4.0/).
+
+You may use it for non-commercial and educational purposes only.
