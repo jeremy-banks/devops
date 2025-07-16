@@ -3,11 +3,11 @@
 # Initial Setup
 
 ## Prerequisites
-- aws-cli/2.25.5
-- Terraform v1.11.3
-- eksctl version 0.191.0
-- kubectl v1.31.1
-- helm v3.16.1
+- aws-cli/2.27.52
+- Terraform v1.12.2
+- eksctl version 0.210.0
+- kubectl v1.33.3
+- helm v3.18.4
 
 ## Instructions
 

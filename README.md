@@ -6,11 +6,11 @@ Thank you for visiting! The goal of this repo is to provide a comprehensive code
 
 ## Repo Features
 
-#### Network Topology
-For maximum security and scalability the [Multi-Region Inspection with AWS Network Firewall](https://d1.awsstatic.com/architecture-diagrams/ArchitectureDiagrams/inspection-deployment-models-with-AWS-network-firewall-ra.pdf) model is used, this codebase dynamically supports 2-6 availability zones, and optionally includes failover regions for all resources.
-
 #### Security Control Policies
 Limitations on S3 access and IAM rights restricted by the OU.
+
+#### Network Topology
+For maximum security and scalability the [Multi-Region Inspection with AWS Network Firewall](https://d1.awsstatic.com/architecture-diagrams/ArchitectureDiagrams/inspection-deployment-models-with-AWS-network-firewall-ra.pdf) model is used, this codebase dynamically supports 2-6 availability zones, and optionally includes failover regions for all resources.
 
 ## Documentation
 - [Initial Setup](./documentation/initial_setup.md)
