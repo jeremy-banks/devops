@@ -1,8 +1,5 @@
 # DevOps
-Thank you for visiting! Please consider leaving a 
-
-<!-- Place this tag where you want the button to render. -->
-<a class="github-button" href="https://github.com/jeremy-banks/devops" data-color-scheme="no-preference: dark; light: dark; dark: dark;" data-icon="octicon-star" data-size="large" aria-label="Star jeremy-banks/devops on GitHub">Star</a>
+Thank you for visiting! Please consider leaving a [![GitHub stars](https://img.shields.io/github/stars/jeremy-banks/devops?style=social)](https://github.com/your-username/your-repo)
 
 The goal of this repo is to provide a comprehensive codebase for me to lift-and-shift any organinzation into an ideal AWS and EKS deployment using documented best practices.
 
@@ -32,6 +29,3 @@ For maximum security and scalability the [Multi-Region Inspection with AWS Netwo
 - [How Transit Gateways Work in Appliance Mode](https://docs.aws.amazon.com/vpc/latest/tgw/how-transit-gateways-work.html#transit-gateway-appliance-scenario)
 - [Prescriptive Guidance Security Reference Architecture](https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture/org-management.html)
 - [Guidance to Render Unsecured PHI Unusable](https://www.hhs.gov/hipaa/for-professionals/breach-notification/guidance/index.html)
-
-<!-- Place this tag in your head or just before your close body tag. -->
-<script async defer src="https://buttons.github.io/buttons.js"></script>
