@@ -62,9 +62,13 @@ variable "cost_center" {
 }
 
 variable "deployment_environment" {
-  description = "name of the deployment environment, eg dev, tst, stg, prd"
-  type        = string
-  default     = "dev"
+  type    = string
+  default = "dev"
+
+  validation {
+    condition     = contains(["dev", "tst", "stg", "prd"], var.deployment_environment)
+    error_message = "variable deployment_environment must be one of: dev, tst, stg, or prd."
+  }
 }
 
 variable "resource_owner_email" {

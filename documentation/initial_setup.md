@@ -24,15 +24,13 @@
 1. Declare your Region(s)
    1. `region.primary` "us-west-2" and `region.primary_short` "usw2"
    1. `region.failover` "us-east-1" and `region.failover_short` "use1"
-1. Explicitly defined AZs tightly control network traffic and reduce costs
-   1. `azs_used` 2-6
+1. Explicitly defined availability zones limit network traffic and reduce costs
+   1. `azs_used` 2-4
    1. `azs_primary` ["usw2-az1","usw2-az2","usw2-az3"]
    1. `azs_failover` ["use1-az1","use1-az2","use1-az3"]
 
 ### Deploy Org Management / Root Account
 1. Create AWS Account to be Org Management / Root
-   1. During account creation enable Developer tier AWS Support
-   1. Open a `Chat` AWS Support Case with `Account and Billing` in category `Organization` requesting `Default maximum number of accounts` increased to `1000`
 1. Create IAM User "superadmin"
    1. Attach AdministratorAccess policy
    1. Create an access key and AWS CLI profile named "superadmin" `aws configure --profile superadmin`
@@ -50,6 +48,9 @@
 ### Deploy OUs, Accounts, and SCPs
 1. Deploy `terraform/aws/ous-scps-and-accounts`
 1. Update the terraform/variables.tf `account_id` map with the output
+1. Increase max number of accounts
+   1. In AWS Console, navigate to Service Quotas -> AWS services -> AWS Organizations
+   1. Request `Default maximum number of accounts` to 100
 
 ### Deploy IAM Groups and Roles
 1. Deploy `terraform/aws/iam`
