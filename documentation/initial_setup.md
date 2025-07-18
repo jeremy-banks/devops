@@ -12,8 +12,9 @@
 ## Instructions
 
 ### Update terraform/variables.tf with Your Unique Information
-1. Update the terraform/variables.tf with your unique information
-   1. `org_owner_email_prefix` "billg" and `org_owner_email_domain_tld` "microsoft.com"
+1. Create an email address, ideally a mailbox shared by senior engineers, to use as org owner
+   1. `org_owner_email_prefix` "jeremybankstech+newtestbed" and `org_owner_email_domain_tld` "gmail.com"
+1. Add your company information
    1. `company_name` "microsoft" and `company_name_abbr` "ms"
    1. `team_name` "blue" and `team_name_abbr` "blu"
    1. `project_name` "windows13" and `project_name_abbr` "w13"
@@ -21,12 +22,9 @@
 1. Enable Failover Region
    1. `create_failover_region` (true|false)
 1. Declare your Region(s)
-   1. `region.primary` "us-west-2"
-   1. `region.primary_short` "usw2"
-   1. `region.failover` "us-east-1"
-   1. `region.failover_short` "use1"
-1. Also Declare your Availability Zones
-   1. Explicitly defined AZs tightly control network traffic and reduce costs
+   1. `region.primary` "us-west-2" and `region.primary_short` "usw2"
+   1. `region.failover` "us-east-1" and `region.failover_short` "use1"
+1. Explicitly defined AZs tightly control network traffic and reduce costs
    1. `azs_used` 2-6
    1. `azs_primary` ["usw2-az1","usw2-az2","usw2-az3"]
    1. `azs_failover` ["use1-az1","use1-az2","use1-az3"]
@@ -34,6 +32,7 @@
 ### Deploy Org Management / Root Account
 1. Create AWS Account to be Org Management / Root
    1. During account creation enable Developer tier AWS Support
+   1. Open a `Chat` AWS Support Case with `Account and Billing` in category `Organization` requesting `Default maximum number of accounts` increased to `1000`
 1. Create IAM User "superadmin"
    1. Attach AdministratorAccess policy
    1. Create an access key and AWS CLI profile named "superadmin" `aws configure --profile superadmin`
@@ -47,7 +46,6 @@
    find . -name 'backend.tf' -exec sed -i '' 's,TFSTATEBACKENDS3BUCKETNAME,scc-blu-w12-usw2-tfstate-storage-blob-569d758c,g' {} +
    ```
 1. Uncomment `terraform/aws/management-account/backend.tf` and migrate state with `terraform init -force-copy`
-1. Open a `Chat` AWS Support Case with `Account and Billing` in category `Organization` requesting `Default maximum number of accounts` increased to `1000`.
 
 ### Deploy OUs, Accounts, and SCPs
 1. Deploy `terraform/aws/ous-scps-and-accounts`

@@ -8,14 +8,6 @@ The goal of this repo is to provide a comprehensive codebase for me to lift-and-
 
 [![Terraform Associate](https://img.shields.io/badge/Certificate-HashiCorp_Certified:_Terraform_Associate-rgb(115,73,182)?style=plastic)](https://www.credly.com/badges/736aae79-b1fd-4567-a3d2-d1e1a27ff182) [![Certified Kubernetes Administrator](https://img.shields.io/badge/Certificate-Certified_Kubernetes_Administrator_(PURSUING)-rgb(77,134,235)?style=plastic)](https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/) [![Unity Prototyping UW](https://img.shields.io/badge/Certificate-Specialization_in_Game_Prototyping_with_Unity-rgb(255,255,255)?style=plastic)](https://badgr.com/public/assertions/HtqMeP7NSSaEzOeMzOowCA)
 
-## Repo Features
-
-#### Security Control Policies
-Limitations on S3 access and IAM rights restricted by the OU.
-
-#### Network Topology
-For maximum security and scalability the [Multi-Region Inspection with AWS Network Firewall](https://d1.awsstatic.com/architecture-diagrams/ArchitectureDiagrams/inspection-deployment-models-with-AWS-network-firewall-ra.pdf) model is used, this codebase dynamically supports 2-6 availability zones, and optionally includes failover regions for all resources.
-
 ## Documentation
 - [Initial Setup](./documentation/initial_setup.md)
 - [To-Do](./documentation/to_do.md)

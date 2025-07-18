@@ -1,23 +1,23 @@
 variable "account_id" {
   type = map(string)
   default = {
-    # identity_prd         = ""
-    # log_archive_prd      = ""
-    networking_prd = "421954349749"
-    # security_tooling_prd = ""
-    workload_spoke_a_prd = "236147389059"
-    workload_spoke_b_prd = "232762586621"
+    identity_prd         = ""
+    log_archive_prd      = ""
+    networking_prd       = ""
+    security_tooling_prd = ""
+    workload_spoke_a_prd = ""
+    workload_spoke_b_prd = ""
   }
 }
 
 variable "org_owner_email_prefix" {
-  description = "the 'billg+aws' in 'billg+aws@microsoft.com'"
+  description = "the 'jeremybankstech+newtestbed' in 'jeremybankstech+newtestbed@gmail.com'"
   type        = string
-  default     = "workjeremyb+newtestbed"
+  default     = "jeremybankstech+newtestbed"
 }
 
 variable "org_owner_email_domain_tld" {
-  description = "the 'microsoft.com' in 'billg+aws@microsoft.com'"
+  description = "the 'gmail.com' in 'jeremybankstech+newtestbed@gmail.com'"
   type        = string
   default     = "gmail.com"
 }
@@ -71,6 +71,11 @@ variable "resource_owner_email" {
   description = "point of escalation for ownership"
   type        = string
   default     = ""
+
+  # validation {
+  #   condition     = can(regex("^\\S+@\\S+\\.\\S+$", var.resource_owner_email))
+  #   error_message = "variable resource_owner_email must be declared as a valid email address (e.g., user@example.com)"
+  # }
 }
 
 variable "cli_profile_name" {
@@ -101,7 +106,7 @@ variable "provider_role_name" {
 }
 
 variable "iam_immutable_tag_key" {
-  description = "key used to prevent users from editing IaC"
+  description = "key used to prevent users from changing critical immutable infrastructure"
   type        = string
   default     = "immutable"
 }
@@ -121,7 +126,12 @@ variable "org_service_access_principals" {
 variable "this_slug" {
   description = "used to programatically declare resource names"
   type        = string
-  default     = "YOU-FORGOT-TO-DECLARE-VARIABLE-this_slug-AND-AS-A-RESULT-THIS-STRING-IS-SO-LONG-IT-WILL-HOPEFULLY-FAIL-ANY-RESOURCE-CREATE-THUS-PROMPTING-YOU-TO-DEFINE-IT-IN-terraform.tfvars"
+  default     = ""
+
+  validation {
+    condition     = var.this_slug != null && var.this_slug != ""
+    error_message = "variable this_slug must be defined in terraform.tfvars"
+  }
 }
 
 variable "region" {
@@ -162,9 +172,13 @@ variable "azs_failover" {
 }
 
 variable "azs_used" {
-  description = "this codebase supports 2, 3, or 4 availability zones"
-  type        = number
-  default     = 2
+  type    = number
+  default = 2
+
+  validation {
+    condition     = var.azs_used >= 2 && var.azs_used <= 4
+    error_message = "this codebase supports 2, 3, or 4 availability zones"
+  }
 }
 
 # variable "network_tgw_share_enabled" {
@@ -172,33 +186,33 @@ variable "azs_used" {
 #   default = false
 # }
 
-variable "vpc_cidr_substitute" {
-  description = "Primary Region VPC CIDR. Use the full network address and subnet mask, eg 10.31.0.0/16"
-  type        = string
-  default     = ""
-}
+# variable "vpc_cidr_substitute" {
+#   description = "Primary Region VPC CIDR. Use the full network address and subnet mask, eg 10.31.0.0/16"
+#   type        = string
+#   default     = ""
+# }
 
-variable "vpc_cidr_substitute_failover" {
-  description = "Failover Region VPC CIDR. Use the full network address and subnet mask, eg 10.32.0.0/16"
-  type        = string
-  default     = ""
-}
+# variable "vpc_cidr_substitute_failover" {
+#   description = "Failover Region VPC CIDR. Use the full network address and subnet mask, eg 10.32.0.0/16"
+#   type        = string
+#   default     = ""
+# }
 
-variable "vpc_cidr_network_primary" {
-  default = {
-    inbound    = "10.0.0.0/16"
-    outbound   = "10.1.0.0/16"
-    inspection = "10.2.0.0/16"
-  }
-}
+# variable "vpc_cidr_network_primary" {
+#   default = {
+#     inbound    = "10.0.0.0/16"
+#     outbound   = "10.1.0.0/16"
+#     inspection = "10.2.0.0/16"
+#   }
+# }
 
-variable "vpc_cidr_network_failover" {
-  default = {
-    inbound    = "10.3.0.0/16"
-    outbound   = "10.4.0.0/16"
-    inspection = "10.5.0.0/16"
-  }
-}
+# variable "vpc_cidr_network_failover" {
+#   default = {
+#     inbound    = "10.3.0.0/16"
+#     outbound   = "10.4.0.0/16"
+#     inspection = "10.5.0.0/16"
+#   }
+# }
 
 # variable "vpc_endpoint_services_enabled" {
 #   type = list(string)
@@ -259,9 +273,9 @@ variable "account_email_slug" {
   type = map(string)
   default = {
     identity_prd         = "identity-prd"
-    log_archive_prd      = "log_archive_prd"
+    log_archive_prd      = "log-archive-prd"
     networking_prd       = "network-prd"
-    security_tooling_prd = "security_tooling_prd"
+    security_tooling_prd = "security-tooling-prd"
     workload_spoke_a_prd = "workload-spoke-a-prd"
     workload_spoke_b_prd = "workload-spoke-b-prd"
   }
@@ -295,7 +309,6 @@ variable "vpc_cidr_infrastructure" {
     workload_spoke_a_prd_primary  = "10.6.0.0/16"
     workload_spoke_b_prd_failover = "10.9.0.0/16"
     workload_spoke_b_prd_primary  = "10.8.0.0/16"
-
   }
 }
 
@@ -317,7 +330,6 @@ locals {
 
   azs_primary  = slice(var.azs_primary, 0, var.azs_used)
   azs_failover = slice(var.azs_failover, 0, var.azs_used)
-
 
   # #build lists of availability zones for each region based on number of availabiliy zones
   # # azs_used_list_primary  = [for az in range(var.availability_zones_num_used) : var.availability_zones.primary[az]]
@@ -409,11 +421,11 @@ locals {
   # )
 
   default_tags_map = {
-    "company"                      = "${var.company_name}" #Microsoft
-    "team"                         = "${var.team_name}"    #Blue
+    "company"                      = "${var.company_name}"
+    "team"                         = "${var.team_name}"
     "cost_center"                  = "${var.cost_center}"
-    "project"                      = "${var.project_name}"           #Windows
-    "environment"                  = "${var.deployment_environment}" #dev|tst|stg|prd
+    "project"                      = "${var.project_name}"
+    "environment"                  = "${var.deployment_environment}"
     "resource_owner"               = var.resource_owner_email != "" ? "${var.resource_owner_email}" : "${local.org_owner_email}"
     "${var.iam_immutable_tag_key}" = "true"
   }
