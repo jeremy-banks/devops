@@ -1,8 +1,4 @@
-output "org_account_id" {
-  value = data.aws_caller_identity.this.id
-}
-
-output "region" {
+output "region_primary" {
   value = var.region.primary
 }
 
