@@ -16,10 +16,10 @@ data "aws_iam_policy_document" "iam_user_admin" {
     effect  = "Allow"
     actions = ["s3:*"]
     resources = [
-      "arn:aws:s3:::${local.resource_name_stub_primary}-tfstate-storage-blob-${local.unique_id}/${var.admin_user_names.admin}",
-      "arn:aws:s3:::${local.resource_name_stub_primary}-tfstate-storage-blob-${local.unique_id}/${var.admin_user_names.admin}/*",
-      "arn:aws:s3:::${local.resource_name_stub_failover}-tfstate-storage-blob-${local.unique_id}/${var.admin_user_names.admin}",
-      "arn:aws:s3:::${local.resource_name_stub_failover}-tfstate-storage-blob-${local.unique_id}/${var.admin_user_names.admin}/*",
+      "arn:aws:s3:::${local.resource_name_stub_primary}-tfstate-${local.unique_id}/${var.admin_user_names.admin}",
+      "arn:aws:s3:::${local.resource_name_stub_primary}-tfstate-${local.unique_id}/${var.admin_user_names.admin}/*",
+      "arn:aws:s3:::${local.resource_name_stub_failover}-tfstate-${local.unique_id}/${var.admin_user_names.admin}",
+      "arn:aws:s3:::${local.resource_name_stub_failover}-tfstate-${local.unique_id}/${var.admin_user_names.admin}/*",
     ]
   }
 
@@ -27,12 +27,6 @@ data "aws_iam_policy_document" "iam_user_admin" {
     sid    = "AllowUseOfTerraformStateS3BucketKMS"
     effect = "Allow"
     actions = [
-      "kms:DescribeKey",
-      "kms:Decrypt",
-      "kms:DescribeKey",
-      "kms:Encrypt",
-      "kms:GenerateDataKey*",
-      "kms:ReEncrypt*",
       "kms:Decrypt",
       "kms:DeriveSharedSecret",
       "kms:DescribeKey",
@@ -41,14 +35,13 @@ data "aws_iam_policy_document" "iam_user_admin" {
       "kms:GenerateMac",
       "kms:GetPublicKey",
       "kms:ReEncrypt*",
-      "kms:ReEncrypt*",
       "kms:Sign",
       "kms:Verify",
       "kms:VerifyMac",
     ]
     resources = [
-      "arn:aws:kms:${var.region.primary}:${data.aws_caller_identity.this.id}:alias/${local.resource_name_stub_primary}-${var.this_slug}",
-      "arn:aws:kms:${var.region.failover}:${data.aws_caller_identity.this.id}:alias/${local.resource_name_stub_failover}-${var.this_slug}",
+      module.kms_tfstate_backend_primary.key_arn,
+      module.kms_tfstate_backend_failover.key_arn,
     ]
   }
 }

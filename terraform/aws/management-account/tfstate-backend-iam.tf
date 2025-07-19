@@ -10,7 +10,7 @@ data "aws_iam_policy_document" "s3_tfstate_region_replicate" {
   statement {
     effect = "Allow"
     actions = [
-      "s3:GetObjectVersion",
+      # "s3:GetObjectVersion",
       "s3:GetObjectVersionForReplication",
       "s3:GetObjectVersionAcl",
       "s3:GetObjectVersionTagging"
@@ -29,21 +29,28 @@ data "aws_iam_policy_document" "s3_tfstate_region_replicate" {
   statement {
     effect = "Allow"
     actions = [
+      "kms:ListAliases",
+      "kms:ListKeys",
+    ]
+    resources = ["*"]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
       "kms:Decrypt",
       "kms:DescribeKey",
       "kms:Encrypt",
       "kms:GenerateDataKey*",
+      "kms:GetKeyRotationStatus",
+      "kms:GetPublicKey",
       "kms:ReEncrypt*",
+      "kms:Sign",
+      "kms:Verify",
     ]
-    resources = ["arn:aws:kms:*:${data.aws_caller_identity.this.id}:key/*"]
-    condition {
-      test     = "StringLike"
-      variable = "kms:ResourceAliases"
-      values   = [
-        "alias/${local.resource_name_stub_primary}-tfstate",
-        "alias/${local.resource_name_stub_failover}-tfstate",
-      ]
-    }
+    resources = [
+      module.kms_tfstate_backend_primary.key_arn,
+      module.kms_tfstate_backend_failover.key_arn,
+    ]
   }
 }
 
@@ -60,10 +67,7 @@ module "iam_role_tfstate_s3_region_replicate" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "5.59.0"
 
-  trusted_role_services = [
-    "s3.amazonaws.com",
-    # "batchoperations.s3.amazonaws.com"
-  ]
+  trusted_role_services = [ "s3.amazonaws.com" ]
 
   create_role = true
 
