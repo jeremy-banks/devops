@@ -35,15 +35,16 @@
    1. Attach AdministratorAccess policy
    1. Create an access key and AWS CLI profile named "superadmin" `aws configure --profile superadmin`
 1. Deploy `terraform/aws/management-account`
-1. Update the backend.tf files in `terraform/aws/` and subdirectories
-   ```sh
-   find . -name 'backend.tf' -exec sed -i '' 's,TFSTATEBACKENDORGACCOUNTID,012345678912,g' {} + &&\
-   find . -name 'backend.tf' -exec sed -i '' 's,TFSTATEBACKENDREGION,us-west-2,g' {} + &&\
-   find . -name 'backend.tf' -exec sed -i '' 's,TFSTATEBACKENDDYNAMODBTABLE,scc-blu-w12-usw2-tfstate,g' {} + &&\
-   find . -name 'backend.tf' -exec sed -i '' 's,TFSTATEBACKENDKMSARN,KEY_ARN,g' {} + &&\
-   find . -name 'backend.tf' -exec sed -i '' 's,TFSTATEBACKENDS3BUCKETNAME,scc-blu-w12-usw2-tfstate-storage-blob-569d758c,g' {} +
-   ```
-1. Uncomment `terraform/aws/management-account/backend.tf` and migrate state with `terraform init -force-copy`
+1. Enable Backend
+   1. Use the terraform output to update the backend.tf files in `terraform/aws/` and subdirectories
+      ```sh
+      find . -name 'backend.tf' -exec sed -i '' 's,TFSTATEBACKENDREGION,region_primary,g' {} + &&\
+      find . -name 'backend.tf' -exec sed -i '' 's,TFSTATEBACKENDKMSARN,tfstate_kms_arn,g' {} + &&\
+      find . -name 'backend.tf' -exec sed -i '' 's,TFSTATEBACKENDS3BUCKETNAME,tfstate_s3_bucket_name,g' {} +
+      ```
+   1. Uncomment `terraform/aws/management-account/backend.tf` and migrate state with `terraform init -force-copy`
+1. Create IAM User "admin"
+   1. Use the terraform output to create an access key and AWS CLI profile named "admin" `aws configure --profile admin`
 
 ### Deploy OUs, Accounts, and SCPs
 1. Deploy `terraform/aws/ous-scps-and-accounts`
