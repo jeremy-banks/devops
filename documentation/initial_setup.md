@@ -45,21 +45,16 @@
    1. Uncomment `terraform/aws/management-account/backend.tf` and migrate state with `terraform init -force-copy`
 1. Create IAM User "admin"
    1. Use the terraform output to create an access key and AWS CLI profile named "admin" `aws configure --profile admin`
-
-### Deploy OUs, Accounts, and SCPs
-1. Deploy `terraform/aws/ous-scps-and-accounts`
-1. Update the terraform/variables.tf `account_id` map with the output
 1. Increase max number of accounts
    1. In AWS Console, navigate to Service Quotas -> AWS services -> AWS Organizations
    1. Request `Default maximum number of accounts` to 100
 
+### Deploy OUs, Accounts, and SCPs
+1. Deploy `terraform/aws/ous-scps-and-accounts`
+1. Update the terraform/variables.tf `account_id` map with the output
+
 ### Deploy IAM Groups and Roles
 1. Deploy `terraform/aws/iam`
-1. Create AWS CLI profile named "admin" with the output
-   ```sh
-   terraform output -json
-   aws configure --profile admin
-   ```
 
 ### Deploy Networking
 1. Deploy `terraform/aws/networking`
