@@ -62,7 +62,7 @@ module "s3_tfstate_backend_primary" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "5.2.0"
 
-  bucket = "${local.resource_name_stub_primary}-tfstate-storage-blob-${local.unique_id}"
+  bucket = "${local.resource_name_stub_primary}-tfstate-${local.unique_id}"
 
   force_destroy = true
 
@@ -87,7 +87,7 @@ module "s3_tfstate_backend_primary" {
   versioning = { enabled = true }
 
   replication_configuration = {
-    role = module.iam_role_s3_tfstate_region_replicate.iam_role_arn
+    role = module.iam_role_tfstate_s3_region_replicate.iam_role_arn
 
     rules = [
       {
@@ -182,7 +182,7 @@ module "s3_tfstate_backend_failover" {
   version   = "5.2.0"
   providers = { aws = aws.management_failover }
 
-  bucket = "${local.resource_name_stub_failover}-tfstate-storage-blob-${local.unique_id}"
+  bucket = "${local.resource_name_stub_failover}-tfstate-${local.unique_id}"
 
   force_destroy = true
 

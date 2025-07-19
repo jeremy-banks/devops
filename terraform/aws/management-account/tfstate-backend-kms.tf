@@ -19,7 +19,7 @@ data "aws_iam_policy_document" "kms_tfstate_backend" {
   #     identifiers = concat(
   #       [
   #         "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
-  #         "arn:aws:iam::${data.aws_caller_identity.this.id}:role/s3-tfstate-region-replicate",
+  #         "${module.iam_role_tfstate_s3_region_replicate.iam_role_arn}",
   #         "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
   #         "${module.iam_user_admin.iam_user_arn}",
   #       ],
@@ -41,7 +41,7 @@ module "kms_tfstate_backend_primary" {
   key_usage               = "ENCRYPT_DECRYPT"
   multi_region            = true
 
-  aliases = ["${local.resource_name_stub_primary}-${var.this_slug}"]
+  aliases = ["${local.resource_name_stub_primary}-tfstate"]
 
   policy = data.aws_iam_policy_document.kms_tfstate_backend.json
 }
@@ -55,7 +55,7 @@ module "kms_tfstate_backend_failover" {
   create_replica          = true
   primary_key_arn         = module.kms_tfstate_backend_primary.key_arn
 
-  aliases = ["${local.resource_name_stub_failover}-${var.this_slug}"]
+  aliases = ["${local.resource_name_stub_failover}-tfstate"]
 
   policy = data.aws_iam_policy_document.kms_tfstate_backend.json
 }

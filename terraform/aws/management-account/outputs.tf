@@ -1,13 +1,13 @@
-output "region_primary" {
+output "tfstate_region" {
   value = var.region.primary
-}
-
-output "tfstate_kms_arn" {
-  value = module.kms_tfstate_backend_primary.key_arn
 }
 
 output "tfstate_s3_arn" {
   value = module.s3_tfstate_backend_primary.s3_bucket_id
+}
+
+output "tfstate_kms_arn" {
+  value = module.kms_tfstate_backend_primary.key_arn
 }
 
 output "iam_user_admin_access_key" {
