@@ -2,7 +2,7 @@ output "tfstate_region" {
   value = var.region.primary
 }
 
-output "tfstate_s3_arn" {
+output "tfstate_s3_bucket_name" {
   value = module.s3_tfstate_backend_primary.s3_bucket_id
 }
 
