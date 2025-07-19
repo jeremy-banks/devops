@@ -1,61 +1,61 @@
 data "aws_iam_policy_document" "s3_tfstate_backend_primary" {
-  statement {
-    sid    = "denyUnintendedAccessToEntireBucket"
-    effect = "Deny"
-    not_principals {
-      type = "AWS"
-      identifiers = concat([
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:role/s3-primary-replicate-to-failover",
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
-        ],
-      [for user in module.iam_user_breakglass : user.iam_user_arn])
-    }
-    actions = ["s3:*"]
-    resources = [
-      "${module.s3_tfstate_backend_primary.s3_bucket_arn}",
-      "${module.s3_tfstate_backend_primary.s3_bucket_arn}/*",
-    ]
-  }
+  # statement {
+  #   sid    = "denyUnintendedAccessToEntireBucket"
+  #   effect = "Deny"
+  #   not_principals {
+  #     type = "AWS"
+  #     identifiers = concat([
+  #       "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
+  #       "arn:aws:iam::${data.aws_caller_identity.this.id}:role/s3-tfstate-region-replicate",
+  #       "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
+  #       ],
+  #     [for user in module.iam_user_breakglass : user.iam_user_arn])
+  #   }
+  #   actions = ["s3:*"]
+  #   resources = [
+  #     "${module.s3_tfstate_backend_primary.s3_bucket_arn}",
+  #     "${module.s3_tfstate_backend_primary.s3_bucket_arn}/*",
+  #   ]
+  # }
 
-  statement {
-    sid    = "denyUnintendedAccessToSuperadmin"
-    effect = "Deny"
-    not_principals {
-      type = "AWS"
-      identifiers = concat([
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:role/s3-primary-replicate-to-failover",
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
-        ],
-      [for user in module.iam_user_breakglass : user.iam_user_arn])
-    }
-    actions = ["s3:*"]
-    resources = [
-      "${module.s3_tfstate_backend_primary.s3_bucket_arn}/${var.admin_user_names.superadmin}",
-      "${module.s3_tfstate_backend_primary.s3_bucket_arn}/${var.admin_user_names.superadmin}/*",
-    ]
-  }
+  # statement {
+  #   sid    = "denyUnintendedAccessToSuperadmin"
+  #   effect = "Deny"
+  #   not_principals {
+  #     type = "AWS"
+  #     identifiers = concat([
+  #       "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
+  #       "arn:aws:iam::${data.aws_caller_identity.this.id}:role/s3-tfstate-region-replicate",
+  #       "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
+  #       ],
+  #     [for user in module.iam_user_breakglass : user.iam_user_arn])
+  #   }
+  #   actions = ["s3:*"]
+  #   resources = [
+  #     "${module.s3_tfstate_backend_primary.s3_bucket_arn}/${var.admin_user_names.superadmin}",
+  #     "${module.s3_tfstate_backend_primary.s3_bucket_arn}/${var.admin_user_names.superadmin}/*",
+  #   ]
+  # }
 
-  statement {
-    sid    = "denyUnintendedAccessToAdmin"
-    effect = "Deny"
-    not_principals {
-      type = "AWS"
-      identifiers = concat([
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:role/s3-primary-replicate-to-failover",
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
-        "${module.iam_user_admin.iam_user_arn}",
-        ],
-      [for user in module.iam_user_breakglass : user.iam_user_arn])
-    }
-    actions = ["s3:*"]
-    resources = [
-      "${module.s3_tfstate_backend_primary.s3_bucket_arn}/${var.admin_user_names.admin}",
-      "${module.s3_tfstate_backend_primary.s3_bucket_arn}/${var.admin_user_names.admin}/*",
-    ]
-  }
+  # statement {
+  #   sid    = "denyUnintendedAccessToAdmin"
+  #   effect = "Deny"
+  #   not_principals {
+  #     type = "AWS"
+  #     identifiers = concat([
+  #       "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
+  #       "arn:aws:iam::${data.aws_caller_identity.this.id}:role/s3-tfstate-region-replicate",
+  #       "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
+  #       "${module.iam_user_admin.iam_user_arn}",
+  #       ],
+  #     [for user in module.iam_user_breakglass : user.iam_user_arn])
+  #   }
+  #   actions = ["s3:*"]
+  #   resources = [
+  #     "${module.s3_tfstate_backend_primary.s3_bucket_arn}/${var.admin_user_names.admin}",
+  #     "${module.s3_tfstate_backend_primary.s3_bucket_arn}/${var.admin_user_names.admin}/*",
+  #   ]
+  # }
 }
 
 module "s3_tfstate_backend_primary" {
@@ -87,7 +87,7 @@ module "s3_tfstate_backend_primary" {
   versioning = { enabled = true }
 
   replication_configuration = {
-    role = module.iam_role_s3_tfstate_backend_primary_replicate_to_failover.iam_role_arn
+    role = module.iam_role_s3_tfstate_region_replicate.iam_role_arn
 
     rules = [
       {
@@ -115,6 +115,66 @@ module "s3_tfstate_backend_primary" {
   attach_deny_incorrect_encryption_headers = true
   attach_deny_incorrect_kms_key_sse        = true
   allowed_kms_key_arn                      = module.kms_tfstate_backend_primary.key_arn
+}
+
+data "aws_iam_policy_document" "s3_tfstate_backend_failover" {
+  # statement {
+  #   sid    = "denyUnintendedAccessToEntireBucket"
+  #   effect = "Deny"
+  #   not_principals {
+  #     type = "AWS"
+  #     identifiers = concat([
+  #       "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
+  #       "arn:aws:iam::${data.aws_caller_identity.this.id}:role/s3-tfstate-region-replicate",
+  #       "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
+  #       ],
+  #     [for user in module.iam_user_breakglass : user.iam_user_arn])
+  #   }
+  #   actions = ["s3:*"]
+  #   resources = [
+  #     "${module.s3_tfstate_backend_failover.s3_bucket_arn}",
+  #     "${module.s3_tfstate_backend_failover.s3_bucket_arn}/*",
+  #   ]
+  # }
+
+  # statement {
+  #   sid    = "denyUnintendedAccessToSuperadmin"
+  #   effect = "Deny"
+  #   not_principals {
+  #     type = "AWS"
+  #     identifiers = concat([
+  #       "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
+  #       "arn:aws:iam::${data.aws_caller_identity.this.id}:role/s3-tfstate-region-replicate",
+  #       "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
+  #       ],
+  #     [for user in module.iam_user_breakglass : user.iam_user_arn])
+  #   }
+  #   actions = ["s3:*"]
+  #   resources = [
+  #     "${module.s3_tfstate_backend_failover.s3_bucket_arn}/${var.admin_user_names.superadmin}",
+  #     "${module.s3_tfstate_backend_failover.s3_bucket_arn}/${var.admin_user_names.superadmin}/*",
+  #   ]
+  # }
+
+  # statement {
+  #   sid    = "denyUnintendedAccessToAdmin"
+  #   effect = "Deny"
+  #   not_principals {
+  #     type = "AWS"
+  #     identifiers = concat([
+  #       "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
+  #       "arn:aws:iam::${data.aws_caller_identity.this.id}:role/s3-tfstate-region-replicate",
+  #       "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
+  #       "${module.iam_user_admin.iam_user_arn}",
+  #       ],
+  #     [for user in module.iam_user_breakglass : user.iam_user_arn])
+  #   }
+  #   actions = ["s3:*"]
+  #   resources = [
+  #     "${module.s3_tfstate_backend_failover.s3_bucket_arn}/${var.admin_user_names.admin}",
+  #     "${module.s3_tfstate_backend_failover.s3_bucket_arn}/${var.admin_user_names.admin}/*",
+  #   ]
+  # }
 }
 
 module "s3_tfstate_backend_failover" {

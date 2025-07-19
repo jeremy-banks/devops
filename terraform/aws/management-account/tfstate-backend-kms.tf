@@ -11,24 +11,24 @@ data "aws_iam_policy_document" "kms_tfstate_backend" {
     resources = ["*"]
   }
 
-  statement {
-    sid    = "Explicit Deny Unintended Access"
-    effect = "Deny"
-    not_principals {
-      type = "AWS"
-      identifiers = concat(
-        [
-          "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
-          "arn:aws:iam::${data.aws_caller_identity.this.id}:role/s3-primary-replicate-to-failover",
-          "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
-          "${module.iam_user_admin.iam_user_arn}",
-        ],
-        [for user in module.iam_user_breakglass : user.iam_user_arn]
-      )
-    }
-    actions   = ["kms:*"]
-    resources = ["*"]
-  }
+  # statement {
+  #   sid    = "Explicit Deny Unintended Access"
+  #   effect = "Deny"
+  #   not_principals {
+  #     type = "AWS"
+  #     identifiers = concat(
+  #       [
+  #         "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
+  #         "arn:aws:iam::${data.aws_caller_identity.this.id}:role/s3-tfstate-region-replicate",
+  #         "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
+  #         "${module.iam_user_admin.iam_user_arn}",
+  #       ],
+  #       [for user in module.iam_user_breakglass : user.iam_user_arn]
+  #     )
+  #   }
+  #   actions   = ["kms:*"]
+  #   resources = ["*"]
+  # }
 }
 
 module "kms_tfstate_backend_primary" {

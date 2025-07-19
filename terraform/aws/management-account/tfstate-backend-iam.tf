@@ -1,11 +1,11 @@
-data "aws_iam_policy_document" "s3_tfstate_backend_primary_replicate_to_failover" {
+data "aws_iam_policy_document" "s3_tfstate_region_replicate" {
   statement {
     effect = "Allow"
     actions = [
       "s3:GetReplicationConfiguration",
       "s3:ListBucket"
     ]
-    resources = ["${module.s3_tfstate_backend_primary.s3_bucket_arn}"]
+    resources = ["arn:aws:s3:::${local.resource_name_stub_primary}-tfstate-storage-blob-${local.unique_id}"]
   }
   statement {
     effect = "Allow"
@@ -15,7 +15,7 @@ data "aws_iam_policy_document" "s3_tfstate_backend_primary_replicate_to_failover
       "s3:GetObjectVersionAcl",
       "s3:GetObjectVersionTagging"
     ]
-    resources = ["${module.s3_tfstate_backend_primary.s3_bucket_arn}/*"]
+    resources = ["arn:aws:s3:::${local.resource_name_stub_primary}-tfstate-storage-blob-${local.unique_id}/*"]
   }
   statement {
     effect = "Allow"
@@ -24,7 +24,7 @@ data "aws_iam_policy_document" "s3_tfstate_backend_primary_replicate_to_failover
       "s3:ReplicateDelete",
       "s3:ReplicateTags"
     ]
-    resources = ["${module.s3_tfstate_backend_failover.s3_bucket_arn}/*"]
+    resources = ["arn:aws:s3:::${local.resource_name_stub_failover}-tfstate-storage-blob-${local.unique_id}/*"]
   }
   statement {
     effect = "Allow"
@@ -42,89 +42,29 @@ data "aws_iam_policy_document" "s3_tfstate_backend_primary_replicate_to_failover
   }
 }
 
-module "iam_policy_s3_tfstate_backend_primary_replicate_to_failover" {
+module "iam_policy_s3_tfstate_region_replicate" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version = "5.59.0"
 
-  name = "s3-tfstate-backend-primary-replicate-to-failover"
+  name = "s3-tfstate-region-replicate"
 
-  policy = data.aws_iam_policy_document.s3_tfstate_backend_primary_replicate_to_failover.json
+  policy = data.aws_iam_policy_document.s3_tfstate_region_replicate.json
 }
 
-module "iam_role_s3_tfstate_backend_primary_replicate_to_failover" {
+module "iam_role_s3_tfstate_region_replicate" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "5.59.0"
 
   trusted_role_services = [
     "s3.amazonaws.com",
-    "batchoperations.s3.amazonaws.com"
+    # "batchoperations.s3.amazonaws.com"
   ]
 
   create_role = true
 
-  role_name           = "s3-primary-replicate-to-failover"
+  role_name           = "s3-tfstate-region-replicate"
   role_requires_mfa   = false
   attach_admin_policy = false
 
-  custom_role_policy_arns = [module.iam_policy_s3_tfstate_backend_primary_replicate_to_failover.arn]
-}
-
-data "aws_iam_policy_document" "s3_tfstate_backend_failover" {
-  statement {
-    sid    = "denyUnintendedAccessToEntireBucket"
-    effect = "Deny"
-    not_principals {
-      type = "AWS"
-      identifiers = concat([
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:role/s3-primary-replicate-to-failover",
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
-        ],
-      [for user in module.iam_user_breakglass : user.iam_user_arn])
-    }
-    actions = ["s3:*"]
-    resources = [
-      "${module.s3_tfstate_backend_failover.s3_bucket_arn}",
-      "${module.s3_tfstate_backend_failover.s3_bucket_arn}/*",
-    ]
-  }
-
-  statement {
-    sid    = "denyUnintendedAccessToSuperadmin"
-    effect = "Deny"
-    not_principals {
-      type = "AWS"
-      identifiers = concat([
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:role/s3-primary-replicate-to-failover",
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
-        ],
-      [for user in module.iam_user_breakglass : user.iam_user_arn])
-    }
-    actions = ["s3:*"]
-    resources = [
-      "${module.s3_tfstate_backend_failover.s3_bucket_arn}/${var.admin_user_names.superadmin}",
-      "${module.s3_tfstate_backend_failover.s3_bucket_arn}/${var.admin_user_names.superadmin}/*",
-    ]
-  }
-
-  statement {
-    sid    = "denyUnintendedAccessToAdmin"
-    effect = "Deny"
-    not_principals {
-      type = "AWS"
-      identifiers = concat([
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:role/s3-primary-replicate-to-failover",
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
-        "${module.iam_user_admin.iam_user_arn}",
-        ],
-      [for user in module.iam_user_breakglass : user.iam_user_arn])
-    }
-    actions = ["s3:*"]
-    resources = [
-      "${module.s3_tfstate_backend_failover.s3_bucket_arn}/${var.admin_user_names.admin}",
-      "${module.s3_tfstate_backend_failover.s3_bucket_arn}/${var.admin_user_names.admin}/*",
-    ]
-  }
+  custom_role_policy_arns = [module.iam_policy_s3_tfstate_region_replicate.arn]
 }
