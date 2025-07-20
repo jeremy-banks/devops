@@ -25,7 +25,7 @@ locals {
 
 module "vpc_outbound_failover" {
   source    = "terraform-aws-modules/vpc/aws"
-  version   = "5.21.0"
+  version   = "6.0.1"
   providers = { aws = aws.networking_prd_failover }
 
   count = var.create_failover_region ? 1 : 0
