@@ -25,7 +25,7 @@ locals {
 
 module "vpc_primary" {
   source    = "terraform-aws-modules/vpc/aws"
-  version   = "5.21.0"
+  version   = "6.0.1"
   providers = { aws = aws.workload_spoke_a_prd }
 
   name = "${local.resource_name_stub_primary}-${var.this_slug}-vpc-primary"
@@ -120,6 +120,11 @@ data "aws_ec2_transit_gateway" "tgw_primary" {
     name   = "options.amazon-side-asn"
     values = [var.tgw_asn.primary]
   }
+
+  filter {
+    name   = "state"
+    values = ["available"]
+  }
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_workload_spoke_a_to_tgw_primary" {
@@ -153,6 +158,11 @@ data "aws_ec2_transit_gateway_vpc_attachment" "tgw_post_inspection_primary" {
     name   = "tag:Name"
     values = ["${local.resource_name_stub_primary}-network-tgw-attach-inspection-vpc"]
   }
+
+  filter {
+    name   = "state"
+    values = ["available"]
+  }
 }
 
 data "aws_ec2_transit_gateway_route_table" "tgw_pre_inspection_primary" {
@@ -162,6 +172,11 @@ data "aws_ec2_transit_gateway_route_table" "tgw_pre_inspection_primary" {
     name   = "tag:Name"
     values = ["${local.resource_name_stub_primary}-network-tgw-pre-inspection"]
   }
+
+  filter {
+    name   = "state"
+    values = ["available"]
+  }
 }
 
 data "aws_ec2_transit_gateway_route_table" "tgw_post_inspection_primary" {
@@ -170,6 +185,11 @@ data "aws_ec2_transit_gateway_route_table" "tgw_post_inspection_primary" {
   filter {
     name   = "tag:Name"
     values = ["${local.resource_name_stub_primary}-network-tgw-post-inspection"]
+  }
+
+  filter {
+    name   = "state"
+    values = ["available"]
   }
 }
 
@@ -181,6 +201,11 @@ data "aws_ec2_transit_gateway_peering_attachment" "tgw_peer_primary" {
   filter {
     name   = "tag:Name"
     values = ["${local.resource_name_stub_primary}-network-tgw-peer-accepter"]
+  }
+
+  filter {
+    name   = "state"
+    values = ["available"]
   }
 }
 

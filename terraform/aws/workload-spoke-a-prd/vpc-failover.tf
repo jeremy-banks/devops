@@ -25,7 +25,7 @@ locals {
 
 module "vpc_failover" {
   source    = "terraform-aws-modules/vpc/aws"
-  version   = "5.21.0"
+  version   = "6.0.1"
   providers = { aws = aws.workload_spoke_a_prd_failover }
 
   count = var.create_failover_region ? 1 : 0
@@ -126,6 +126,11 @@ data "aws_ec2_transit_gateway" "tgw_failover" {
     name   = "options.amazon-side-asn"
     values = [var.tgw_asn.failover]
   }
+
+  filter {
+    name   = "state"
+    values = ["available"]
+  }
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_workload_spoke_a_to_tgw_failover" {
@@ -165,6 +170,11 @@ data "aws_ec2_transit_gateway_vpc_attachment" "tgw_post_inspection_failover" {
     name   = "tag:Name"
     values = ["${local.resource_name_stub_failover}-network-tgw-attach-inspection-vpc"]
   }
+
+  filter {
+    name   = "state"
+    values = ["available"]
+  }
 }
 
 data "aws_ec2_transit_gateway_route_table" "tgw_pre_inspection_failover" {
@@ -175,6 +185,11 @@ data "aws_ec2_transit_gateway_route_table" "tgw_pre_inspection_failover" {
   filter {
     name   = "tag:Name"
     values = ["${local.resource_name_stub_failover}-network-tgw-pre-inspection"]
+  }
+
+  filter {
+    name   = "state"
+    values = ["available"]
   }
 }
 
@@ -187,6 +202,11 @@ data "aws_ec2_transit_gateway_route_table" "tgw_post_inspection_failover" {
     name   = "tag:Name"
     values = ["${local.resource_name_stub_failover}-network-tgw-post-inspection"]
   }
+
+  filter {
+    name   = "state"
+    values = ["available"]
+  }
 }
 
 data "aws_ec2_transit_gateway_peering_attachment" "tgw_peer_failover" {
@@ -197,6 +217,11 @@ data "aws_ec2_transit_gateway_peering_attachment" "tgw_peer_failover" {
   filter {
     name   = "tag:Name"
     values = ["${local.resource_name_stub_failover}-network-tgw-peer-requester"]
+  }
+
+  filter {
+    name   = "state"
+    values = ["available"]
   }
 }
 

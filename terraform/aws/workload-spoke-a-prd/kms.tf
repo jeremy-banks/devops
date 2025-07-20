@@ -82,7 +82,7 @@ data "aws_iam_policy_document" "kms" {
 
 module "kms_primary" {
   source    = "terraform-aws-modules/kms/aws"
-  version   = "3.1.1"
+  version   = "4.0.0"
   providers = { aws = aws.workload_spoke_a_prd }
 
   deletion_window_in_days = 30
@@ -98,7 +98,7 @@ module "kms_primary" {
 
 module "kms_failover" {
   source    = "terraform-aws-modules/kms/aws"
-  version   = "3.1.1"
+  version   = "4.0.0"
   providers = { aws = aws.workload_spoke_a_prd_failover }
 
   deletion_window_in_days = 30

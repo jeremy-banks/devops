@@ -1,6 +1,6 @@
 module "s3_primary" {
   source    = "terraform-aws-modules/s3-bucket/aws"
-  version   = "4.7.0"
+  version   = "5.2.0"
   providers = { aws = aws.workload_spoke_a_prd }
 
   bucket = "${local.resource_name_stub_primary}-${var.this_slug}-storage-blob-${local.unique_id}"
@@ -62,10 +62,10 @@ module "s3_primary" {
 
 module "iam_policy_s3_primary_replicate_to_failover" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version   = "5.55.0"
+  version   = "5.59.0"
   providers = { aws = aws.workload_spoke_a_prd }
 
-  name = "s3-primary-replicate-to-failover"
+  name = "s3-tfstate-region-replicate"
 
   policy = <<EOF
 {
@@ -119,7 +119,7 @@ EOF
 
 module "iam_role_s3_primary_replicate_to_failover" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version   = "5.55.0"
+  version   = "5.59.0"
   providers = { aws = aws.workload_spoke_a_prd }
 
   trusted_role_services = [
@@ -129,7 +129,7 @@ module "iam_role_s3_primary_replicate_to_failover" {
 
   create_role = true
 
-  role_name           = "s3-primary-replicate-to-failover"
+  role_name           = "s3-tfstate-region-replicate"
   role_requires_mfa   = false
   attach_admin_policy = false
 
@@ -140,7 +140,7 @@ module "iam_role_s3_primary_replicate_to_failover" {
 
 module "s3_failover" {
   source    = "terraform-aws-modules/s3-bucket/aws"
-  version   = "4.7.0"
+  version   = "5.2.0"
   providers = { aws = aws.workload_spoke_a_prd_failover }
 
   bucket = "${local.resource_name_stub_failover}-${var.this_slug}-storage-blob-${local.unique_id}"
