@@ -1,6 +1,6 @@
 output "vpc_inbound_primary" {
   value = {
-    subnets_public = module.vpc_inbound_primary.*.public_subnets
+    subnets_public = module.vpc_inbound_primary.public_subnets
     vpc_id         = module.vpc_inbound_primary.vpc_id
   }
 }
