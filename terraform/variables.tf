@@ -64,7 +64,7 @@ variable "deployment_environment" {
 
   validation {
     condition     = contains(["dev", "tst", "stg", "prd"], var.deployment_environment)
-    error_message = "variable deployment_environment must be one of: dev, tst, stg, or prd."
+    error_message = "variable deployment_environment must be one of: 'dev', 'tst', 'stg', or 'prd'"
   }
 }
 
@@ -164,7 +164,7 @@ variable "azs_primary" {
     condition = alltrue([
       for az in var.azs_primary : can(regex("^us[a-z0-9]+-az[0-9]+$", az))
     ])
-    error_message = "All items must be AWS AZ IDs like 'usw2-az1', not AZ names like 'us-east-1a'."
+    error_message = "must be AWS AZ IDs like 'usw2-az1', not AZ names like 'us-east-1a'"
   }
 }
 
@@ -182,7 +182,7 @@ variable "azs_failover" {
     condition = alltrue([
       for az in var.azs_failover : can(regex("^us[a-z0-9]+-az[0-9]+$", az))
     ])
-    error_message = "items must be AWS AZ IDs like 'usw2-az1', not AZ names like 'us-east-1a'"
+    error_message = "must be AWS AZ IDs like 'usw2-az1', not AZ names like 'us-east-1a'"
   }
 }
 
