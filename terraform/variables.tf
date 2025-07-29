@@ -159,6 +159,13 @@ variable "azs_primary" {
     "usw2-az3",
     "usw2-az4", # firewall-fips not supported
   ]
+
+  validation {
+    condition = alltrue([
+      for az in var.azs_primary : can(regex("^us[a-z0-9]+-az[0-9]+$", az))
+    ])
+    error_message = "All items must be AWS AZ IDs like 'usw2-az1', not AZ names like 'us-east-1a'."
+  }
 }
 
 variable "azs_failover" {
@@ -170,6 +177,13 @@ variable "azs_failover" {
     # "use1-az4", # firewall-fips not supported
     # "use1-az5", # firewall-fips not supported
   ]
+
+  validation {
+    condition = alltrue([
+      for az in var.azs_failover : can(regex("^us[a-z0-9]+-az[0-9]+$", az))
+    ])
+    error_message = "items must be AWS AZ IDs like 'usw2-az1', not AZ names like 'us-east-1a'"
+  }
 }
 
 variable "azs_number_used" {
@@ -179,16 +193,6 @@ variable "azs_number_used" {
   validation {
     condition     = var.azs_number_used >= 2 && var.azs_number_used <= 4
     error_message = "this codebase supports 2, 3, or 4 availability zones"
-  }
-}
-
-variable "azs_number_used_override" {
-  type    = number
-  default = 2
-
-  validation {
-    condition     = var.azs_number_used_override <= var.azs_number_used
-    error_message = "azs_number_used_override must be equal to or less than azs_number_used"
   }
 }
 
