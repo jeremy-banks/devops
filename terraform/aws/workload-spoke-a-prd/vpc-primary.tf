@@ -122,20 +122,6 @@ resource "aws_route" "intra_to_tgw_primary" {
   transit_gateway_id     = data.aws_ec2_transit_gateway.tgw_primary.id
 }
 
-data "aws_ec2_transit_gateway" "tgw_primary" {
-  provider = aws.networking_prd
-
-  filter {
-    name   = "options.amazon-side-asn"
-    values = [var.tgw_asn.primary]
-  }
-
-  filter {
-    name   = "state"
-    values = ["available"]
-  }
-}
-
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_workload_spoke_a_to_tgw_primary" {
   provider = aws.workload_spoke_a_prd
 
@@ -158,64 +144,6 @@ resource "aws_ec2_transit_gateway_route_table_association" "vpc_workload_spoke_a
 
   transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.vpc_workload_spoke_a_to_tgw_primary.id
   transit_gateway_route_table_id = data.aws_ec2_transit_gateway_route_table.tgw_pre_inspection_primary.id
-}
-
-data "aws_ec2_transit_gateway_vpc_attachment" "tgw_post_inspection_primary" {
-  provider = aws.networking_prd
-
-  filter {
-    name   = "tag:Name"
-    values = ["${local.resource_name_stub_primary}-network-tgw-attach-inspection-vpc"]
-  }
-
-  filter {
-    name   = "state"
-    values = ["available"]
-  }
-}
-
-data "aws_ec2_transit_gateway_route_table" "tgw_pre_inspection_primary" {
-  provider = aws.networking_prd
-
-  filter {
-    name   = "tag:Name"
-    values = ["${local.resource_name_stub_primary}-network-tgw-pre-inspection"]
-  }
-
-  filter {
-    name   = "state"
-    values = ["available"]
-  }
-}
-
-data "aws_ec2_transit_gateway_route_table" "tgw_post_inspection_primary" {
-  provider = aws.networking_prd
-
-  filter {
-    name   = "tag:Name"
-    values = ["${local.resource_name_stub_primary}-network-tgw-post-inspection"]
-  }
-
-  filter {
-    name   = "state"
-    values = ["available"]
-  }
-}
-
-data "aws_ec2_transit_gateway_peering_attachment" "tgw_peer_primary" {
-  provider = aws.networking_prd
-
-  count = var.create_failover_region ? 1 : 0
-
-  filter {
-    name   = "tag:Name"
-    values = ["${local.resource_name_stub_primary}-network-tgw-peer-accepter"]
-  }
-
-  filter {
-    name   = "state"
-    values = ["available"]
-  }
 }
 
 resource "aws_ec2_transit_gateway_route" "post_inspection_workload_spoke_a_primary_to_primary" {

@@ -1,10 +1,10 @@
-data "aws_caller_identity" "networking" { provider = aws.networking_prd }
-
 locals {
   current_time = timestamp()
   test_start   = formatdate("YYYYMMDDhhmmss", timeadd(local.current_time, "120s"))
   test_stop    = formatdate("YYYYMMDDhhmmss", timeadd(local.current_time, "240s"))
 }
+
+data "aws_caller_identity" "networking" { provider = aws.networking_prd }
 
 data "aws_ami" "amazon_linux_primary" {
   provider = aws.networking_prd
