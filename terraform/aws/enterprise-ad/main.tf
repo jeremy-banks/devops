@@ -82,7 +82,7 @@ resource "aws_directory_service_region" "ad_failover" {
   provider = aws.identity
 
   directory_id = aws_directory_service_directory.ad_primary.id
-  region_name  = var.region.failover
+  region_name  = var.region_failover.full
 
   vpc_settings {
     vpc_id     = data.aws_vpc.network_failover.id

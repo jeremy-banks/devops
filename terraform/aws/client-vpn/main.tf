@@ -39,13 +39,13 @@ resource "aws_ec2_client_vpn_endpoint" "client_vpn_primary" {
 data "aws_ec2_managed_prefix_list" "route53_healthchecks_primary" {
   provider = aws.network
 
-  name = "com.amazonaws.${var.region.primary}.route53-healthchecks"
+  name = "com.amazonaws.${var.region_primary.full}.route53-healthchecks"
 }
 
 data "aws_ec2_managed_prefix_list" "route53_healthchecks_failover" {
   provider = aws.network_failover
 
-  name = "com.amazonaws.${var.region.failover}.route53-healthchecks"
+  name = "com.amazonaws.${var.region_failover.full}.route53-healthchecks"
 }
 
 module "client_vpn_endpoint_sg_primary" {
@@ -376,7 +376,7 @@ module "client_vpn_records" {
         "${aws_ec2_client_vpn_endpoint.client_vpn_primary.dns_name}",
       ]
       latency_routing_policy = {
-        region = var.region.primary
+        region = var.region_primary.full
       }
     },
     {
@@ -389,7 +389,7 @@ module "client_vpn_records" {
         "${aws_ec2_client_vpn_endpoint.client_vpn_failover.dns_name}",
       ]
       latency_routing_policy = {
-        region = var.region.failover
+        region = var.region_failover.full
       }
     },
   ]

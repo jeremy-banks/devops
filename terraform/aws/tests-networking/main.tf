@@ -78,70 +78,70 @@ data "aws_key_pair" "spoke_b_prd_failover" {
 }
 
 #inbound-primary
-data "aws_vpc" "inbound_primary" {
+data "aws_vpc" "central_ingress_primary" {
   provider = aws.networking_prd
 
   filter {
     name   = "cidr-block"
-    values = [var.vpc_cidr_infrastructure.inbound_primary]
+    values = [var.vpc_cidr_infrastructure.central_ingress_primary]
   }
 }
 
-data "aws_subnets" "inbound_primary" {
+data "aws_subnets" "central_ingress_primary" {
   provider = aws.networking_prd
 
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.inbound_primary.id]
+    values = [data.aws_vpc.central_ingress_primary.id]
   }
 
   tags = { Name = "*-pub-*" }
 }
 
-data "aws_security_group" "inbound_primary" {
+data "aws_security_group" "central_ingress_primary" {
   provider = aws.networking_prd
 
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.inbound_primary.id]
+    values = [data.aws_vpc.central_ingress_primary.id]
   }
 
   tags = { Name = "*-main-sg" }
 }
 
 #inbound-failover
-data "aws_vpc" "inbound_failover" {
+data "aws_vpc" "central_ingress_failover" {
   provider = aws.networking_prd_failover
 
   count = var.create_failover_region ? 1 : 0
 
   filter {
     name   = "cidr-block"
-    values = [var.vpc_cidr_infrastructure.inbound_failover]
+    values = [var.vpc_cidr_infrastructure.central_ingress_failover]
   }
 }
 
-data "aws_subnets" "inbound_failover" {
+data "aws_subnets" "central_ingress_failover" {
   provider = aws.networking_prd_failover
 
   count = var.create_failover_region ? 1 : 0
 
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.inbound_failover[0].id]
+    values = [data.aws_vpc.central_ingress_failover[0].id]
   }
 
   tags = { Name = "*-pub-*" }
 }
 
-data "aws_security_group" "inbound_failover" {
+data "aws_security_group" "central_ingress_failover" {
   provider = aws.networking_prd_failover
 
   count = var.create_failover_region ? 1 : 0
 
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.inbound_failover[0].id]
+    values = [data.aws_vpc.central_ingress_failover[0].id]
   }
 
   tags = { Name = "*-main-sg" }
@@ -218,70 +218,70 @@ data "aws_security_group" "inspection_failover" {
 }
 
 #outbound-primary
-data "aws_vpc" "outbound_primary" {
+data "aws_vpc" "central_egress_primary" {
   provider = aws.networking_prd
 
   filter {
     name   = "cidr-block"
-    values = [var.vpc_cidr_infrastructure.outbound_primary]
+    values = [var.vpc_cidr_infrastructure.central_egress_primary]
   }
 }
 
-data "aws_subnets" "outbound_primary" {
+data "aws_subnets" "central_egress_primary" {
   provider = aws.networking_prd
 
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.outbound_primary.id]
+    values = [data.aws_vpc.central_egress_primary.id]
   }
 
   tags = { Name = "*-pub-*" }
 }
 
-data "aws_security_group" "outbound_primary" {
+data "aws_security_group" "central_egress_primary" {
   provider = aws.networking_prd
 
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.outbound_primary.id]
+    values = [data.aws_vpc.central_egress_primary.id]
   }
 
   tags = { Name = "*-main-sg" }
 }
 
 #outbound-failover
-data "aws_vpc" "outbound_failover" {
+data "aws_vpc" "central_egress_failover" {
   provider = aws.networking_prd_failover
 
   count = var.create_failover_region ? 1 : 0
 
   filter {
     name   = "cidr-block"
-    values = [var.vpc_cidr_infrastructure.outbound_failover]
+    values = [var.vpc_cidr_infrastructure.central_egress_failover]
   }
 }
 
-data "aws_subnets" "outbound_failover" {
+data "aws_subnets" "central_egress_failover" {
   provider = aws.networking_prd_failover
 
   count = var.create_failover_region ? 1 : 0
 
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.outbound_failover[0].id]
+    values = [data.aws_vpc.central_egress_failover[0].id]
   }
 
   tags = { Name = "*-pub-*" }
 }
 
-data "aws_security_group" "outbound_failover" {
+data "aws_security_group" "central_egress_failover" {
   provider = aws.networking_prd_failover
 
   count = var.create_failover_region ? 1 : 0
 
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.outbound_failover[0].id]
+    values = [data.aws_vpc.central_egress_failover[0].id]
   }
 
   tags = { Name = "*-main-sg" }

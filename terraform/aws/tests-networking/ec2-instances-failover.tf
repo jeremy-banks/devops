@@ -1,5 +1,5 @@
 #inbound-failover
-module "inbound_failover" {
+module "central_ingress_failover" {
   source    = "terraform-aws-modules/ec2-instance/aws"
   version   = "5.8.0"
   providers = { aws = aws.networking_prd_failover }
@@ -11,8 +11,8 @@ module "inbound_failover" {
   ami           = data.aws_ami.amazon_linux_failover.id
   instance_type = "t4g.nano"
 
-  subnet_id              = data.aws_subnets.inbound_failover[0].ids[0]
-  vpc_security_group_ids = [data.aws_security_group.inbound_failover[0].id]
+  subnet_id              = data.aws_subnets.central_ingress_failover[0].ids[0]
+  vpc_security_group_ids = [data.aws_security_group.central_ingress_failover[0].id]
 
   associate_public_ip_address = true
   key_name                    = "me"
@@ -20,16 +20,16 @@ module "inbound_failover" {
   iam_instance_profile = aws_iam_role.tests_networking_prd.name
 
   user_data = templatefile("user_data.tftpl", {
-    cloudwatch_logs_region = var.region.primary
+    cloudwatch_logs_region = var.region_primary.full
     test_start             = local.test_start
     test_stop              = local.test_stop
     this_instance_name     = "inbound-failover"
-    this_instance_region   = var.region.failover
+    this_instance_region   = var.region_failover.full
     this_instance_ping_targets = join(" ", [
       "127.0.0.1",
       module.inspection_failover[0].private_dns,
       module.spoke_a_prd_failover[0].private_dns,
-      # module.outbound_failover.private_dns,
+      # module.central_egress_failover.private_dns,
       "google.com",
       "bing.com",
     ])
@@ -58,15 +58,15 @@ module "inspection_failover" {
   iam_instance_profile = aws_iam_role.tests_networking_prd.name
 
   user_data = templatefile("user_data.tftpl", {
-    cloudwatch_logs_region = var.region.primary
+    cloudwatch_logs_region = var.region_primary.full
     test_start             = local.test_start
     test_stop              = local.test_stop
     this_instance_name     = "inspection-failover"
-    this_instance_region   = var.region.failover
+    this_instance_region   = var.region_failover.full
     this_instance_ping_targets = join(" ", [
       "127.0.0.1",
       # module.spoke_a_prd_failover.private_dns,
-      # module.outbound_failover.private_dns,
+      # module.central_egress_failover.private_dns,
       "google.com",
       "bing.com",
     ])
@@ -74,7 +74,7 @@ module "inspection_failover" {
 }
 
 #outbound-failover
-module "outbound_failover" {
+module "central_egress_failover" {
   source    = "terraform-aws-modules/ec2-instance/aws"
   version   = "5.8.0"
   providers = { aws = aws.networking_prd_failover }
@@ -86,8 +86,8 @@ module "outbound_failover" {
   ami           = data.aws_ami.amazon_linux_failover.id
   instance_type = "t4g.nano"
 
-  subnet_id              = data.aws_subnets.outbound_failover[0].ids[0]
-  vpc_security_group_ids = [data.aws_security_group.outbound_failover[0].id]
+  subnet_id              = data.aws_subnets.central_egress_failover[0].ids[0]
+  vpc_security_group_ids = [data.aws_security_group.central_egress_failover[0].id]
 
   # associate_public_ip_address = true
   key_name = "me"
@@ -95,11 +95,11 @@ module "outbound_failover" {
   iam_instance_profile = aws_iam_role.tests_networking_prd.name
 
   user_data = templatefile("user_data.tftpl", {
-    cloudwatch_logs_region = var.region.primary
+    cloudwatch_logs_region = var.region_primary.full
     test_start             = local.test_start
     test_stop              = local.test_stop
     this_instance_name     = "outbound-failover"
-    this_instance_region   = var.region.failover
+    this_instance_region   = var.region_failover.full
     this_instance_ping_targets = join(" ", [
       "127.0.0.1",
       "google.com",
@@ -130,11 +130,11 @@ module "spoke_a_prd_failover" {
   iam_instance_profile = aws_iam_role.tests_networking_prd.name
 
   user_data = templatefile("user_data.tftpl", {
-    cloudwatch_logs_region = var.region.primary
+    cloudwatch_logs_region = var.region_primary.full
     test_start             = local.test_start
     test_stop              = local.test_stop
     this_instance_name     = "spoke-a-prd-failover"
-    this_instance_region   = var.region.failover
+    this_instance_region   = var.region_failover.full
     this_instance_ping_targets = join(" ", [
       "127.0.0.1",
       # module.inspection_failover.private_dns,
@@ -168,11 +168,11 @@ module "spoke_b_prd_failover" {
   iam_instance_profile = aws_iam_role.tests_networking_prd.name
 
   user_data = templatefile("user_data.tftpl", {
-    cloudwatch_logs_region = var.region.primary
+    cloudwatch_logs_region = var.region_primary.full
     test_start             = local.test_start
     test_stop              = local.test_stop
     this_instance_name     = "spoke-b-prd-failover"
-    this_instance_region   = var.region.failover
+    this_instance_region   = var.region_failover.full
     this_instance_ping_targets = join(" ", [
       "127.0.0.1",
       "google.com",

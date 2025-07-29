@@ -1,29 +1,29 @@
 locals {
   vpc_workload_spoke_a_cidrsubnets_failover = (
-    var.azs_used == 4 ? cidrsubnets(var.vpc_cidr_infrastructure.workload_spoke_a_prd_failover, 3, 3, 3, 3, 6, 6, 6, 6, 5, 5, 5, 5) :
-    var.azs_used == 3 ? cidrsubnets(var.vpc_cidr_infrastructure.workload_spoke_a_prd_failover, 2, 2, 2, 6, 6, 6, 5, 5, 5) :
-    var.azs_used == 2 ? cidrsubnets(var.vpc_cidr_infrastructure.workload_spoke_a_prd_failover, 2, 2, 6, 6, 5, 5) :
+    var.azs_number_used == 4 ? cidrsubnets(var.vpc_cidr_infrastructure.workload_spoke_a_prd_failover, 3, 3, 3, 3, 6, 6, 6, 6, 5, 5, 5, 5) :
+    var.azs_number_used == 3 ? cidrsubnets(var.vpc_cidr_infrastructure.workload_spoke_a_prd_failover, 2, 2, 2, 6, 6, 6, 5, 5, 5) :
+    var.azs_number_used == 2 ? cidrsubnets(var.vpc_cidr_infrastructure.workload_spoke_a_prd_failover, 2, 2, 6, 6, 5, 5) :
     null
   )
 
   vpc_workload_spoke_a_private_subnets_failover = (
-    var.azs_used == 4 ? [local.vpc_workload_spoke_a_cidrsubnets_failover[0], local.vpc_workload_spoke_a_cidrsubnets_failover[1], local.vpc_workload_spoke_a_cidrsubnets_failover[2], local.vpc_workload_spoke_a_cidrsubnets_failover[3]] :
-    var.azs_used == 3 ? [local.vpc_workload_spoke_a_cidrsubnets_failover[0], local.vpc_workload_spoke_a_cidrsubnets_failover[1], local.vpc_workload_spoke_a_cidrsubnets_failover[2]] :
-    var.azs_used == 2 ? [local.vpc_workload_spoke_a_cidrsubnets_failover[0], local.vpc_workload_spoke_a_cidrsubnets_failover[1]] :
+    var.azs_number_used == 4 ? [local.vpc_workload_spoke_a_cidrsubnets_failover[0], local.vpc_workload_spoke_a_cidrsubnets_failover[1], local.vpc_workload_spoke_a_cidrsubnets_failover[2], local.vpc_workload_spoke_a_cidrsubnets_failover[3]] :
+    var.azs_number_used == 3 ? [local.vpc_workload_spoke_a_cidrsubnets_failover[0], local.vpc_workload_spoke_a_cidrsubnets_failover[1], local.vpc_workload_spoke_a_cidrsubnets_failover[2]] :
+    var.azs_number_used == 2 ? [local.vpc_workload_spoke_a_cidrsubnets_failover[0], local.vpc_workload_spoke_a_cidrsubnets_failover[1]] :
     null
   )
 
   vpc_workload_spoke_a_intra_subnets_failover = (
-    var.azs_used == 4 ? [local.vpc_workload_spoke_a_cidrsubnets_failover[4], local.vpc_workload_spoke_a_cidrsubnets_failover[5], local.vpc_workload_spoke_a_cidrsubnets_failover[6], local.vpc_workload_spoke_a_cidrsubnets_failover[7]] :
-    var.azs_used == 3 ? [local.vpc_workload_spoke_a_cidrsubnets_failover[3], local.vpc_workload_spoke_a_cidrsubnets_failover[4], local.vpc_workload_spoke_a_cidrsubnets_failover[5]] :
-    var.azs_used == 2 ? [local.vpc_workload_spoke_a_cidrsubnets_failover[2], local.vpc_workload_spoke_a_cidrsubnets_failover[3]] :
+    var.azs_number_used == 4 ? [local.vpc_workload_spoke_a_cidrsubnets_failover[4], local.vpc_workload_spoke_a_cidrsubnets_failover[5], local.vpc_workload_spoke_a_cidrsubnets_failover[6], local.vpc_workload_spoke_a_cidrsubnets_failover[7]] :
+    var.azs_number_used == 3 ? [local.vpc_workload_spoke_a_cidrsubnets_failover[3], local.vpc_workload_spoke_a_cidrsubnets_failover[4], local.vpc_workload_spoke_a_cidrsubnets_failover[5]] :
+    var.azs_number_used == 2 ? [local.vpc_workload_spoke_a_cidrsubnets_failover[2], local.vpc_workload_spoke_a_cidrsubnets_failover[3]] :
     null
   )
 
   vpc_workload_spoke_a_public_subnets_failover = (
-    var.azs_used == 4 ? [local.vpc_workload_spoke_a_cidrsubnets_failover[8], local.vpc_workload_spoke_a_cidrsubnets_failover[9], local.vpc_workload_spoke_a_cidrsubnets_failover[10], local.vpc_workload_spoke_a_cidrsubnets_failover[11]] :
-    var.azs_used == 3 ? [local.vpc_workload_spoke_a_cidrsubnets_failover[6], local.vpc_workload_spoke_a_cidrsubnets_failover[7], local.vpc_workload_spoke_a_cidrsubnets_failover[8]] :
-    var.azs_used == 2 ? [local.vpc_workload_spoke_a_cidrsubnets_failover[4], local.vpc_workload_spoke_a_cidrsubnets_failover[5]] :
+    var.azs_number_used == 4 ? [local.vpc_workload_spoke_a_cidrsubnets_failover[8], local.vpc_workload_spoke_a_cidrsubnets_failover[9], local.vpc_workload_spoke_a_cidrsubnets_failover[10], local.vpc_workload_spoke_a_cidrsubnets_failover[11]] :
+    var.azs_number_used == 3 ? [local.vpc_workload_spoke_a_cidrsubnets_failover[6], local.vpc_workload_spoke_a_cidrsubnets_failover[7], local.vpc_workload_spoke_a_cidrsubnets_failover[8]] :
+    var.azs_number_used == 2 ? [local.vpc_workload_spoke_a_cidrsubnets_failover[4], local.vpc_workload_spoke_a_cidrsubnets_failover[5]] :
     null
   )
 
