@@ -13,7 +13,7 @@ module "network_firewall_primary" {
   subnet_change_protection          = false
 
   vpc_id = module.vpc_inspection_primary.vpc_id
-  subnet_mapping = { for i in range(0, var.azs_used) :
+  subnet_mapping = { for i in range(0, var.azs_number_used) :
     "subnet-${i}" => {
       subnet_id       = element(module.vpc_inspection_primary.private_subnets, i)
       ip_address_type = "IPV4"

@@ -67,7 +67,7 @@ module "iam_role_tfstate_s3_region_replicate" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "5.59.0"
 
-  trusted_role_services = [ "s3.amazonaws.com" ]
+  trusted_role_services = ["s3.amazonaws.com"]
 
   create_role = true
 

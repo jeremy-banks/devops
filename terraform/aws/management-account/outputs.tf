@@ -1,5 +1,5 @@
 output "tfstate_region" {
-  value = var.region.primary
+  value = var.region_primary.full
 }
 
 output "tfstate_s3_bucket_name" {

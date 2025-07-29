@@ -37,7 +37,7 @@ resource "aws_ec2_transit_gateway_peering_attachment" "tgw_peering" {
 
   count = var.create_failover_region ? 1 : 0
 
-  peer_region             = var.region.primary
+  peer_region             = var.region_primary.full
   peer_transit_gateway_id = aws_ec2_transit_gateway.tgw_primary.id
   transit_gateway_id      = aws_ec2_transit_gateway.tgw_failover[0].id
 

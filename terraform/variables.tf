@@ -135,14 +135,19 @@ variable "this_slug" {
   }
 }
 
-variable "region" {
-  description = "regions for the infrastructure"
-  type        = map(string)
+variable "region_primary" {
+  type = map(string)
   default = {
-    primary        = "us-west-2"
-    failover       = "us-east-1"
-    primary_short  = "usw2"
-    failover_short = "use1"
+    full  = "us-west-2"
+    short = "usw2"
+  }
+}
+
+variable "region_failover" {
+  type = map(string)
+  default = {
+    full  = "us-east-1"
+    short = "use1"
   }
 }
 
@@ -152,7 +157,6 @@ variable "create_failover_region" {
 }
 
 variable "azs_primary" {
-  description = "availability zones to use"
   default = [
     "usw2-az1",
     "usw2-az2",
@@ -347,8 +351,8 @@ locals {
   number_words = { 1 = "one", 2 = "two", 3 = "three", 4 = "four", 5 = "five", 6 = "six", 7 = "seven", 8 = "eight", 9 = "nine", 10 = "ten", }
 
   resource_name_stub          = lower("${var.company_name_abbr}-${var.team_name_abbr}-${var.project_name_abbr}") #company - team - project - env
-  resource_name_stub_primary  = lower("${local.resource_name_stub}-${var.region.primary_short}")                 #company - team - project - env - primary
-  resource_name_stub_failover = lower("${local.resource_name_stub}-${var.region.failover_short}")                #company - team - project - env - failover
+  resource_name_stub_primary  = lower("${local.resource_name_stub}-${var.region_primary.short}")                 #company - team - project - env - primary
+  resource_name_stub_failover = lower("${local.resource_name_stub}-${var.region_failover.short}")                #company - team - project - env - failover
 
   azs_primary  = slice(var.azs_primary, 0, var.azs_number_used)
   azs_failover = slice(var.azs_failover, 0, var.azs_number_used)

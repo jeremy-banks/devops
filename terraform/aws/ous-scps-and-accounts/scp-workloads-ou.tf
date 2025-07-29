@@ -51,7 +51,7 @@ data "aws_iam_policy_document" "workloads_ou" {
     condition {
       test     = "StringNotEquals"
       variable = "aws:RequestedRegion"
-      values   = [var.region.primary, var.region.failover]
+      values   = [var.region_primary.full, var.region_failover.full]
     }
   }
   statement {

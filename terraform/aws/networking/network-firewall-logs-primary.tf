@@ -29,7 +29,7 @@ resource "aws_s3_bucket_policy" "network_firewall_logs_primary" {
         Action = "s3:PutObject"
         Condition = {
           ArnLike = {
-            "aws:SourceArn" = "arn:aws:logs:${var.region.primary}:${data.aws_caller_identity.this.account_id}:*"
+            "aws:SourceArn" = "arn:aws:logs:${var.region_primary.full}:${data.aws_caller_identity.this.account_id}:*"
           }
           StringEquals = {
             "aws:SourceAccount" = data.aws_caller_identity.this.account_id
@@ -47,7 +47,7 @@ resource "aws_s3_bucket_policy" "network_firewall_logs_primary" {
         Action = "s3:GetBucketAcl"
         Condition = {
           ArnLike = {
-            "aws:SourceArn" = "arn:aws:logs:${var.region.primary}:${data.aws_caller_identity.this.account_id}:*"
+            "aws:SourceArn" = "arn:aws:logs:${var.region_primary.full}:${data.aws_caller_identity.this.account_id}:*"
           }
           StringEquals = {
             "aws:SourceAccount" = data.aws_caller_identity.this.account_id
