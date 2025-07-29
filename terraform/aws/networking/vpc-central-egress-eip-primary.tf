@@ -5,5 +5,5 @@ resource "aws_eip" "vpc_central_egress_primary_nat" {
   count = var.azs_used
 
   domain = "vpc"
-  tags   = { "Name" = "${local.resource_name_stub_primary}-vpc-outbound-primary-eip-DO-NOT-DELETE-${count.index}" }
+  tags   = { "Name" = "${local.resource_name_stub_primary}-vpc-central-egress-primary-eip-DO-NOT-DELETE-${count.index}" }
 }

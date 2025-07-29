@@ -1,8 +1,8 @@
 locals {
   vpc_central_egress_cidrsubnets_primary = (
-    var.azs_used == 4 ? cidrsubnets(var.vpc_cidr_infrastructure.outbound_primary, 3, 3, 3, 3, 12, 12, 12, 12) :
-    var.azs_used == 3 ? cidrsubnets(var.vpc_cidr_infrastructure.outbound_primary, 2, 2, 2, 12, 12, 12) :
-    var.azs_used == 2 ? cidrsubnets(var.vpc_cidr_infrastructure.outbound_primary, 2, 2, 12, 12) :
+    var.azs_used == 4 ? cidrsubnets(var.vpc_cidr_infrastructure.central_egress_primary, 3, 3, 3, 3, 12, 12, 12, 12) :
+    var.azs_used == 3 ? cidrsubnets(var.vpc_cidr_infrastructure.central_egress_primary, 2, 2, 2, 12, 12, 12) :
+    var.azs_used == 2 ? cidrsubnets(var.vpc_cidr_infrastructure.central_egress_primary, 2, 2, 12, 12) :
     null
   )
 
@@ -28,8 +28,8 @@ module "vpc_central_egress_primary" {
   version   = "6.0.1"
   providers = { aws = aws.networking_prd }
 
-  name = "${local.resource_name_stub_primary}-vpc-outbound-primary"
-  cidr = var.vpc_cidr_infrastructure.outbound_primary
+  name = "${local.resource_name_stub_primary}-vpc-central-egress-primary"
+  cidr = var.vpc_cidr_infrastructure.central_egress_primary
 
   azs                 = local.azs_primary
   private_subnets     = []
@@ -72,7 +72,7 @@ module "vpc_central_egress_primary" {
   create_private_nat_gateway_route = false
 
   enable_dhcp_options              = true
-  dhcp_options_domain_name_servers = [replace(var.vpc_cidr_infrastructure.outbound_primary, "0/16", "2")]
+  dhcp_options_domain_name_servers = [replace(var.vpc_cidr_infrastructure.central_egress_primary, "0/16", "2")]
   dhcp_options_ntp_servers         = var.ntp_servers
 
   vpc_tags = local.vpc_central_egress_tags_primary
@@ -92,10 +92,10 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_central_egress_to_tgw_pri
   # transit_gateway_default_route_table_association = false
   # transit_gateway_default_route_table_propagation = false
 
-  tags = { Name = "${local.resource_name_stub_primary}-${var.this_slug}-tgw-attach-outbound-vpc" }
+  tags = { Name = "${local.resource_name_stub_primary}-${var.this_slug}-tgw-attach-central-egress-vpc" }
 }
 
-resource "aws_route" "outbound_pub_to_tgw_primary" {
+resource "aws_route" "central_egress_pub_to_tgw_primary" {
   provider = aws.networking_prd
 
   count = length(module.vpc_central_egress_primary.public_route_table_ids)
@@ -105,7 +105,7 @@ resource "aws_route" "outbound_pub_to_tgw_primary" {
   transit_gateway_id     = aws_ec2_transit_gateway.tgw_primary.id
 }
 
-resource "aws_route" "outbound_intra_to_tgw_primary" {
+resource "aws_route" "central_egress_intra_to_tgw_primary" {
   provider = aws.networking_prd
 
   count = length(module.vpc_central_egress_primary.intra_route_table_ids)
@@ -115,7 +115,7 @@ resource "aws_route" "outbound_intra_to_tgw_primary" {
   transit_gateway_id     = aws_ec2_transit_gateway.tgw_primary.id
 }
 
-resource "aws_route" "outbound_intra_to_nat_primary" {
+resource "aws_route" "central_egress_intra_to_nat_primary" {
   provider = aws.networking_prd
 
   count = length(module.vpc_central_egress_primary.intra_route_table_ids)

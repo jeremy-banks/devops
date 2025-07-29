@@ -1,8 +1,8 @@
 locals {
   vpc_central_egress_cidrsubnets_failover = (
-    var.azs_used == 4 ? cidrsubnets(var.vpc_cidr_infrastructure.outbound_failover, 3, 3, 3, 3, 12, 12, 12, 12) :
-    var.azs_used == 3 ? cidrsubnets(var.vpc_cidr_infrastructure.outbound_failover, 2, 2, 2, 12, 12, 12) :
-    var.azs_used == 2 ? cidrsubnets(var.vpc_cidr_infrastructure.outbound_failover, 2, 2, 12, 12) :
+    var.azs_used == 4 ? cidrsubnets(var.vpc_cidr_infrastructure.central_egress_failover, 3, 3, 3, 3, 12, 12, 12, 12) :
+    var.azs_used == 3 ? cidrsubnets(var.vpc_cidr_infrastructure.central_egress_failover, 2, 2, 2, 12, 12, 12) :
+    var.azs_used == 2 ? cidrsubnets(var.vpc_cidr_infrastructure.central_egress_failover, 2, 2, 12, 12) :
     null
   )
 
@@ -30,8 +30,8 @@ module "vpc_central_egress_failover" {
 
   count = var.create_failover_region ? 1 : 0
 
-  name = "${local.resource_name_stub_failover}-vpc-outbound-failover"
-  cidr = var.vpc_cidr_infrastructure.outbound_failover
+  name = "${local.resource_name_stub_failover}-vpc-central-egress-failover"
+  cidr = var.vpc_cidr_infrastructure.central_egress_failover
 
   azs                 = local.azs_failover
   private_subnets     = []
@@ -74,7 +74,7 @@ module "vpc_central_egress_failover" {
   create_private_nat_gateway_route = false
 
   enable_dhcp_options              = true
-  dhcp_options_domain_name_servers = [replace(var.vpc_cidr_infrastructure.outbound_failover, "0/16", "2")]
+  dhcp_options_domain_name_servers = [replace(var.vpc_cidr_infrastructure.central_egress_failover, "0/16", "2")]
   dhcp_options_ntp_servers         = var.ntp_servers
 
   vpc_tags = local.vpc_central_egress_tags_failover
@@ -96,10 +96,10 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_central_egress_to_tgw_fai
   # transit_gateway_default_route_table_association = false
   # transit_gateway_default_route_table_propagation = false
 
-  tags = { Name = "${local.resource_name_stub_failover}-${var.this_slug}-tgw-attach-outbound-vpc" }
+  tags = { Name = "${local.resource_name_stub_failover}-${var.this_slug}-tgw-attach-central-egress-vpc" }
 }
 
-resource "aws_route" "outbound_pub_to_tgw_failover" {
+resource "aws_route" "central_egress_pub_to_tgw_failover" {
   provider = aws.networking_prd_failover
 
   count = var.create_failover_region ? length(module.vpc_central_egress_failover[0].public_route_table_ids) : 0
@@ -109,7 +109,7 @@ resource "aws_route" "outbound_pub_to_tgw_failover" {
   transit_gateway_id     = aws_ec2_transit_gateway.tgw_failover[0].id
 }
 
-resource "aws_route" "outbound_intra_to_tgw_failover" {
+resource "aws_route" "central_egress_intra_to_tgw_failover" {
   provider = aws.networking_prd_failover
 
   count = var.create_failover_region ? length(module.vpc_central_egress_failover[0].intra_route_table_ids) : 0
@@ -119,7 +119,7 @@ resource "aws_route" "outbound_intra_to_tgw_failover" {
   transit_gateway_id     = aws_ec2_transit_gateway.tgw_failover[0].id
 }
 
-resource "aws_route" "outbound_intra_to_nat_failover" {
+resource "aws_route" "central_egress_intra_to_nat_failover" {
   provider = aws.networking_prd_failover
 
   count = var.create_failover_region ? length(module.vpc_central_egress_failover[0].intra_route_table_ids) : 0

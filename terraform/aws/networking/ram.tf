@@ -12,7 +12,7 @@ resource "aws_ram_resource_association" "ram_tgw_primary" {
   resource_share_arn = aws_ram_resource_share.primary.arn
 }
 
-resource "aws_ram_resource_association" "ram_inbound_subnets_primary" {
+resource "aws_ram_resource_association" "ram_central_ingress_subnets_primary" {
   provider = aws.networking_prd
 
   count = length(module.vpc_central_ingress_primary.public_subnet_arns)
@@ -75,7 +75,7 @@ resource "aws_ram_resource_association" "ram_tgw_failover" {
   resource_share_arn = aws_ram_resource_share.failover[0].arn
 }
 
-resource "aws_ram_resource_association" "ram_inbound_subnets_failover" {
+resource "aws_ram_resource_association" "ram_central_ingress_subnets_failover" {
   provider = aws.networking_prd_failover
 
   count = var.create_failover_region ? length(module.vpc_central_ingress_failover[0].public_subnet_arns) : 0
