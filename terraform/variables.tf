@@ -157,7 +157,7 @@ variable "azs_primary" {
     "usw2-az1",
     "usw2-az2",
     "usw2-az3",
-    # "usw2-az4", firewall-fips not supported
+    "usw2-az4", # firewall-fips not supported
   ]
 }
 
@@ -165,21 +165,36 @@ variable "azs_failover" {
   default = [
     "use1-az1",
     "use1-az2",
-    # "use1-az3", firewall-fips not supported
-    # "use1-az4", firewall-fips not supported
-    # "use1-az5", firewall-fips not supported
     "use1-az6",
+    "use1-az3", # firewall-fips not supported
+    # "use1-az4", # firewall-fips not supported
+    # "use1-az5", # firewall-fips not supported
   ]
 }
 
-variable "azs_used" {
+variable "azs_number_used" {
   type    = number
   default = 2
 
   validation {
-    condition     = var.azs_used >= 2 && var.azs_used <= 4
+    condition     = var.azs_number_used >= 2 && var.azs_number_used <= 4
     error_message = "this codebase supports 2, 3, or 4 availability zones"
   }
+}
+
+variable "azs_number_used_override" {
+  type    = number
+  default = 2
+
+  validation {
+    condition     = var.azs_number_used_override <= var.azs_number_used
+    error_message = "azs_number_used_override must be equal to or less than azs_number_used"
+  }
+}
+
+variable "create_public_subnets_override" {
+  type    = bool
+  default = false
 }
 
 # variable "network_tgw_share_enabled" {
@@ -299,12 +314,12 @@ variable "vpc_cidr_infrastructure" {
   default = {
     transit_gateway = "10.0.0.0/8"
 
-    inbound_failover    = "10.3.0.0/16"
-    inbound_primary     = "10.0.0.0/16"
-    inspection_failover = "10.4.0.0/16"
-    inspection_primary  = "10.1.0.0/16"
-    outbound_failover   = "10.5.0.0/16"
-    outbound_primary    = "10.2.0.0/16"
+    central_ingress_failover = "10.3.0.0/16"
+    central_ingress_primary  = "10.0.0.0/16"
+    inspection_failover      = "10.4.0.0/16"
+    inspection_primary       = "10.1.0.0/16"
+    central_egress_failover  = "10.5.0.0/16"
+    central_egress_primary   = "10.2.0.0/16"
 
     workload_spoke_a_prd_failover = "10.7.0.0/16"
     workload_spoke_a_prd_primary  = "10.6.0.0/16"
@@ -331,12 +346,12 @@ locals {
   resource_name_stub_primary  = lower("${local.resource_name_stub}-${var.region.primary_short}")                 #company - team - project - env - primary
   resource_name_stub_failover = lower("${local.resource_name_stub}-${var.region.failover_short}")                #company - team - project - env - failover
 
-  azs_primary  = slice(var.azs_primary, 0, var.azs_used)
-  azs_failover = slice(var.azs_failover, 0, var.azs_used)
+  azs_primary  = slice(var.azs_primary, 0, var.azs_number_used)
+  azs_failover = slice(var.azs_failover, 0, var.azs_number_used)
 
   # #build lists of availability zones for each region based on number of availabiliy zones
-  # # azs_used_list_primary  = [for az in range(var.availability_zones_num_used) : var.availability_zones.primary[az]]
-  # azs_used_list_failover = [for az in range(var.availability_zones_num_used) : var.availability_zones.failover[az]]
+  # # azs_number_used_list_primary  = [for az in range(var.availability_zones_num_used) : var.availability_zones.primary[az]]
+  # azs_number_used_list_failover = [for az in range(var.availability_zones_num_used) : var.availability_zones.failover[az]]
 
   # #dynamically generate subnet cidrs based on number of availability zones
   # vpc_subnet_cidrs_primary = local.vpc_cidr_primary != "" ? (
