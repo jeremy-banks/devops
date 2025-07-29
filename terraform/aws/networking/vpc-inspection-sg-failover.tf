@@ -3,8 +3,8 @@ module "sg_inspection_main_failover" {
   version   = "5.3.0"
   providers = { aws = aws.networking_prd_failover }
 
-  count       = var.create_failover_region ? 1 : 0
-  
+  count = var.create_failover_region ? 1 : 0
+
   name        = "${local.resource_name_stub_failover}-${var.this_slug}-inspection-main-sg"
   description = "${local.resource_name_stub_failover}-${var.this_slug}-inspection-main-sg"
   vpc_id      = module.vpc_inspection_failover[0].vpc_id
