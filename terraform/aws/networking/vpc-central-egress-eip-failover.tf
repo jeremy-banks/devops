@@ -1,4 +1,4 @@
-resource "aws_eip" "vpc_outbound_failover_nat" {
+resource "aws_eip" "vpc_central_egress_failover_nat" {
   provider = aws.networking_prd_failover
   # lifecycle { prevent_destroy = true } # YOU NEVER WANT TO DELETE THESE
 

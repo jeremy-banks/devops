@@ -1,29 +1,29 @@
 locals {
-  vpc_inbound_cidrsubnets_primary = (
+  vpc_central_ingress_cidrsubnets_primary = (
     var.azs_used == 4 ? cidrsubnets(var.vpc_cidr_infrastructure.inbound_primary, 3, 3, 3, 3, 12, 12, 12, 12) :
     var.azs_used == 3 ? cidrsubnets(var.vpc_cidr_infrastructure.inbound_primary, 2, 2, 2, 12, 12, 12) :
     var.azs_used == 2 ? cidrsubnets(var.vpc_cidr_infrastructure.inbound_primary, 2, 2, 12, 12) :
     null
   )
 
-  vpc_inbound_public_subnets_primary = (
-    var.azs_used == 4 ? [local.vpc_inbound_cidrsubnets_primary[0], local.vpc_inbound_cidrsubnets_primary[1], local.vpc_inbound_cidrsubnets_primary[2], local.vpc_inbound_cidrsubnets_primary[3]] :
-    var.azs_used == 3 ? [local.vpc_inbound_cidrsubnets_primary[0], local.vpc_inbound_cidrsubnets_primary[1], local.vpc_inbound_cidrsubnets_primary[2]] :
-    var.azs_used == 2 ? [local.vpc_inbound_cidrsubnets_primary[0], local.vpc_inbound_cidrsubnets_primary[1]] :
+  vpc_central_ingress_public_subnets_primary = (
+    var.azs_used == 4 ? [local.vpc_central_ingress_cidrsubnets_primary[0], local.vpc_central_ingress_cidrsubnets_primary[1], local.vpc_central_ingress_cidrsubnets_primary[2], local.vpc_central_ingress_cidrsubnets_primary[3]] :
+    var.azs_used == 3 ? [local.vpc_central_ingress_cidrsubnets_primary[0], local.vpc_central_ingress_cidrsubnets_primary[1], local.vpc_central_ingress_cidrsubnets_primary[2]] :
+    var.azs_used == 2 ? [local.vpc_central_ingress_cidrsubnets_primary[0], local.vpc_central_ingress_cidrsubnets_primary[1]] :
     null
   )
 
-  vpc_inbound_intra_subnets_primary = (
-    var.azs_used == 4 ? [local.vpc_inbound_cidrsubnets_primary[4], local.vpc_inbound_cidrsubnets_primary[5], local.vpc_inbound_cidrsubnets_primary[6], local.vpc_inbound_cidrsubnets_primary[7]] :
-    var.azs_used == 3 ? [local.vpc_inbound_cidrsubnets_primary[3], local.vpc_inbound_cidrsubnets_primary[4], local.vpc_inbound_cidrsubnets_primary[5]] :
-    var.azs_used == 2 ? [local.vpc_inbound_cidrsubnets_primary[2], local.vpc_inbound_cidrsubnets_primary[3]] :
+  vpc_central_ingress_intra_subnets_primary = (
+    var.azs_used == 4 ? [local.vpc_central_ingress_cidrsubnets_primary[4], local.vpc_central_ingress_cidrsubnets_primary[5], local.vpc_central_ingress_cidrsubnets_primary[6], local.vpc_central_ingress_cidrsubnets_primary[7]] :
+    var.azs_used == 3 ? [local.vpc_central_ingress_cidrsubnets_primary[3], local.vpc_central_ingress_cidrsubnets_primary[4], local.vpc_central_ingress_cidrsubnets_primary[5]] :
+    var.azs_used == 2 ? [local.vpc_central_ingress_cidrsubnets_primary[2], local.vpc_central_ingress_cidrsubnets_primary[3]] :
     null
   )
 
-  vpc_inbound_tags_primary = {}
+  vpc_central_ingress_tags_primary = {}
 }
 
-module "vpc_inbound_primary" {
+module "vpc_central_ingress_primary" {
   source    = "terraform-aws-modules/vpc/aws"
   version   = "6.0.1"
   providers = { aws = aws.networking_prd }
@@ -33,11 +33,11 @@ module "vpc_inbound_primary" {
 
   azs                 = local.azs_primary
   private_subnets     = []
-  public_subnets      = local.vpc_inbound_public_subnets_primary
+  public_subnets      = local.vpc_central_ingress_public_subnets_primary
   database_subnets    = []
   elasticache_subnets = []
   redshift_subnets    = []
-  intra_subnets       = local.vpc_inbound_intra_subnets_primary
+  intra_subnets       = local.vpc_central_ingress_intra_subnets_primary
 
   public_subnet_suffix = "pub"
   intra_subnet_suffix  = "tgw"
@@ -70,15 +70,15 @@ module "vpc_inbound_primary" {
   dhcp_options_domain_name_servers = [replace(var.vpc_cidr_infrastructure.inbound_primary, "0/16", "2")]
   dhcp_options_ntp_servers         = var.ntp_servers
 
-  vpc_tags = local.vpc_inbound_tags_primary
+  vpc_tags = local.vpc_central_ingress_tags_primary
 }
 
-resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inbound_to_tgw_primary" {
+resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_central_ingress_to_tgw_primary" {
   provider = aws.networking_prd
 
-  subnet_ids         = module.vpc_inbound_primary.intra_subnets
+  subnet_ids         = module.vpc_central_ingress_primary.intra_subnets
   transit_gateway_id = aws_ec2_transit_gateway.tgw_primary.id
-  vpc_id             = module.vpc_inbound_primary.vpc_id
+  vpc_id             = module.vpc_central_ingress_primary.vpc_id
 
   appliance_mode_support             = "disable"
   dns_support                        = "enable"
@@ -93,9 +93,9 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inbound_to_tgw_primary" {
 resource "aws_route" "inbound_pub_to_tgw_primary" {
   provider = aws.networking_prd
 
-  count = length(module.vpc_inbound_primary.public_route_table_ids)
+  count = length(module.vpc_central_ingress_primary.public_route_table_ids)
 
-  route_table_id         = module.vpc_inbound_primary.public_route_table_ids[count.index]
+  route_table_id         = module.vpc_central_ingress_primary.public_route_table_ids[count.index]
   destination_cidr_block = var.vpc_cidr_infrastructure.transit_gateway
   transit_gateway_id     = aws_ec2_transit_gateway.tgw_primary.id
 }
@@ -103,9 +103,9 @@ resource "aws_route" "inbound_pub_to_tgw_primary" {
 resource "aws_route" "inbound_intra_to_tgw_primary" {
   provider = aws.networking_prd
 
-  count = length(module.vpc_inbound_primary.intra_route_table_ids)
+  count = length(module.vpc_central_ingress_primary.intra_route_table_ids)
 
-  route_table_id         = module.vpc_inbound_primary.intra_route_table_ids[count.index]
+  route_table_id         = module.vpc_central_ingress_primary.intra_route_table_ids[count.index]
   destination_cidr_block = var.vpc_cidr_infrastructure.transit_gateway
   transit_gateway_id     = aws_ec2_transit_gateway.tgw_primary.id
 }

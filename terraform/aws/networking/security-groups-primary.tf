@@ -5,7 +5,7 @@ module "sg_inbound_main_primary" {
 
   name        = "${local.resource_name_stub_primary}-${var.this_slug}-inbound-main-sg"
   description = "${local.resource_name_stub_primary}-${var.this_slug}-inbound-main-sg"
-  vpc_id      = module.vpc_inbound_primary.vpc_id
+  vpc_id      = module.vpc_central_ingress_primary.vpc_id
 
   ingress_with_self = [{ rule = "all-all" }]
   egress_with_self  = [{ rule = "all-all" }]
@@ -47,7 +47,7 @@ module "sg_outbound_main_primary" {
 
   name        = "${local.resource_name_stub_primary}-${var.this_slug}-outbound-main-sg"
   description = "${local.resource_name_stub_primary}-${var.this_slug}-outbound-main-sg"
-  vpc_id      = module.vpc_outbound_primary.vpc_id
+  vpc_id      = module.vpc_central_egress_primary.vpc_id
 
   ingress_with_self = [{ rule = "all-all" }]
   egress_with_self  = [{ rule = "all-all" }]

@@ -14,17 +14,17 @@ resource "aws_ec2_transit_gateway_route" "pre_inspection_primary" {
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.pre_inspection_primary.id
 }
 
-resource "aws_ec2_transit_gateway_route_table_association" "vpc_inbound_to_tgw_primary" {
+resource "aws_ec2_transit_gateway_route_table_association" "vpc_central_ingress_to_tgw_primary" {
   provider = aws.networking_prd
 
-  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.vpc_inbound_to_tgw_primary.id
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.vpc_central_ingress_to_tgw_primary.id
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.pre_inspection_primary.id
 }
 
-resource "aws_ec2_transit_gateway_route_table_association" "vpc_outbound_to_tgw_primary" {
+resource "aws_ec2_transit_gateway_route_table_association" "vpc_central_egress_to_tgw_primary" {
   provider = aws.networking_prd
 
-  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.vpc_outbound_to_tgw_primary.id
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.vpc_central_egress_to_tgw_primary.id
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.pre_inspection_primary.id
 }
 
@@ -40,7 +40,7 @@ resource "aws_ec2_transit_gateway_route" "post_inspection_inbound_primary" {
   provider = aws.networking_prd
 
   destination_cidr_block         = var.vpc_cidr_infrastructure.inbound_primary
-  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.vpc_inbound_to_tgw_primary.id
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.vpc_central_ingress_to_tgw_primary.id
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.post_inspection_primary.id
 }
 
@@ -48,7 +48,7 @@ resource "aws_ec2_transit_gateway_route" "post_inspection_outbound_primary" {
   provider = aws.networking_prd
 
   destination_cidr_block         = "0.0.0.0/0"
-  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.vpc_outbound_to_tgw_primary.id
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.vpc_central_egress_to_tgw_primary.id
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.post_inspection_primary.id
 }
 

@@ -1,12 +1,9 @@
 variable "account_id" {
   type = map(string)
   default = {
-    identity_prd         = ""
-    log_archive_prd      = ""
-    networking_prd       = ""
-    security_tooling_prd = ""
-    workload_spoke_a_prd = ""
-    workload_spoke_b_prd = ""
+    networking_prd       = "000000000000"
+    workload_spoke_a_prd = "000000000000"
+    workload_spoke_b_prd = "000000000000"
   }
 }
 
@@ -327,6 +324,8 @@ locals {
     workload_spoke_a_prd = var.account_email_substitute.workload_spoke_a_prd != "" ? var.account_email_substitute.workload_spoke_a_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.workload_spoke_a_prd}@${var.org_owner_email_domain_tld}"
     workload_spoke_b_prd = var.account_email_substitute.workload_spoke_b_prd != "" ? var.account_email_substitute.workload_spoke_b_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.workload_spoke_b_prd}@${var.org_owner_email_domain_tld}"
   }
+
+  number_words = { 1 = "one", 2 = "two", 3 = "three", 4 = "four", 5 = "five", 6 = "six", 7 = "seven", 8 = "eight", 9 = "nine", 10 = "ten", }
 
   resource_name_stub          = lower("${var.company_name_abbr}-${var.team_name_abbr}-${var.project_name_abbr}") #company - team - project - env
   resource_name_stub_primary  = lower("${local.resource_name_stub}-${var.region.primary_short}")                 #company - team - project - env - primary

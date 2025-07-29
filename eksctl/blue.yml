@@ -4,28 +4,20 @@ kind: ClusterConfig
 metadata:
   name: &clusterName scc-blue-w12-usw2-blue
   region: us-west-2
-  version: "1.31"
+  version: "1.33"
 
 vpc:
+  id: "vpc-00000000000000000"
+  securityGroup: "sg-00000000000000000"
   subnets:
     private:
-      private-one:    { id: subnet-0a62997396479ca89 }
-      private-two:    { id: subnet-02ce9165d2a310f17 }
-      # private-three:  { id: subnet-id }
-      # private-four:   { id: subnet-id }
-      # private-five:   { id: subnet-id }
-      # private-six:    { id: subnet-id }
-    public:
-      public-one:     { id: subnet-07713dbed2a420d3e }
-      public-two:     { id: subnet-0f46ee578b946c6b0 }
-      # public-three:   { id: subnet-id }
-      # public-four:    { id: subnet-id }
-      # public-five:    { id: subnet-id }
-      # public-six:     { id: subnet-id }
-  id: vpc-01b9c23b840fc7e0d
+      pvt-1:  { id: subnet-11111111111111111 }
+      pvt-2:  { id: subnet-22222222222222222 }
+      pvt-3:  { id: subnet-33333333333333333 }
+      pvt-4:  { id: subnet-44444444444444444 }
 
-# secretsEncryption:
-#   keyARN: 
+secretsEncryption:
+  keyARN: 
 
 # cloudWatch:
 #   clusterLogging:

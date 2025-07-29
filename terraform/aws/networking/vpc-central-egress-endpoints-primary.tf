@@ -3,11 +3,11 @@
 
 #   count = var.vpc_endpoint_services_enabled != [] ? length(var.vpc_endpoint_services_enabled) : 0
 
-#   vpc_id             = module.vpc_outbound_primary.vpc_id
+#   vpc_id             = module.vpc_central_egress_primary.vpc_id
 #   service_name       = "com.amazonaws.${var.region.primary}.${var.vpc_endpoint_services_enabled[count.index]}"
 #   vpc_endpoint_type  = "Interface"
 #   security_group_ids = ["${module.vpc_endpoint_sg_primary[count.index].security_group_id}"]
-#   subnet_ids         = module.vpc_outbound_primary.public_subnets
+#   subnet_ids         = module.vpc_central_egress_primary.public_subnets
 # }
 
 # module "vpc_endpoint_sg_primary" {
@@ -20,7 +20,7 @@
 #   name            = "vpc-endpoint-${element(var.vpc_endpoint_services_enabled, count.index)}"
 #   use_name_prefix = false
 #   description     = "vpc endpoint security group for ${element(var.vpc_endpoint_services_enabled, count.index)}"
-#   vpc_id          = module.vpc_outbound_primary.vpc_id
+#   vpc_id          = module.vpc_central_egress_primary.vpc_id
 
 #   ingress_with_self = [
 #     {
@@ -42,11 +42,11 @@
 
 #   count = var.create_failover_region && var.vpc_endpoint_services_enabled != [] ? length(var.vpc_endpoint_services_enabled) : 0
 
-#   vpc_id             = module.vpc_outbound_failover[0].vpc_id
+#   vpc_id             = module.vpc_central_egress_failover[0].vpc_id
 #   service_name       = "com.amazonaws.${var.region.failover}.${var.vpc_endpoint_services_enabled[count.index]}"
 #   vpc_endpoint_type  = "Interface"
 #   security_group_ids = [module.vpc_endpoint_sg_failover[count.index].security_group_id]
-#   subnet_ids         = module.vpc_outbound_failover[0].public_subnets
+#   subnet_ids         = module.vpc_central_egress_failover[0].public_subnets
 # }
 
 # module "vpc_endpoint_sg_failover" {
@@ -59,7 +59,7 @@
 #   name            = "vpc-endpoint-${element(var.vpc_endpoint_services_enabled, count.index)}"
 #   use_name_prefix = false
 #   description     = "vpc endpoint security group for ${element(var.vpc_endpoint_services_enabled, count.index)}"
-#   vpc_id          = module.vpc_outbound_failover[0].vpc_id
+#   vpc_id          = module.vpc_central_egress_failover[0].vpc_id
 
 #   ingress_with_self = [
 #     {

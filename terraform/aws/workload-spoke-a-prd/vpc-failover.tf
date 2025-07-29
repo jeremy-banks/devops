@@ -1,8 +1,8 @@
 locals {
   vpc_workload_spoke_a_cidrsubnets_failover = (
-    var.azs_used == 4 ? cidrsubnets(var.vpc_cidr_infrastructure.workload_spoke_a_prd_failover, 3, 3, 3, 3, 12, 12, 12, 12) :
-    var.azs_used == 3 ? cidrsubnets(var.vpc_cidr_infrastructure.workload_spoke_a_prd_failover, 2, 2, 2, 12, 12, 12) :
-    var.azs_used == 2 ? cidrsubnets(var.vpc_cidr_infrastructure.workload_spoke_a_prd_failover, 2, 2, 12, 12) :
+    var.azs_used == 4 ? cidrsubnets(var.vpc_cidr_infrastructure.workload_spoke_a_prd_failover, 3, 3, 3, 3, 6, 6, 6, 6, 5, 5, 5, 5) :
+    var.azs_used == 3 ? cidrsubnets(var.vpc_cidr_infrastructure.workload_spoke_a_prd_failover, 2, 2, 2, 6, 6, 6, 5, 5, 5) :
+    var.azs_used == 2 ? cidrsubnets(var.vpc_cidr_infrastructure.workload_spoke_a_prd_failover, 2, 2, 6, 6, 5, 5) :
     null
   )
 
@@ -17,6 +17,13 @@ locals {
     var.azs_used == 4 ? [local.vpc_workload_spoke_a_cidrsubnets_failover[4], local.vpc_workload_spoke_a_cidrsubnets_failover[5], local.vpc_workload_spoke_a_cidrsubnets_failover[6], local.vpc_workload_spoke_a_cidrsubnets_failover[7]] :
     var.azs_used == 3 ? [local.vpc_workload_spoke_a_cidrsubnets_failover[3], local.vpc_workload_spoke_a_cidrsubnets_failover[4], local.vpc_workload_spoke_a_cidrsubnets_failover[5]] :
     var.azs_used == 2 ? [local.vpc_workload_spoke_a_cidrsubnets_failover[2], local.vpc_workload_spoke_a_cidrsubnets_failover[3]] :
+    null
+  )
+
+  vpc_workload_spoke_a_public_subnets_failover = (
+    var.azs_used == 4 ? [local.vpc_workload_spoke_a_cidrsubnets_failover[8], local.vpc_workload_spoke_a_cidrsubnets_failover[9], local.vpc_workload_spoke_a_cidrsubnets_failover[10], local.vpc_workload_spoke_a_cidrsubnets_failover[11]] :
+    var.azs_used == 3 ? [local.vpc_workload_spoke_a_cidrsubnets_failover[6], local.vpc_workload_spoke_a_cidrsubnets_failover[7], local.vpc_workload_spoke_a_cidrsubnets_failover[8]] :
+    var.azs_used == 2 ? [local.vpc_workload_spoke_a_cidrsubnets_failover[4], local.vpc_workload_spoke_a_cidrsubnets_failover[5]] :
     null
   )
 
@@ -35,7 +42,7 @@ module "vpc_failover" {
 
   azs                 = local.azs_failover
   private_subnets     = local.vpc_workload_spoke_a_private_subnets_failover
-  public_subnets      = []
+  public_subnets      = (var.deployment_environment == "prd" || var.deployment_environment == "stg" || var.create_public_subnets_override) ? local.vpc_workload_spoke_a_public_subnets_failover : []
   database_subnets    = []
   elasticache_subnets = []
   redshift_subnets    = []

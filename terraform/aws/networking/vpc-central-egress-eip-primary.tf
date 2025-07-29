@@ -1,4 +1,4 @@
-resource "aws_eip" "vpc_outbound_primary_nat" {
+resource "aws_eip" "vpc_central_egress_primary_nat" {
   provider = aws.networking_prd
   # lifecycle { prevent_destroy = true } # YOU NEVER WANT TO DELETE THESE
 
