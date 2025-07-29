@@ -34,8 +34,6 @@ resource "aws_ec2_client_vpn_endpoint" "client_vpn_primary" {
   }
 }
 
-
-
 data "aws_ec2_managed_prefix_list" "route53_healthchecks_primary" {
   provider = aws.network
 
@@ -300,7 +298,6 @@ data "aws_subnets" "network_failover" {
     values = ["*-pvt-*"]
   }
 }
-
 
 resource "aws_ec2_client_vpn_network_association" "failover" {
   provider = aws.network_failover

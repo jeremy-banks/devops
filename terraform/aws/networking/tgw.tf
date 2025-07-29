@@ -64,7 +64,6 @@ resource "aws_ec2_transit_gateway_route_table" "cross_region_primary" {
   tags = { Name = "${local.resource_name_stub_primary}-${var.this_slug}-tgw-cross-region-primary" }
 }
 
-
 resource "aws_ec2_transit_gateway_route_table" "cross_region_failover" {
   provider = aws.networking_prd_failover
 
