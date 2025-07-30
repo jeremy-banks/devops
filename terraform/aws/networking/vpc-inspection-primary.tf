@@ -31,7 +31,7 @@ module "vpc_inspection_primary" {
   name = "${local.resource_name_stub_primary}-vpc-inspection-primary"
   cidr = var.vpc_cidr_infrastructure.inspection_primary
 
-  azs                 = local.azs_primary
+  azs                 = slice(var.azs_primary, 0, var.azs_number_used_networking)
   private_subnets     = local.vpc_inspection_private_subnets_primary
   public_subnets      = []
   database_subnets    = []

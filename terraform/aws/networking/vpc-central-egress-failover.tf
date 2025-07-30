@@ -33,7 +33,7 @@ module "vpc_central_egress_failover" {
   name = "${local.resource_name_stub_failover}-vpc-central-egress-failover"
   cidr = var.vpc_cidr_infrastructure.central_egress_failover
 
-  azs                 = local.azs_failover
+  azs                 = slice(var.azs_failover, 0, var.azs_number_used_networking)
   private_subnets     = []
   public_subnets      = local.vpc_central_egress_public_subnets_failover
   database_subnets    = []

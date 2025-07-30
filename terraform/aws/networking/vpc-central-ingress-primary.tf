@@ -31,7 +31,7 @@ module "vpc_central_ingress_primary" {
   name = "${local.resource_name_stub_primary}-vpc-central-ingress-primary"
   cidr = var.vpc_cidr_infrastructure.central_ingress_primary
 
-  azs                 = local.azs_primary
+  azs                 = slice(var.azs_primary, 0, var.azs_number_used_networking)
   private_subnets     = []
   public_subnets      = local.vpc_central_ingress_public_subnets_primary
   database_subnets    = []

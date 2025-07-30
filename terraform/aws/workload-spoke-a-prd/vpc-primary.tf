@@ -38,9 +38,9 @@ module "vpc_primary" {
   name = "${local.resource_name_stub_primary}-${var.this_slug}-vpc-primary"
   cidr = var.vpc_cidr_infrastructure.workload_spoke_a_prd_primary
 
-  azs             = local.azs_primary
+  azs             = slice(var.azs_failover, 0, var.azs_number_used)
   private_subnets = local.vpc_workload_spoke_a_private_subnets_primary
-  public_subnets  = (contains(["stg", "prd"], var.deployment_environment) || var.create_public_subnets_override) ? local.vpc_workload_spoke_a_public_subnets_primary : []
+  public_subnets  = (contains(["stg", "prd"], var.deployment_environment) || var.workload_create_vpc_public_subnets) ? local.vpc_workload_spoke_a_public_subnets_primary : []
   #  public_subnets      = local.vpc_workload_spoke_a_public_subnets_primary
   database_subnets    = []
   elasticache_subnets = []

@@ -40,9 +40,9 @@ module "vpc_failover" {
   name = "${local.resource_name_stub_failover}-${var.this_slug}-vpc-failover"
   cidr = var.vpc_cidr_infrastructure.workload_spoke_a_prd_failover
 
-  azs                 = local.azs_failover
+  azs                 = slice(var.azs_failover, 0, var.azs_number_used)
   private_subnets     = local.vpc_workload_spoke_a_private_subnets_failover
-  public_subnets      = (contains(["stg", "prd"], var.deployment_environment) || var.create_public_subnets_override) ? local.vpc_workload_spoke_a_public_subnets_failover : []
+  public_subnets      = (contains(["stg", "prd"], var.deployment_environment) || var.workload_create_vpc_public_subnets) ? local.vpc_workload_spoke_a_public_subnets_failover : []
   database_subnets    = []
   elasticache_subnets = []
   redshift_subnets    = []

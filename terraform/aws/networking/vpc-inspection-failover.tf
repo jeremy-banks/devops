@@ -33,7 +33,7 @@ module "vpc_inspection_failover" {
   name = "${local.resource_name_stub_failover}-vpc-inspection-failover"
   cidr = var.vpc_cidr_infrastructure.inspection_failover
 
-  azs                 = local.azs_failover
+  azs                 = slice(var.azs_failover, 0, var.azs_number_used_networking)
   private_subnets     = local.vpc_inspection_private_subnets_failover
   public_subnets      = []
   database_subnets    = []
