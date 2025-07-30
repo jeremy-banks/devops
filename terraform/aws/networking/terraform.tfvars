@@ -7,3 +7,5 @@ deployment_environment = "prd"
 this_slug = "network"
 
 create_failover_region = true
+
+azs_number_used = 3
