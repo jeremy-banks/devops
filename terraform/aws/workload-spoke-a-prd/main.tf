@@ -16,6 +16,22 @@ data "aws_ec2_transit_gateway" "tgw_primary" {
   }
 }
 
+data "aws_ec2_transit_gateway" "tgw_failover" {
+  provider = aws.networking_prd_failover
+
+  count = var.create_failover_region ? 1 : 0
+
+  filter {
+    name   = "options.amazon-side-asn"
+    values = [var.tgw_asn.failover]
+  }
+
+  filter {
+    name   = "state"
+    values = ["available"]
+  }
+}
+
 data "aws_ec2_transit_gateway_vpc_attachment" "tgw_post_inspection_primary" {
   provider = aws.networking_prd
 
