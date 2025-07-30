@@ -72,11 +72,6 @@ variable "resource_owner_email" {
   description = "point of escalation for ownership"
   type        = string
   default     = ""
-
-  # validation {
-  #   condition     = can(regex("^\\S+@\\S+\\.\\S+$", var.resource_owner_email))
-  #   error_message = "variable resource_owner_email must be declared as a valid email address (e.g., user@example.com)"
-  # }
 }
 
 variable "cli_profile_name" {
@@ -165,9 +160,7 @@ variable "azs_primary" {
   ]
 
   validation {
-    condition = alltrue([
-      for az in var.azs_primary : can(regex("^us[a-z0-9]+-az[0-9]+$", az))
-    ])
+    condition     = alltrue([for az in var.azs_primary : can(regex("^us[a-z0-9]+-az[0-9]+$", az))])
     error_message = "must be AWS AZ IDs like 'usw2-az1', not AZ names like 'us-east-1a'"
   }
 }
@@ -183,9 +176,7 @@ variable "azs_failover" {
   ]
 
   validation {
-    condition = alltrue([
-      for az in var.azs_failover : can(regex("^[a-z0-9-]+-az[0-9]+$", az))
-    ])
+    condition     = alltrue([for az in var.azs_failover : can(regex("^[a-z0-9-]+-az[0-9]+$", az))])
     error_message = "must be AWS AZ IDs like 'usw2-az1' or 'sae1-az1', not AZ names like 'us-east-1a'"
   }
 }
@@ -204,61 +195,6 @@ variable "create_public_subnets_override" {
   type    = bool
   default = false
 }
-
-# variable "network_tgw_share_enabled" {
-#   type    = bool
-#   default = false
-# }
-
-# variable "vpc_cidr_substitute" {
-#   description = "Primary Region VPC CIDR. Use the full network address and subnet mask, eg 10.31.0.0/16"
-#   type        = string
-#   default     = ""
-# }
-
-# variable "vpc_cidr_substitute_failover" {
-#   description = "Failover Region VPC CIDR. Use the full network address and subnet mask, eg 10.32.0.0/16"
-#   type        = string
-#   default     = ""
-# }
-
-# variable "vpc_cidr_network_primary" {
-#   default = {
-#     inbound    = "10.0.0.0/16"
-#     outbound   = "10.1.0.0/16"
-#     inspection = "10.2.0.0/16"
-#   }
-# }
-
-# variable "vpc_cidr_network_failover" {
-#   default = {
-#     inbound    = "10.3.0.0/16"
-#     outbound   = "10.4.0.0/16"
-#     inspection = "10.5.0.0/16"
-#   }
-# }
-
-# variable "vpc_endpoint_services_enabled" {
-#   type = list(string)
-#   default = [
-#     # "dynamodb",
-#     # "ec2",
-#     # "kms",
-#     # "s3",
-#   ]
-# }
-
-# variable "network_vpc_share_enabled" {
-#   type    = bool
-#   default = false
-# }
-
-# variable "vpc_cidr_clientvpn" {
-#   default = {
-#     primary  = "10.43.0.0/16"
-#     failover = "10.44.0.0/16"
-#   }
-# }
 
 variable "ntp_servers" {
   type    = list(string)
@@ -357,46 +293,6 @@ locals {
   azs_primary  = slice(var.azs_primary, 0, var.azs_number_used)
   azs_failover = slice(var.azs_failover, 0, var.azs_number_used)
 
-  # #build lists of availability zones for each region based on number of availabiliy zones
-  # # azs_number_used_list_primary  = [for az in range(var.availability_zones_num_used) : var.availability_zones.primary[az]]
-  # azs_number_used_list_failover = [for az in range(var.availability_zones_num_used) : var.availability_zones.failover[az]]
-
-  # #dynamically generate subnet cidrs based on number of availability zones
-  # vpc_subnet_cidrs_primary = local.vpc_cidr_primary != "" ? (
-  #   var.availability_zones_num_used == 6 ? cidrsubnets(local.vpc_cidr_primary, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5) :
-  #   var.availability_zones_num_used == 5 ? cidrsubnets(local.vpc_cidr_primary, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5) :
-  #   var.availability_zones_num_used == 4 ? cidrsubnets(local.vpc_cidr_primary, 3, 3, 3, 3, 5, 5, 5, 5) :
-  #   var.availability_zones_num_used == 3 ? cidrsubnets(local.vpc_cidr_primary, 2, 2, 2, 4, 4, 4) :
-  #   cidrsubnets(local.vpc_cidr_primary, 2, 2, 4, 4)
-  # ) : []
-  # vpc_subnet_cidrs_failover = local.vpc_cidr_failover != "" ? (
-  #   var.availability_zones_num_used == 6 ? cidrsubnets(local.vpc_cidr_failover, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5) :
-  #   var.availability_zones_num_used == 5 ? cidrsubnets(local.vpc_cidr_failover, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5) :
-  #   var.availability_zones_num_used == 4 ? cidrsubnets(local.vpc_cidr_failover, 3, 3, 3, 3, 5, 5, 5, 5) :
-  #   var.availability_zones_num_used == 3 ? cidrsubnets(local.vpc_cidr_failover, 2, 2, 2, 4, 4, 4) :
-  #   cidrsubnets(local.vpc_cidr_failover, 2, 2, 4, 4)
-  # ) : []
-
-  # #slice the subnets in 'half', first slice goes to pvt, second slice goes to pub
-  # vpc_subnet_cidrs_pvt_primary  = slice(local.vpc_subnet_cidrs_primary, 0, length(local.vpc_subnet_cidrs_primary) / 2)
-  # vpc_subnet_cidrs_pub_primary  = slice(local.vpc_subnet_cidrs_primary, length(local.vpc_subnet_cidrs_primary) / 2, length(local.vpc_subnet_cidrs_primary))
-  # vpc_subnet_cidrs_pvt_failover = slice(local.vpc_subnet_cidrs_failover, 0, length(local.vpc_subnet_cidrs_failover) / 2)
-  # vpc_subnet_cidrs_pub_failover = slice(local.vpc_subnet_cidrs_failover, length(local.vpc_subnet_cidrs_failover) / 2, length(local.vpc_subnet_cidrs_failover))
-
-  # #create addresses for VPC DNS
-  # vpc_dns_primary = local.vpc_cidr_primary != "" ? join(".", [
-  #   split(".", cidrhost(local.vpc_cidr_primary, 0))[0],
-  #   split(".", cidrhost(local.vpc_cidr_primary, 0))[1],
-  #   split(".", cidrhost(local.vpc_cidr_primary, 0))[2],
-  #   "2"
-  # ]) : local.vpc_cidr_primary
-  # vpc_dns_failover = local.vpc_cidr_failover != "" ? join(".", [
-  #   split(".", cidrhost(local.vpc_cidr_failover, 0))[0],
-  #   split(".", cidrhost(local.vpc_cidr_failover, 0))[1],
-  #   split(".", cidrhost(local.vpc_cidr_failover, 0))[2],
-  #   "2"
-  # ]) : local.vpc_cidr_failover
-
   # vpc_tags_primary = merge(local.eks_tags_primary, {
   #   "${local.resource_name_stub_primary}-blue"                            = "shared"
   #   "${local.resource_name_stub_primary}-green"                           = "shared"
@@ -434,17 +330,6 @@ locals {
   #   "kubernetes.io/role/alb-ingress" = 1
   #   "kubernetes.io/role/elb"         = 1
   # }
-
-  # acm_san_names = concat(
-  #   [
-  #     for zone in var.r53_zones :
-  #     (var.deployment_environment != "prd" ? "${var.deployment_environment}.${zone}" : zone)
-  #   ],
-  #   [
-  #     for zone in var.r53_zones :
-  #     (var.deployment_environment != "prd" ? "*.${var.deployment_environment}.${zone}" : "*.${zone}")
-  #   ]
-  # )
 
   default_tags_map = {
     "company"                      = "${var.company_name}"
