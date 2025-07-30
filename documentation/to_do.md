@@ -6,6 +6,10 @@
 - rework the eks stuff
    append k8s 'bare metal' to demonstrate skill and pass CKA
 
+- add RDS to workload spoke
+
+- outbound endpoints for s3, kms, rds so that all org traffic to those services is privately routes for security and cost savings
+
 - impelement federated access using active directory and windows server
    - https://getstarted.awsworkshop.io/02-dev-fast-follow/02-federated-access-to-aws/02-aws-sso-ad.html
    - https://aws.amazon.com/blogs/architecture/field-notes-integrating-active-directory-federation-service-with-aws-single-sign-on/
@@ -15,8 +19,6 @@
    - AD
       - Update directory AD and client VPN so groups in AD manage network access to AWS environments
       - Add Windows Server 2019 cheap instance to Directory for AD administration
-
-- outbound endpoints for s3, kms, rds so that all org traffic to those services is privately routes for security and cost savings
 
 - StackSet Deployments
    - Disable unlimited burstable instance credits
@@ -41,3 +43,5 @@
    - ALB logs send to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
 
 - Mozilla Secrets OPerationS (SOPS) protects secrets in code using Key Management System (KMS) Customer Managed Key (CMK)
+
+- add R53 and ACM to workload spoke
