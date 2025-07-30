@@ -161,7 +161,7 @@ variable "azs_primary" {
     "usw2-az1",
     "usw2-az2",
     "usw2-az3",
-    # "usw2-az4", # firewall not supported
+    "usw2-az4", # firewall not supported
   ]
 
   validation {
@@ -176,10 +176,10 @@ variable "azs_failover" {
   default = [
     "use1-az1",
     "use1-az2",
-    # "use1-az3", # firewall not supported
     "use1-az4",
     "use1-az5",
     "use1-az6",
+    "use1-az3", # firewall not supported
   ]
 
   validation {
