@@ -38,10 +38,9 @@ module "vpc_primary" {
   name = "${local.resource_name_stub_primary}-${var.this_slug}-vpc-primary"
   cidr = var.vpc_cidr_infrastructure.workload_spoke_a_prd_primary
 
-  azs             = slice(var.azs_primary, 0, var.azs_number_used)
-  private_subnets = local.vpc_workload_spoke_a_private_subnets_primary
-  public_subnets  = (contains(["stg", "prd"], var.deployment_environment) || var.workload_create_vpc_public_subnets) ? local.vpc_workload_spoke_a_public_subnets_primary : []
-  #  public_subnets      = local.vpc_workload_spoke_a_public_subnets_primary
+  azs                 = slice(var.azs_primary, 0, var.azs_number_used)
+  private_subnets     = local.vpc_workload_spoke_a_private_subnets_primary
+  public_subnets      = (contains(["stg", "prd"], var.deployment_environment) || var.workload_create_vpc_public_subnets) ? local.vpc_workload_spoke_a_public_subnets_primary : []
   database_subnets    = []
   elasticache_subnets = []
   redshift_subnets    = []
@@ -50,6 +49,19 @@ module "vpc_primary" {
   private_subnet_suffix = "pvt"
   public_subnet_suffix  = "pub"
   intra_subnet_suffix   = "tgw"
+
+  private_subnet_tags = {
+    "kubernetes.io/role/alb-ingress"  = 1
+    "kubernetes.io/role/internal-elb" = 1
+    "kubernetes.io/cluster/blue"      = "shared"
+    "kubernetes.io/cluster/green"     = "shared"
+  }
+  public_subnet_tags = {
+    "kubernetes.io/role/alb-ingress" = 1
+    "kubernetes.io/role/elb"         = 1
+    "kubernetes.io/cluster/blue"     = "shared"
+    "kubernetes.io/cluster/green"    = "shared"
+  }
 
   create_database_subnet_group    = false
   create_elasticache_subnet_group = false
@@ -78,5 +90,12 @@ module "vpc_primary" {
   dhcp_options_domain_name_servers = [replace(var.vpc_cidr_infrastructure.workload_spoke_a_prd_primary, "0/16", "2")]
   dhcp_options_ntp_servers         = var.ntp_servers
 
-  vpc_tags = local.vpc_workload_spoke_a_tags_primary
+  vpc_tags = merge(
+    local.vpc_workload_spoke_a_tags_primary,
+    {
+      "kubernetes.io/cluster/blue"        = "owned"
+      "kubernetes.io/cluster/green"       = "owned"
+      "k8s.io/cluster-autoscaler/enabled" = true
+    }
+  )
 }

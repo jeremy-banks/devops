@@ -52,6 +52,19 @@ module "vpc_failover" {
   public_subnet_suffix  = "pub"
   intra_subnet_suffix   = "tgw"
 
+  private_subnet_tags = {
+    "kubernetes.io/role/alb-ingress"  = 1
+    "kubernetes.io/role/internal-elb" = 1
+    "kubernetes.io/cluster/blue"      = "shared"
+    "kubernetes.io/cluster/green"     = "shared"
+  }
+  public_subnet_tags = {
+    "kubernetes.io/role/alb-ingress" = 1
+    "kubernetes.io/role/elb"         = 1
+    "kubernetes.io/cluster/blue"     = "shared"
+    "kubernetes.io/cluster/green"    = "shared"
+  }
+
   create_database_subnet_group    = false
   create_elasticache_subnet_group = false
   create_redshift_subnet_group    = false
@@ -79,5 +92,12 @@ module "vpc_failover" {
   dhcp_options_domain_name_servers = [replace(var.vpc_cidr_infrastructure.workload_spoke_a_prd_failover, "0/16", "2")]
   dhcp_options_ntp_servers         = var.ntp_servers
 
-  vpc_tags = local.vpc_workload_spoke_a_tags_failover
+  vpc_tags = merge(
+    local.vpc_workload_spoke_a_tags_failover,
+    {
+      "kubernetes.io/cluster/blue"        = "owned"
+      "kubernetes.io/cluster/green"       = "owned"
+      "k8s.io/cluster-autoscaler/enabled" = true
+    }
+  )
 }
