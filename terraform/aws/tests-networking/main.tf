@@ -153,7 +153,7 @@ data "aws_vpc" "inspection_primary" {
 
   filter {
     name   = "cidr-block"
-    values = [var.vpc_cidr_infrastructure.inspection_primary]
+    values = [var.vpc_cidr_infrastructure.central_inspection_primary]
   }
 }
 
@@ -162,7 +162,7 @@ data "aws_subnets" "inspection_primary" {
 
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.inspection_primary.id]
+    values = [data.aws_vpc.central_inspection_primary.id]
   }
 
   tags = { Name = "*-firewall-*" }
@@ -173,7 +173,7 @@ data "aws_security_group" "inspection_primary" {
 
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.inspection_primary.id]
+    values = [data.aws_vpc.central_inspection_primary.id]
   }
 
   tags = { Name = "*-main-sg" }
@@ -187,7 +187,7 @@ data "aws_vpc" "inspection_failover" {
 
   filter {
     name   = "cidr-block"
-    values = [var.vpc_cidr_infrastructure.inspection_failover]
+    values = [var.vpc_cidr_infrastructure.central_inspection_failover]
   }
 }
 
@@ -198,7 +198,7 @@ data "aws_subnets" "inspection_failover" {
 
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.inspection_failover[0].id]
+    values = [data.aws_vpc.central_inspection_failover[0].id]
   }
 
   tags = { Name = "*-firewall-*" }
@@ -211,7 +211,7 @@ data "aws_security_group" "inspection_failover" {
 
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.inspection_failover[0].id]
+    values = [data.aws_vpc.central_inspection_failover[0].id]
   }
 
   tags = { Name = "*-main-sg" }

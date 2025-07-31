@@ -25,7 +25,7 @@ module "central_ingress_primary" {
     this_instance_region   = var.region_primary.full
     this_instance_ping_targets = join(" ", [
       "127.0.0.1",
-      module.inspection_primary.private_dns,
+      module.central_inspection_primary.private_dns,
       module.spoke_a_prd_primary.private_dns,
       # module.central_egress_primary.private_dns,
       "google.com",
@@ -47,8 +47,8 @@ module "inspection_primary" {
   ami           = data.aws_ami.amazon_linux_primary.id
   instance_type = "t4g.nano"
 
-  subnet_id              = data.aws_subnets.inspection_primary.ids[0]
-  vpc_security_group_ids = [data.aws_security_group.inspection_primary.id]
+  subnet_id              = data.aws_subnets.central_inspection_primary.ids[0]
+  vpc_security_group_ids = [data.aws_security_group.central_inspection_primary.id]
 
   #   associate_public_ip_address = true
   key_name = "me"
@@ -135,7 +135,7 @@ module "spoke_a_prd_primary" {
     this_instance_region   = var.region_primary.full
     this_instance_ping_targets = join(" ", [
       "127.0.0.1",
-      # module.inspection_primary.private_dns,
+      # module.central_inspection_primary.private_dns,
       # module.spoke_a_prd_failover[0].private_dns,
       module.spoke_b_prd_primary.private_dns,
       "google.com",

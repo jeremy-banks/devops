@@ -3,7 +3,7 @@ output "central_ingress_primary" {
 }
 
 output "inspection_primary" {
-  value = module.inspection_primary.private_ip
+  value = module.central_inspection_primary.private_ip
 }
 
 output "central_egress_primary" {
@@ -15,7 +15,7 @@ output "central_ingress_failover" {
 }
 
 output "inspection_failover" {
-  value = module.inspection_failover[0].private_ip
+  value = module.central_inspection_failover[0].private_ip
 }
 
 output "central_egress_failover" {

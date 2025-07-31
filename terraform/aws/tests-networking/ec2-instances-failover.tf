@@ -27,7 +27,7 @@ module "central_ingress_failover" {
     this_instance_region   = var.region_failover.full
     this_instance_ping_targets = join(" ", [
       "127.0.0.1",
-      module.inspection_failover[0].private_dns,
+      module.central_inspection_failover[0].private_dns,
       module.spoke_a_prd_failover[0].private_dns,
       # module.central_egress_failover.private_dns,
       "google.com",
@@ -49,8 +49,8 @@ module "inspection_failover" {
   ami           = data.aws_ami.amazon_linux_failover.id
   instance_type = "t4g.nano"
 
-  subnet_id              = data.aws_subnets.inspection_failover[0].ids[0]
-  vpc_security_group_ids = [data.aws_security_group.inspection_failover[0].id]
+  subnet_id              = data.aws_subnets.central_inspection_failover[0].ids[0]
+  vpc_security_group_ids = [data.aws_security_group.central_inspection_failover[0].id]
 
   #   associate_public_ip_address = true
   key_name = "me"
@@ -137,7 +137,7 @@ module "spoke_a_prd_failover" {
     this_instance_region   = var.region_failover.full
     this_instance_ping_targets = join(" ", [
       "127.0.0.1",
-      # module.inspection_failover.private_dns,
+      # module.central_inspection_failover.private_dns,
       # module.spoke_a_prd_failover[0].private_dns,
       module.spoke_b_prd_failover[0].private_dns,
       "google.com",
