@@ -30,7 +30,7 @@ module "vpc_inspection_failover" {
 
   count = var.create_failover_region ? 1 : 0
 
-  name = "${local.resource_name_stub_failover}-vpc-inspection-failover"
+  name = "${local.resource_name_stub_failover}-vpc-central-inspection-failover"
   cidr = var.vpc_cidr_infrastructure.central_inspection_failover
 
   azs                 = slice(var.azs_failover, 0, var.azs_number_used_networking)
@@ -87,7 +87,7 @@ module "vpc_inspection_failover" {
 
 #   create_security_group = false
 #   # create_security_group      = true
-#   # security_group_name_prefix = "${local.resource_name_stub_failover}-${var.this_slug}-inspection-firewall-sg"
+#   # security_group_name_prefix = "${local.resource_name_stub_failover}-${var.this_slug}-central-inspection-firewall-sg"
 #   # security_group_rules       = { ingress_https = { cidr_blocks = ["0.0.0.0/0"] } }
 
 #   endpoints = {
@@ -116,5 +116,5 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inspection_to_tgw_failove
   # transit_gateway_default_route_table_association = false
   # transit_gateway_default_route_table_propagation = false
 
-  tags = { Name = "${local.resource_name_stub_failover}-${var.this_slug}-tgw-attach-inspection-vpc" }
+  tags = { Name = "${local.resource_name_stub_failover}-${var.this_slug}-tgw-attach-central-inspection-vpc" }
 }

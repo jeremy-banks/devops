@@ -9,6 +9,6 @@ The organization, organization units, and accounts layout is designed in accorda
 
 ## VPC Inspection Model
 
-<p align="center"><img src="../drawings/vpc-north-south-inspection-firewall.png"/></p>
+<p align="center"><img src="../drawings/vpc-north-south-central-inspection-firewall.png"/></p>
 
 This repo follows the documented guide for North-South Inspection with AWS Network Firewall as [documented by AWS](https://d1.awsstatic.com/architecture-diagrams/ArchitectureDiagrams/inspection-deployment-models-with-AWS-network-firewall-ra.pdf).

@@ -37,7 +37,7 @@ data "aws_ec2_transit_gateway_vpc_attachment" "tgw_post_central_inspection_prima
 
   filter {
     name   = "tag:Name"
-    values = ["${local.resource_name_stub_primary}-network-tgw-attach-inspection-vpc"]
+    values = ["${local.resource_name_stub_primary}-network-tgw-attach-central-inspection-vpc"]
   }
 
   filter {
@@ -97,7 +97,7 @@ data "aws_ec2_transit_gateway_vpc_attachment" "tgw_post_inspection_failover" {
 
   filter {
     name   = "tag:Name"
-    values = ["${local.resource_name_stub_failover}-network-tgw-attach-inspection-vpc"]
+    values = ["${local.resource_name_stub_failover}-network-tgw-attach-central-inspection-vpc"]
   }
 
   filter {
