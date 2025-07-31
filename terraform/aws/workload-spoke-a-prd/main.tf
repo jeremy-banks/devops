@@ -32,7 +32,7 @@ data "aws_ec2_transit_gateway" "tgw_failover" {
   }
 }
 
-data "aws_ec2_transit_gateway_vpc_attachment" "tgw_post_inspection_primary" {
+data "aws_ec2_transit_gateway_vpc_attachment" "tgw_post_central_inspection_primary" {
   provider = aws.networking_prd
 
   filter {
@@ -46,7 +46,7 @@ data "aws_ec2_transit_gateway_vpc_attachment" "tgw_post_inspection_primary" {
   }
 }
 
-data "aws_ec2_transit_gateway_route_table" "tgw_pre_inspection_primary" {
+data "aws_ec2_transit_gateway_route_table" "tgw_pre_central_inspection_primary" {
   provider = aws.networking_prd
 
   filter {
@@ -60,7 +60,7 @@ data "aws_ec2_transit_gateway_route_table" "tgw_pre_inspection_primary" {
   }
 }
 
-data "aws_ec2_transit_gateway_route_table" "tgw_post_inspection_primary" {
+data "aws_ec2_transit_gateway_route_table" "tgw_post_central_inspection_primary" {
   provider = aws.networking_prd
 
   filter {
