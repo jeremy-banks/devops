@@ -1,22 +1,22 @@
 locals {
   vpc_inspection_cidrsubnets_primary = (
-    var.azs_number_used == 4 ? cidrsubnets(var.vpc_cidr_infrastructure.central_inspection_primary, 3, 3, 3, 3, 12, 12, 12, 12) :
-    var.azs_number_used == 3 ? cidrsubnets(var.vpc_cidr_infrastructure.central_inspection_primary, 2, 2, 2, 12, 12, 12) :
-    var.azs_number_used == 2 ? cidrsubnets(var.vpc_cidr_infrastructure.central_inspection_primary, 2, 2, 12, 12) :
+    var.azs_number_used_networking == 4 ? cidrsubnets(var.vpc_cidr_infrastructure.central_inspection_primary, 3, 3, 3, 3, 12, 12, 12, 12) :
+    var.azs_number_used_networking == 3 ? cidrsubnets(var.vpc_cidr_infrastructure.central_inspection_primary, 2, 2, 2, 12, 12, 12) :
+    var.azs_number_used_networking == 2 ? cidrsubnets(var.vpc_cidr_infrastructure.central_inspection_primary, 2, 2, 12, 12) :
     null
   )
 
   vpc_inspection_private_subnets_primary = (
-    var.azs_number_used == 4 ? [local.vpc_inspection_cidrsubnets_primary[0], local.vpc_inspection_cidrsubnets_primary[1], local.vpc_inspection_cidrsubnets_primary[2], local.vpc_inspection_cidrsubnets_primary[3]] :
-    var.azs_number_used == 3 ? [local.vpc_inspection_cidrsubnets_primary[0], local.vpc_inspection_cidrsubnets_primary[1], local.vpc_inspection_cidrsubnets_primary[2]] :
-    var.azs_number_used == 2 ? [local.vpc_inspection_cidrsubnets_primary[0], local.vpc_inspection_cidrsubnets_primary[1]] :
+    var.azs_number_used_networking == 4 ? [local.vpc_inspection_cidrsubnets_primary[0], local.vpc_inspection_cidrsubnets_primary[1], local.vpc_inspection_cidrsubnets_primary[2], local.vpc_inspection_cidrsubnets_primary[3]] :
+    var.azs_number_used_networking == 3 ? [local.vpc_inspection_cidrsubnets_primary[0], local.vpc_inspection_cidrsubnets_primary[1], local.vpc_inspection_cidrsubnets_primary[2]] :
+    var.azs_number_used_networking == 2 ? [local.vpc_inspection_cidrsubnets_primary[0], local.vpc_inspection_cidrsubnets_primary[1]] :
     null
   )
 
   vpc_inspection_intra_subnets_primary = (
-    var.azs_number_used == 4 ? [local.vpc_inspection_cidrsubnets_primary[4], local.vpc_inspection_cidrsubnets_primary[5], local.vpc_inspection_cidrsubnets_primary[6], local.vpc_inspection_cidrsubnets_primary[7]] :
-    var.azs_number_used == 3 ? [local.vpc_inspection_cidrsubnets_primary[3], local.vpc_inspection_cidrsubnets_primary[4], local.vpc_inspection_cidrsubnets_primary[5]] :
-    var.azs_number_used == 2 ? [local.vpc_inspection_cidrsubnets_primary[2], local.vpc_inspection_cidrsubnets_primary[3]] :
+    var.azs_number_used_networking == 4 ? [local.vpc_inspection_cidrsubnets_primary[4], local.vpc_inspection_cidrsubnets_primary[5], local.vpc_inspection_cidrsubnets_primary[6], local.vpc_inspection_cidrsubnets_primary[7]] :
+    var.azs_number_used_networking == 3 ? [local.vpc_inspection_cidrsubnets_primary[3], local.vpc_inspection_cidrsubnets_primary[4], local.vpc_inspection_cidrsubnets_primary[5]] :
+    var.azs_number_used_networking == 2 ? [local.vpc_inspection_cidrsubnets_primary[2], local.vpc_inspection_cidrsubnets_primary[3]] :
     null
   )
 
