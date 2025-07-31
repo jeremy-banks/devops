@@ -1,9 +1,9 @@
 variable "account_id" {
   type = map(string)
   default = {
-    networking_prd       = "000000000000"
-    workload_spoke_a_prd = "000000000000"
-    workload_spoke_b_prd = "000000000000"
+    networking_prd       = "347645055752"
+    workload_spoke_a_prd = "299372338669"
+    workload_spoke_b_prd = "998871896429"
   }
 }
 
@@ -268,17 +268,30 @@ variable "vpc_cidr_infrastructure" {
   default = {
     transit_gateway = "10.0.0.0/8"
 
-    central_ingress_failover = "10.3.0.0/16"
-    central_ingress_primary  = "10.0.0.0/16"
-    central_inspection_failover      = "10.4.0.0/16"
-    central_inspection_primary       = "10.1.0.0/16"
-    central_egress_failover  = "10.5.0.0/16"
-    central_egress_primary   = "10.2.0.0/16"
+    central_inspection_primary  = "10.0.0.0/16"
+    central_inspection_failover = "10.1.0.0/16"
+    central_egress_primary      = "10.2.0.0/16"
+    central_egress_failover     = "10.3.0.0/16"
 
-    workload_spoke_a_prd_failover = "10.7.0.0/16"
-    workload_spoke_a_prd_primary  = "10.6.0.0/16"
-    workload_spoke_b_prd_failover = "10.9.0.0/16"
-    workload_spoke_b_prd_primary  = "10.8.0.0/16"
+    shared_services_prd_primary  = "10.4.0.0/16"
+    shared_services_prd_failover = "10.5.0.0/16"
+    shared_services_tst_primary  = "10.6.0.0/16"
+    shared_services_tst_failover = "10.7.0.0/16"
+
+    sdlc_dev_primary  = "10.8.0.0/16"
+    sdlc_dev_failover = "10.9.0.0/16"
+    sdlc_tst_primary  = "10.10.0.0/16"
+    sdlc_tst_failover = "10.11.0.0/16"
+    sdlc_stg_primary  = "10.12.0.0/16"
+    sdlc_stg_failover = "10.13.0.0/16"
+    sdlc_prd_primary  = "10.14.0.0/16"
+    sdlc_prd_failover = "10.15.0.0/16"
+
+    workload_spoke_a_prd_primary  = "10.16.0.0/16"
+    workload_spoke_a_prd_failover = "10.17.0.0/16"
+
+    workload_spoke_b_prd_primary  = "10.18.0.0/16"
+    workload_spoke_b_prd_failover = "10.19.0.0/16"
   }
 }
 
