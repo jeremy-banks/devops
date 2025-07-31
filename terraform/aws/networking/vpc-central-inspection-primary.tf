@@ -1,8 +1,8 @@
 locals {
   vpc_inspection_cidrsubnets_primary = (
-    var.azs_number_used == 4 ? cidrsubnets(var.vpc_cidr_infrastructure.inspection_primary, 3, 3, 3, 3, 12, 12, 12, 12) :
-    var.azs_number_used == 3 ? cidrsubnets(var.vpc_cidr_infrastructure.inspection_primary, 2, 2, 2, 12, 12, 12) :
-    var.azs_number_used == 2 ? cidrsubnets(var.vpc_cidr_infrastructure.inspection_primary, 2, 2, 12, 12) :
+    var.azs_number_used == 4 ? cidrsubnets(var.vpc_cidr_infrastructure.central_inspection_primary, 3, 3, 3, 3, 12, 12, 12, 12) :
+    var.azs_number_used == 3 ? cidrsubnets(var.vpc_cidr_infrastructure.central_inspection_primary, 2, 2, 2, 12, 12, 12) :
+    var.azs_number_used == 2 ? cidrsubnets(var.vpc_cidr_infrastructure.central_inspection_primary, 2, 2, 12, 12) :
     null
   )
 
@@ -29,7 +29,7 @@ module "vpc_inspection_primary" {
   providers = { aws = aws.networking_prd }
 
   name = "${local.resource_name_stub_primary}-vpc-inspection-primary"
-  cidr = var.vpc_cidr_infrastructure.inspection_primary
+  cidr = var.vpc_cidr_infrastructure.central_inspection_primary
 
   azs                 = slice(var.azs_primary, 0, var.azs_number_used_networking)
   private_subnets     = local.vpc_inspection_private_subnets_primary
@@ -68,7 +68,7 @@ module "vpc_inspection_primary" {
   enable_nat_gateway = false
 
   enable_dhcp_options              = true
-  dhcp_options_domain_name_servers = [replace(var.vpc_cidr_infrastructure.inspection_primary, "0/16", "2")]
+  dhcp_options_domain_name_servers = [replace(var.vpc_cidr_infrastructure.central_inspection_primary, "0/16", "2")]
   dhcp_options_ntp_servers         = var.ntp_servers
 
   vpc_tags = local.vpc_inspection_tags_primary

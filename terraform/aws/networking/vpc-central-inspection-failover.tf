@@ -1,8 +1,8 @@
 locals {
   vpc_inspection_cidrsubnets_failover = (
-    var.azs_number_used == 4 ? cidrsubnets(var.vpc_cidr_infrastructure.inspection_failover, 3, 3, 3, 3, 12, 12, 12, 12) :
-    var.azs_number_used == 3 ? cidrsubnets(var.vpc_cidr_infrastructure.inspection_failover, 2, 2, 2, 12, 12, 12) :
-    var.azs_number_used == 2 ? cidrsubnets(var.vpc_cidr_infrastructure.inspection_failover, 2, 2, 12, 12) :
+    var.azs_number_used == 4 ? cidrsubnets(var.vpc_cidr_infrastructure.central_inspection_failover, 3, 3, 3, 3, 12, 12, 12, 12) :
+    var.azs_number_used == 3 ? cidrsubnets(var.vpc_cidr_infrastructure.central_inspection_failover, 2, 2, 2, 12, 12, 12) :
+    var.azs_number_used == 2 ? cidrsubnets(var.vpc_cidr_infrastructure.central_inspection_failover, 2, 2, 12, 12) :
     null
   )
 
@@ -31,7 +31,7 @@ module "vpc_inspection_failover" {
   count = var.create_failover_region ? 1 : 0
 
   name = "${local.resource_name_stub_failover}-vpc-inspection-failover"
-  cidr = var.vpc_cidr_infrastructure.inspection_failover
+  cidr = var.vpc_cidr_infrastructure.central_inspection_failover
 
   azs                 = slice(var.azs_failover, 0, var.azs_number_used_networking)
   private_subnets     = local.vpc_inspection_private_subnets_failover
@@ -70,7 +70,7 @@ module "vpc_inspection_failover" {
   enable_nat_gateway = false
 
   enable_dhcp_options              = true
-  dhcp_options_domain_name_servers = [replace(var.vpc_cidr_infrastructure.inspection_failover, "0/16", "2")]
+  dhcp_options_domain_name_servers = [replace(var.vpc_cidr_infrastructure.central_inspection_failover, "0/16", "2")]
   dhcp_options_ntp_servers         = var.ntp_servers
 
   vpc_tags = local.vpc_inspection_tags_failover
