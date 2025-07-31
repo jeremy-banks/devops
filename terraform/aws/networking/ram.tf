@@ -12,14 +12,14 @@ resource "aws_ram_resource_association" "ram_tgw_primary" {
   resource_share_arn = aws_ram_resource_share.primary.arn
 }
 
-resource "aws_ram_resource_association" "ram_central_ingress_subnets_primary" {
-  provider = aws.networking_prd
+# resource "aws_ram_resource_association" "ram_central_ingress_subnets_primary" {
+#   provider = aws.networking_prd
 
-  count = length(module.vpc_central_ingress_primary.public_subnet_arns)
+#   count = length(module.vpc_central_ingress_primary.public_subnet_arns)
 
-  resource_arn       = module.vpc_central_ingress_primary.public_subnet_arns[count.index]
-  resource_share_arn = aws_ram_resource_share.primary.arn
-}
+#   resource_arn       = module.vpc_central_ingress_primary.public_subnet_arns[count.index]
+#   resource_share_arn = aws_ram_resource_share.primary.arn
+# }
 
 data "aws_organizations_organizational_unit" "infrastructure" {
   parent_id = data.aws_organizations_organization.this.roots[0].id
@@ -75,14 +75,14 @@ resource "aws_ram_resource_association" "ram_tgw_failover" {
   resource_share_arn = aws_ram_resource_share.failover[0].arn
 }
 
-resource "aws_ram_resource_association" "ram_central_ingress_subnets_failover" {
-  provider = aws.networking_prd_failover
+# resource "aws_ram_resource_association" "ram_central_ingress_subnets_failover" {
+#   provider = aws.networking_prd_failover
 
-  count = var.create_failover_region ? length(module.vpc_central_ingress_failover[0].public_subnet_arns) : 0
+#   count = var.create_failover_region ? length(module.vpc_central_ingress_failover[0].public_subnet_arns) : 0
 
-  resource_arn       = module.vpc_central_ingress_failover[0].public_subnet_arns[count.index]
-  resource_share_arn = aws_ram_resource_share.failover[0].arn
-}
+#   resource_arn       = module.vpc_central_ingress_failover[0].public_subnet_arns[count.index]
+#   resource_share_arn = aws_ram_resource_share.failover[0].arn
+# }
 
 resource "aws_ram_principal_association" "ram_ou_infrastructure_failover" {
   provider = aws.networking_prd_failover

@@ -1,19 +1,19 @@
-resource "aws_route" "central_ingress_pub_to_tgw_primary" {
-  provider = aws.networking_prd
+# resource "aws_route" "central_ingress_pub_to_tgw_primary" {
+#   provider = aws.networking_prd
 
-  count = length(module.vpc_central_ingress_primary.public_route_table_ids)
+#   count = length(module.vpc_central_ingress_primary.public_route_table_ids)
 
-  route_table_id         = module.vpc_central_ingress_primary.public_route_table_ids[count.index]
-  destination_cidr_block = var.vpc_cidr_infrastructure.transit_gateway
-  transit_gateway_id     = aws_ec2_transit_gateway.tgw_primary.id
-}
+#   route_table_id         = module.vpc_central_ingress_primary.public_route_table_ids[count.index]
+#   destination_cidr_block = var.vpc_cidr_infrastructure.transit_gateway
+#   transit_gateway_id     = aws_ec2_transit_gateway.tgw_primary.id
+# }
 
-resource "aws_route" "central_ingress_intra_to_tgw_primary" {
-  provider = aws.networking_prd
+# resource "aws_route" "central_ingress_intra_to_tgw_primary" {
+#   provider = aws.networking_prd
 
-  count = length(module.vpc_central_ingress_primary.intra_route_table_ids)
+#   count = length(module.vpc_central_ingress_primary.intra_route_table_ids)
 
-  route_table_id         = module.vpc_central_ingress_primary.intra_route_table_ids[count.index]
-  destination_cidr_block = var.vpc_cidr_infrastructure.transit_gateway
-  transit_gateway_id     = aws_ec2_transit_gateway.tgw_primary.id
-}
+#   route_table_id         = module.vpc_central_ingress_primary.intra_route_table_ids[count.index]
+#   destination_cidr_block = var.vpc_cidr_infrastructure.transit_gateway
+#   transit_gateway_id     = aws_ec2_transit_gateway.tgw_primary.id
+# }
