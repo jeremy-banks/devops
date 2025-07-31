@@ -73,20 +73,3 @@ resource "aws_ec2_transit_gateway_route_table" "cross_region_failover" {
 
   tags = { Name = "${local.resource_name_stub_failover}-${var.this_slug}-tgw-cross-region-failover" }
 }
-
-# resource "aws_ec2_transit_gateway_route" "pre_inspection_primary" {
-#   provider = aws.networking_prd
-
-#   destination_cidr_block         = "0.0.0.0/0"
-#   transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.vpc_inspection_to_tgw_primary.id
-#   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.pre_inspection_primary.id
-# }
-
-# resource "aws_ec2_transit_gateway_route_table_association" "cross_region_primary" {
-#   provider = aws.networking_prd
-
-#   count = var.create_failover_region ? 1 : 0
-
-#   transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.vpc_inspection_to_tgw_primary.id
-#   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.cross_region_primary[0].id
-# }
