@@ -39,7 +39,7 @@ module "vpc_inspection_primary" {
   redshift_subnets    = []
   intra_subnets       = local.vpc_inspection_intra_subnets_primary
 
-  private_subnet_suffix = "firewall"
+  private_subnet_suffix = "pvt"
   intra_subnet_suffix   = "tgw"
 
   create_database_subnet_group    = false

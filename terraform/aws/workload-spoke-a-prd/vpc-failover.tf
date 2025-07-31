@@ -49,6 +49,7 @@ module "vpc_failover" {
   intra_subnets       = local.vpc_workload_spoke_a_intra_subnets_failover
 
   private_subnet_suffix = "pvt"
+  public_subnet_suffix  = "pub"
   intra_subnet_suffix   = "tgw"
 
   create_database_subnet_group    = false
