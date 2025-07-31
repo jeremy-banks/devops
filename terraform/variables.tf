@@ -1,9 +1,9 @@
 variable "account_id" {
   type = map(string)
   default = {
-    networking_prd       = "347645055752"
-    workload_spoke_a_prd = "299372338669"
-    workload_spoke_b_prd = "998871896429"
+    networking_prd       = "000000000000"
+    workload_spoke_a_prd = "000000000000"
+    workload_spoke_b_prd = "000000000000"
   }
 }
 
@@ -246,6 +246,12 @@ variable "account_email_slug" {
     log_archive_prd      = "log-archive-prd"
     networking_prd       = "network-prd"
     security_tooling_prd = "security-tooling-prd"
+    shared_services_prd  = "shared-services-prd"
+    shared_services_tst  = "shared-services-tst"
+    sdlc_dev             = "sdlc-dev"
+    sdlc_tst             = "sdlc-tst"
+    sdlc_stg             = "sdlc-stg"
+    sdlc_prd             = "sdlc-prd"
     workload_spoke_a_prd = "workload-spoke-a-prd"
     workload_spoke_b_prd = "workload-spoke-b-prd"
   }
@@ -258,6 +264,13 @@ variable "account_email_substitute" {
     log_archive_prd      = ""
     networking_prd       = ""
     security_tooling_prd = ""
+    security_tooling_prd = ""
+    shared_services_prd  = ""
+    shared_services_tst  = ""
+    sdlc_dev             = ""
+    sdlc_tst             = ""
+    sdlc_stg             = ""
+    sdlc_prd             = ""
     workload_spoke_a_prd = ""
     workload_spoke_b_prd = ""
   }
