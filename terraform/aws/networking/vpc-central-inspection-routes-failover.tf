@@ -1,7 +1,7 @@
 resource "aws_route" "inspection_intra_to_firewall_endpoint_failover" {
   provider = aws.networking_prd_failover
 
-  count = var.create_failover_region ? length(module.vpc_inspection_failover[0].private_route_table_ids) : 0
+  count = var.create_failover_region_networking ? length(module.vpc_inspection_failover[0].private_route_table_ids) : 0
 
   route_table_id         = module.vpc_inspection_failover[0].intra_route_table_ids[count.index]
   destination_cidr_block = "0.0.0.0/0"
@@ -15,7 +15,7 @@ resource "aws_route" "inspection_intra_to_firewall_endpoint_failover" {
 resource "aws_route" "inspection_private_to_tgw_failover" {
   provider = aws.networking_prd_failover
 
-  count = var.create_failover_region ? length(module.vpc_inspection_failover[0].private_route_table_ids) : 0
+  count = var.create_failover_region_networking ? length(module.vpc_inspection_failover[0].private_route_table_ids) : 0
 
   route_table_id         = module.vpc_inspection_failover[0].private_route_table_ids[count.index]
   destination_cidr_block = "0.0.0.0/0"

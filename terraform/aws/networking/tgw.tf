@@ -17,7 +17,7 @@ resource "aws_ec2_transit_gateway" "tgw_primary" {
 resource "aws_ec2_transit_gateway" "tgw_failover" {
   provider = aws.networking_prd_failover
 
-  count = var.create_failover_region ? 1 : 0
+  count = var.create_failover_region_networking ? 1 : 0
 
   amazon_side_asn                = var.tgw_asn.failover
   auto_accept_shared_attachments = "enable"
@@ -35,7 +35,7 @@ resource "aws_ec2_transit_gateway" "tgw_failover" {
 resource "aws_ec2_transit_gateway_peering_attachment" "tgw_peering" {
   provider = aws.networking_prd_failover
 
-  count = var.create_failover_region ? 1 : 0
+  count = var.create_failover_region_networking ? 1 : 0
 
   peer_region             = var.region_primary.full
   peer_transit_gateway_id = aws_ec2_transit_gateway.tgw_primary.id
@@ -47,7 +47,7 @@ resource "aws_ec2_transit_gateway_peering_attachment" "tgw_peering" {
 resource "aws_ec2_transit_gateway_peering_attachment_accepter" "tgw_peering" {
   provider = aws.networking_prd
 
-  count = var.create_failover_region ? 1 : 0
+  count = var.create_failover_region_networking ? 1 : 0
 
   transit_gateway_attachment_id = aws_ec2_transit_gateway_peering_attachment.tgw_peering[0].id
 
@@ -57,7 +57,7 @@ resource "aws_ec2_transit_gateway_peering_attachment_accepter" "tgw_peering" {
 resource "aws_ec2_transit_gateway_route_table" "cross_region_primary" {
   provider = aws.networking_prd
 
-  count = var.create_failover_region ? 1 : 0
+  count = var.create_failover_region_networking ? 1 : 0
 
   transit_gateway_id = aws_ec2_transit_gateway.tgw_primary.id
 
@@ -67,7 +67,7 @@ resource "aws_ec2_transit_gateway_route_table" "cross_region_primary" {
 resource "aws_ec2_transit_gateway_route_table" "cross_region_failover" {
   provider = aws.networking_prd_failover
 
-  count = var.create_failover_region ? 1 : 0
+  count = var.create_failover_region_networking ? 1 : 0
 
   transit_gateway_id = aws_ec2_transit_gateway.tgw_failover[0].id
 

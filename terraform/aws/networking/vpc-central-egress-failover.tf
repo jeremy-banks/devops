@@ -28,7 +28,7 @@ module "vpc_central_egress_failover" {
   version   = "6.0.1"
   providers = { aws = aws.networking_prd_failover }
 
-  count = var.create_failover_region ? 1 : 0
+  count = var.create_failover_region_networking ? 1 : 0
 
   name = "${local.resource_name_stub_failover}-vpc-central-egress-failover"
   cidr = var.vpc_cidr_infrastructure.central_egress_failover
@@ -83,7 +83,7 @@ module "vpc_central_egress_failover" {
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_central_egress_to_tgw_failover" {
   provider = aws.networking_prd_failover
 
-  count = var.create_failover_region ? 1 : 0
+  count = var.create_failover_region_networking ? 1 : 0
 
   subnet_ids         = module.vpc_central_egress_failover[0].intra_subnets
   transit_gateway_id = aws_ec2_transit_gateway.tgw_failover[0].id

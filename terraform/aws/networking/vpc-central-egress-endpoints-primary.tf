@@ -40,7 +40,7 @@
 # resource "aws_vpc_endpoint" "failover" {
 #   provider = aws.networking_prd_failover
 
-#   count = var.create_failover_region && var.vpc_endpoint_services_enabled != [] ? length(var.vpc_endpoint_services_enabled) : 0
+#   count = var.create_failover_region_networking && var.vpc_endpoint_services_enabled != [] ? length(var.vpc_endpoint_services_enabled) : 0
 
 #   vpc_id             = module.vpc_central_egress_failover[0].vpc_id
 #   service_name       = "com.amazonaws.${var.region_failover.full}.${var.vpc_endpoint_services_enabled[count.index]}"
@@ -54,7 +54,7 @@
 #   version   = "5.2.0"
 #   providers = { aws = aws.networking_prd_failover }
 
-#   count = var.create_failover_region && var.vpc_endpoint_services_enabled != [] ? length(var.vpc_endpoint_services_enabled) : 0
+#   count = var.create_failover_region_networking && var.vpc_endpoint_services_enabled != [] ? length(var.vpc_endpoint_services_enabled) : 0
 
 #   name            = "vpc-endpoint-${element(var.vpc_endpoint_services_enabled, count.index)}"
 #   use_name_prefix = false

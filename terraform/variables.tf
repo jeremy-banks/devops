@@ -146,9 +146,14 @@ variable "region_failover" {
   }
 }
 
+variable "create_failover_region_networking" {
+  type    = bool
+  default = true
+}
+
 variable "create_failover_region" {
   type    = bool
-  default = false
+  default = true
 }
 
 variable "azs_primary" {
@@ -193,7 +198,7 @@ variable "azs_number_used_networking" {
 
 variable "azs_number_used" {
   type    = number
-  default = 2
+  default = 3
 
   validation {
     condition     = var.azs_number_used >= 2 && var.azs_number_used <= 4
@@ -201,7 +206,7 @@ variable "azs_number_used" {
   }
 }
 
-variable "workload_create_vpc_public_subnets" {
+variable "create_vpc_public_subnets" {
   type    = bool
   default = false
 }
@@ -286,25 +291,28 @@ variable "vpc_cidr_infrastructure" {
     central_egress_primary      = "10.2.0.0/16"
     central_egress_failover     = "10.3.0.0/16"
 
-    shared_services_prd_primary  = "10.4.0.0/16"
-    shared_services_prd_failover = "10.5.0.0/16"
-    shared_services_tst_primary  = "10.6.0.0/16"
-    shared_services_tst_failover = "10.7.0.0/16"
+    client_vpn_primary  = "10.4.0.0/16"
+    client_vpn_failover = "10.5.0.0/16"
 
-    sdlc_dev_primary  = "10.8.0.0/16"
-    sdlc_dev_failover = "10.9.0.0/16"
-    sdlc_tst_primary  = "10.10.0.0/16"
-    sdlc_tst_failover = "10.11.0.0/16"
-    sdlc_stg_primary  = "10.12.0.0/16"
-    sdlc_stg_failover = "10.13.0.0/16"
-    sdlc_prd_primary  = "10.14.0.0/16"
-    sdlc_prd_failover = "10.15.0.0/16"
+    shared_services_prd_primary  = "10.6.0.0/16"
+    shared_services_prd_failover = "10.7.0.0/16"
+    shared_services_tst_primary  = "10.8.0.0/16"
+    shared_services_tst_failover = "10.9.0.0/16"
 
-    workload_spoke_a_prd_primary  = "10.16.0.0/16"
-    workload_spoke_a_prd_failover = "10.17.0.0/16"
+    sdlc_dev_primary  = "10.10.0.0/16"
+    sdlc_dev_failover = "10.11.0.0/16"
+    sdlc_tst_primary  = "10.12.0.0/16"
+    sdlc_tst_failover = "10.13.0.0/16"
+    sdlc_stg_primary  = "10.14.0.0/16"
+    sdlc_stg_failover = "10.15.0.0/16"
+    sdlc_prd_primary  = "10.16.0.0/16"
+    sdlc_prd_failover = "10.17.0.0/16"
 
-    workload_spoke_b_prd_primary  = "10.18.0.0/16"
-    workload_spoke_b_prd_failover = "10.19.0.0/16"
+    workload_spoke_a_prd_primary  = "10.18.0.0/16"
+    workload_spoke_a_prd_failover = "10.19.0.0/16"
+
+    workload_spoke_b_prd_primary  = "10.20.0.0/16"
+    workload_spoke_b_prd_failover = "10.21.0.0/16"
   }
 }
 
