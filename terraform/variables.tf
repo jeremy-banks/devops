@@ -284,6 +284,8 @@ variable "account_email_substitute" {
 variable "vpc_cidr_infrastructure" {
   type = map(string)
   default = {
+    on_prem = ""
+
     transit_gateway = "10.0.0.0/8"
 
     central_inspection_primary  = "10.0.0.0/16"
