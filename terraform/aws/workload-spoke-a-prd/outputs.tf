@@ -1,3 +1,5 @@
+output "account_id" { value = data.aws_caller_identity.this.account_id }
+
 output "kms_arn_primary" { value = module.kms_primary.*.key_arn }
 
 output "s3_bucket_name_primary" { value = module.s3_primary.s3_bucket_id }
@@ -25,4 +27,3 @@ output "vpc_private_subnets_ids_failover" { value = [for idx, subnet_id in flatt
 output "vpc_security_group_id_ingress_failover" { value = module.sg_ingress_failover.*.security_group_id }
 
 output "vpc_security_group_id_main_failover" { value = module.sg_main_failover.*.security_group_id }
-
