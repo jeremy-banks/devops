@@ -32,11 +32,17 @@ module "sg_main_rules_primary" {
     },
   ]
 
-  ingress_with_cidr_blocks = [
+  ingress_with_cidr_blocks = var.create_failover_region_networking ? [
     {
       description = "allow all from client vpn"
       rule        = "all-all"
       cidr_blocks = "${var.vpc_cidr_infrastructure.client_vpn_primary},${var.vpc_cidr_infrastructure.client_vpn_failover}"
+    },
+    ] : [
+    {
+      description = "allow all from client vpn"
+      rule        = "all-all"
+      cidr_blocks = "${var.vpc_cidr_infrastructure.client_vpn_primary}"
     },
   ]
 
@@ -96,11 +102,17 @@ module "sg_ingress_rules_primary" {
       rule        = "https-443-tcp"
       cidr_blocks = "0.0.0.0/0"
     },
-    ] : [
+    ] : var.create_failover_region_networking ? [
     {
       description = "allow all from client vpn"
       rule        = "all-all"
       cidr_blocks = "${var.vpc_cidr_infrastructure.client_vpn_primary},${var.vpc_cidr_infrastructure.client_vpn_failover}"
+    },
+    ] : [
+    {
+      description = "allow all from client vpn"
+      rule        = "all-all"
+      cidr_blocks = "${var.vpc_cidr_infrastructure.client_vpn_primary}"
     },
   ]
 

@@ -3,7 +3,7 @@ module "sg_main_failover" {
   version   = "5.3.0"
   providers = { aws = aws.workload_spoke_a_prd_failover }
 
-  count = var.create_failover_region ? 1 : 0
+  count = var.create_failover_region_networking ? 1 : 0
 
   name        = "${local.resource_name_stub_failover}-${var.this_slug}-main-sg"
   description = "${local.resource_name_stub_failover}-${var.this_slug}-main-sg"
@@ -17,7 +17,7 @@ module "sg_main_rules_failover" {
   version   = "5.3.0"
   providers = { aws = aws.workload_spoke_a_prd_failover }
 
-  count = var.create_failover_region ? 1 : 0
+  count = var.create_failover_region_networking ? 1 : 0
 
   create_sg         = false
   security_group_id = module.sg_main_failover[0].security_group_id
@@ -36,11 +36,17 @@ module "sg_main_rules_failover" {
     },
   ]
 
-  ingress_with_cidr_blocks = [
+  ingress_with_cidr_blocks = var.create_failover_region_networking ? [
     {
       description = "allow all from client vpn"
       rule        = "all-all"
       cidr_blocks = "${var.vpc_cidr_infrastructure.client_vpn_primary},${var.vpc_cidr_infrastructure.client_vpn_failover}"
+    },
+    ] : [
+    {
+      description = "allow all from client vpn"
+      rule        = "all-all"
+      cidr_blocks = "${var.vpc_cidr_infrastructure.client_vpn_primary}"
     },
   ]
 
@@ -74,7 +80,7 @@ module "sg_ingress_failover" {
   version   = "5.3.0"
   providers = { aws = aws.workload_spoke_a_prd_failover }
 
-  count = var.create_failover_region ? 1 : 0
+  count = var.create_failover_region_networking ? 1 : 0
 
   name        = "${local.resource_name_stub_failover}-${var.this_slug}-ingress-sg"
   description = "${local.resource_name_stub_failover}-${var.this_slug}-ingress-sg"
@@ -88,7 +94,7 @@ module "sg_ingress_rules_failover" {
   version   = "5.3.0"
   providers = { aws = aws.workload_spoke_a_prd_failover }
 
-  count = var.create_failover_region ? 1 : 0
+  count = var.create_failover_region_networking ? 1 : 0
 
   create_sg         = false
   security_group_id = module.sg_ingress_failover[0].security_group_id
@@ -104,11 +110,17 @@ module "sg_ingress_rules_failover" {
       rule        = "https-443-tcp"
       cidr_blocks = "0.0.0.0/0"
     },
-    ] : [
+    ] : var.create_failover_region_networking ? [
     {
       description = "allow all from client vpn"
       rule        = "all-all"
       cidr_blocks = "${var.vpc_cidr_infrastructure.client_vpn_primary},${var.vpc_cidr_infrastructure.client_vpn_failover}"
+    },
+    ] : [
+    {
+      description = "allow all from client vpn"
+      rule        = "all-all"
+      cidr_blocks = "${var.vpc_cidr_infrastructure.client_vpn_primary}"
     },
   ]
 
