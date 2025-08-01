@@ -62,12 +62,15 @@
 ### Deploy Workload Spoke A
 1. Deploy `terraform/aws/workload-spoke-a-prd`
 
-### Desploy EKS in 
-1. Update eksctl/sdlc-prd-blue.yaml and eksctl/sdlc-prd-failover-blue.yaml with vpc_id and private_subnets for primary and failover from terraform output of workload-spoke-a-prd
-1. Deploy eksctl/blue.yaml
+### Deploy EKS in Workload Spoke A
+1. Update deployments with relevant outputs
+   1. `eksctl/blue.yaml` and `eksctl/green.yaml` with `account_id`, ``kms_arn_primary`, `vpc_id_primary`, `vpc_private_subnets_ids_primary`, `vpc_security_group_id_ingress_primary`, and `vpc_security_group_id_main_primary`
+   1. `helm/cluster-services/values.yaml` with `acm_arn_primary`
+   1. `helm/nginx-welcome-example/values.yaml` with `acm_arn_primary` and `workload_fqdn`
+1. Deploy `eksctl/blue.yaml`
    1. Assume admin role in account
       ```sh
-      # replace 012345678912 with the account id
+      # replace 012345678912 with the account_id
       AWS_PROFILE=admin aws sts assume-role \
          --role-arn arn:aws:iam::012345678912:role/admin \
          --role-session-name workload-spoke-a-prd \
@@ -79,12 +82,11 @@
       unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
       ```
    1. Deploy Cluster
-      Update the vpc-id and subnet-ids in blue.yml
       ```sh
       eksctl create cluster -f blue.yml &
-      eksctl delete cluster --name scc-blue-w12-usw2-blue --region us-west-2 &
+      eksctl delete cluster --name blue --region us-west-2 &
       eksctl create nodegroup -f blue.yml &
-      eksctl delete nodegroup --cluster scc-blue-w12-usw2-blue --name general --region us-west-2 &
+      eksctl delete nodegroup --cluster blue --name general --region us-west-2 &
       ```
    1. Deploy cluster-services
       ```sh
@@ -103,7 +105,7 @@
          ```
    1. Test your website
       ```sh
-      curl www.yourwebsite.com
+      curl workload_fqdn
       ```
 
 ### Deploy Workload Spoke B (Optional)

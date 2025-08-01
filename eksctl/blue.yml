@@ -2,7 +2,7 @@ apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 
 metadata:
-  name: &clusterName scc-blue-w12-usw2-blue
+  name: &clusterName blue
   region: us-west-2
   version: "1.33"
 
@@ -10,14 +10,19 @@ vpc:
   id: "vpc-00000000000000000"
   securityGroup: "sg-00000000000000000"
   subnets:
+    # public:
+    #   one:    { id: subnet-11111111111111111 }
+    #   two:    { id: subnet-22222222222222222 }
+    #   three:  { id: subnet-33333333333333333 }
+    #   four:   { id: subnet-44444444444444444 }
     private:
-      pvt-1:  { id: subnet-11111111111111111 }
-      pvt-2:  { id: subnet-22222222222222222 }
-      pvt-3:  { id: subnet-33333333333333333 }
-      pvt-4:  { id: subnet-44444444444444444 }
+      one:    { id: subnet-11111111111111111 }
+      two:    { id: subnet-22222222222222222 }
+      three:  { id: subnet-33333333333333333 }
+      four:   { id: subnet-44444444444444444 }
 
 secretsEncryption:
-  keyARN: 
+  keyARN: kms_key_arn
 
 # cloudWatch:
 #   clusterLogging:
