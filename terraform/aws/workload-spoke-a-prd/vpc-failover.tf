@@ -42,7 +42,7 @@ module "vpc_failover" {
 
   azs                 = slice(var.azs_failover, 0, var.azs_number_used)
   private_subnets     = local.vpc_workload_spoke_a_private_subnets_failover
-  public_subnets      = (contains(["stg", "prd"], var.deployment_environment) || var.workload_create_vpc_public_subnets) ? local.vpc_workload_spoke_a_public_subnets_failover : []
+  public_subnets      = var.create_vpc_public_subnets ? local.vpc_workload_spoke_a_public_subnets_failover : []
   database_subnets    = []
   elasticache_subnets = []
   redshift_subnets    = []
