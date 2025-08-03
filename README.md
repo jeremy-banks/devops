@@ -1,7 +1,7 @@
 # DevOps
 Thank you for visiting my repo and please consider leaving a Star!
 
-The goal of this repo is to provide a comprehensive codebase for me to lift-and-shift an organinzation into an ideal AWS and EKS deployment using documented best practices.
+The goal of this repo is to provide a comprehensive codebase to lift-and-shift any organinzation into an ideal AWS and EKS deployment using documented best practices.
 
 ## My Education and Certifications
 [![Bachelor's: Genetics and Cell Biology - Washington State University](https://img.shields.io/badge/Bachelor's-Genetics_and_Cell_Biology_--_WSU_(PURSUING)-rgb(152,36,49)?style=plastic)](https://degrees.wsu.edu/degree/genetics-cell-biology/)
@@ -11,6 +11,20 @@ The goal of this repo is to provide a comprehensive codebase for me to lift-and-
 ## Documentation
 - [Initial Setup](./documentation/initial_setup.md)
 - [To-Do](./documentation/to_do.md)
+
+## Features
+- [x] Centralized Inspection of *all* ingress ***and*** egress traffic, including immutable log archiving
+- [ ] Centralized Egress of NAT and endpoints for improved security, faster speed, and cost savings
+- [x] AZ IDz used so traffic stays in the intended AZs even when crossing to other VPCs through TGW
+- [ ] Client VPN with Federated Access using Active Directory
+- [x] Codebase optionally supports failover region for all resources, 2-4 AZs for VPCs, and public subnets with R53 and ACM
+
+## To Do
+- [ ] Add RDS to Workload Spoke
+- [ ] Implement StackSet Deployments
+- [ ] Mozilla Secrets OPerationS (SOPS) implementation to keep secrets protected
+- [ ] Test Site-to-Site VPN connection between my home hardware and AWS
+- [ ] Create a faux DR event by creating terraform code that blocks traffic in ACL of one AZs subnets
 
 ## Reference Material
 - [Whitepaper: Genomics Data Transfer, Analytics, and Machine Learning using AWS Services](https://aws.amazon.com/blogs/industries/whitepaper-genomics-data-transfer-analytics-and-machine-learning-using-aws-services/)

@@ -11,21 +11,24 @@
 
 ## Instructions
 
+### High-Level Overview
+Make an email, update relevant files with your unique information, and begin deploying!
+
 ### Update terraform/variables.tf with Your Unique Information
 1. Create an email address, ideally a mailbox shared by senior engineers, to use as org owner
    1. `org_owner_email_prefix` "jeremybankstech+newtestbed" and `org_owner_email_domain_tld` "gmail.com"
 1. Add your company information
-   1. `company_name` "microsoft" and `company_name_abbr` "ms"
-   1. `team_name` "blue" and `team_name_abbr` "blu"
-   1. `project_name` "windows13" and `project_name_abbr` "w13"
+   1. `company_name` "photon craze" and `company_name_abbr` "pc"
+   1. `team_name` "devops" and `team_name_abbr` "devops"
+   1. `project_name` "newtestbed" and `project_name_abbr` "ntb"
    1. `cost_center` for billing
-1. Enable Failover Region
-   1. `create_failover_region` (true|false)
+1. Declare use of Failover Region
+   1. `create_failover_region_networking` creates tgw and networking vpcs in failover region
 1. Declare your Region(s)
-   1. `region.primary` "us-west-2" and `region.primary_short` "usw2"
-   1. `region.failover` "us-east-1" and `region.failover_short` "use1"
+   1. `region_primary.full` "us-west-2" and `region_primary.short` "usw2"
+   1. `region_failover.full` "us-east-1" and `region_failover.short` "use1"
 1. Explicitly defined availability zones limit network traffic and reduce costs
-   1. `azs_used` 2-4
+   1. `azs_number_used_networking` number of AZs for the networking infrastructure to use
    1. `azs_primary` ["usw2-az1","usw2-az2","usw2-az3"]
    1. `azs_failover` ["use1-az1","use1-az2","use1-az3"]
 
@@ -60,13 +63,16 @@
 1. Deploy `terraform/aws/networking`
 
 ### Deploy Workload Spoke A
+1. `create_failover_region` used to declare whether this deployment should have a failover region
+1. `azs_number_used` 2-4
+1. `create_vpc_public_subnets`
 1. Deploy `terraform/aws/workload-spoke-a-prd`
 
 ### Deploy EKS in Workload Spoke A
-1. Update deployments with relevant outputs
-   1. `eksctl/blue.yaml` and `eksctl/green.yaml` with `account_id`, ``kms_arn_primary`, `vpc_id_primary`, `vpc_private_subnets_ids_primary`, `vpc_security_group_id_ingress_primary`, and `vpc_security_group_id_main_primary`
+1. Update deployment files with relevant outputs
+   1. `eksctl/blue.yaml` and `eksctl/green.yaml` with `kms_arn_primary`, `vpc_id_primary`, `vpc_private_subnets_ids_primary`, `vpc_security_group_id_ingress_primary`, and `vpc_security_group_id_main_primary`
    1. `helm/cluster-services/values.yaml` with `acm_arn_primary`
-   1. `helm/nginx-welcome-example/values.yaml` with `acm_arn_primary` and `workload_fqdn`
+   1. `helm/nginx-welcome-example/values.yaml` with `acm_arn_primary`, and `workload_fqdn`
 1. Deploy `eksctl/blue.yaml`
    1. Assume admin role in account
       ```sh
