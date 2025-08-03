@@ -1,5 +1,5 @@
 resource "aws_organizations_account" "identity_prd" {
-  name  = "identity-prd"
+  name  = var.account_email_slug.identity_prd
   email = local.account_owner_email.identity_prd
 
   close_on_deletion          = true

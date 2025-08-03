@@ -1,5 +1,5 @@
 # resource "aws_organizations_account" "security_tooling_prd" {
-#   name  = "security-tooling-prd"
+#   name  = var.account_email_slug.security_tooling_prd
 #   email = local.account_owner_email.security_tooling_prd
 
 #   close_on_deletion          = true

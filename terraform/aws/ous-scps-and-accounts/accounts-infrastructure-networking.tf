@@ -1,5 +1,5 @@
 resource "aws_organizations_account" "networking_prd" {
-  name  = "network-prd"
+  name  = var.account_email_slug.networking_prd
   email = local.account_owner_email.networking_prd
 
   close_on_deletion          = true

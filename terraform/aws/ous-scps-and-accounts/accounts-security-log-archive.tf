@@ -1,5 +1,5 @@
 # resource "aws_organizations_account" "log_archive_prd" {
-#   name  = "log-archive-prd"
+#   name  = var.account_email_slug.log_archive_prd
 #   email = local.account_owner_email.log_archive_prd
 
 #   close_on_deletion          = true
