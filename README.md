@@ -1,12 +1,12 @@
 # DevOps
 Thank you for visiting my repo and please consider leaving a Star!
 
-The goal of this repo is to provide a comprehensive codebase to lift-and-shift any organinzation into an ideal AWS and EKS deployment using documented best practices.
+The goal of this repo is to provide a comprehensive codebase to lift-and-shift any organinzation into an ideal AWS and EKS deployment using official documented best practices, prescriptive guidance, and white papers.
 
 ## My Education and Certifications
-[![Bachelor's: Genetics and Cell Biology - Washington State University](https://img.shields.io/badge/Bachelor's-Genetics_and_Cell_Biology_--_WSU_(PURSUING)-rgb(152,36,49)?style=plastic)](https://degrees.wsu.edu/degree/genetics-cell-biology/)
+[![Bachelor's: Genetics and Cell Biology - Washington State University](https://img.shields.io/badge/Bachelor's-Genetics_and_Cell_Biology_--_WSU-rgb(152,36,49)?style=plastic)](https://degrees.wsu.edu/degree/genetics-cell-biology/) <sub>PURSUING</sub>
 
-[![Terraform Associate](https://img.shields.io/badge/Certificate-HashiCorp_Certified:_Terraform_Associate-rgb(115,73,182)?style=plastic)](https://www.credly.com/badges/736aae79-b1fd-4567-a3d2-d1e1a27ff182) [![Certified Kubernetes Administrator](https://img.shields.io/badge/Certificate-Certified_Kubernetes_Administrator_(PURSUING)-rgb(77,134,235)?style=plastic)](https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/) [![Unity Prototyping UW](https://img.shields.io/badge/Certificate-Specialization_in_Game_Prototyping_with_Unity-rgb(255,255,255)?style=plastic)](https://badgr.com/public/assertions/HtqMeP7NSSaEzOeMzOowCA)
+[![Terraform Associate](https://img.shields.io/badge/Certificate-HashiCorp_Certified:_Terraform_Associate-rgb(115,73,182)?style=plastic)](https://www.credly.com/badges/736aae79-b1fd-4567-a3d2-d1e1a27ff182) [![Certified Kubernetes Administrator](https://img.shields.io/badge/Certificate-Certified_Kubernetes_Administrator-rgb(77,134,235)?style=plastic)](https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/) <sub>PURSUING</sub> [![Unity Prototyping UW](https://img.shields.io/badge/Certificate-Specialization_in_Game_Prototyping_with_Unity-rgb(255,255,255)?style=plastic)](https://badgr.com/public/assertions/HtqMeP7NSSaEzOeMzOowCA)
 
 ## Documentation
 - [Initial Setup](./documentation/initial_setup.md)
