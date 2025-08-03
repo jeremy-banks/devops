@@ -5,7 +5,7 @@ locals {
 }
 
 provider "aws" {
-  alias   = "r53_deletage_dev"
+  alias   = "r53_delegate_dev"
   profile = var.cli_profile_name
   region  = var.region_failover.full
   assume_role { role_arn = "arn:aws:iam::${local.provider_r53_delegate_dev}:role/${var.provider_role_name}" }
@@ -13,7 +13,7 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias   = "r53_deletage_tst"
+  alias   = "r53_delegate_tst"
   profile = var.cli_profile_name
   region  = var.region_failover.full
   assume_role { role_arn = "arn:aws:iam::${local.provider_r53_delegate_tst}:role/${var.provider_role_name}" }
@@ -21,7 +21,7 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias   = "r53_deletage_stg"
+  alias   = "r53_delegate_stg"
   profile = var.cli_profile_name
   region  = var.region_failover.full
   assume_role { role_arn = "arn:aws:iam::${local.provider_r53_delegate_stg}:role/${var.provider_role_name}" }
