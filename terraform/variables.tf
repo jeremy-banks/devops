@@ -1,7 +1,7 @@
 variable "account_id" {
   type = map(string)
   default = {
-    networking_prd = "347645055752"
+    networking_prd = "000000000000"
 
     workload_shared_services_prd = "000000000000"
     workload_shared_services_stg = "000000000000"
