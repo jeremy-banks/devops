@@ -13,15 +13,9 @@ variable "account_id" {
 
     workload_product_a_prd = "000000000000"
     workload_product_a_stg = "000000000000"
-    workload_product_a_tst = "000000000000"
-    workload_product_a_dev = "000000000000"
 
     workload_customer_a_prd = "000000000000"
     workload_customer_a_stg = "000000000000"
-
-
-    workload_spoke_a_prd = "299372338669"
-    workload_spoke_b_prd = "998871896429"
   }
 }
 
@@ -320,20 +314,16 @@ variable "account_email_slug" {
     workload_shared_services_prd = "workload-shared-services-prd"
     workload_shared_services_stg = "workload-shared-services-stg"
 
-    workload_sdlc_dev = "workload-sdlc-dev"
-    workload_sdlc_tst = "workload-sdlc-tst"
-    workload_sdlc_stg = "workload-sdlc-stg"
     workload_sdlc_prd = "workload-sdlc-prd"
+    workload_sdlc_stg = "workload-sdlc-stg"
+    workload_sdlc_tst = "workload-sdlc-tst"
+    workload_sdlc_dev = "workload-sdlc-dev"
 
     workload_product_a_prd = "workload-product-a-prd"
     workload_product_a_stg = "workload-product-a-stg"
 
     workload_customer_a_prd = "workload-customer-a-prd"
     workload_customer_a_stg = "workload-customer-a-stg"
-
-
-    workload_spoke_a_prd = "workload-spoke-a-prd"
-    workload_spoke_b_prd = "workload-spoke-b-prd"
   }
 }
 
@@ -344,23 +334,26 @@ variable "account_email_substitute" {
     log_archive_prd      = ""
     networking_prd       = ""
     security_tooling_prd = ""
-    security_tooling_prd = ""
-    shared_services_prd  = ""
-    shared_services_tst  = ""
-    sdlc_dev             = ""
-    sdlc_tst             = ""
-    sdlc_stg             = ""
-    sdlc_prd             = ""
-    workload_spoke_a_prd = ""
-    workload_spoke_b_prd = ""
+
+    workload_shared_services_prd = ""
+    workload_shared_services_stg = ""
+
+    workload_sdlc_prd = ""
+    workload_sdlc_stg = ""
+    workload_sdlc_tst = ""
+    workload_sdlc_dev = ""
+
+    workload_product_a_prd = ""
+    workload_product_a_stg = ""
+
+    workload_customer_a_prd = ""
+    workload_customer_a_stg = ""
   }
 }
 
 variable "vpc_cidr_infrastructure" {
   type = map(string)
   default = {
-    on_prem = ""
-
     transit_gateway = "10.0.0.0/8"
 
     central_inspection_primary  = "10.0.0.0/16"
@@ -370,48 +363,32 @@ variable "vpc_cidr_infrastructure" {
 
     client_vpn_prd_primary  = "10.4.0.0/16"
     client_vpn_prd_failover = "10.5.0.0/16"
-    client_vpn_tst_primary  = "10.6.0.0/16"
-    client_vpn_tst_failover = "10.7.0.0/16"
+    client_vpn_stg_primary  = "10.6.0.0/16"
+    client_vpn_stg_failover = "10.7.0.0/16"
 
-    # workload_shared_services_prd_primary  = "10.6.0.0/16"
-    # workload_shared_services_prd_failover = "10.7.0.0/16"
-    # workload_shared_services_tst_primary  = "10.8.0.0/16"
-    # workload_shared_services_tst_failover = "10.9.0.0/16"
+    workload_shared_services_prd_primary  = "10.6.0.0/16"
+    workload_shared_services_prd_failover = "10.7.0.0/16"
+    workload_shared_services_stg_primary  = "10.8.0.0/16"
+    workload_shared_services_stg_failover = "10.9.0.0/16"
 
-    # workload_sdlc_dev_primary  = "10.10.0.0/16"
-    # workload_sdlc_dev_failover = "10.11.0.0/16"
-    # workload_sdlc_tst_primary  = "10.12.0.0/16"
-    # workload_sdlc_tst_failover = "10.13.0.0/16"
-    # workload_sdlc_stg_primary  = "10.14.0.0/16"
-    # workload_sdlc_stg_failover = "10.15.0.0/16"
-    # workload_sdlc_prd_primary  = "10.16.0.0/16"
-    # workload_sdlc_prd_failover = "10.17.0.0/16"
+    workload_sdlc_prd_primary  = "10.16.0.0/16"
+    workload_sdlc_prd_failover = "10.17.0.0/16"
+    workload_sdlc_stg_primary  = "10.14.0.0/16"
+    workload_sdlc_stg_failover = "10.15.0.0/16"
+    workload_sdlc_tst_primary  = "10.12.0.0/16"
+    workload_sdlc_tst_failover = "10.13.0.0/16"
+    workload_sdlc_dev_primary  = "10.10.0.0/16"
+    workload_sdlc_dev_failover = "10.11.0.0/16"
 
-    workload_customer_a_prd_primary  = ""
-    workload_customer_a_prd_failover = ""
-    workload_customer_a_stg_primary  = ""
-    workload_customer_a_stg_failover = ""
-    workload_customer_a_tst_primary  = ""
-    workload_customer_a_tst_failover = ""
-    workload_customer_a_dev_primary  = ""
-    workload_customer_a_dev_failover = ""
+    workload_product_a_prd_primary  = "10.0.0.0/16"
+    workload_product_a_prd_failover = "10.0.0.0/16"
+    workload_product_a_stg_primary  = "10.0.0.0/16"
+    workload_product_a_stg_failover = "10.0.0.0/16"
 
-    workload_project_a_prd_primary  = ""
-    workload_project_a_prd_failover = ""
-    workload_project_a_stg_primary  = ""
-    workload_project_a_stg_failover = ""
-    workload_project_a_tst_primary  = ""
-    workload_project_a_tst_failover = ""
-    workload_project_a_dev_primary  = ""
-    workload_project_a_dev_failover = ""
-
-
-
-    workload_spoke_a_prd_primary  = "10.18.0.0/16"
-    workload_spoke_a_prd_failover = "10.19.0.0/16"
-
-    workload_spoke_b_prd_primary  = "10.20.0.0/16"
-    workload_spoke_b_prd_failover = "10.21.0.0/16"
+    workload_customer_a_prd_primary  = "10.0.0.0/16"
+    workload_customer_a_prd_failover = "10.0.0.0/16"
+    workload_customer_a_stg_primary  = "10.0.0.0/16"
+    workload_customer_a_stg_failover = "10.0.0.0/16"
   }
 }
 
@@ -423,8 +400,20 @@ locals {
     log_archive_prd      = var.account_email_substitute.log_archive_prd != "" ? var.account_email_substitute.log_archive_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.log_archive_prd}@${var.org_owner_email_domain_tld}"
     networking_prd       = var.account_email_substitute.networking_prd != "" ? var.account_email_substitute.networking_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.networking_prd}@${var.org_owner_email_domain_tld}"
     security_tooling_prd = var.account_email_substitute.security_tooling_prd != "" ? var.account_email_substitute.security_tooling_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.security_tooling_prd}@${var.org_owner_email_domain_tld}"
-    workload_spoke_a_prd = var.account_email_substitute.workload_spoke_a_prd != "" ? var.account_email_substitute.workload_spoke_a_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.workload_spoke_a_prd}@${var.org_owner_email_domain_tld}"
-    workload_spoke_b_prd = var.account_email_substitute.workload_spoke_b_prd != "" ? var.account_email_substitute.workload_spoke_b_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.workload_spoke_b_prd}@${var.org_owner_email_domain_tld}"
+
+    workload_shared_services_prd = var.account_email_substitute.workload_shared_services_prd != "" ? var.account_email_substitute.workload_shared_services_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.workload_shared_services_prd}@${var.org_owner_email_domain_tld}"
+    workload_shared_services_stg = var.account_email_substitute.workload_shared_services_stg != "" ? var.account_email_substitute.workload_shared_services_stg : "${var.org_owner_email_prefix}-${var.account_email_slug.workload_shared_services_stg}@${var.org_owner_email_domain_tld}"
+
+    workload_sdlc_prd = var.account_email_substitute.workload_sdlc_prd != "" ? var.account_email_substitute.workload_sdlc_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.workload_sdlc_prd}@${var.org_owner_email_domain_tld}"
+    workload_sdlc_stg = var.account_email_substitute.workload_sdlc_stg != "" ? var.account_email_substitute.workload_sdlc_stg : "${var.org_owner_email_prefix}-${var.account_email_slug.workload_sdlc_stg}@${var.org_owner_email_domain_tld}"
+    workload_sdlc_tst = var.account_email_substitute.workload_sdlc_tst != "" ? var.account_email_substitute.workload_sdlc_tst : "${var.org_owner_email_prefix}-${var.account_email_slug.workload_sdlc_tst}@${var.org_owner_email_domain_tld}"
+    workload_sdlc_dev = var.account_email_substitute.workload_sdlc_dev != "" ? var.account_email_substitute.workload_sdlc_dev : "${var.org_owner_email_prefix}-${var.account_email_slug.workload_sdlc_dev}@${var.org_owner_email_domain_tld}"
+
+    workload_product_a_prd = var.account_email_substitute.workload_product_a_prd != "" ? var.account_email_substitute.workload_product_a_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.workload_product_a_prd}@${var.org_owner_email_domain_tld}"
+    workload_product_a_stg = var.account_email_substitute.workload_product_a_stg != "" ? var.account_email_substitute.workload_product_a_stg : "${var.org_owner_email_prefix}-${var.account_email_slug.workload_product_a_stg}@${var.org_owner_email_domain_tld}"
+
+    workload_customer_a_prd = var.account_email_substitute.workload_customer_a_prd != "" ? var.account_email_substitute.workload_customer_a_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.workload_customer_a_prd}@${var.org_owner_email_domain_tld}"
+    workload_customer_a_stg = var.account_email_substitute.workload_customer_a_stg != "" ? var.account_email_substitute.workload_customer_a_stg : "${var.org_owner_email_prefix}-${var.account_email_slug.workload_customer_a_stg}@${var.org_owner_email_domain_tld}"
   }
 
   resource_name_stub          = lower("${var.company_name_abbr}-${var.team_name_abbr}-${var.project_name_abbr}") #company - team - project - env
