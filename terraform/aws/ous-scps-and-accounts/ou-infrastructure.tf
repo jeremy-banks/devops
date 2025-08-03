@@ -12,13 +12,3 @@ resource "aws_organizations_organizational_unit" "infrastructure_prd" {
 #   name      = "stg"
 #   parent_id = aws_organizations_organizational_unit.infrastructure.id
 # }
-
-# resource "aws_organizations_organizational_unit" "infrastructure_tst" {
-#   name      = "tst"
-#   parent_id = aws_organizations_organizational_unit.infrastructure.id
-# }
-
-# resource "aws_organizations_organizational_unit" "infrastructure_dev" {
-#   name      = "dev"
-#   parent_id = aws_organizations_organizational_unit.infrastructure.id
-# }

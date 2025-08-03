@@ -12,13 +12,3 @@ resource "aws_organizations_organizational_unit" "security_prd" {
 #   name      = "stg"
 #   parent_id = aws_organizations_organizational_unit.security.id
 # }
-
-# resource "aws_organizations_organizational_unit" "security_tst" {
-#   name      = "tst"
-#   parent_id = aws_organizations_organizational_unit.security.id
-# }
-
-# resource "aws_organizations_organizational_unit" "security_dev" {
-#   name      = "dev"
-#   parent_id = aws_organizations_organizational_unit.security.id
-# }
