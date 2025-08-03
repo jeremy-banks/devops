@@ -1,9 +1,27 @@
 variable "account_id" {
   type = map(string)
   default = {
-    networking_prd       = "000000000000"
-    workload_spoke_a_prd = "000000000000"
-    workload_spoke_b_prd = "000000000000"
+    networking_prd = "347645055752"
+
+    workload_shared_services_prd = "000000000000"
+    workload_shared_services_stg = "000000000000"
+
+    workload_sdlc_prd = "000000000000"
+    workload_sdlc_stg = "000000000000"
+    workload_sdlc_tst = "000000000000"
+    workload_sdlc_dev = "000000000000"
+
+    workload_product_a_prd = "000000000000"
+    workload_product_a_stg = "000000000000"
+    workload_product_a_tst = "000000000000"
+    workload_product_a_dev = "000000000000"
+
+    workload_customer_a_prd = "000000000000"
+    workload_customer_a_stg = "000000000000"
+
+
+    workload_spoke_a_prd = "299372338669"
+    workload_spoke_b_prd = "998871896429"
   }
 }
 
@@ -58,13 +76,79 @@ variable "cost_center" {
   default     = "1-EU"
 }
 
-variable "deployment_environment" {
-  type    = string
-  default = "dev"
+variable "create_failover_region_networking" {
+  type    = bool
+  default = true
+}
+
+variable "create_failover_region" {
+  type    = bool
+  default = true
+}
+
+variable "region_primary" {
+  type = map(string)
+  default = {
+    full  = "us-west-2"
+    short = "usw2"
+  }
+}
+
+variable "region_failover" {
+  type = map(string)
+  default = {
+    full  = "us-east-1"
+    short = "use1"
+  }
+}
+
+variable "azs_number_used_networking" {
+  type    = number
+  default = 3
 
   validation {
-    condition     = contains(["dev", "tst", "stg", "prd"], var.deployment_environment)
-    error_message = "variable deployment_environment must be one of: 'dev', 'tst', 'stg', or 'prd'"
+    condition     = var.azs_number_used_networking >= 2 && var.azs_number_used_networking <= 4
+    error_message = "this codebase supports 2, 3, or 4 availability zones"
+  }
+}
+
+variable "azs_number_used" {
+  type    = number
+  default = 3
+
+  validation {
+    condition     = var.azs_number_used >= 2 && var.azs_number_used <= 4
+    error_message = "this codebase supports 2, 3, or 4 availability zones"
+  }
+}
+
+variable "azs_primary" {
+  default = [
+    "usw2-az1",
+    "usw2-az2",
+    "usw2-az3",
+    "usw2-az4", # firewall not supported
+  ]
+
+  validation {
+    condition     = alltrue([for az in var.azs_primary : can(regex("^us[a-z0-9]+-az[0-9]+$", az))])
+    error_message = "must be AWS AZ IDs like 'usw2-az1', not AZ names like 'us-east-1a'"
+  }
+}
+
+variable "azs_failover" {
+  default = [
+    "use1-az1",
+    "use1-az2",
+    "use1-az4",
+    "use1-az5",
+    "use1-az6",
+    "use1-az3", # firewall not supported
+  ]
+
+  validation {
+    condition     = alltrue([for az in var.azs_failover : can(regex("^[a-z0-9-]+-az[0-9]+$", az))])
+    error_message = "must be AWS AZ IDs like 'usw2-az1' or 'sae1-az1', not AZ names like 'us-east-1a'"
   }
 }
 
@@ -101,6 +185,16 @@ variable "provider_role_name" {
   default = "admin"
 }
 
+variable "deployment_environment" {
+  type    = string
+  default = "dev"
+
+  validation {
+    condition     = contains(["dev", "tst", "stg", "prd"], var.deployment_environment)
+    error_message = "variable deployment_environment must be one of: 'dev', 'tst', 'stg', or 'prd'"
+  }
+}
+
 variable "iam_immutable_tag_key" {
   description = "key used to prevent users from changing critical immutable infrastructure"
   type        = string
@@ -125,90 +219,56 @@ variable "this_slug" {
   default     = ""
 
   validation {
-    condition     = var.this_slug != null && var.this_slug != ""
-    error_message = "variable this_slug must be defined in terraform.tfvars"
-  }
-}
-
-variable "region_primary" {
-  type = map(string)
-  default = {
-    full  = "us-west-2"
-    short = "usw2"
-  }
-}
-
-variable "region_failover" {
-  type = map(string)
-  default = {
-    full  = "us-east-1"
-    short = "use1"
-  }
-}
-
-variable "create_failover_region_networking" {
-  type    = bool
-  default = true
-}
-
-variable "create_failover_region" {
-  type    = bool
-  default = true
-}
-
-variable "azs_primary" {
-  default = [
-    "usw2-az1",
-    "usw2-az2",
-    "usw2-az3",
-    "usw2-az4", # firewall not supported
-  ]
-
-  validation {
-    condition     = alltrue([for az in var.azs_primary : can(regex("^us[a-z0-9]+-az[0-9]+$", az))])
-    error_message = "must be AWS AZ IDs like 'usw2-az1', not AZ names like 'us-east-1a'"
-  }
-}
-
-variable "azs_failover" {
-  default = [
-    "use1-az1",
-    "use1-az2",
-    "use1-az4",
-    "use1-az5",
-    "use1-az6",
-    "use1-az3", # firewall not supported
-  ]
-
-  validation {
-    condition     = alltrue([for az in var.azs_failover : can(regex("^[a-z0-9-]+-az[0-9]+$", az))])
-    error_message = "must be AWS AZ IDs like 'usw2-az1' or 'sae1-az1', not AZ names like 'us-east-1a'"
-  }
-}
-
-variable "azs_number_used_networking" {
-  type    = number
-  default = 3
-
-  validation {
-    condition     = var.azs_number_used_networking >= 2 && var.azs_number_used_networking <= 4
-    error_message = "this codebase supports 2, 3, or 4 availability zones"
-  }
-}
-
-variable "azs_number_used" {
-  type    = number
-  default = 3
-
-  validation {
-    condition     = var.azs_number_used >= 2 && var.azs_number_used <= 4
-    error_message = "this codebase supports 2, 3, or 4 availability zones"
+    condition = (
+      can(regex("^[a-zA-Z0-9-]+$", var.this_slug)) &&
+      var.this_slug != null &&
+      var.this_slug != ""
+    )
+    error_message = "variable this_slug must be defined in terraform.tfvars, as alphanumerics and dashes only"
   }
 }
 
 variable "create_vpc_public_subnets" {
   type    = bool
   default = false
+}
+
+variable "r53_zones_parents_and_delegates" {
+  default = {
+    public = {
+      "host.com" = {
+        dev = []
+        tst = []
+        stg = []
+        prd = [
+          "www",
+        ]
+      }
+    }
+    private = {
+      "host.com" = {
+        dev = [
+          "www",
+        ]
+        tst = [
+          "www",
+        ]
+        stg = [
+          "gitlab",
+          "grafana",
+          "prometheus",
+          "www",
+        ]
+        prd = [
+          "artifactory",
+          "gitlab",
+          "grafana",
+          "prometheus",
+          "www",
+        ]
+      }
+    }
+  }
 }
 
 variable "ntp_servers" {
@@ -222,6 +282,11 @@ variable "tgw_asn" {
     primary  = 65434
     failover = 65433
   }
+}
+
+variable "log_retention_days" {
+  type    = number
+  default = 2192 #six years per HIPAA NIST SP 800-66 section 4.22
 }
 
 # variable "ad_directory_admin_password" {
@@ -251,12 +316,22 @@ variable "account_email_slug" {
     log_archive_prd      = "log-archive-prd"
     networking_prd       = "network-prd"
     security_tooling_prd = "security-tooling-prd"
-    shared_services_prd  = "shared-services-prd"
-    shared_services_tst  = "shared-services-tst"
-    sdlc_dev             = "sdlc-dev"
-    sdlc_tst             = "sdlc-tst"
-    sdlc_stg             = "sdlc-stg"
-    sdlc_prd             = "sdlc-prd"
+
+    workload_shared_services_prd = "workload-shared-services-prd"
+    workload_shared_services_stg = "workload-shared-services-stg"
+
+    workload_sdlc_dev = "workload-sdlc-dev"
+    workload_sdlc_tst = "workload-sdlc-tst"
+    workload_sdlc_stg = "workload-sdlc-stg"
+    workload_sdlc_prd = "workload-sdlc-prd"
+
+    workload_product_a_prd = "workload-product-a-prd"
+    workload_product_a_stg = "workload-product-a-stg"
+
+    workload_customer_a_prd = "workload-customer-a-prd"
+    workload_customer_a_stg = "workload-customer-a-stg"
+
+
     workload_spoke_a_prd = "workload-spoke-a-prd"
     workload_spoke_b_prd = "workload-spoke-b-prd"
   }
@@ -293,22 +368,44 @@ variable "vpc_cidr_infrastructure" {
     central_egress_primary      = "10.2.0.0/16"
     central_egress_failover     = "10.3.0.0/16"
 
-    client_vpn_primary  = "10.4.0.0/16"
-    client_vpn_failover = "10.5.0.0/16"
+    client_vpn_prd_primary  = "10.4.0.0/16"
+    client_vpn_prd_failover = "10.5.0.0/16"
+    client_vpn_tst_primary  = "10.6.0.0/16"
+    client_vpn_tst_failover = "10.7.0.0/16"
 
-    shared_services_prd_primary  = "10.6.0.0/16"
-    shared_services_prd_failover = "10.7.0.0/16"
-    shared_services_tst_primary  = "10.8.0.0/16"
-    shared_services_tst_failover = "10.9.0.0/16"
+    # workload_shared_services_prd_primary  = "10.6.0.0/16"
+    # workload_shared_services_prd_failover = "10.7.0.0/16"
+    # workload_shared_services_tst_primary  = "10.8.0.0/16"
+    # workload_shared_services_tst_failover = "10.9.0.0/16"
 
-    sdlc_dev_primary  = "10.10.0.0/16"
-    sdlc_dev_failover = "10.11.0.0/16"
-    sdlc_tst_primary  = "10.12.0.0/16"
-    sdlc_tst_failover = "10.13.0.0/16"
-    sdlc_stg_primary  = "10.14.0.0/16"
-    sdlc_stg_failover = "10.15.0.0/16"
-    sdlc_prd_primary  = "10.16.0.0/16"
-    sdlc_prd_failover = "10.17.0.0/16"
+    # workload_sdlc_dev_primary  = "10.10.0.0/16"
+    # workload_sdlc_dev_failover = "10.11.0.0/16"
+    # workload_sdlc_tst_primary  = "10.12.0.0/16"
+    # workload_sdlc_tst_failover = "10.13.0.0/16"
+    # workload_sdlc_stg_primary  = "10.14.0.0/16"
+    # workload_sdlc_stg_failover = "10.15.0.0/16"
+    # workload_sdlc_prd_primary  = "10.16.0.0/16"
+    # workload_sdlc_prd_failover = "10.17.0.0/16"
+
+    workload_customer_a_prd_primary  = ""
+    workload_customer_a_prd_failover = ""
+    workload_customer_a_stg_primary  = ""
+    workload_customer_a_stg_failover = ""
+    workload_customer_a_tst_primary  = ""
+    workload_customer_a_tst_failover = ""
+    workload_customer_a_dev_primary  = ""
+    workload_customer_a_dev_failover = ""
+
+    workload_project_a_prd_primary  = ""
+    workload_project_a_prd_failover = ""
+    workload_project_a_stg_primary  = ""
+    workload_project_a_stg_failover = ""
+    workload_project_a_tst_primary  = ""
+    workload_project_a_tst_failover = ""
+    workload_project_a_dev_primary  = ""
+    workload_project_a_dev_failover = ""
+
+
 
     workload_spoke_a_prd_primary  = "10.18.0.0/16"
     workload_spoke_a_prd_failover = "10.19.0.0/16"
@@ -335,44 +432,6 @@ locals {
   resource_name_stub_failover = lower("${local.resource_name_stub}-${var.region_failover.short}")                #company - team - project - env - failover
 
   number_words = { 1 = "one", 2 = "two", 3 = "three", 4 = "four", 5 = "five", 6 = "six", 7 = "seven", 8 = "eight", 9 = "nine", 10 = "ten", }
-
-  # vpc_tags_primary = merge(local.eks_tags_primary, {
-  #   "${local.resource_name_stub_primary}-blue"                            = "shared"
-  #   "${local.resource_name_stub_primary}-green"                           = "shared"
-  #   "k8s.io/cluster-autoscaler/${local.resource_name_stub_primary}-blue"  = "shared"
-  #   "k8s.io/cluster-autoscaler/${local.resource_name_stub_primary}-green" = "shared"
-  #   "k8s.io/cluster-autoscaler/enabled"                                   = "true"
-  # })
-  # vpc_tags_failover = merge(local.eks_tags_failover, {
-  #   "${local.resource_name_stub_failover}-blue"                            = "shared"
-  #   "${local.resource_name_stub_failover}-green"                           = "shared"
-  #   "k8s.io/cluster-autoscaler/${local.resource_name_stub_failover}-blue"  = "shared"
-  #   "k8s.io/cluster-autoscaler/${local.resource_name_stub_failover}-green" = "shared"
-  #   "k8s.io/cluster-autoscaler/enabled"                                    = "true"
-  # })
-
-  # subnet_pvt_tags_primary  = merge(local.eks_tags_primary, local.eks_tags_subnet_pvt)
-  # subnet_pub_tags_primary  = merge(local.eks_tags_primary, local.eks_tags_subnet_pub)
-  # subnet_pvt_tags_failover = merge(local.eks_tags_failover, local.eks_tags_subnet_pvt)
-  # subnet_pub_tags_failover = merge(local.eks_tags_failover, local.eks_tags_subnet_pub)
-
-  # eks_tags_primary = {
-  #   "kubernetes.io/cluster/${local.resource_name_stub_primary}-blue"  = "shared"
-  #   "kubernetes.io/cluster/${local.resource_name_stub_primary}-green" = "shared"
-  # }
-  # eks_tags_failover = {
-  #   "kubernetes.io/cluster/${local.resource_name_stub_failover}-blue"  = "shared"
-  #   "kubernetes.io/cluster/${local.resource_name_stub_failover}-green" = "shared"
-  # }
-
-  # eks_tags_subnet_pvt = {
-  #   "kubernetes.io/role/alb-ingress"  = 1
-  #   "kubernetes.io/role/internal-elb" = 1
-  # }
-  # eks_tags_subnet_pub = {
-  #   "kubernetes.io/role/alb-ingress" = 1
-  #   "kubernetes.io/role/elb"         = 1
-  # }
 
   default_tags_map = {
     "company"                      = "${var.company_name}"

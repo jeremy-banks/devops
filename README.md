@@ -1,7 +1,7 @@
 # DevOps
 Thank you for visiting my repo and please consider leaving a Star!
 
-The goal of this repo is to provide a comprehensive codebase to lift-and-shift any organinzation into an ideal AWS and EKS deployment using official documented best practices, prescriptive guidance, and white papers.
+The goal of this repo is to provide a comprehensive codebase to lift-and-shift any organinzation into the ideal AWS and EKS deployment using official documented best practices, prescriptive guidance, and white papers.
 
 ## My Education and Certifications
 [![Bachelor's: Genetics and Cell Biology - Washington State University](https://img.shields.io/badge/Bachelor's-Genetics_and_Cell_Biology_--_WSU_(PURSUING)-rgb(152,36,49)?style=plastic)](https://degrees.wsu.edu/degree/genetics-cell-biology/)<br>

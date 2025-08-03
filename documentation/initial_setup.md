@@ -22,13 +22,14 @@ Make an email, update relevant files with your unique information, and begin dep
    1. `team_name` "devops" and `team_name_abbr` "devops"
    1. `project_name` "newtestbed" and `project_name_abbr` "ntb"
    1. `cost_center` for billing
-1. Declare use of Failover Region
+1. Declare use of Failover Region and the Region(s) to use
    1. `create_failover_region_networking` creates tgw and networking vpcs in failover region
-1. Declare your Region(s)
+   1. `create_failover_region` creates workload vpcs in failover region
    1. `region_primary.full` "us-west-2" and `region_primary.short` "usw2"
    1. `region_failover.full` "us-east-1" and `region_failover.short` "use1"
 1. Explicitly defined availability zones limit network traffic and reduce costs
    1. `azs_number_used_networking` number of AZs for the networking infrastructure to use
+   1. `azs_number_used` number of AZs for the workload infrastructure to use
    1. `azs_primary` ["usw2-az1","usw2-az2","usw2-az3"]
    1. `azs_failover` ["use1-az1","use1-az2","use1-az3"]
 
