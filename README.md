@@ -10,6 +10,7 @@ The goal of this repo is to provide a comprehensive codebase to lift-and-shift a
 [![Unity Prototyping UW](https://img.shields.io/badge/Certificate-Specialization_in_Game_Prototyping_with_Unity-rgb(255,255,255)?style=plastic)](https://badgr.com/public/assertions/HtqMeP7NSSaEzOeMzOowCA)
 
 ## Documentation
+- [Architectural Overview](./documentation/architectural_overview.md)
 - [Initial Setup](./documentation/initial_setup.md)
 - [To-Do](./documentation/to_do.md)
 
