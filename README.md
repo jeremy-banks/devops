@@ -15,7 +15,8 @@ The goal of this repo is to provide a comprehensive codebase to lift-and-shift a
 - [To-Do](./documentation/to_do.md)
 
 ## Features
-- [x] Centralized Inspection of *all* ingress ***and*** egress traffic, including immutable log archiving
+- [x] Centralized Inspection of *all* ingress ***and*** egress traffic
+- [ ] Immutable log archiving with N-day retention
 - [ ] Centralized Egress of NAT and endpoints for improved security, faster speed, and cost savings
 - [x] AZ IDz used so traffic stays in the intended AZs even when crossing to other VPCs through TGW
 - [ ] Client VPN with Federated Access using Active Directory
