@@ -1,6 +1,6 @@
 # resource "aws_organizations_account" "security_tooling_prd" {
-#   name  = var.account_email_slug.security_tooling_prd
-#   email = local.account_owner_email.security_tooling_prd
+#   name  = var.account_name_slug.security_tooling_prd
+#   email = "${var.org_owner_email_prefix}-${var.account_name_slug.security_tooling_prd}@${var.org_owner_email_domain_tld}"
 
 #   close_on_deletion          = true
 #   create_govcloud            = false

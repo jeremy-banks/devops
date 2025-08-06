@@ -1,6 +1,6 @@
 resource "aws_organizations_account" "networking_prd" {
-  name  = var.account_email_slug.networking_prd
-  email = local.account_owner_email.networking_prd
+  name  = var.account_name_slug.networking_prd
+  email = "${var.org_owner_email_prefix}-${var.account_name_slug.networking_prd}@${var.org_owner_email_domain_tld}"
 
   close_on_deletion          = true
   create_govcloud            = false

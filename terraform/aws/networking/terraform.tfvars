@@ -2,9 +2,9 @@ cli_profile_name = "superadmin"
 
 provider_role_name = "superadmin"
 
-deployment_environment = "prd"
-
 this_slug = "network"
+
+deployment_environment = "prd"
 
 # create_failover_region_networking = false
 

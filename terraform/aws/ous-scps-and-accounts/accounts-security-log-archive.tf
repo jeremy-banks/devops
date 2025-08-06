@@ -1,6 +1,6 @@
 # resource "aws_organizations_account" "log_archive_prd" {
-#   name  = var.account_email_slug.log_archive_prd
-#   email = local.account_owner_email.log_archive_prd
+#   name  = var.account_name_slug.log_archive_prd
+#   email = "${var.org_owner_email_prefix}-${var.account_name_slug.log_archive_prd}@${var.org_owner_email_domain_tld}"
 
 #   close_on_deletion          = true
 #   create_govcloud            = false

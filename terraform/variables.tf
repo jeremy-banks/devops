@@ -21,6 +21,77 @@ variable "account_id" {
   }
 }
 
+variable "account_name_slug" {
+  type = map(string)
+  default = {
+    identity_prd         = "identity-prd"
+    log_archive_prd      = "log-archive-prd"
+    networking_prd       = "network-prd"
+    security_tooling_prd = "security-tooling-prd"
+
+    workload_shared_services_prd = "workload-shared-services-prd"
+    workload_shared_services_stg = "workload-shared-services-stg"
+
+    workload_sdlc_prd = "workload-sdlc-prd"
+    workload_sdlc_stg = "workload-sdlc-stg"
+    workload_sdlc_tst = "workload-sdlc-tst"
+    workload_sdlc_dev = "workload-sdlc-dev"
+
+    workload_product_a_prd = "workload-product-a-prd"
+    workload_product_a_stg = "workload-product-a-stg"
+    # workload_product_a_tst = "workload-product-a-tst"
+    # workload_product_a_dev = "workload-product-a-dev"
+
+    workload_customer_a_prd = "workload-customer-a-prd"
+    workload_customer_a_stg = "workload-customer-a-stg"
+  }
+}
+
+variable "vpc_cidr_infrastructure" {
+  type = map(string)
+  default = {
+    transit_gateway = "10.0.0.0/8"
+
+    central_inspection_primary  = "10.0.0.0/16"
+    central_inspection_failover = "10.1.0.0/16"
+    central_egress_primary      = "10.2.0.0/16"
+    central_egress_failover     = "10.3.0.0/16"
+
+    client_vpn_prd_primary  = "10.4.0.0/16"
+    client_vpn_prd_failover = "10.5.0.0/16"
+    client_vpn_stg_primary  = "10.6.0.0/16"
+    client_vpn_stg_failover = "10.7.0.0/16"
+
+    workload_shared_services_prd_primary  = "10.8.0.0/16"
+    workload_shared_services_prd_failover = "10.9.0.0/16"
+    workload_shared_services_stg_primary  = "10.10.0.0/16"
+    workload_shared_services_stg_failover = "10.11.0.0/16"
+
+    workload_sdlc_prd_primary  = "10.12.0.0/16"
+    workload_sdlc_prd_failover = "10.13.0.0/16"
+    workload_sdlc_stg_primary  = "10.14.0.0/16"
+    workload_sdlc_stg_failover = "10.15.0.0/16"
+    workload_sdlc_tst_primary  = "10.16.0.0/16"
+    workload_sdlc_tst_failover = "10.17.0.0/16"
+    workload_sdlc_dev_primary  = "10.18.0.0/16"
+    workload_sdlc_dev_failover = "10.19.0.0/16"
+
+    workload_product_a_prd_primary  = "10.20.0.0/16"
+    workload_product_a_prd_failover = "10.21.0.0/16"
+    workload_product_a_stg_primary  = "10.22.0.0/16"
+    workload_product_a_stg_failover = "10.23.0.0/16"
+    # workload_product_a_tst_primary  = "10.24.0.0/16"
+    # workload_product_a_tst_failover = "10.25.0.0/16"
+    # workload_product_a_dev_primary  = "10.26.0.0/16"
+    # workload_product_a_dev_failover = "10.27.0.0/16"
+
+    workload_customer_a_prd_primary  = "10.28.0.0/16"
+    workload_customer_a_prd_failover = "10.29.0.0/16"
+    workload_customer_a_stg_primary  = "10.30.0.0/16"
+    workload_customer_a_stg_failover = "10.31.0.0/16"
+  }
+}
+
 variable "org_owner_email_prefix" {
   description = "the 'jeremybankstech+newtestbed' in 'jeremybankstech+newtestbed@gmail.com'"
   type        = string
@@ -70,6 +141,84 @@ variable "cost_center" {
   description = "for billing"
   type        = string
   default     = "1-EU"
+}
+
+variable "resource_owner_email" {
+  description = "point of escalation for ownership"
+  type        = string
+  default     = ""
+}
+
+variable "admin_user_names" {
+  type = map(string)
+  default = {
+    superadmin = "superadmin"
+    admin      = "admin"
+    breakglass = "breakglass"
+  }
+}
+
+variable "cli_profile_name" {
+  description = "aws profile name to be used"
+  type        = string
+  default     = "admin"
+}
+
+variable "account_role_name" {
+  default = "superadmin"
+}
+
+variable "admin_role_name" {
+  default = "admin"
+}
+
+variable "provider_role_name" {
+  default = "admin"
+}
+
+variable "org_service_access_principals" {
+  type = list(string)
+  default = [
+    "account.amazonaws.com",                  #account management
+    "cloudtrail.amazonaws.com",               #cloudtrail
+    "config-multiaccountsetup.amazonaws.com", #config
+    "config.amazonaws.com",                   #config
+    "ds.amazonaws.com",                       #enterprise active directory
+    "ram.amazonaws.com",                      #resource access manager
+  ]
+}
+
+variable "this_slug" {
+  description = "used to programatically declare resource names"
+  type        = string
+  default     = ""
+
+  validation {
+    condition = (
+      can(regex("^[a-zA-Z0-9-]+$", var.this_slug)) &&
+      var.this_slug != null &&
+      var.this_slug != ""
+    )
+    error_message = "variable this_slug must be defined in terraform.tfvars, as alphanumerics and dashes only"
+  }
+}
+
+variable "deployment_environment" {
+  type    = string
+  default = "dev"
+
+  validation {
+    condition     = contains(["dev", "tst", "stg", "prd"], var.deployment_environment)
+    error_message = "variable deployment_environment must be one of: 'dev', 'tst', 'stg', or 'prd'"
+  }
+}
+
+variable "tgw_asn" {
+  type = map(number)
+  default = {
+    primary  = 65434
+    failover = 65433
+  }
 }
 
 variable "create_failover_region_networking" {
@@ -148,82 +297,6 @@ variable "azs_failover" {
   }
 }
 
-variable "resource_owner_email" {
-  description = "point of escalation for ownership"
-  type        = string
-  default     = ""
-}
-
-variable "cli_profile_name" {
-  description = "aws profile name to be used"
-  type        = string
-  default     = "admin"
-}
-
-variable "admin_user_names" {
-  type = map(string)
-  default = {
-    superadmin = "superadmin"
-    admin      = "admin"
-    breakglass = "breakglass"
-  }
-}
-
-variable "account_role_name" {
-  default = "superadmin"
-}
-
-variable "admin_role_name" {
-  default = "admin"
-}
-
-variable "provider_role_name" {
-  default = "admin"
-}
-
-variable "deployment_environment" {
-  type    = string
-  default = "dev"
-
-  validation {
-    condition     = contains(["dev", "tst", "stg", "prd"], var.deployment_environment)
-    error_message = "variable deployment_environment must be one of: 'dev', 'tst', 'stg', or 'prd'"
-  }
-}
-
-variable "iam_immutable_tag_key" {
-  description = "key used to prevent users from changing critical immutable infrastructure"
-  type        = string
-  default     = "immutable"
-}
-
-variable "org_service_access_principals" {
-  type = list(string)
-  default = [
-    "account.amazonaws.com",                  #account management
-    "cloudtrail.amazonaws.com",               #cloudtrail
-    "config-multiaccountsetup.amazonaws.com", #config
-    "config.amazonaws.com",                   #config
-    "ds.amazonaws.com",                       #enterprise active directory
-    "ram.amazonaws.com",                      #resource access manager
-  ]
-}
-
-variable "this_slug" {
-  description = "used to programatically declare resource names"
-  type        = string
-  default     = ""
-
-  validation {
-    condition = (
-      can(regex("^[a-zA-Z0-9-]+$", var.this_slug)) &&
-      var.this_slug != null &&
-      var.this_slug != ""
-    )
-    error_message = "variable this_slug must be defined in terraform.tfvars, as alphanumerics and dashes only"
-  }
-}
-
 variable "create_vpc_public_subnets" {
   type    = bool
   default = false
@@ -231,39 +304,16 @@ variable "create_vpc_public_subnets" {
 
 variable "r53_zones_parents_and_delegates" {
   default = {
-    public = {
-      "host.com" = {
-        dev = []
-        tst = []
-        stg = []
-        prd = [
-          "www",
-        ]
-      }
-    }
-    private = {
-      "host.com" = {
-        dev = [
-          "www",
-        ]
-        tst = [
-          "www",
-        ]
-        stg = [
-          "gitlab",
-          "grafana",
-          "prometheus",
-          "www",
-        ]
-        prd = [
-          "artifactory",
-          "gitlab",
-          "grafana",
-          "prometheus",
-          "www",
-        ]
-      }
-    }
+    "host.com" = [
+      "prd",
+      "stg",
+      # tst,
+      # dev,
+    ]
+    "foo.com" = [
+      "prd",
+      "stg",
+    ]
   }
 }
 
@@ -272,161 +322,19 @@ variable "ntp_servers" {
   default = ["169.254.169.123"]
 }
 
-variable "tgw_asn" {
-  type = map(number)
-  default = {
-    primary  = 65434
-    failover = 65433
-  }
-}
-
 variable "log_retention_days" {
   type    = number
   default = 2192 #six years per HIPAA NIST SP 800-66 section 4.22
 }
 
-# variable "ad_directory_admin_password" {
-#   type    = string
-#   default = "tempSuperSecretPassword123"
-# }
-
-# variable "ad_directory_id_connector_network" {
-#   type    = string
-#   default = ""
-# }
-
-# variable "ad_directory_id_connector_network_failover" {
-#   type    = string
-#   default = ""
-# }
-
-# variable "r53_zones" {
-#   type    = list(string)
-#   default = []
-# }
-
-variable "account_email_slug" {
-  type = map(string)
-  default = {
-    identity_prd         = "identity-prd"
-    log_archive_prd      = "log-archive-prd"
-    networking_prd       = "network-prd"
-    security_tooling_prd = "security-tooling-prd"
-
-    workload_shared_services_prd = "workload-shared-services-prd"
-    workload_shared_services_stg = "workload-shared-services-stg"
-
-    workload_sdlc_prd = "workload-sdlc-prd"
-    workload_sdlc_stg = "workload-sdlc-stg"
-    workload_sdlc_tst = "workload-sdlc-tst"
-    workload_sdlc_dev = "workload-sdlc-dev"
-
-    workload_product_a_prd = "workload-product-a-prd"
-    workload_product_a_stg = "workload-product-a-stg"
-    # workload_product_a_tst = "workload-product-a-tst"
-    # workload_product_a_dev = "workload-product-a-dev"
-
-    workload_customer_a_prd = "workload-customer-a-prd"
-    workload_customer_a_stg = "workload-customer-a-stg"
-  }
-}
-
-variable "account_email_substitute" {
-  type = map(string)
-  default = {
-    identity_prd         = ""
-    log_archive_prd      = ""
-    networking_prd       = ""
-    security_tooling_prd = ""
-
-    workload_shared_services_prd = ""
-    workload_shared_services_stg = ""
-
-    workload_sdlc_prd = ""
-    workload_sdlc_stg = ""
-    workload_sdlc_tst = ""
-    workload_sdlc_dev = ""
-
-    workload_product_a_prd = ""
-    workload_product_a_stg = ""
-    # workload_product_a_tst = ""
-    # workload_product_a_dev = ""
-
-    workload_customer_a_prd = ""
-    workload_customer_a_stg = ""
-  }
-}
-
-variable "vpc_cidr_infrastructure" {
-  type = map(string)
-  default = {
-    transit_gateway = "10.0.0.0/8"
-
-    central_inspection_primary  = "10.0.0.0/16"
-    central_inspection_failover = "10.1.0.0/16"
-    central_egress_primary      = "10.2.0.0/16"
-    central_egress_failover     = "10.3.0.0/16"
-
-    client_vpn_prd_primary  = "10.4.0.0/16"
-    client_vpn_prd_failover = "10.5.0.0/16"
-    client_vpn_stg_primary  = "10.6.0.0/16"
-    client_vpn_stg_failover = "10.7.0.0/16"
-
-    workload_shared_services_prd_primary  = "10.8.0.0/16"
-    workload_shared_services_prd_failover = "10.9.0.0/16"
-    workload_shared_services_stg_primary  = "10.10.0.0/16"
-    workload_shared_services_stg_failover = "10.11.0.0/16"
-
-    workload_sdlc_prd_primary  = "10.12.0.0/16"
-    workload_sdlc_prd_failover = "10.13.0.0/16"
-    workload_sdlc_stg_primary  = "10.14.0.0/16"
-    workload_sdlc_stg_failover = "10.15.0.0/16"
-    workload_sdlc_tst_primary  = "10.16.0.0/16"
-    workload_sdlc_tst_failover = "10.17.0.0/16"
-    workload_sdlc_dev_primary  = "10.18.0.0/16"
-    workload_sdlc_dev_failover = "10.19.0.0/16"
-
-    workload_product_a_prd_primary  = "10.20.0.0/16"
-    workload_product_a_prd_failover = "10.21.0.0/16"
-    workload_product_a_stg_primary  = "10.22.0.0/16"
-    workload_product_a_stg_failover = "10.23.0.0/16"
-    # workload_product_a_tst_primary  = "10.24.0.0/16"
-    # workload_product_a_tst_failover = "10.25.0.0/16"
-    # workload_product_a_dev_primary  = "10.26.0.0/16"
-    # workload_product_a_dev_failover = "10.27.0.0/16"
-
-    workload_customer_a_prd_primary  = "10.28.0.0/16"
-    workload_customer_a_prd_failover = "10.29.0.0/16"
-    workload_customer_a_stg_primary  = "10.30.0.0/16"
-    workload_customer_a_stg_failover = "10.31.0.0/16"
-  }
+variable "iam_immutable_tag_key" {
+  description = "key used to prevent users from changing critical immutable infrastructure"
+  type        = string
+  default     = "immutable"
 }
 
 locals {
   org_owner_email = "${var.org_owner_email_prefix}@${var.org_owner_email_domain_tld}"
-
-  account_owner_email = {
-    identity_prd         = var.account_email_substitute.identity_prd != "" ? var.account_email_substitute.identity_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.identity_prd}@${var.org_owner_email_domain_tld}"
-    log_archive_prd      = var.account_email_substitute.log_archive_prd != "" ? var.account_email_substitute.log_archive_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.log_archive_prd}@${var.org_owner_email_domain_tld}"
-    networking_prd       = var.account_email_substitute.networking_prd != "" ? var.account_email_substitute.networking_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.networking_prd}@${var.org_owner_email_domain_tld}"
-    security_tooling_prd = var.account_email_substitute.security_tooling_prd != "" ? var.account_email_substitute.security_tooling_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.security_tooling_prd}@${var.org_owner_email_domain_tld}"
-
-    workload_shared_services_prd = var.account_email_substitute.workload_shared_services_prd != "" ? var.account_email_substitute.workload_shared_services_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.workload_shared_services_prd}@${var.org_owner_email_domain_tld}"
-    workload_shared_services_stg = var.account_email_substitute.workload_shared_services_stg != "" ? var.account_email_substitute.workload_shared_services_stg : "${var.org_owner_email_prefix}-${var.account_email_slug.workload_shared_services_stg}@${var.org_owner_email_domain_tld}"
-
-    workload_sdlc_prd = var.account_email_substitute.workload_sdlc_prd != "" ? var.account_email_substitute.workload_sdlc_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.workload_sdlc_prd}@${var.org_owner_email_domain_tld}"
-    workload_sdlc_stg = var.account_email_substitute.workload_sdlc_stg != "" ? var.account_email_substitute.workload_sdlc_stg : "${var.org_owner_email_prefix}-${var.account_email_slug.workload_sdlc_stg}@${var.org_owner_email_domain_tld}"
-    workload_sdlc_tst = var.account_email_substitute.workload_sdlc_tst != "" ? var.account_email_substitute.workload_sdlc_tst : "${var.org_owner_email_prefix}-${var.account_email_slug.workload_sdlc_tst}@${var.org_owner_email_domain_tld}"
-    workload_sdlc_dev = var.account_email_substitute.workload_sdlc_dev != "" ? var.account_email_substitute.workload_sdlc_dev : "${var.org_owner_email_prefix}-${var.account_email_slug.workload_sdlc_dev}@${var.org_owner_email_domain_tld}"
-
-    workload_product_a_prd = var.account_email_substitute.workload_product_a_prd != "" ? var.account_email_substitute.workload_product_a_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.workload_product_a_prd}@${var.org_owner_email_domain_tld}"
-    workload_product_a_stg = var.account_email_substitute.workload_product_a_stg != "" ? var.account_email_substitute.workload_product_a_stg : "${var.org_owner_email_prefix}-${var.account_email_slug.workload_product_a_stg}@${var.org_owner_email_domain_tld}"
-    # workload_product_a_tst = var.account_email_substitute.workload_product_a_tst != "" ? var.account_email_substitute.workload_product_a_tst : "${var.org_owner_email_prefix}-${var.account_email_slug.workload_product_a_tst}@${var.org_owner_email_domain_tld}"
-    # workload_product_a_dev = var.account_email_substitute.workload_product_a_dev != "" ? var.account_email_substitute.workload_product_a_dev : "${var.org_owner_email_prefix}-${var.account_email_slug.workload_product_a_dev}@${var.org_owner_email_domain_tld}"
-
-    workload_customer_a_prd = var.account_email_substitute.workload_customer_a_prd != "" ? var.account_email_substitute.workload_customer_a_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.workload_customer_a_prd}@${var.org_owner_email_domain_tld}"
-    workload_customer_a_stg = var.account_email_substitute.workload_customer_a_stg != "" ? var.account_email_substitute.workload_customer_a_stg : "${var.org_owner_email_prefix}-${var.account_email_slug.workload_customer_a_stg}@${var.org_owner_email_domain_tld}"
-  }
 
   resource_name_stub          = lower("${var.company_name_abbr}-${var.team_name_abbr}-${var.project_name_abbr}") #company - team - project - env
   resource_name_stub_primary  = lower("${local.resource_name_stub}-${var.region_primary.short}")                 #company - team - project - env - primary
