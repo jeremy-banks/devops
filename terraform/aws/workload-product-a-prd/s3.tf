@@ -1,7 +1,7 @@
 module "s3_primary" {
   source    = "terraform-aws-modules/s3-bucket/aws"
   version   = "5.2.0"
-  providers = { aws = aws.workload_product_a_prd }
+  providers = { aws = aws.this }
 
   bucket = "${local.resource_name_stub_primary}-${var.this_slug}-storage-blob-${local.unique_id}"
 
@@ -63,7 +63,7 @@ module "s3_primary" {
 module "iam_policy_s3_primary_replicate_to_failover" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version   = "5.59.0"
-  providers = { aws = aws.workload_product_a_prd }
+  providers = { aws = aws.this }
 
   name = "s3-tfstate-region-replicate"
 
@@ -120,7 +120,7 @@ EOF
 module "iam_role_s3_primary_replicate_to_failover" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version   = "5.59.0"
-  providers = { aws = aws.workload_product_a_prd }
+  providers = { aws = aws.this }
 
   trusted_role_services = [
     "s3.amazonaws.com",
@@ -141,7 +141,7 @@ module "iam_role_s3_primary_replicate_to_failover" {
 module "s3_failover" {
   source    = "terraform-aws-modules/s3-bucket/aws"
   version   = "5.2.0"
-  providers = { aws = aws.workload_product_a_prd_failover }
+  providers = { aws = aws.this_failover }
 
   bucket = "${local.resource_name_stub_failover}-${var.this_slug}-storage-blob-${local.unique_id}"
 

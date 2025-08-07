@@ -1,7 +1,7 @@
 module "sg_main_failover" {
   source    = "terraform-aws-modules/security-group/aws"
   version   = "5.3.0"
-  providers = { aws = aws.workload_product_a_prd_failover }
+  providers = { aws = aws.this_failover }
 
   count = var.create_failover_region ? 1 : 0
 
@@ -15,7 +15,7 @@ module "sg_main_failover" {
 module "sg_main_rules_failover" {
   source    = "terraform-aws-modules/security-group/aws"
   version   = "5.3.0"
-  providers = { aws = aws.workload_product_a_prd_failover }
+  providers = { aws = aws.this_failover }
 
   count = var.create_failover_region ? 1 : 0
 
@@ -78,7 +78,7 @@ module "sg_main_rules_failover" {
 module "sg_ingress_failover" {
   source    = "terraform-aws-modules/security-group/aws"
   version   = "5.3.0"
-  providers = { aws = aws.workload_product_a_prd_failover }
+  providers = { aws = aws.this_failover }
 
   count = var.create_failover_region ? 1 : 0
 
@@ -92,7 +92,7 @@ module "sg_ingress_failover" {
 module "sg_ingress_rules_failover" {
   source    = "terraform-aws-modules/security-group/aws"
   version   = "5.3.0"
-  providers = { aws = aws.workload_product_a_prd_failover }
+  providers = { aws = aws.this_failover }
 
   count = var.create_failover_region ? 1 : 0
 

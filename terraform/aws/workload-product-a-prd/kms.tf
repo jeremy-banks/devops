@@ -83,7 +83,7 @@ data "aws_iam_policy_document" "kms" {
 module "kms_primary" {
   source    = "terraform-aws-modules/kms/aws"
   version   = "4.0.0"
-  providers = { aws = aws.workload_product_a_prd }
+  providers = { aws = aws.this }
 
   deletion_window_in_days = 30
   enable_key_rotation     = true
@@ -99,7 +99,7 @@ module "kms_primary" {
 module "kms_failover" {
   source    = "terraform-aws-modules/kms/aws"
   version   = "4.0.0"
-  providers = { aws = aws.workload_product_a_prd_failover }
+  providers = { aws = aws.this_failover }
 
   deletion_window_in_days = 30
   create_replica          = true
@@ -111,25 +111,25 @@ module "kms_failover" {
 }
 
 resource "aws_ebs_encryption_by_default" "kms_primary" {
-  provider = aws.workload_product_a_prd
+  provider = aws.this
 
   enabled = true
 }
 
 resource "aws_ebs_default_kms_key" "kms_primary" {
-  provider = aws.workload_product_a_prd
+  provider = aws.this
 
   key_arn = module.kms_primary.key_arn
 }
 
 resource "aws_ebs_encryption_by_default" "kms_failover" {
-  provider = aws.workload_product_a_prd_failover
+  provider = aws.this_failover
 
   enabled = true
 }
 
 resource "aws_ebs_default_kms_key" "kms_failover" {
-  provider = aws.workload_product_a_prd_failover
+  provider = aws.this_failover
 
   key_arn = module.kms_failover.key_arn
 }

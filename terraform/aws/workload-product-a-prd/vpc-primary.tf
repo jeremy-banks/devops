@@ -1,4 +1,6 @@
 locals {
+  vpc_cidr_primary = var.vpc_cidr_primary
+  
   vpc_cidrsubnets_primary = (
     var.azs_number_used == 4 ? cidrsubnets(local.vpc_cidr_primary, 3, 3, 3, 3, 4, 4, 4, 4, 12, 12, 12, 12) :
     var.azs_number_used == 3 ? cidrsubnets(local.vpc_cidr_primary, 2, 2, 2, 4, 4, 4, 12, 12, 12) :
@@ -33,7 +35,7 @@ locals {
 module "vpc_primary" {
   source    = "terraform-aws-modules/vpc/aws"
   version   = "6.0.1"
-  providers = { aws = aws.workload_product_a_prd }
+  providers = { aws = aws.this }
 
   name = "${local.resource_name_stub_primary}-${var.this_slug}-vpc-primary"
   cidr = local.vpc_cidr_primary

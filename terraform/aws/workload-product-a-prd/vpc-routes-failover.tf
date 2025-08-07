@@ -1,5 +1,5 @@
 resource "aws_route" "private_to_tgw_failover" {
-  provider = aws.workload_product_a_prd_failover
+  provider = aws.this_failover
 
   count = var.create_failover_region ? length(module.vpc_failover[0].private_route_table_ids) : 0
 
@@ -9,7 +9,7 @@ resource "aws_route" "private_to_tgw_failover" {
 }
 
 resource "aws_route" "public_to_tgw_failover" {
-  provider = aws.workload_product_a_prd_failover
+  provider = aws.this_failover
 
   count = var.create_failover_region ? length(module.vpc_failover[0].public_route_table_ids) : 0
 
@@ -19,7 +19,7 @@ resource "aws_route" "public_to_tgw_failover" {
 }
 
 resource "aws_route" "intra_to_tgw_failover" {
-  provider = aws.workload_product_a_prd_failover
+  provider = aws.this_failover
 
   count = var.create_failover_region ? length(module.vpc_failover[0].intra_route_table_ids) : 0
 

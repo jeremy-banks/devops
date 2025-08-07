@@ -1,5 +1,5 @@
 resource "aws_route53_zone" "zones_public_prd" {
-  provider = aws.workload_product_a_prd
+  provider = aws.this
 
   count = length(var.r53_zones_parents)
 
@@ -15,7 +15,7 @@ resource "aws_route53_zone" "zones_public_stg" {
 }
 
 resource "aws_route53_record" "stg_ns_in_parent" {
-  provider = aws.workload_product_a_prd
+  provider = aws.this
 
   for_each = toset(var.r53_zones_delegates_stg)
 
@@ -40,7 +40,7 @@ resource "aws_route53_zone" "zones_public_tst" {
 }
 
 resource "aws_route53_record" "tst_ns_in_parent" {
-  provider = aws.workload_product_a_prd
+  provider = aws.this
 
   for_each = toset(var.r53_zones_delegates_tst)
 
@@ -65,7 +65,7 @@ resource "aws_route53_zone" "zones_public_dev" {
 }
 
 resource "aws_route53_record" "dev_ns_in_parent" {
-  provider = aws.workload_product_a_prd
+  provider = aws.this
 
   for_each = toset(var.r53_zones_delegates_dev)
 

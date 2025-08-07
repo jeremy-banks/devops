@@ -1,5 +1,5 @@
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_workload_product_a_to_tgw_primary" {
-  provider = aws.workload_product_a_prd
+  provider = aws.this
 
   subnet_ids         = module.vpc_primary.intra_subnets
   transit_gateway_id = data.aws_ec2_transit_gateway.tgw_primary.id
@@ -25,7 +25,7 @@ resource "aws_ec2_transit_gateway_route_table_association" "vpc_workload_product
 resource "aws_ec2_transit_gateway_route" "post_central_inspection_workload_product_a_primary_to_primary" {
   provider = aws.networking_prd
 
-  destination_cidr_block         = var.vpc_cidr_infrastructure.workload_product_a_prd_primary
+  destination_cidr_block         = local.vpc_cidr_primary
   transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.vpc_workload_product_a_to_tgw_primary.id
   transit_gateway_route_table_id = data.aws_ec2_transit_gateway_route_table.tgw_post_central_inspection_primary.id
 }
@@ -35,7 +35,7 @@ resource "aws_ec2_transit_gateway_route" "post_central_inspection_workload_produ
 
   count = var.create_failover_region ? 1 : 0
 
-  destination_cidr_block         = var.vpc_cidr_infrastructure.workload_product_a_prd_failover
+  destination_cidr_block         = local.vpc_cidr_failover
   transit_gateway_attachment_id  = data.aws_ec2_transit_gateway_peering_attachment.tgw_peer_failover[0].id
   transit_gateway_route_table_id = data.aws_ec2_transit_gateway_route_table.tgw_post_central_inspection_primary.id
 }

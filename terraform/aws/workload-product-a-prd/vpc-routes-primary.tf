@@ -1,5 +1,5 @@
 resource "aws_route" "private_to_tgw_primary" {
-  provider = aws.workload_product_a_prd
+  provider = aws.this
 
   count = length(module.vpc_primary.private_route_table_ids)
 
@@ -9,7 +9,7 @@ resource "aws_route" "private_to_tgw_primary" {
 }
 
 resource "aws_route" "public_to_tgw_primary" {
-  provider = aws.workload_product_a_prd
+  provider = aws.this
 
   count = length(module.vpc_primary.public_route_table_ids)
 
@@ -19,7 +19,7 @@ resource "aws_route" "public_to_tgw_primary" {
 }
 
 resource "aws_route" "intra_to_tgw_primary" {
-  provider = aws.workload_product_a_prd
+  provider = aws.this
 
   count = length(module.vpc_primary.intra_route_table_ids)
 

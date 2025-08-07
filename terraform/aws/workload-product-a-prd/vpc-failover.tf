@@ -1,4 +1,6 @@
 locals {
+  vpc_cidr_failover = var.vpc_cidr_failover
+
   vpc_cidrsubnets_failover = (
     var.azs_number_used == 4 ? cidrsubnets(local.vpc_cidr_failover, 3, 3, 3, 3, 4, 4, 4, 4, 12, 12, 12, 12) :
     var.azs_number_used == 3 ? cidrsubnets(local.vpc_cidr_failover, 2, 2, 2, 4, 4, 4, 12, 12, 12) :
@@ -33,7 +35,7 @@ locals {
 module "vpc_failover" {
   source    = "terraform-aws-modules/vpc/aws"
   version   = "6.0.1"
-  providers = { aws = aws.workload_product_a_prd_failover }
+  providers = { aws = aws.this_failover }
 
   count = var.create_failover_region ? 1 : 0
 

@@ -1,7 +1,7 @@
 module "sg_main_primary" {
   source    = "terraform-aws-modules/security-group/aws"
   version   = "5.3.0"
-  providers = { aws = aws.workload_product_a_prd }
+  providers = { aws = aws.this }
 
   name        = "${local.resource_name_stub_primary}-${var.this_slug}-main-sg"
   description = "${local.resource_name_stub_primary}-${var.this_slug}-main-sg"
@@ -13,7 +13,7 @@ module "sg_main_primary" {
 module "sg_main_rules_primary" {
   source    = "terraform-aws-modules/security-group/aws"
   version   = "5.3.0"
-  providers = { aws = aws.workload_product_a_prd }
+  providers = { aws = aws.this }
 
   create_sg         = false
   security_group_id = module.sg_main_primary.security_group_id
@@ -74,7 +74,7 @@ module "sg_main_rules_primary" {
 module "sg_ingress_primary" {
   source    = "terraform-aws-modules/security-group/aws"
   version   = "5.3.0"
-  providers = { aws = aws.workload_product_a_prd }
+  providers = { aws = aws.this }
 
   name        = "${local.resource_name_stub_primary}-${var.this_slug}-ingress-sg"
   description = "${local.resource_name_stub_primary}-${var.this_slug}-ingress-sg"
@@ -86,7 +86,7 @@ module "sg_ingress_primary" {
 module "sg_ingress_rules_primary" {
   source    = "terraform-aws-modules/security-group/aws"
   version   = "5.3.0"
-  providers = { aws = aws.workload_product_a_prd }
+  providers = { aws = aws.this }
 
   create_sg         = false
   security_group_id = module.sg_ingress_primary.security_group_id
