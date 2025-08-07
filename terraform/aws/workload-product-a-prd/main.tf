@@ -1,6 +1,8 @@
 locals {
   unique_id = substr(sha256("foo${data.aws_caller_identity.this.account_id}"), 0, 8)
 
+  this_workload = join("_", [var.this_slug, var.deployment_environment])
+
   vpc_cidr_primary  = var.vpc_cidr_infrastructure.workload_product_a_prd_primary
   vpc_cidr_failover = var.vpc_cidr_infrastructure.workload_product_a_prd_failover
 }

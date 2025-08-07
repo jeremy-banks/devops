@@ -1,7 +1,10 @@
 variable "account_id" {
   type = map(string)
   default = {
-    networking_prd = "000000000000"
+    identity_prd         = "000000000000"
+    log_archive_prd      = "000000000000"
+    networking_prd       = "000000000000"
+    security_tooling_prd = "000000000000"
 
     workload_shared_services_prd = "000000000000"
     workload_shared_services_stg = "000000000000"
@@ -11,10 +14,10 @@ variable "account_id" {
     workload_sdlc_tst = "000000000000"
     workload_sdlc_dev = "000000000000"
 
+    workload_product_a_dev = "000000000000"
     workload_product_a_prd = "000000000000"
     workload_product_a_stg = "000000000000"
-    # workload_product_a_tst = "000000000000"
-    # workload_product_a_dev = "000000000000"
+    workload_product_a_tst = "000000000000"
 
     workload_customer_a_prd = "000000000000"
     workload_customer_a_stg = "000000000000"
@@ -39,8 +42,8 @@ variable "account_name_slug" {
 
     workload_product_a_prd = "workload-product-a-prd"
     workload_product_a_stg = "workload-product-a-stg"
-    # workload_product_a_tst = "workload-product-a-tst"
-    # workload_product_a_dev = "workload-product-a-dev"
+    workload_product_a_tst = "workload-product-a-tst"
+    workload_product_a_dev = "workload-product-a-dev"
 
     workload_customer_a_prd = "workload-customer-a-prd"
     workload_customer_a_stg = "workload-customer-a-stg"
@@ -80,10 +83,10 @@ variable "vpc_cidr_infrastructure" {
     workload_product_a_prd_failover = "10.21.0.0/16"
     workload_product_a_stg_primary  = "10.22.0.0/16"
     workload_product_a_stg_failover = "10.23.0.0/16"
-    # workload_product_a_tst_primary  = "10.24.0.0/16"
-    # workload_product_a_tst_failover = "10.25.0.0/16"
-    # workload_product_a_dev_primary  = "10.26.0.0/16"
-    # workload_product_a_dev_failover = "10.27.0.0/16"
+    workload_product_a_tst_primary  = "10.24.0.0/16"
+    workload_product_a_tst_failover = "10.25.0.0/16"
+    workload_product_a_dev_primary  = "10.26.0.0/16"
+    workload_product_a_dev_failover = "10.27.0.0/16"
 
     workload_customer_a_prd_primary  = "10.28.0.0/16"
     workload_customer_a_prd_failover = "10.29.0.0/16"
@@ -159,9 +162,7 @@ variable "admin_user_names" {
 }
 
 variable "cli_profile_name" {
-  description = "aws profile name to be used"
-  type        = string
-  default     = "admin"
+  default = "admin"
 }
 
 variable "account_role_name" {
@@ -297,29 +298,46 @@ variable "azs_failover" {
   }
 }
 
+variable "vpc_cidr_primary" {
+  default = ""
+}
+
+variable "vpc_cidr_failover" {
+  default = ""
+}
+
 variable "create_vpc_public_subnets" {
   type    = bool
   default = false
 }
 
-variable "r53_zones_parents_and_delegates" {
-  default = {
-    "host.com" = [
-      "prd",
-      "stg",
-      # tst,
-      # dev,
-    ]
-    "foo.com" = [
-      "prd",
-      "stg",
-    ]
-  }
-}
-
 variable "ntp_servers" {
   type    = list(string)
   default = ["169.254.169.123"]
+}
+
+variable "r53_zones_parents" {
+  default = [
+    "bar.com",
+    "foo.com",
+    "foobar.com"
+  ]
+}
+
+variable "r53_zones_delegates_stg" {
+  default = [
+    "bar.com",
+    "foobar.com",
+    "foo.com",
+  ]
+}
+
+variable "r53_zones_delegates_tst" {
+  default = []
+}
+
+variable "r53_zones_delegates_dev" {
+  default = []
 }
 
 variable "log_retention_days" {
