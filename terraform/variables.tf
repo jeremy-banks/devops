@@ -3,7 +3,7 @@ variable "account_id" {
   default = {
     identity_prd         = "000000000000"
     log_archive_prd      = "000000000000"
-    networking_prd       = "347645055752"
+    networking_prd       = "000000000000"
     security_tooling_prd = "000000000000"
 
     workload_shared_services_prd = "000000000000"
@@ -14,10 +14,10 @@ variable "account_id" {
     workload_sdlc_tst = "000000000000"
     workload_sdlc_dev = "000000000000"
 
-    workload_product_a_dev = "482003670538"
-    workload_product_a_prd = "343845667043"
-    workload_product_a_stg = "048013208204"
-    workload_product_a_tst = "008099619772"
+    workload_product_a_dev = "000000000000"
+    workload_product_a_prd = "000000000000"
+    workload_product_a_stg = "000000000000"
+    workload_product_a_tst = "000000000000"
 
     workload_customer_a_prd = "000000000000"
     workload_customer_a_stg = "000000000000"
@@ -355,45 +355,45 @@ variable "iam_immutable_tag_key" {
   default     = "immutable"
 }
 
+variable "unique_id_seed" {
+  default = "foo"
+}
+
 locals {
   org_owner_email = "${var.org_owner_email_prefix}@${var.org_owner_email_domain_tld}"
 
-  # new_this_slug = 
-  # company name - region - deployment_stage - name
-  # pc-use1-prd-storage-blob
+  # company-project
+  resource_name_prefix = lower("${var.company_name_abbr}-${var.project_name_abbr}")
 
+  # company-project-region-env-slug
+  resource_name_primary  = lower("${local.resource_name_prefix}-${var.region_primary.short}-${var.deployment_environment}-${var.this_slug}")
+  resource_name_failover = lower("${local.resource_name_prefix}-${var.region_failover.short}-${var.deployment_environment}-${var.this_slug}")
 
+  # company-project-region-env-slug-unique_id
+  resource_name_primary_globally_unique  = "${local.resource_name_primary}-${local.unique_id}"
+  resource_name_failover_globally_unique = "${local.resource_name_failover}-${local.unique_id}"
 
-  # this_slug = lower(var.this_slug)
-  # this_slug_primary = join("-", [local.this_slug, "primary"])
-  # this_slug_failover = join("-", [local.this_slug, "failover"])
-
-  # resource_name = lower("${var.company_name_abbr}-${var.project_name_abbr}")
-
-  resource_name_stub          = lower("${var.company_name_abbr}-${var.project_name_abbr}")        #company - project
-  resource_name_stub_primary  = lower("${local.resource_name_stub}-${var.region_primary.short}")  #company - project - region.primary
-  resource_name_stub_failover = lower("${local.resource_name_stub}-${var.region_failover.short}") #company - project - region.failover
-
-  this_slug_prd = join("_", ["workload", replace(var.this_slug, "-", "_"), "prd"])
-  this_slug_stg = join("_", ["workload", replace(var.this_slug, "-", "_"), "stg"])
-  this_slug_tst = join("_", ["workload", replace(var.this_slug, "-", "_"), "tst"])
-  this_slug_dev = join("_", ["workload", replace(var.this_slug, "-", "_"), "dev"])
+  # this_slug_prd = join("_", ["workload", replace(var.this_slug, "-", "_"), "prd"])
+  # this_slug_stg = join("_", ["workload", replace(var.this_slug, "-", "_"), "stg"])
+  # this_slug_tst = join("_", ["workload", replace(var.this_slug, "-", "_"), "tst"])
+  # this_slug_dev = join("_", ["workload", replace(var.this_slug, "-", "_"), "dev"])
 
   # this_snake          = join("_", ["workload", replace(var.this_slug, "-", "_"), var.deployment_environment])
   # this_snake_primary  = join("_", ["workload", replace(var.this_slug, "-", "_"), var.deployment_environment, "primary"])
   # this_snake_failover = join("_", ["workload", replace(var.this_slug, "-", "_"), var.deployment_environment, "failover"])
 
-  unique_id = substr(sha256("foo${data.aws_caller_identity.this.account_id}"), 0, 8)
+  unique_id = substr(sha256("${var.unique_id_seed}${data.aws_caller_identity.this.account_id}"), 0, 8)
 
   number_words = { 1 = "one", 2 = "two", 3 = "three", 4 = "four", 5 = "five", 6 = "six", 7 = "seven", 8 = "eight", 9 = "nine", 10 = "ten", }
 
   default_tags_map = {
-    "company"                      = "${var.company_name}"
-    "team"                         = "${var.team_name}"
-    "cost_center"                  = "${var.cost_center}"
-    "project"                      = "${var.project_name}"
-    "environment"                  = "${var.deployment_environment}"
-    "resource_owner"               = var.resource_owner_email != null ? "${var.resource_owner_email}" : "${local.org_owner_email}"
-    "${var.iam_immutable_tag_key}" = "true"
+    "${var.company_name_abbr}:company"        = "${var.company_name}"
+    "${var.company_name_abbr}:team"           = "${var.team_name}"
+    "${var.company_name_abbr}:cost_center"    = "${var.cost_center}"
+    "${var.company_name_abbr}:project"        = "${var.project_name}"
+    "${var.company_name_abbr}:environment"    = "${var.deployment_environment}"
+    "${var.company_name_abbr}:resource_owner" = var.resource_owner_email != null ? "${var.resource_owner_email}" : "${local.org_owner_email}"
+
+    "${var.company_name_abbr}:${var.iam_immutable_tag_key}" = "true"
   }
 }
