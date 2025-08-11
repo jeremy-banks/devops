@@ -58,7 +58,7 @@ module "iam_policy_tfstate_s3_region_replicate" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version = "5.59.0"
 
-  name = "tfstate-s3-region-replicate"
+  name = "${local.resource_name_primary}-replicate"
 
   policy = data.aws_iam_policy_document.s3_tfstate_region_replicate.json
 }
@@ -71,7 +71,7 @@ module "iam_role_tfstate_s3_region_replicate" {
 
   create_role = true
 
-  role_name           = "tfstate-s3-region-replicate"
+  role_name           = "${local.resource_name_primary}-replicate"
   role_requires_mfa   = false
   attach_admin_policy = false
 
