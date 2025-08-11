@@ -16,10 +16,10 @@ data "aws_iam_policy_document" "iam_user_admin" {
     effect  = "Allow"
     actions = ["s3:*"]
     resources = [
-      "arn:aws:s3:::${local.resource_name_stub_primary}-tfstate-${local.unique_id}/${var.admin_user_names.admin}",
-      "arn:aws:s3:::${local.resource_name_stub_primary}-tfstate-${local.unique_id}/${var.admin_user_names.admin}/*",
-      "arn:aws:s3:::${local.resource_name_stub_failover}-tfstate-${local.unique_id}/${var.admin_user_names.admin}",
-      "arn:aws:s3:::${local.resource_name_stub_failover}-tfstate-${local.unique_id}/${var.admin_user_names.admin}/*",
+      "arn:aws:s3:::${local.resource_name_primary_globally_unique}/${var.admin_user_names.admin}",
+      "arn:aws:s3:::${local.resource_name_primary_globally_unique}/${var.admin_user_names.admin}/*",
+      "arn:aws:s3:::${local.resource_name_failover_globally_unique}/${var.admin_user_names.admin}",
+      "arn:aws:s3:::${local.resource_name_failover_globally_unique}/${var.admin_user_names.admin}/*",
     ]
   }
 

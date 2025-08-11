@@ -5,7 +5,7 @@ data "aws_iam_policy_document" "s3_tfstate_region_replicate" {
       "s3:GetReplicationConfiguration",
       "s3:ListBucket"
     ]
-    resources = ["arn:aws:s3:::${local.resource_name_stub_primary}-tfstate-${local.unique_id}"]
+    resources = ["arn:aws:s3:::${local.resource_name_primary_globally_unique}"]
   }
   statement {
     effect = "Allow"
@@ -15,7 +15,7 @@ data "aws_iam_policy_document" "s3_tfstate_region_replicate" {
       "s3:GetObjectVersionAcl",
       "s3:GetObjectVersionTagging"
     ]
-    resources = ["arn:aws:s3:::${local.resource_name_stub_primary}-tfstate-${local.unique_id}/*"]
+    resources = ["arn:aws:s3:::${local.resource_name_primary_globally_unique}/*"]
   }
   statement {
     effect = "Allow"
@@ -24,7 +24,7 @@ data "aws_iam_policy_document" "s3_tfstate_region_replicate" {
       "s3:ReplicateDelete",
       "s3:ReplicateTags"
     ]
-    resources = ["arn:aws:s3:::${local.resource_name_stub_failover}-tfstate-${local.unique_id}/*"]
+    resources = ["arn:aws:s3:::${local.resource_name_failover_globally_unique}/*"]
   }
   statement {
     effect = "Allow"

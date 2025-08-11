@@ -62,7 +62,7 @@ module "s3_tfstate_backend_primary" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "5.2.0"
 
-  bucket = "${local.resource_name_stub_primary}-${var.this_slug}-${local.unique_id}"
+  bucket = local.resource_name_primary_globally_unique
 
   force_destroy = true
 
@@ -182,7 +182,7 @@ module "s3_tfstate_backend_failover" {
   version   = "5.2.0"
   providers = { aws = aws.management_failover }
 
-  bucket = "${local.resource_name_stub_failover}-${var.this_slug}-${local.unique_id}"
+  bucket = local.resource_name_failover_globally_unique
 
   force_destroy = true
 
