@@ -1,5 +1,5 @@
 locals {
-  vpc_cidr_failover = var.vpc_cidr_failover
+  # vpc_cidr_failover = var.vpc_cidr_failover
 
   vpc_cidrsubnets_failover = (
     var.azs_number_used == 4 ? cidrsubnets(local.vpc_cidr_failover, 3, 3, 3, 3, 4, 4, 4, 4, 12, 12, 12, 12) :

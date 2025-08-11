@@ -1,6 +1,6 @@
 locals {
-  vpc_cidr_primary = var.vpc_cidr_primary
-  
+  # vpc_cidr_primary = var.vpc_cidr_primary
+
   vpc_cidrsubnets_primary = (
     var.azs_number_used == 4 ? cidrsubnets(local.vpc_cidr_primary, 3, 3, 3, 3, 4, 4, 4, 4, 12, 12, 12, 12) :
     var.azs_number_used == 3 ? cidrsubnets(local.vpc_cidr_primary, 2, 2, 2, 4, 4, 4, 12, 12, 12) :
