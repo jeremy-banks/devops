@@ -1,5 +1,5 @@
 resource "aws_organizations_account" "identity_prd" {
-  name  = var.account_name_slug.identity_prd
+  name  = "${var.account_name_slug.identity}-prd"
   email = "${var.org_owner_email_prefix}-${var.account_name_slug.identity_prd}@${var.org_owner_email_domain_tld}"
 
   close_on_deletion          = true
