@@ -18,35 +18,21 @@ variable "account_id" {
     workload_product_a_prd = "000000000000"
     workload_product_a_stg = "000000000000"
     workload_product_a_tst = "000000000000"
-
-    workload_customer_a_prd = "000000000000"
-    workload_customer_a_stg = "000000000000"
   }
 }
 
 variable "account_name_slug" {
   type = map(string)
   default = {
-    identity_prd         = "identity-prd"
-    log_archive_prd      = "log-archive-prd"
-    networking_prd       = "network-prd"
-    security_tooling_prd = "security-tooling-prd"
+    identity         = "identity"
+    log_archive      = "log-archive"
+    networking       = "network"
+    security_tooling = "security-tooling"
 
-    workload_shared_services_prd = "workload-shared-services-prd"
-    workload_shared_services_stg = "workload-shared-services-stg"
+    workload_shared_services = "workload-shared-services"
+    workload_sdlc            = "workload-sdlc"
 
-    workload_sdlc_prd = "workload-sdlc-prd"
-    workload_sdlc_stg = "workload-sdlc-stg"
-    workload_sdlc_tst = "workload-sdlc-tst"
-    workload_sdlc_dev = "workload-sdlc-dev"
-
-    workload_product_a_prd = "workload-product-a-prd"
-    workload_product_a_stg = "workload-product-a-stg"
-    workload_product_a_tst = "workload-product-a-tst"
-    workload_product_a_dev = "workload-product-a-dev"
-
-    workload_customer_a_prd = "workload-customer-a-prd"
-    workload_customer_a_stg = "workload-customer-a-stg"
+    workload_product_a = "workload-product-a"
   }
 }
 
@@ -96,13 +82,19 @@ variable "vpc_cidr_infrastructure" {
 }
 
 variable "org_owner_email_prefix" {
-  description = "the 'jeremybankstech+newtestbed' in 'jeremybankstech+newtestbed@gmail.com'"
+  description = "the 'jeremybankstech' in 'jeremybankstech+onemoretestbed@gmail.com'"
   type        = string
-  default     = "jeremybankstech+newtestbed"
+  default     = "jeremybankstech"
+}
+
+variable "org_owner_email_plus_address" {
+  description = "the 'onemoretestbed' in 'jeremybankstech+onemoretestbed@gmail.com'"
+  type        = string
+  default     = "onemoretestbed"
 }
 
 variable "org_owner_email_domain_tld" {
-  description = "the 'gmail.com' in 'jeremybankstech+newtestbed@gmail.com'"
+  description = "the 'gmail.com' in 'jeremybankstech+onemoretestbed@gmail.com'"
   type        = string
   default     = "gmail.com"
 }
@@ -110,12 +102,22 @@ variable "org_owner_email_domain_tld" {
 variable "company_name" {
   description = "name of the company"
   type        = string
-  default     = "Photon Craze"
+  default     = "Photonic Labs"
 }
 
 variable "company_name_abbr" {
-  type    = string
-  default = "pc"
+  description = "abbreviated name of the company"
+  type        = string
+  default     = "pl"
+
+  validation {
+    condition = (
+      var.this_slug != null &&                         #not undefined
+      var.this_slug != "" &&                           #not empty
+      can(regex("^[a-z0-9]+$", var.company_name_abbr)) #alphanumerics only
+    )
+    error_message = "variable 'company_name_abbr' must be defined, and contain alphanumerics and dashes only"
+  }
 }
 
 variable "team_name" {
@@ -127,17 +129,35 @@ variable "team_name" {
 variable "team_name_abbr" {
   type    = string
   default = "devops"
+
+  validation {
+    condition = (
+      var.this_slug != null &&                      #not undefined
+      var.this_slug != "" &&                        #not empty
+      can(regex("^[a-z0-9]+$", var.team_name_abbr)) #alphanumerics only
+    )
+    error_message = "variable 'team_name_abbr' must be defined, and contain alphanumerics and dashes only"
+  }
 }
 
 variable "project_name" {
   description = "name of the project"
   type        = string
-  default     = "newtestbed"
+  default     = "one more test bed"
 }
 
 variable "project_name_abbr" {
   type    = string
-  default = "ntb"
+  default = "omtb"
+
+  validation {
+    condition = (
+      var.this_slug != null &&                         #not undefined
+      var.this_slug != "" &&                           #not empty
+      can(regex("^[a-z0-9]+$", var.project_name_abbr)) #alphanumerics only
+    )
+    error_message = "variable 'project_name_abbr' must be defined, and contain alphanumerics and dashes only"
+  }
 }
 
 variable "cost_center" {
@@ -204,17 +224,17 @@ variable "this_slug" {
       var.this_slug != "" &&                       #not empty
       can(regex("^[a-zA-Z0-9-]+$", var.this_slug)) #only has alphanumerics and dashes
     )
-    error_message = "variable this_slug must be defined in terraform.tfvars, as alphanumerics and dashes only"
+    error_message = "variable 'this_slug' must be defined, and contain alphanumerics and dashes only"
   }
 }
 
-variable "deployment_environment" {
+variable "environment" {
   type    = string
   default = "dev"
 
   validation {
-    condition     = contains(["dev", "tst", "stg", "prd"], var.deployment_environment)
-    error_message = "variable deployment_environment must be one of: 'dev', 'tst', 'stg', or 'prd'"
+    condition     = contains(["dev", "tst", "stg", "prd"], var.environment)
+    error_message = "variable 'environment' must be one of: 'dev', 'tst', 'stg', or 'prd'"
   }
 }
 
@@ -362,25 +382,22 @@ variable "unique_id_seed" {
 locals {
   org_owner_email = "${var.org_owner_email_prefix}@${var.org_owner_email_domain_tld}"
 
-  # company-project
-  resource_name_prefix = lower("${var.company_name_abbr}-${var.project_name_abbr}")
-
-  # company-project-region-env-slug
-  resource_name_primary  = lower("${local.resource_name_prefix}-${var.region_primary.short}-${var.deployment_environment}-${var.this_slug}")
-  resource_name_failover = lower("${local.resource_name_prefix}-${var.region_failover.short}-${var.deployment_environment}-${var.this_slug}")
+  # project-region-env-slug
+  resource_name_primary  = lower("${var.project_name_abbr}-${var.region_primary.short}-${var.environment}-${var.this_slug}")
+  resource_name_failover = lower("${var.project_name_abbr}-${var.region_failover.short}-${var.environment}-${var.this_slug}")
 
   # company-project-region-env-slug-unique_id
-  resource_name_primary_globally_unique  = "${local.resource_name_primary}-${local.unique_id}"
-  resource_name_failover_globally_unique = "${local.resource_name_failover}-${local.unique_id}"
+  resource_name_primary_globally_unique  = lower("${var.company_name_abbr}-${local.resource_name_primary}-${local.unique_id}")
+  resource_name_failover_globally_unique = lower("${var.company_name_abbr}-${local.resource_name_failover}-${local.unique_id}")
 
   # this_slug_prd = join("_", ["workload", replace(var.this_slug, "-", "_"), "prd"])
   # this_slug_stg = join("_", ["workload", replace(var.this_slug, "-", "_"), "stg"])
   # this_slug_tst = join("_", ["workload", replace(var.this_slug, "-", "_"), "tst"])
   # this_slug_dev = join("_", ["workload", replace(var.this_slug, "-", "_"), "dev"])
 
-  # this_snake          = join("_", ["workload", replace(var.this_slug, "-", "_"), var.deployment_environment])
-  # this_snake_primary  = join("_", ["workload", replace(var.this_slug, "-", "_"), var.deployment_environment, "primary"])
-  # this_snake_failover = join("_", ["workload", replace(var.this_slug, "-", "_"), var.deployment_environment, "failover"])
+  # this_snake          = join("_", ["workload", replace(var.this_slug, "-", "_"), var.environment])
+  # this_snake_primary  = join("_", ["workload", replace(var.this_slug, "-", "_"), var.environment, "primary"])
+  # this_snake_failover = join("_", ["workload", replace(var.this_slug, "-", "_"), var.environment, "failover"])
 
   unique_id = substr(sha256("${var.unique_id_seed}${data.aws_caller_identity.this.account_id}"), 0, 8)
 
@@ -391,7 +408,7 @@ locals {
     "${var.company_name_abbr}:team"           = "${var.team_name}"
     "${var.company_name_abbr}:cost_center"    = "${var.cost_center}"
     "${var.company_name_abbr}:project"        = "${var.project_name}"
-    "${var.company_name_abbr}:environment"    = "${var.deployment_environment}"
+    "${var.company_name_abbr}:environment"    = "${var.environment}"
     "${var.company_name_abbr}:resource_owner" = var.resource_owner_email != null ? "${var.resource_owner_email}" : "${local.org_owner_email}"
 
     "${var.company_name_abbr}:${var.iam_immutable_tag_key}" = "true"
