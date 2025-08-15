@@ -4,4 +4,4 @@ provider_role_name = "superadmin"
 
 this_slug = "management-account"
 
-deployment_environment = "prd"
+environment = "prd"

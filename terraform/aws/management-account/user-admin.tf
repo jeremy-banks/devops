@@ -50,7 +50,7 @@ module "iam_user_admin_policy" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version = "5.59.0"
 
-  name = "admin"
+  name = var.admin_user_names.admin
 
   policy = data.aws_iam_policy_document.iam_user_admin.json
 }
