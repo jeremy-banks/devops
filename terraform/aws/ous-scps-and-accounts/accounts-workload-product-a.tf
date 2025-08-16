@@ -1,6 +1,6 @@
 resource "aws_organizations_account" "workload_product_a_prd" {
-  name  = var.account_name_slug.workload_product_a_prd
-  email = "${var.org_owner_email_prefix}-${var.account_name_slug.workload_product_a_prd}@${var.org_owner_email_domain_tld}"
+  name  = "${var.account_name_slug.workload_product_a}-prd"
+  email = "${var.org_owner_email_prefix}-${var.account_name_slug.workload_product_a}-prd@${var.org_owner_email_domain_tld}"
 
   close_on_deletion          = true
   create_govcloud            = false
@@ -10,8 +10,8 @@ resource "aws_organizations_account" "workload_product_a_prd" {
 }
 
 resource "aws_organizations_account" "workload_product_a_stg" {
-  name  = var.account_name_slug.workload_product_a_stg
-  email = "${var.org_owner_email_prefix}-${var.account_name_slug.workload_product_a_stg}@${var.org_owner_email_domain_tld}"
+  name  = "${var.account_name_slug.workload_product_a}-stg"
+email = "${var.org_owner_email_prefix}-${var.account_name_slug.workload_product_a}-stg@${var.org_owner_email_domain_tld}"
 
   close_on_deletion          = true
   create_govcloud            = false
@@ -21,8 +21,8 @@ resource "aws_organizations_account" "workload_product_a_stg" {
 }
 
 resource "aws_organizations_account" "workload_product_a_tst" {
-  name  = var.account_name_slug.workload_product_a_tst
-  email = "${var.org_owner_email_prefix}-${var.account_name_slug.workload_product_a_tst}@${var.org_owner_email_domain_tld}"
+  name  = "${var.account_name_slug.workload_product_a}-tst"
+email = "${var.org_owner_email_prefix}-${var.account_name_slug.workload_product_a}-tst@${var.org_owner_email_domain_tld}"
 
   close_on_deletion          = true
   create_govcloud            = false
@@ -32,8 +32,8 @@ resource "aws_organizations_account" "workload_product_a_tst" {
 }
 
 resource "aws_organizations_account" "workload_product_a_dev" {
-  name  = var.account_name_slug.workload_product_a_dev
-  email = "${var.org_owner_email_prefix}-${var.account_name_slug.workload_product_a_dev}@${var.org_owner_email_domain_tld}"
+  name  = "${var.account_name_slug.workload_product_a}-dev"
+email = "${var.org_owner_email_prefix}-${var.account_name_slug.workload_product_a}-dev@${var.org_owner_email_domain_tld}"
 
   close_on_deletion          = true
   create_govcloud            = false

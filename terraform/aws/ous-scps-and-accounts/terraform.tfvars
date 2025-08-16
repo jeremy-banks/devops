@@ -4,4 +4,4 @@ provider_role_name = "superadmin"
 
 this_slug = "org-ous-and-accounts"
 
-deployment_environment = "prd"
+environment = "prd"

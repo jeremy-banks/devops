@@ -34,21 +34,33 @@ Make an email, update relevant files with your unique information, and begin dep
    1. `azs_failover` ["use1-az1","use1-az2","use1-az3"]
 
 ### Deploy Org Management / Root Account
-1. Create AWS Account to be Org Management / Root
-1. Create IAM User "superadmin"
+1. Create AWS Account to be Root and Org Management
+   1. The root user has the absolute highest authority in the organization. It should be:
+      1. Assigned MFA
+      1. Never given security credentials
+      1. Only shared with principal engineers to reduce blast radius
+      1. Used only in the event that `breakglass` user access has failed
+1. Create AWS CLI Profile `superadmin`
    1. Attach AdministratorAccess policy
-   1. Create an access key and AWS CLI profile named "superadmin" `aws configure --profile superadmin`
+   1. Create an access key and AWS CLI profile named superadmin `aws configure --profile superadmin`
 1. Deploy `terraform/aws/management-account`
-1. Enable Backend
-   1. Use the terraform output to update the backend.tf files in `terraform/aws/` and subdirectories
+1. Enable Terraform State Backend
+   1. Use the `terraform output` to update the backend.tf files in `terraform/aws/` and subdirectories
       ```sh
-      find . -name 'backend.tf' -exec sed -i '' 's,TFSTATEBACKENDREGION,region_primary,g' {} + &&\
       find . -name 'backend.tf' -exec sed -i '' 's,TFSTATEBACKENDKMSARN,tfstate_kms_arn,g' {} + &&\
+      find . -name 'backend.tf' -exec sed -i '' 's,TFSTATEBACKENDREGION,tfstate_region,g' {} + &&\
       find . -name 'backend.tf' -exec sed -i '' 's,TFSTATEBACKENDS3BUCKETNAME,tfstate_s3_bucket_name,g' {} +
       ```
    1. Uncomment `terraform/aws/management-account/backend.tf` and migrate state with `terraform init -force-copy`
-1. Create IAM User "admin"
-   1. Use the terraform output to create an access key and AWS CLI profile named "admin" `aws configure --profile admin`
+1. Save `breakglass` user information
+   1. Use `terraform output -json` to reveal passwords for the three breakglass users
+   1. Save the credentials in a LastPass or other secured location
+   1. breakglass users should:
+      1. Never be given security credentials
+      1. Only be shared with principal engineers
+      1. Used only in the event that `superadmin` and `admin` access has failed
+1. Create AWS CLI Profile `admin`
+   1. Use the `terraform output -json` to create an AWS CLI profile named admin `aws configure --profile admin`
 1. Increase max number of accounts
    1. In AWS Console, navigate to Service Quotas -> AWS services -> AWS Organizations
    1. Request `Default maximum number of accounts` to 100
