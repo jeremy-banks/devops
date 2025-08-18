@@ -11,7 +11,7 @@ resource "aws_organizations_account" "workload_product_a_prd" {
 
 resource "aws_organizations_account" "workload_product_a_stg" {
   name  = "${var.account_name_slug.workload_product_a}-stg"
-email = "${var.org_owner_email_prefix}-${var.account_name_slug.workload_product_a}-stg@${var.org_owner_email_domain_tld}"
+  email = "${var.org_owner_email_prefix}-${var.account_name_slug.workload_product_a}-stg@${var.org_owner_email_domain_tld}"
 
   close_on_deletion          = true
   create_govcloud            = false
@@ -22,7 +22,7 @@ email = "${var.org_owner_email_prefix}-${var.account_name_slug.workload_product_
 
 resource "aws_organizations_account" "workload_product_a_tst" {
   name  = "${var.account_name_slug.workload_product_a}-tst"
-email = "${var.org_owner_email_prefix}-${var.account_name_slug.workload_product_a}-tst@${var.org_owner_email_domain_tld}"
+  email = "${var.org_owner_email_prefix}-${var.account_name_slug.workload_product_a}-tst@${var.org_owner_email_domain_tld}"
 
   close_on_deletion          = true
   create_govcloud            = false
@@ -33,7 +33,7 @@ email = "${var.org_owner_email_prefix}-${var.account_name_slug.workload_product_
 
 resource "aws_organizations_account" "workload_product_a_dev" {
   name  = "${var.account_name_slug.workload_product_a}-dev"
-email = "${var.org_owner_email_prefix}-${var.account_name_slug.workload_product_a}-dev@${var.org_owner_email_domain_tld}"
+  email = "${var.org_owner_email_prefix}-${var.account_name_slug.workload_product_a}-dev@${var.org_owner_email_domain_tld}"
 
   close_on_deletion          = true
   create_govcloud            = false
