@@ -3,7 +3,7 @@ variable "account_id" {
   default = {
     identity_prd         = "000000000000"
     log_archive_prd      = "000000000000"
-    networking_prd       = "000000000000"
+    network_prd          = "000000000000"
     security_tooling_prd = "000000000000"
     shared_services_prd  = "000000000000"
 
@@ -244,7 +244,7 @@ variable "tgw_asn" {
   }
 }
 
-variable "create_failover_region_networking" {
+variable "create_failover_region_network" {
   type    = bool
   default = true
 }
@@ -270,12 +270,12 @@ variable "region_failover" {
   }
 }
 
-variable "azs_number_used_networking" {
+variable "azs_number_used_network" {
   type    = number
   default = 3
 
   validation {
-    condition     = var.azs_number_used_networking >= 2 && var.azs_number_used_networking <= 4
+    condition     = var.azs_number_used_network >= 2 && var.azs_number_used_network <= 4
     error_message = "this codebase supports 2, 3, or 4 availability zones"
   }
 }
