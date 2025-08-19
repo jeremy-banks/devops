@@ -69,8 +69,9 @@ module "vpc_inspection_failover" {
 
   enable_nat_gateway = false
 
-  enable_dhcp_options              = true
-  dhcp_options_domain_name_servers = [replace(var.vpc_cidr_infrastructure.central_inspection_failover, "0/16", "2")]
+  enable_dhcp_options = true
+  # dhcp_options_domain_name_servers = [replace(var.vpc_cidr_infrastructure.central_inspection_failover, "0/16", "2")]
+  dhcp_options_domain_name_servers = ["AmazonProvidedDNS"]
   dhcp_options_ntp_servers         = var.ntp_servers
 
   vpc_tags = local.vpc_inspection_tags_failover

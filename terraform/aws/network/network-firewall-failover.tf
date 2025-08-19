@@ -1,6 +1,6 @@
 
 module "network_firewall_failover" {
-  source    = "terraform-aws-modules/network-firewall/aws"
+  source = "terraform-aws-modules/network-firewall/aws"
   # version   = "1.0.2"
   version   = "2.0.1"
   providers = { aws = aws.network_prd_failover }
