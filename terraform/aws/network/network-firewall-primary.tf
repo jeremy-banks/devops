@@ -1,7 +1,7 @@
 module "network_firewall_primary" {
   source    = "terraform-aws-modules/network-firewall/aws"
   version   = "1.0.2"
-  providers = { aws = aws.networking_prd }
+  providers = { aws = aws.network_prd }
 
   # Firewall
   name        = "${local.resource_name_stub_primary}-${var.this_slug}-primary"

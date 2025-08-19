@@ -1,9 +1,9 @@
 module "network_firewall_rule_group_stateful_failover" {
   source    = "terraform-aws-modules/network-firewall/aws//modules/rule-group"
   version   = "1.0.2"
-  providers = { aws = aws.networking_prd_failover }
+  providers = { aws = aws.network_prd_failover }
 
-  count = var.create_failover_region_networking ? 1 : 0
+  count = var.create_failover_region_network ? 1 : 0
 
   name        = "${local.resource_name_stub_failover}-${var.this_slug}-rule-group-stateful-failover"
   description = "Stateful Inspection for denying access to a domain"
@@ -31,9 +31,9 @@ module "network_firewall_rule_group_stateful_failover" {
 module "network_firewall_rule_group_stateless_failover" {
   source    = "terraform-aws-modules/network-firewall/aws//modules/rule-group"
   version   = "1.0.2"
-  providers = { aws = aws.networking_prd_failover }
+  providers = { aws = aws.network_prd_failover }
 
-  count = var.create_failover_region_networking ? 1 : 0
+  count = var.create_failover_region_network ? 1 : 0
 
   name        = "${local.resource_name_stub_failover}-${var.this_slug}-rule-group-stateless-failover"
   description = "Stateless Inspection with a Custom Action"

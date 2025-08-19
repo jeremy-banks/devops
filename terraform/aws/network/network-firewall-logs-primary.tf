@@ -1,6 +1,6 @@
 
 resource "aws_cloudwatch_log_group" "logs_primary" {
-  provider = aws.networking_prd
+  provider = aws.network_prd
 
   name              = "${local.resource_name_stub_primary}-${var.this_slug}-logs"
   retention_in_days = 7
@@ -9,7 +9,7 @@ resource "aws_cloudwatch_log_group" "logs_primary" {
 }
 
 resource "aws_s3_bucket" "network_firewall_logs_primary" {
-  provider = aws.networking_prd
+  provider = aws.network_prd
 
   bucket        = "${local.resource_name_stub_primary}-${var.this_slug}-network-firewall-logs-${data.aws_caller_identity.this.account_id}"
   force_destroy = true
@@ -19,7 +19,7 @@ resource "aws_s3_bucket" "network_firewall_logs_primary" {
 
 # Logging configuration automatically adds this policy if not present
 resource "aws_s3_bucket_policy" "network_firewall_logs_primary" {
-  provider = aws.networking_prd
+  provider = aws.network_prd
 
   bucket = aws_s3_bucket.network_firewall_logs_primary.id
   policy = jsonencode({

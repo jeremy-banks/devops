@@ -49,7 +49,7 @@ provider "aws" {
 data "aws_caller_identity" "this" { provider = aws.this }
 
 data "aws_ec2_transit_gateway" "tgw_primary" {
-  provider = aws.networking_prd
+  provider = aws.network_prd
 
   filter {
     name   = "options.amazon-side-asn"
@@ -63,7 +63,7 @@ data "aws_ec2_transit_gateway" "tgw_primary" {
 }
 
 data "aws_ec2_transit_gateway" "tgw_failover" {
-  provider = aws.networking_prd_failover
+  provider = aws.network_prd_failover
 
   count = var.create_failover_region ? 1 : 0
 
@@ -79,7 +79,7 @@ data "aws_ec2_transit_gateway" "tgw_failover" {
 }
 
 data "aws_ec2_transit_gateway_vpc_attachment" "tgw_post_central_inspection_primary" {
-  provider = aws.networking_prd
+  provider = aws.network_prd
 
   filter {
     name   = "tag:Name"
@@ -93,7 +93,7 @@ data "aws_ec2_transit_gateway_vpc_attachment" "tgw_post_central_inspection_prima
 }
 
 data "aws_ec2_transit_gateway_route_table" "tgw_pre_central_inspection_primary" {
-  provider = aws.networking_prd
+  provider = aws.network_prd
 
   filter {
     name   = "tag:Name"
@@ -107,7 +107,7 @@ data "aws_ec2_transit_gateway_route_table" "tgw_pre_central_inspection_primary" 
 }
 
 data "aws_ec2_transit_gateway_route_table" "tgw_post_central_inspection_primary" {
-  provider = aws.networking_prd
+  provider = aws.network_prd
 
   filter {
     name   = "tag:Name"
@@ -121,7 +121,7 @@ data "aws_ec2_transit_gateway_route_table" "tgw_post_central_inspection_primary"
 }
 
 data "aws_ec2_transit_gateway_peering_attachment" "tgw_peer_primary" {
-  provider = aws.networking_prd
+  provider = aws.network_prd
 
   count = var.create_failover_region ? 1 : 0
 
@@ -137,7 +137,7 @@ data "aws_ec2_transit_gateway_peering_attachment" "tgw_peer_primary" {
 }
 
 data "aws_ec2_transit_gateway_vpc_attachment" "tgw_post_inspection_failover" {
-  provider = aws.networking_prd_failover
+  provider = aws.network_prd_failover
 
   count = var.create_failover_region ? 1 : 0
 
@@ -153,7 +153,7 @@ data "aws_ec2_transit_gateway_vpc_attachment" "tgw_post_inspection_failover" {
 }
 
 data "aws_ec2_transit_gateway_route_table" "tgw_pre_inspection_failover" {
-  provider = aws.networking_prd_failover
+  provider = aws.network_prd_failover
 
   count = var.create_failover_region ? 1 : 0
 
@@ -169,7 +169,7 @@ data "aws_ec2_transit_gateway_route_table" "tgw_pre_inspection_failover" {
 }
 
 data "aws_ec2_transit_gateway_route_table" "tgw_post_inspection_failover" {
-  provider = aws.networking_prd_failover
+  provider = aws.network_prd_failover
 
   count = var.create_failover_region ? 1 : 0
 
@@ -185,7 +185,7 @@ data "aws_ec2_transit_gateway_route_table" "tgw_post_inspection_failover" {
 }
 
 data "aws_ec2_transit_gateway_peering_attachment" "tgw_peer_failover" {
-  provider = aws.networking_prd_failover
+  provider = aws.network_prd_failover
 
   count = var.create_failover_region ? 1 : 0
 

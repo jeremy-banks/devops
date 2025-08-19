@@ -2,9 +2,9 @@
 module "network_firewall_failover" {
   source    = "terraform-aws-modules/network-firewall/aws"
   version   = "1.0.2"
-  providers = { aws = aws.networking_prd_failover }
+  providers = { aws = aws.network_prd_failover }
 
-  count = var.create_failover_region_networking ? 1 : 0
+  count = var.create_failover_region_network ? 1 : 0
 
   # Firewall
   name        = "${local.resource_name_stub_failover}-${var.this_slug}-failover"

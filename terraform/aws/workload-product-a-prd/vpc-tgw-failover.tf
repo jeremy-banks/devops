@@ -18,7 +18,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_workload_product_a_to_tgw
 }
 
 resource "aws_ec2_transit_gateway_route_table_association" "vpc_workload_product_a_to_tgw_failover" {
-  provider = aws.networking_prd_failover
+  provider = aws.network_prd_failover
 
   count = var.create_failover_region ? 1 : 0
 
@@ -27,7 +27,7 @@ resource "aws_ec2_transit_gateway_route_table_association" "vpc_workload_product
 }
 
 resource "aws_ec2_transit_gateway_route" "post_inspection_workload_product_a_failover_to_failover" {
-  provider = aws.networking_prd_failover
+  provider = aws.network_prd_failover
 
   count = var.create_failover_region ? 1 : 0
 
@@ -37,7 +37,7 @@ resource "aws_ec2_transit_gateway_route" "post_inspection_workload_product_a_fai
 }
 
 resource "aws_ec2_transit_gateway_route" "post_inspection_workload_product_a_failover_to_primary" {
-  provider = aws.networking_prd_failover
+  provider = aws.network_prd_failover
 
   count = var.create_failover_region ? 1 : 0
 

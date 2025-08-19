@@ -1,8 +1,8 @@
 
 resource "aws_cloudwatch_log_group" "logs_failover" {
-  provider = aws.networking_prd_failover
+  provider = aws.network_prd_failover
 
-  count = var.create_failover_region_networking ? 1 : 0
+  count = var.create_failover_region_network ? 1 : 0
 
   name              = "${local.resource_name_stub_failover}-${var.this_slug}-logs"
   retention_in_days = 7
@@ -11,9 +11,9 @@ resource "aws_cloudwatch_log_group" "logs_failover" {
 }
 
 resource "aws_s3_bucket" "network_firewall_logs_failover" {
-  provider = aws.networking_prd_failover
+  provider = aws.network_prd_failover
 
-  count = var.create_failover_region_networking ? 1 : 0
+  count = var.create_failover_region_network ? 1 : 0
 
   bucket        = "${local.resource_name_stub_failover}-${var.this_slug}-network-firewall-logs-${data.aws_caller_identity.this.account_id}"
   force_destroy = true
@@ -23,9 +23,9 @@ resource "aws_s3_bucket" "network_firewall_logs_failover" {
 
 # Logging configuration automatically adds this policy if not present
 resource "aws_s3_bucket_policy" "network_firewall_logs_failover" {
-  provider = aws.networking_prd_failover
+  provider = aws.network_prd_failover
 
-  count = var.create_failover_region_networking ? 1 : 0
+  count = var.create_failover_region_network ? 1 : 0
 
   bucket = aws_s3_bucket.network_firewall_logs_failover[0].id
   policy = jsonencode({

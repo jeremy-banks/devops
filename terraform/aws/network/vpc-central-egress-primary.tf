@@ -1,22 +1,22 @@
 locals {
   vpc_central_egress_cidrsubnets_primary = (
-    var.azs_number_used_networking == 4 ? cidrsubnets(var.vpc_cidr_infrastructure.central_egress_primary, 3, 3, 3, 3, 12, 12, 12, 12) :
-    var.azs_number_used_networking == 3 ? cidrsubnets(var.vpc_cidr_infrastructure.central_egress_primary, 2, 2, 2, 12, 12, 12) :
-    var.azs_number_used_networking == 2 ? cidrsubnets(var.vpc_cidr_infrastructure.central_egress_primary, 2, 2, 12, 12) :
+    var.azs_number_used_network == 4 ? cidrsubnets(var.vpc_cidr_infrastructure.central_egress_primary, 3, 3, 3, 3, 12, 12, 12, 12) :
+    var.azs_number_used_network == 3 ? cidrsubnets(var.vpc_cidr_infrastructure.central_egress_primary, 2, 2, 2, 12, 12, 12) :
+    var.azs_number_used_network == 2 ? cidrsubnets(var.vpc_cidr_infrastructure.central_egress_primary, 2, 2, 12, 12) :
     null
   )
 
   vpc_central_egress_public_subnets_primary = (
-    var.azs_number_used_networking == 4 ? [local.vpc_central_egress_cidrsubnets_primary[0], local.vpc_central_egress_cidrsubnets_primary[1], local.vpc_central_egress_cidrsubnets_primary[2], local.vpc_central_egress_cidrsubnets_primary[3]] :
-    var.azs_number_used_networking == 3 ? [local.vpc_central_egress_cidrsubnets_primary[0], local.vpc_central_egress_cidrsubnets_primary[1], local.vpc_central_egress_cidrsubnets_primary[2]] :
-    var.azs_number_used_networking == 2 ? [local.vpc_central_egress_cidrsubnets_primary[0], local.vpc_central_egress_cidrsubnets_primary[1]] :
+    var.azs_number_used_network == 4 ? [local.vpc_central_egress_cidrsubnets_primary[0], local.vpc_central_egress_cidrsubnets_primary[1], local.vpc_central_egress_cidrsubnets_primary[2], local.vpc_central_egress_cidrsubnets_primary[3]] :
+    var.azs_number_used_network == 3 ? [local.vpc_central_egress_cidrsubnets_primary[0], local.vpc_central_egress_cidrsubnets_primary[1], local.vpc_central_egress_cidrsubnets_primary[2]] :
+    var.azs_number_used_network == 2 ? [local.vpc_central_egress_cidrsubnets_primary[0], local.vpc_central_egress_cidrsubnets_primary[1]] :
     null
   )
 
   vpc_central_egress_intra_subnets_primary = (
-    var.azs_number_used_networking == 4 ? [local.vpc_central_egress_cidrsubnets_primary[4], local.vpc_central_egress_cidrsubnets_primary[5], local.vpc_central_egress_cidrsubnets_primary[6], local.vpc_central_egress_cidrsubnets_primary[7]] :
-    var.azs_number_used_networking == 3 ? [local.vpc_central_egress_cidrsubnets_primary[3], local.vpc_central_egress_cidrsubnets_primary[4], local.vpc_central_egress_cidrsubnets_primary[5]] :
-    var.azs_number_used_networking == 2 ? [local.vpc_central_egress_cidrsubnets_primary[2], local.vpc_central_egress_cidrsubnets_primary[3]] :
+    var.azs_number_used_network == 4 ? [local.vpc_central_egress_cidrsubnets_primary[4], local.vpc_central_egress_cidrsubnets_primary[5], local.vpc_central_egress_cidrsubnets_primary[6], local.vpc_central_egress_cidrsubnets_primary[7]] :
+    var.azs_number_used_network == 3 ? [local.vpc_central_egress_cidrsubnets_primary[3], local.vpc_central_egress_cidrsubnets_primary[4], local.vpc_central_egress_cidrsubnets_primary[5]] :
+    var.azs_number_used_network == 2 ? [local.vpc_central_egress_cidrsubnets_primary[2], local.vpc_central_egress_cidrsubnets_primary[3]] :
     null
   )
 
@@ -26,12 +26,12 @@ locals {
 module "vpc_central_egress_primary" {
   source    = "terraform-aws-modules/vpc/aws"
   version   = "6.0.1"
-  providers = { aws = aws.networking_prd }
+  providers = { aws = aws.network_prd }
 
   name = "${local.resource_name_stub_primary}-vpc-central-egress-primary"
   cidr = var.vpc_cidr_infrastructure.central_egress_primary
 
-  azs                 = slice(var.azs_primary, 0, var.azs_number_used_networking)
+  azs                 = slice(var.azs_primary, 0, var.azs_number_used_network)
   private_subnets     = []
   public_subnets      = local.vpc_central_egress_public_subnets_primary
   database_subnets    = []
@@ -79,7 +79,7 @@ module "vpc_central_egress_primary" {
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_central_egress_to_tgw_primary" {
-  provider = aws.networking_prd
+  provider = aws.network_prd
 
   subnet_ids         = module.vpc_central_egress_primary.intra_subnets
   transit_gateway_id = aws_ec2_transit_gateway.tgw_primary.id

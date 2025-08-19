@@ -1,22 +1,22 @@
 locals {
   vpc_central_egress_cidrsubnets_failover = (
-    var.azs_number_used_networking == 4 ? cidrsubnets(var.vpc_cidr_infrastructure.central_egress_failover, 3, 3, 3, 3, 12, 12, 12, 12) :
-    var.azs_number_used_networking == 3 ? cidrsubnets(var.vpc_cidr_infrastructure.central_egress_failover, 2, 2, 2, 12, 12, 12) :
-    var.azs_number_used_networking == 2 ? cidrsubnets(var.vpc_cidr_infrastructure.central_egress_failover, 2, 2, 12, 12) :
+    var.azs_number_used_network == 4 ? cidrsubnets(var.vpc_cidr_infrastructure.central_egress_failover, 3, 3, 3, 3, 12, 12, 12, 12) :
+    var.azs_number_used_network == 3 ? cidrsubnets(var.vpc_cidr_infrastructure.central_egress_failover, 2, 2, 2, 12, 12, 12) :
+    var.azs_number_used_network == 2 ? cidrsubnets(var.vpc_cidr_infrastructure.central_egress_failover, 2, 2, 12, 12) :
     null
   )
 
   vpc_central_egress_public_subnets_failover = (
-    var.azs_number_used_networking == 4 ? [local.vpc_central_egress_cidrsubnets_failover[0], local.vpc_central_egress_cidrsubnets_failover[1], local.vpc_central_egress_cidrsubnets_failover[2], local.vpc_central_egress_cidrsubnets_failover[3]] :
-    var.azs_number_used_networking == 3 ? [local.vpc_central_egress_cidrsubnets_failover[0], local.vpc_central_egress_cidrsubnets_failover[1], local.vpc_central_egress_cidrsubnets_failover[2]] :
-    var.azs_number_used_networking == 2 ? [local.vpc_central_egress_cidrsubnets_failover[0], local.vpc_central_egress_cidrsubnets_failover[1]] :
+    var.azs_number_used_network == 4 ? [local.vpc_central_egress_cidrsubnets_failover[0], local.vpc_central_egress_cidrsubnets_failover[1], local.vpc_central_egress_cidrsubnets_failover[2], local.vpc_central_egress_cidrsubnets_failover[3]] :
+    var.azs_number_used_network == 3 ? [local.vpc_central_egress_cidrsubnets_failover[0], local.vpc_central_egress_cidrsubnets_failover[1], local.vpc_central_egress_cidrsubnets_failover[2]] :
+    var.azs_number_used_network == 2 ? [local.vpc_central_egress_cidrsubnets_failover[0], local.vpc_central_egress_cidrsubnets_failover[1]] :
     null
   )
 
   vpc_central_egress_intra_subnets_failover = (
-    var.azs_number_used_networking == 4 ? [local.vpc_central_egress_cidrsubnets_failover[4], local.vpc_central_egress_cidrsubnets_failover[5], local.vpc_central_egress_cidrsubnets_failover[6], local.vpc_central_egress_cidrsubnets_failover[7]] :
-    var.azs_number_used_networking == 3 ? [local.vpc_central_egress_cidrsubnets_failover[3], local.vpc_central_egress_cidrsubnets_failover[4], local.vpc_central_egress_cidrsubnets_failover[5]] :
-    var.azs_number_used_networking == 2 ? [local.vpc_central_egress_cidrsubnets_failover[2], local.vpc_central_egress_cidrsubnets_failover[3]] :
+    var.azs_number_used_network == 4 ? [local.vpc_central_egress_cidrsubnets_failover[4], local.vpc_central_egress_cidrsubnets_failover[5], local.vpc_central_egress_cidrsubnets_failover[6], local.vpc_central_egress_cidrsubnets_failover[7]] :
+    var.azs_number_used_network == 3 ? [local.vpc_central_egress_cidrsubnets_failover[3], local.vpc_central_egress_cidrsubnets_failover[4], local.vpc_central_egress_cidrsubnets_failover[5]] :
+    var.azs_number_used_network == 2 ? [local.vpc_central_egress_cidrsubnets_failover[2], local.vpc_central_egress_cidrsubnets_failover[3]] :
     null
   )
 
@@ -26,14 +26,14 @@ locals {
 module "vpc_central_egress_failover" {
   source    = "terraform-aws-modules/vpc/aws"
   version   = "6.0.1"
-  providers = { aws = aws.networking_prd_failover }
+  providers = { aws = aws.network_prd_failover }
 
-  count = var.create_failover_region_networking ? 1 : 0
+  count = var.create_failover_region_network ? 1 : 0
 
   name = "${local.resource_name_stub_failover}-vpc-central-egress-failover"
   cidr = var.vpc_cidr_infrastructure.central_egress_failover
 
-  azs                 = slice(var.azs_failover, 0, var.azs_number_used_networking)
+  azs                 = slice(var.azs_failover, 0, var.azs_number_used_network)
   private_subnets     = []
   public_subnets      = local.vpc_central_egress_public_subnets_failover
   database_subnets    = []
@@ -81,9 +81,9 @@ module "vpc_central_egress_failover" {
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_central_egress_to_tgw_failover" {
-  provider = aws.networking_prd_failover
+  provider = aws.network_prd_failover
 
-  count = var.create_failover_region_networking ? 1 : 0
+  count = var.create_failover_region_network ? 1 : 0
 
   subnet_ids         = module.vpc_central_egress_failover[0].intra_subnets
   transit_gateway_id = aws_ec2_transit_gateway.tgw_failover[0].id

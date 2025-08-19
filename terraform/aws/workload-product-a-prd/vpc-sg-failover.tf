@@ -36,7 +36,7 @@ module "sg_main_rules_failover" {
     },
   ]
 
-  ingress_with_cidr_blocks = var.create_failover_region_networking ? [
+  ingress_with_cidr_blocks = var.create_failover_region_network ? [
     {
       description = "allow all from client vpn"
       rule        = "all-all"
@@ -110,7 +110,7 @@ module "sg_ingress_rules_failover" {
       rule        = "https-443-tcp"
       cidr_blocks = "0.0.0.0/0"
     },
-    ] : var.create_failover_region_networking ? [
+    ] : var.create_failover_region_network ? [
     {
       description = "allow all from client vpn"
       rule        = "all-all"
