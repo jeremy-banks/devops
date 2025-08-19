@@ -4,8 +4,8 @@ provider_role_name = "superadmin"
 
 this_slug = "network"
 
-deployment_environment = "prd"
+environment = "prd"
 
 # create_failover_region_networking = false
 
-# azs_number_used_networking = 2
+azs_number_used_networking = 2

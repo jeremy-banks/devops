@@ -1,6 +1,6 @@
 module "iam_user_breakglass" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-user"
-  version = "6.1.1"
+  version = "6.1.2"
 
   count = 3
 

@@ -31,7 +31,7 @@ data "aws_iam_policy_document" "s3_tfstate_region_replicate" {
 
 module "iam_policy_tfstate_s3_region_replicate" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "6.1.1"
+  version = "6.1.2"
 
   name = "${local.resource_name_primary}-replicate"
 
@@ -40,7 +40,7 @@ module "iam_policy_tfstate_s3_region_replicate" {
 
 module "iam_role_tfstate_s3_region_replicate" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role"
-  version = "6.1.1"
+  version = "6.1.2"
 
   name            = "${local.resource_name_primary}-replicate"
   use_name_prefix = false
