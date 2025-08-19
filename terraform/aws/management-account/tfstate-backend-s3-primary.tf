@@ -1,60 +1,81 @@
 data "aws_iam_policy_document" "s3_tfstate_backend_primary" {
-  # statement {
-  #   sid    = "denyUnintendedAccessToEntireBucket"
-  #   effect = "Deny"
-  #   not_principals {
-  #     type = "AWS"
-  #     identifiers = concat([
-  #       "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
-  #       "${module.iam_role_tfstate_s3_region_replicate.arn}",
-  #       "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
-  #       ],
-  #     [for user in module.iam_user_breakglass : user.iam_user_arn])
-  #   }
-  #   actions = ["s3:*"]
-  #   resources = [
-  #     "${module.s3_tfstate_backend_primary.s3_bucket_arn}",
-  #     "${module.s3_tfstate_backend_primary.s3_bucket_arn}/*",
-  #   ]
-  # }
+  statement {
+    sid    = "denyUnintendedAccessToBucket"
+    effect = "Deny"
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+    actions = ["s3:*"]
+    resources = [
+      "${module.s3_tfstate_backend_primary.s3_bucket_arn}",
+      "${module.s3_tfstate_backend_primary.s3_bucket_arn}/*",
+    ]
+    condition {
+      test     = "StringNotEquals"
+      variable = "aws:PrincipalArn"
+      values = concat(
+        [
+          "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
+          "${module.iam_role_tfstate_s3_region_replicate.arn}",
+          "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
+        ],
+        [for user in module.iam_user_breakglass : user.arn]
+      )
+    }
+  }
 
   statement {
-    sid    = "denyUnintendedAccessToSuperadmin"
+    sid    = "denyUnintendedAccessToSuperAdmin"
     effect = "Deny"
-    not_principals {
-      type = "AWS"
-      identifiers = concat([
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
-        "${module.iam_role_tfstate_s3_region_replicate.arn}",
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
-        ],
-      [for user in module.iam_user_breakglass : user.arn])
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
     }
     actions = ["s3:*"]
     resources = [
       "${module.s3_tfstate_backend_primary.s3_bucket_arn}/${var.admin_user_names.superadmin}",
       "${module.s3_tfstate_backend_primary.s3_bucket_arn}/${var.admin_user_names.superadmin}/*",
     ]
+    condition {
+      test     = "StringNotEquals"
+      variable = "aws:PrincipalArn"
+      values = concat(
+        [
+          "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
+          "${module.iam_role_tfstate_s3_region_replicate.arn}",
+          "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
+        ],
+        [for user in module.iam_user_breakglass : user.arn]
+      )
+    }
   }
 
   statement {
     sid    = "denyUnintendedAccessToAdmin"
     effect = "Deny"
-    not_principals {
-      type = "AWS"
-      identifiers = concat([
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
-        "${module.iam_role_tfstate_s3_region_replicate.arn}",
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
-        "${module.iam_user_admin.arn}",
-        ],
-      [for user in module.iam_user_breakglass : user.arn])
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
     }
     actions = ["s3:*"]
     resources = [
       "${module.s3_tfstate_backend_primary.s3_bucket_arn}/${var.admin_user_names.admin}",
       "${module.s3_tfstate_backend_primary.s3_bucket_arn}/${var.admin_user_names.admin}/*",
     ]
+    condition {
+      test     = "StringNotEquals"
+      variable = "aws:PrincipalArn"
+      values = concat(
+        [
+          "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
+          "${module.iam_role_tfstate_s3_region_replicate.arn}",
+          "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
+          "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.admin}",
+        ],
+        [for user in module.iam_user_breakglass : user.arn]
+      )
+    }
   }
 }
 
@@ -86,30 +107,6 @@ module "s3_tfstate_backend_primary" {
 
   versioning = { enabled = true }
 
-  # replication_configuration = {
-  #   role = module.iam_role_tfstate_s3_region_replicate.arn
-
-  #   rules = [
-  #     {
-  #       id     = "replicate-everything"
-  #       status = "Enabled"
-
-  #       delete_marker_replication = true
-
-  #       source_selection_criteria = {
-  #         replica_modifications     = { status = "Enabled" }
-  #         sse_kms_encrypted_objects = { enabled = true }
-  #       }
-
-  #       destination = {
-  #         bucket             = module.s3_tfstate_backend_failover.s3_bucket_arn
-  #         storage_class      = "INTELLIGENT_TIERING"
-  #         replica_kms_key_id = module.kms_tfstate_backend_failover.key_arn
-  #       }
-  #     },
-  #   ]
-  # }
-
   attach_policy                            = true
   policy                                   = data.aws_iam_policy_document.s3_tfstate_backend_primary.json
   attach_deny_incorrect_encryption_headers = true
@@ -118,25 +115,27 @@ module "s3_tfstate_backend_primary" {
 }
 
 resource "aws_s3_bucket_replication_configuration" "s3_tfstate_backend_primary" {
-#   provider = aws.central
-  # Must have bucket versioning enabled first
-#   depends_on = [aws_s3_bucket_versioning.source]
-
   role   = module.iam_role_tfstate_s3_region_replicate.arn
   bucket = module.s3_tfstate_backend_primary.s3_bucket_id
 
   rule {
     id = "primary-to-failover"
 
-    # filter {
-    #   prefix = "example"
-    # }
-
     status = "Enabled"
 
     destination {
       bucket        = module.s3_tfstate_backend_failover.s3_bucket_arn
       storage_class = "INTELLIGENT_TIERING"
+
+      encryption_configuration {
+        replica_kms_key_id = module.kms_tfstate_backend_failover.key_arn
+      }
+    }
+
+    source_selection_criteria {
+      sse_kms_encrypted_objects {
+        status = "Enabled"
+      }
     }
   }
 }
