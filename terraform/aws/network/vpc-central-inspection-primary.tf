@@ -28,7 +28,7 @@ module "vpc_inspection_primary" {
   version   = "6.0.1"
   providers = { aws = aws.network_prd }
 
-  name = "${local.resource_name_stub_primary}-vpc-central-inspection-primary"
+  name = "${local.resource_name_primary}-vpc-central-inspection-primary"
   cidr = var.vpc_cidr_infrastructure.central_inspection_primary
 
   azs                 = slice(var.azs_primary, 0, var.azs_number_used_network)
@@ -83,7 +83,7 @@ module "vpc_inspection_primary" {
 
 #   create_security_group = false
 #   # create_security_group      = true
-#   # security_group_name_prefix = "${local.resource_name_stub_primary}-${var.this_slug}-central-inspection-firewall-sg"
+#   # security_group_name_prefix = "${local.resource_name_primary}-${var.this_slug}-central-inspection-firewall-sg"
 #   # security_group_rules       = { ingress_https = { cidr_blocks = ["0.0.0.0/0"] } }
 
 #   endpoints = {
@@ -110,5 +110,5 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inspection_to_tgw_primary
   # transit_gateway_default_route_table_association = false
   # transit_gateway_default_route_table_propagation = false
 
-  tags = { Name = "${local.resource_name_stub_primary}-${var.this_slug}-tgw-attach-central-inspection-vpc" }
+  tags = { Name = "${local.resource_name_primary}-${var.this_slug}-tgw-attach-central-inspection-vpc" }
 }

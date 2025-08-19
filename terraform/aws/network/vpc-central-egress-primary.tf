@@ -28,7 +28,7 @@ module "vpc_central_egress_primary" {
   version   = "6.0.1"
   providers = { aws = aws.network_prd }
 
-  name = "${local.resource_name_stub_primary}-vpc-central-egress-primary"
+  name = "${local.resource_name_primary}-vpc-central-egress-primary"
   cidr = var.vpc_cidr_infrastructure.central_egress_primary
 
   azs                 = slice(var.azs_primary, 0, var.azs_number_used_network)
@@ -92,5 +92,5 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_central_egress_to_tgw_pri
   # transit_gateway_default_route_table_association = false
   # transit_gateway_default_route_table_propagation = false
 
-  tags = { Name = "${local.resource_name_stub_primary}-${var.this_slug}-tgw-attach-central-egress-vpc" }
+  tags = { Name = "${local.resource_name_primary}-${var.this_slug}-tgw-attach-central-egress-vpc" }
 }

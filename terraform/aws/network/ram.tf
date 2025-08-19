@@ -1,7 +1,7 @@
 resource "aws_ram_resource_share" "primary" {
   provider = aws.network_prd
 
-  name                      = "${local.resource_name_stub_primary}-${var.this_slug}"
+  name                      = "${local.resource_name_primary}-${var.this_slug}"
   allow_external_principals = false
 }
 
@@ -38,7 +38,7 @@ resource "aws_ram_resource_share" "failover" {
 
   count = var.create_failover_region_network ? 1 : 0
 
-  name                      = "${local.resource_name_stub_failover}-${var.this_slug}"
+  name                      = "${local.resource_name_failover}-${var.this_slug}"
   allow_external_principals = false
 }
 
