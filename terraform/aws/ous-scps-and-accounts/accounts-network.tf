@@ -1,6 +1,6 @@
 resource "aws_organizations_account" "network_prd" {
   name  = "${var.account_name_slug.network}-prd"
-  email = "${var.org_owner_email_prefix}-${var.account_name_slug.network}-prd@${var.org_owner_email_domain_tld}"
+  email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name_slug.network}-prd@${var.org_owner_email_domain_tld}"
 
   close_on_deletion          = true
   create_govcloud            = false
@@ -11,7 +11,7 @@ resource "aws_organizations_account" "network_prd" {
 
 # resource "aws_organizations_account" "network_stg" {
 #   name  = "${var.account_name_slug.network}-stg"
-#   email = "${var.org_owner_email_prefix}-${var.account_name_slug.network}-stg@${var.org_owner_email_domain_tld}"
+#   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name_slug.network}-stg@${var.org_owner_email_domain_tld}"
 
 #   close_on_deletion          = true
 #   create_govcloud            = false
@@ -22,7 +22,7 @@ resource "aws_organizations_account" "network_prd" {
 
 # resource "aws_organizations_account" "network_tst" {
 #   name  = "${var.account_name_slug.network}-tst"
-#   email = "${var.org_owner_email_prefix}-${var.account_name_slug.network}-tst@${var.org_owner_email_domain_tld}"
+#   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name_slug.network}-tst@${var.org_owner_email_domain_tld}"
 
 #   close_on_deletion          = true
 #   create_govcloud            = false
@@ -33,7 +33,7 @@ resource "aws_organizations_account" "network_prd" {
 
 # resource "aws_organizations_account" "network_dev" {
 #   name  = "${var.account_name_slug.network}-dev"
-#   email = "${var.org_owner_email_prefix}-${var.account_name_slug.network}-dev@${var.org_owner_email_domain_tld}"
+#   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name_slug.network}-dev@${var.org_owner_email_domain_tld}"
 
 #   close_on_deletion          = true
 #   create_govcloud            = false

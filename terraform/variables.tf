@@ -3,21 +3,21 @@ variable "account_id" {
   default = {
     identity_prd         = "000000000000"
     log_archive_prd      = "000000000000"
-    networking_prd       = "000000000000"
+    networking_prd       = "126271033106"
     security_tooling_prd = "000000000000"
 
-    workload_shared_services_prd = "000000000000"
-    workload_shared_services_stg = "000000000000"
+    shared_services_prd = "000000000000"
+    shared_services_stg = "000000000000"
 
-    workload_sdlc_prd = "000000000000"
-    workload_sdlc_stg = "000000000000"
-    workload_sdlc_tst = "000000000000"
-    workload_sdlc_dev = "000000000000"
+    sdlc_prd = "000000000000"
+    sdlc_stg = "000000000000"
+    sdlc_tst = "000000000000"
+    sdlc_dev = "000000000000"
 
-    workload_product_a_dev = "000000000000"
-    workload_product_a_prd = "000000000000"
-    workload_product_a_stg = "000000000000"
-    workload_product_a_tst = "000000000000"
+    product_a_dev = "004801103377"
+    product_a_prd = "106500537541"
+    product_a_stg = "807650717690"
+    product_a_tst = "318112817414"
   }
 }
 
@@ -26,13 +26,13 @@ variable "account_name_slug" {
   default = {
     identity         = "identity"
     log_archive      = "log-archive"
-    networking       = "network"
+    network          = "network"
     security_tooling = "security-tooling"
+    shared_services  = "shared-services"
 
-    workload_shared_services = "workload-shared-services"
-    workload_sdlc            = "workload-sdlc"
+    sdlc = "sdlc"
 
-    workload_product_a = "workload-product-a"
+    product_a = "product-a"
   }
 }
 
@@ -51,33 +51,33 @@ variable "vpc_cidr_infrastructure" {
     client_vpn_stg_primary  = "10.6.0.0/16"
     client_vpn_stg_failover = "10.7.0.0/16"
 
-    workload_shared_services_prd_primary  = "10.8.0.0/16"
-    workload_shared_services_prd_failover = "10.9.0.0/16"
-    workload_shared_services_stg_primary  = "10.10.0.0/16"
-    workload_shared_services_stg_failover = "10.11.0.0/16"
+    shared_services_prd_primary  = "10.8.0.0/16"
+    shared_services_prd_failover = "10.9.0.0/16"
+    shared_services_stg_primary  = "10.10.0.0/16"
+    shared_services_stg_failover = "10.11.0.0/16"
 
-    workload_sdlc_prd_primary  = "10.12.0.0/16"
-    workload_sdlc_prd_failover = "10.13.0.0/16"
-    workload_sdlc_stg_primary  = "10.14.0.0/16"
-    workload_sdlc_stg_failover = "10.15.0.0/16"
-    workload_sdlc_tst_primary  = "10.16.0.0/16"
-    workload_sdlc_tst_failover = "10.17.0.0/16"
-    workload_sdlc_dev_primary  = "10.18.0.0/16"
-    workload_sdlc_dev_failover = "10.19.0.0/16"
+    sdlc_prd_primary  = "10.12.0.0/16"
+    sdlc_prd_failover = "10.13.0.0/16"
+    sdlc_stg_primary  = "10.14.0.0/16"
+    sdlc_stg_failover = "10.15.0.0/16"
+    sdlc_tst_primary  = "10.16.0.0/16"
+    sdlc_tst_failover = "10.17.0.0/16"
+    sdlc_dev_primary  = "10.18.0.0/16"
+    sdlc_dev_failover = "10.19.0.0/16"
 
-    workload_product_a_prd_primary  = "10.20.0.0/16"
-    workload_product_a_prd_failover = "10.21.0.0/16"
-    workload_product_a_stg_primary  = "10.22.0.0/16"
-    workload_product_a_stg_failover = "10.23.0.0/16"
-    workload_product_a_tst_primary  = "10.24.0.0/16"
-    workload_product_a_tst_failover = "10.25.0.0/16"
-    workload_product_a_dev_primary  = "10.26.0.0/16"
-    workload_product_a_dev_failover = "10.27.0.0/16"
+    product_a_prd_primary  = "10.20.0.0/16"
+    product_a_prd_failover = "10.21.0.0/16"
+    product_a_stg_primary  = "10.22.0.0/16"
+    product_a_stg_failover = "10.23.0.0/16"
+    product_a_tst_primary  = "10.24.0.0/16"
+    product_a_tst_failover = "10.25.0.0/16"
+    product_a_dev_primary  = "10.26.0.0/16"
+    product_a_dev_failover = "10.27.0.0/16"
 
-    workload_customer_a_prd_primary  = "10.28.0.0/16"
-    workload_customer_a_prd_failover = "10.29.0.0/16"
-    workload_customer_a_stg_primary  = "10.30.0.0/16"
-    workload_customer_a_stg_failover = "10.31.0.0/16"
+    customer_a_prd_primary  = "10.28.0.0/16"
+    customer_a_prd_failover = "10.29.0.0/16"
+    customer_a_stg_primary  = "10.30.0.0/16"
+    customer_a_stg_failover = "10.31.0.0/16"
   }
 }
 
@@ -380,7 +380,7 @@ variable "unique_id_seed" {
 }
 
 locals {
-  org_owner_email = "${var.org_owner_email_prefix}@${var.org_owner_email_domain_tld}"
+  org_owner_email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}@${var.org_owner_email_domain_tld}"
 
   # project-region-env-slug
   resource_name_primary  = lower("${var.project_name_abbr}-${var.region_primary.short}-${var.environment}-${var.this_slug}")
