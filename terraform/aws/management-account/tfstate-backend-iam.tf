@@ -10,7 +10,7 @@ data "aws_iam_policy_document" "s3_tfstate_region_replicate" {
   statement {
     effect = "Allow"
     actions = [
-      # "s3:GetObjectVersion",
+      "s3:GetObjectVersion",
       "s3:GetObjectVersionForReplication",
       "s3:GetObjectVersionAcl",
       "s3:GetObjectVersionTagging"
@@ -26,14 +26,14 @@ data "aws_iam_policy_document" "s3_tfstate_region_replicate" {
     ]
     resources = ["arn:aws:s3:::${local.resource_name_failover_globally_unique}/*"]
   }
-  statement {
-    effect = "Allow"
-    actions = [
-      "kms:ListAliases",
-      "kms:ListKeys",
-    ]
-    resources = ["*"]
-  }
+  # statement {
+  #   effect = "Allow"
+  #   actions = [
+  #     "kms:ListAliases",
+  #     "kms:ListKeys",
+  #   ]
+  #   resources = ["*"]
+  # }
   statement {
     effect = "Allow"
     actions = [
@@ -41,11 +41,11 @@ data "aws_iam_policy_document" "s3_tfstate_region_replicate" {
       "kms:DescribeKey",
       "kms:Encrypt",
       "kms:GenerateDataKey*",
-      "kms:GetKeyRotationStatus",
-      "kms:GetPublicKey",
+      # "kms:GetKeyRotationStatus",
+      # "kms:GetPublicKey",
       "kms:ReEncrypt*",
-      "kms:Sign",
-      "kms:Verify",
+      # "kms:Sign",
+      # "kms:Verify",
     ]
     resources = [
       module.kms_tfstate_backend_primary.key_arn,
