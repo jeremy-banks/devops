@@ -93,5 +93,5 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_central_egress_to_tgw_pri
   # transit_gateway_default_route_table_association = false
   # transit_gateway_default_route_table_propagation = false
 
-  tags = { Name = "${local.resource_name_primary}-tgw-attach-central-egress-vpc" }
+  tags = { Name = "${local.resource_name_primary}-tgw-attach" }
 }
