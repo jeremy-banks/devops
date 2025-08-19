@@ -1,6 +1,7 @@
 module "network_firewall_rule_group_stateful_primary" {
   source    = "terraform-aws-modules/network-firewall/aws//modules/rule-group"
-  version   = "1.0.2"
+  # version   = "1.0.2"
+  version   = "2.0.1"
   providers = { aws = aws.network_prd }
 
   name        = "${local.resource_name_stub_primary}-${var.this_slug}-rule-group-stateful-primary"
@@ -28,7 +29,8 @@ module "network_firewall_rule_group_stateful_primary" {
 
 module "network_firewall_rule_group_stateless_primary" {
   source    = "terraform-aws-modules/network-firewall/aws//modules/rule-group"
-  version   = "1.0.2"
+  # version   = "1.0.2"
+  version   = "2.0.1"
   providers = { aws = aws.network_prd }
 
   name        = "${local.resource_name_stub_primary}-${var.this_slug}-rule-group-stateless-primary"

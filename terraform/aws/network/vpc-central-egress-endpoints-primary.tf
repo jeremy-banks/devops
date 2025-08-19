@@ -12,7 +12,7 @@
 
 # module "vpc_endpoint_sg_primary" {
 #   source    = "terraform-aws-modules/security-group/aws"
-#   version   = "5.2.0"
+#   version   = "5.3.0"
 #   providers = { aws = aws.network_prd }
 
 #   count = var.vpc_endpoint_services_enabled != [] ? length(var.vpc_endpoint_services_enabled) : 0
@@ -51,7 +51,7 @@
 
 # module "vpc_endpoint_sg_failover" {
 #   source    = "terraform-aws-modules/security-group/aws"
-#   version   = "5.2.0"
+#   version   = "5.3.0"
 #   providers = { aws = aws.network_prd_failover }
 
 #   count = var.create_failover_region_network && var.vpc_endpoint_services_enabled != [] ? length(var.vpc_endpoint_services_enabled) : 0
