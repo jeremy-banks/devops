@@ -30,7 +30,7 @@ module "vpc_central_egress_failover" {
 
   count = var.create_failover_region_network ? 1 : 0
 
-  name = "${local.resource_name_failover}-vpc-central-egress-failover"
+  name = "${local.resource_name_failover}-vpc-central-egress"
   cidr = var.vpc_cidr_infrastructure.central_egress_failover
 
   azs                 = slice(var.azs_failover, 0, var.azs_number_used_network)
@@ -96,5 +96,5 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_central_egress_to_tgw_fai
   # transit_gateway_default_route_table_association = false
   # transit_gateway_default_route_table_propagation = false
 
-  tags = { Name = "${local.resource_name_failover}-${var.this_slug}-tgw-attach-central-egress-vpc" }
+  tags = { Name = "${local.resource_name_failover}-tgw-attach-central-egress-vpc" }
 }

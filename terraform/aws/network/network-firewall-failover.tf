@@ -8,7 +8,7 @@ module "network_firewall_failover" {
   count = var.create_failover_region_network ? 1 : 0
 
   # Firewall
-  name        = "${local.resource_name_failover}-${var.this_slug}-failover"
+  name        = "${local.resource_name_failover}-firewall"
   description = "Example network firewall"
 
   # Only for example
@@ -45,7 +45,7 @@ module "network_firewall_failover" {
   ]
 
   # Policy
-  policy_name        = "${local.resource_name_failover}-${var.this_slug}-policy-failover"
+  policy_name        = "${local.resource_name_failover}-${var.this_slug}-policy"
   policy_description = "Example network firewall policy"
 
   # policy_stateful_rule_group_reference = {

@@ -6,6 +6,6 @@ this_slug = "network"
 
 environment = "prd"
 
-# create_failover_region_networking = false
+# create_failover_region = false
 
-azs_number_used_networking = 2
+# azs_number_used = 2

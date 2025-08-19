@@ -5,7 +5,7 @@ module "network_firewall_primary" {
   providers = { aws = aws.network_prd }
 
   # Firewall
-  name        = "${local.resource_name_primary}-${var.this_slug}-primary"
+  name        = "${local.resource_name_primary}-firewall"
   description = "Example network firewall"
 
   # Only for example
@@ -42,7 +42,7 @@ module "network_firewall_primary" {
   ]
 
   # Policy
-  policy_name        = "${local.resource_name_primary}-${var.this_slug}-policy-primary"
+  policy_name        = "${local.resource_name_primary}-${var.this_slug}-policy"
   policy_description = "Example network firewall policy"
 
   # policy_stateful_rule_group_reference = {

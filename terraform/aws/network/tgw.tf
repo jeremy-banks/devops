@@ -7,11 +7,11 @@ resource "aws_ec2_transit_gateway" "tgw_primary" {
   # default_route_table_propagation    = "enable"
   default_route_table_association    = "disable"
   default_route_table_propagation    = "disable"
-  description                        = "${local.resource_name_primary}-${var.this_slug}-tgw"
+  description                        = "${local.resource_name_primary}-tgw"
   dns_support                        = "enable"
   security_group_referencing_support = "enable"
 
-  tags = { "Name" = "${local.resource_name_primary}-${var.this_slug}-tgw" }
+  tags = { "Name" = "${local.resource_name_primary}-tgw" }
 }
 
 resource "aws_ec2_transit_gateway" "tgw_failover" {
@@ -25,11 +25,11 @@ resource "aws_ec2_transit_gateway" "tgw_failover" {
   # default_route_table_propagation    = "enable"
   default_route_table_association    = "disable"
   default_route_table_propagation    = "disable"
-  description                        = "${local.resource_name_failover}-${var.this_slug}-tgw"
+  description                        = "${local.resource_name_failover}-tgw"
   dns_support                        = "enable"
   security_group_referencing_support = "enable"
 
-  tags = { "Name" = "${local.resource_name_failover}-${var.this_slug}-tgw" }
+  tags = { "Name" = "${local.resource_name_failover}-tgw" }
 }
 
 resource "aws_ec2_transit_gateway_peering_attachment" "tgw_peering" {
@@ -41,7 +41,7 @@ resource "aws_ec2_transit_gateway_peering_attachment" "tgw_peering" {
   peer_transit_gateway_id = aws_ec2_transit_gateway.tgw_primary.id
   transit_gateway_id      = aws_ec2_transit_gateway.tgw_failover[0].id
 
-  tags = { Name = "${local.resource_name_failover}-${var.this_slug}-tgw-peer-requester" }
+  tags = { Name = "${local.resource_name_failover}-tgw-peer-requester" }
 }
 
 resource "aws_ec2_transit_gateway_peering_attachment_accepter" "tgw_peering" {
@@ -51,7 +51,7 @@ resource "aws_ec2_transit_gateway_peering_attachment_accepter" "tgw_peering" {
 
   transit_gateway_attachment_id = aws_ec2_transit_gateway_peering_attachment.tgw_peering[0].id
 
-  tags = { Name = "${local.resource_name_primary}-${var.this_slug}-tgw-peer-accepter" }
+  tags = { Name = "${local.resource_name_primary}-tgw-peer-accepter" }
 }
 
 resource "aws_ec2_transit_gateway_route_table" "cross_region_primary" {
@@ -61,7 +61,7 @@ resource "aws_ec2_transit_gateway_route_table" "cross_region_primary" {
 
   transit_gateway_id = aws_ec2_transit_gateway.tgw_primary.id
 
-  tags = { Name = "${local.resource_name_primary}-${var.this_slug}-tgw-cross-region-primary" }
+  tags = { Name = "${local.resource_name_primary}-tgw-cross-region" }
 }
 
 resource "aws_ec2_transit_gateway_route_table" "cross_region_failover" {
@@ -71,5 +71,5 @@ resource "aws_ec2_transit_gateway_route_table" "cross_region_failover" {
 
   transit_gateway_id = aws_ec2_transit_gateway.tgw_failover[0].id
 
-  tags = { Name = "${local.resource_name_failover}-${var.this_slug}-tgw-cross-region-failover" }
+  tags = { Name = "${local.resource_name_failover}-tgw-cross-region" }
 }

@@ -6,7 +6,7 @@ module "network_firewall_rule_group_stateful_failover" {
 
   count = var.create_failover_region_network ? 1 : 0
 
-  name        = "${local.resource_name_failover}-${var.this_slug}-rule-group-stateful-failover"
+  name        = "${local.resource_name_failover}-rule-group-stateful"
   description = "Stateful Inspection for denying access to a domain"
   type        = "STATEFUL"
   capacity    = 100
@@ -37,7 +37,7 @@ module "network_firewall_rule_group_stateless_failover" {
 
   count = var.create_failover_region_network ? 1 : 0
 
-  name        = "${local.resource_name_failover}-${var.this_slug}-rule-group-stateless-failover"
+  name        = "${local.resource_name_failover}-rule-group-stateless"
   description = "Stateless Inspection with a Custom Action"
   type        = "STATELESS"
   capacity    = 100

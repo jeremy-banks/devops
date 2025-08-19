@@ -2,7 +2,7 @@
 resource "aws_cloudwatch_log_group" "logs_primary" {
   provider = aws.network_prd
 
-  name              = "${local.resource_name_primary}-${var.this_slug}-logs"
+  name              = "${local.resource_name_primary}-logs"
   retention_in_days = 7
 
   #   tags = local.tags
@@ -11,7 +11,7 @@ resource "aws_cloudwatch_log_group" "logs_primary" {
 resource "aws_s3_bucket" "network_firewall_logs_primary" {
   provider = aws.network_prd
 
-  bucket        = "${local.resource_name_primary}-${var.this_slug}-network-firewall-logs-${data.aws_caller_identity.this.account_id}"
+  bucket        = local.resource_name_primary_globally_unique
   force_destroy = true
 
   #   tags = local.tags

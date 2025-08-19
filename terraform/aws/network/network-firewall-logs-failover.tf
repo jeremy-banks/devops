@@ -4,7 +4,7 @@ resource "aws_cloudwatch_log_group" "logs_failover" {
 
   count = var.create_failover_region_network ? 1 : 0
 
-  name              = "${local.resource_name_failover}-${var.this_slug}-logs"
+  name              = "${local.resource_name_failover}-logs"
   retention_in_days = 7
 
   #   tags = local.tags
@@ -15,7 +15,7 @@ resource "aws_s3_bucket" "network_firewall_logs_failover" {
 
   count = var.create_failover_region_network ? 1 : 0
 
-  bucket        = "${local.resource_name_failover}-${var.this_slug}-network-firewall-logs-${data.aws_caller_identity.this.account_id}"
+  bucket        = local.resource_name_failover_globally_unique
   force_destroy = true
 
   #   tags = local.tags

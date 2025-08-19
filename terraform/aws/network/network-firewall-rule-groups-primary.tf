@@ -4,7 +4,7 @@ module "network_firewall_rule_group_stateful_primary" {
   version   = "2.0.1"
   providers = { aws = aws.network_prd }
 
-  name        = "${local.resource_name_primary}-${var.this_slug}-rule-group-stateful-primary"
+  name        = "${local.resource_name_primary}-rule-group-stateful"
   description = "Stateful Inspection for denying access to a domain"
   type        = "STATEFUL"
   capacity    = 100
@@ -33,7 +33,7 @@ module "network_firewall_rule_group_stateless_primary" {
   version   = "2.0.1"
   providers = { aws = aws.network_prd }
 
-  name        = "${local.resource_name_primary}-${var.this_slug}-rule-group-stateless-primary"
+  name        = "${local.resource_name_primary}-rule-group-stateless"
   description = "Stateless Inspection with a Custom Action"
   type        = "STATELESS"
   capacity    = 100
