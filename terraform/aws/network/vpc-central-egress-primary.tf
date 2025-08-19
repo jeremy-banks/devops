@@ -71,8 +71,7 @@ module "vpc_central_egress_primary" {
   external_nat_ips                 = aws_eip.vpc_central_egress_primary_nat[*].public_ip
   create_private_nat_gateway_route = false
 
-  enable_dhcp_options = true
-  # dhcp_options_domain_name_servers = [replace(var.vpc_cidr_infrastructure.central_egress_primary, "0/16", "2")]
+  enable_dhcp_options              = true
   dhcp_options_domain_name_servers = ["AmazonProvidedDNS"]
   dhcp_options_ntp_servers         = var.ntp_servers
 
