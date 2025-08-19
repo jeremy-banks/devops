@@ -3,21 +3,19 @@ variable "account_id" {
   default = {
     identity_prd         = "000000000000"
     log_archive_prd      = "000000000000"
-    networking_prd       = "126271033106"
+    networking_prd       = "000000000000"
     security_tooling_prd = "000000000000"
+    shared_services_prd  = "000000000000"
 
-    shared_services_prd = "000000000000"
-    shared_services_stg = "000000000000"
-
+    sdlc_dev = "000000000000"
     sdlc_prd = "000000000000"
     sdlc_stg = "000000000000"
     sdlc_tst = "000000000000"
-    sdlc_dev = "000000000000"
 
-    product_a_dev = "004801103377"
-    product_a_prd = "106500537541"
-    product_a_stg = "807650717690"
-    product_a_tst = "318112817414"
+    product_a_dev = "000000000000"
+    product_a_prd = "000000000000"
+    product_a_stg = "000000000000"
+    product_a_tst = "000000000000"
   }
 }
 

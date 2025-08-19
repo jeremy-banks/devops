@@ -6,6 +6,8 @@ output "networking_prd" { value = aws_organizations_account.network_prd.id }
 
 output "security_tooling_prd" { value = aws_organizations_account.security_tooling_prd.id }
 
+output "shared_services_prd" { value = aws_organizations_account.shared_services_prd.id }
+
 output "sdlc_prd" { value = aws_organizations_account.sdlc_prd.id }
 output "sdlc_stg" { value = aws_organizations_account.sdlc_stg.id }
 output "sdlc_tst" { value = aws_organizations_account.sdlc_tst.id }

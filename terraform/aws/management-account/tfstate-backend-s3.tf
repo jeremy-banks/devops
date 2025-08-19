@@ -6,7 +6,7 @@ data "aws_iam_policy_document" "s3_tfstate_backend_primary" {
   #     type = "AWS"
   #     identifiers = concat([
   #       "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
-  #       "${module.iam_role_tfstate_s3_region_replicate.iam_role_arn}",
+  #       "${module.iam_role_tfstate_s3_region_replicate.arn}",
   #       "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
   #       ],
   #     [for user in module.iam_user_breakglass : user.iam_user_arn])
@@ -25,10 +25,10 @@ data "aws_iam_policy_document" "s3_tfstate_backend_primary" {
       type = "AWS"
       identifiers = concat([
         "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
-        "${module.iam_role_tfstate_s3_region_replicate.iam_role_arn}",
+        "${module.iam_role_tfstate_s3_region_replicate.arn}",
         "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
         ],
-      [for user in module.iam_user_breakglass : user.iam_user_arn])
+      [for user in module.iam_user_breakglass : user.arn])
     }
     actions = ["s3:*"]
     resources = [
@@ -44,11 +44,11 @@ data "aws_iam_policy_document" "s3_tfstate_backend_primary" {
       type = "AWS"
       identifiers = concat([
         "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
-        "${module.iam_role_tfstate_s3_region_replicate.iam_role_arn}",
+        "${module.iam_role_tfstate_s3_region_replicate.arn}",
         "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
-        "${module.iam_user_admin.iam_user_arn}",
+        "${module.iam_user_admin.arn}",
         ],
-      [for user in module.iam_user_breakglass : user.iam_user_arn])
+      [for user in module.iam_user_breakglass : user.arn])
     }
     actions = ["s3:*"]
     resources = [
@@ -60,7 +60,7 @@ data "aws_iam_policy_document" "s3_tfstate_backend_primary" {
 
 module "s3_tfstate_backend_primary" {
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.2.0"
+  version = "5.4.0"
 
   bucket = local.resource_name_primary_globally_unique
 
@@ -87,7 +87,7 @@ module "s3_tfstate_backend_primary" {
   versioning = { enabled = true }
 
   replication_configuration = {
-    role = module.iam_role_tfstate_s3_region_replicate.iam_role_arn
+    role = module.iam_role_tfstate_s3_region_replicate.arn
 
     rules = [
       {
@@ -125,7 +125,7 @@ data "aws_iam_policy_document" "s3_tfstate_backend_failover" {
   #     type = "AWS"
   #     identifiers = concat([
   #       "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
-  #       "${module.iam_role_tfstate_s3_region_replicate.iam_role_arn}",
+  #       "${module.iam_role_tfstate_s3_region_replicate.arn}",
   #       "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
   #       ],
   #     [for user in module.iam_user_breakglass : user.iam_user_arn])
@@ -144,10 +144,10 @@ data "aws_iam_policy_document" "s3_tfstate_backend_failover" {
       type = "AWS"
       identifiers = concat([
         "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
-        "${module.iam_role_tfstate_s3_region_replicate.iam_role_arn}",
+        "${module.iam_role_tfstate_s3_region_replicate.arn}",
         "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
         ],
-      [for user in module.iam_user_breakglass : user.iam_user_arn])
+      [for user in module.iam_user_breakglass : user.arn])
     }
     actions = ["s3:*"]
     resources = [
@@ -163,11 +163,11 @@ data "aws_iam_policy_document" "s3_tfstate_backend_failover" {
       type = "AWS"
       identifiers = concat([
         "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
-        "${module.iam_role_tfstate_s3_region_replicate.iam_role_arn}",
+        "${module.iam_role_tfstate_s3_region_replicate.arn}",
         "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
-        "${module.iam_user_admin.iam_user_arn}",
+        "${module.iam_user_admin.arn}",
         ],
-      [for user in module.iam_user_breakglass : user.iam_user_arn])
+      [for user in module.iam_user_breakglass : user.arn])
     }
     actions = ["s3:*"]
     resources = [

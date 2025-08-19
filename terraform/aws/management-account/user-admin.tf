@@ -48,7 +48,7 @@ data "aws_iam_policy_document" "iam_user_admin" {
 
 module "iam_user_admin_policy" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.59.0"
+  version = "6.1.1"
 
   name = var.admin_user_names.admin
 
@@ -57,14 +57,15 @@ module "iam_user_admin_policy" {
 
 module "iam_user_admin" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-user"
-  version = "5.59.0"
+  version = "6.1.1"
 
   name = var.admin_user_names.admin
 
-  create_iam_user_login_profile = false
-  create_iam_access_key         = true
-  policy_arns = [
-    module.iam_user_admin_policy.arn,
-    "arn:aws:iam::aws:policy/AWSOrganizationsReadOnlyAccess",
-  ]
+  create_login_profile = false
+  create_access_key    = true
+
+  policies = {
+    admin-user    = module.iam_user_admin_policy.arn,
+    org-read-only = "arn:aws:iam::aws:policy/AWSOrganizationsReadOnlyAccess",
+  }
 }

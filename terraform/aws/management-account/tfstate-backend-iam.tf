@@ -56,7 +56,7 @@ data "aws_iam_policy_document" "s3_tfstate_region_replicate" {
 
 module "iam_policy_tfstate_s3_region_replicate" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.59.0"
+  version = "6.1.1"
 
   name = "${local.resource_name_primary}-replicate"
 
@@ -64,16 +64,30 @@ module "iam_policy_tfstate_s3_region_replicate" {
 }
 
 module "iam_role_tfstate_s3_region_replicate" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "5.59.0"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role"
+  version = "6.1.1"
 
-  trusted_role_services = ["s3.amazonaws.com"]
+  name            = "${local.resource_name_primary}-replicate"
+  use_name_prefix = false
 
-  create_role = true
+  trust_policy_permissions = {
+    TrustRoleAndServiceToAssume = {
+      principals = [
+        {
+          type = "Service"
+          identifiers = [
+            "s3.amazonaws.com",
+          ]
+        }
+      ]
+      actions = [
+        "sts:AssumeRole",
+        "sts:TagSession",
+      ]
+    }
+  }
 
-  role_name           = "${local.resource_name_primary}-replicate"
-  role_requires_mfa   = false
-  attach_admin_policy = false
-
-  custom_role_policy_arns = [module.iam_policy_tfstate_s3_region_replicate.arn]
+  policies = {
+    replicate = module.iam_policy_tfstate_s3_region_replicate.arn,
+  }
 }

@@ -2,6 +2,6 @@ cli_profile_name = "superadmin"
 
 provider_role_name = "superadmin"
 
-this_slug = "iam"
+environment = "prd"
 
-deployment_environment = "prd"
+this_slug = "iam"
