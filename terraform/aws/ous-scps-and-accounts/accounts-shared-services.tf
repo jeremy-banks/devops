@@ -1,6 +1,6 @@
 resource "aws_organizations_account" "shared_services_prd" {
   name  = "${var.account_name_slug.shared_services}-prd"
-  email = "${var.org_owner_email_prefix}-${var.account_name_slug.shared_services}-prd@${var.org_owner_email_domain_tld}"
+  email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name_slug.shared_services}-prd@${var.org_owner_email_domain_tld}"
 
   close_on_deletion          = true
   create_govcloud            = false
@@ -11,7 +11,7 @@ resource "aws_organizations_account" "shared_services_prd" {
 
 # resource "aws_organizations_account" "shared_services_stg" {
 #   name  = "${var.account_name_slug.shared_services}-stg"
-#   email = "${var.org_owner_email_prefix}-${var.account_name_slug.shared_services}-stg@${var.org_owner_email_domain_tld}"
+#   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name_slug.shared_services}-stg@${var.org_owner_email_domain_tld}"
 
 #   close_on_deletion          = true
 #   create_govcloud            = false
@@ -22,7 +22,7 @@ resource "aws_organizations_account" "shared_services_prd" {
 
 # resource "aws_organizations_account" "shared_services_tst" {
 #   name  = "${var.account_name_slug.shared_services}-tst"
-#   email = "${var.org_owner_email_prefix}-${var.account_name_slug.shared_services}-tst@${var.org_owner_email_domain_tld}"
+#   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name_slug.shared_services}-tst@${var.org_owner_email_domain_tld}"
 
 #   close_on_deletion          = true
 #   create_govcloud            = false
@@ -33,7 +33,7 @@ resource "aws_organizations_account" "shared_services_prd" {
 
 # resource "aws_organizations_account" "shared_services_dev" {
 #   name  = "${var.account_name_slug.shared_services}-dev"
-#   email = "${var.org_owner_email_prefix}-${var.account_name_slug.shared_services}-dev@${var.org_owner_email_domain_tld}"
+#   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name_slug.shared_services}-dev@${var.org_owner_email_domain_tld}"
 
 #   close_on_deletion          = true
 #   create_govcloud            = false

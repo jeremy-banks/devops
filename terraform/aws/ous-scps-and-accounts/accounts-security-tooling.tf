@@ -1,6 +1,6 @@
 resource "aws_organizations_account" "security_tooling_prd" {
   name  = "${var.account_name_slug.security_tooling}-prd"
-  email = "${var.org_owner_email_prefix}-${var.account_name_slug.security_tooling}-prd@${var.org_owner_email_domain_tld}"
+  email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name_slug.security_tooling}-prd@${var.org_owner_email_domain_tld}"
 
   close_on_deletion          = true
   create_govcloud            = false
@@ -11,7 +11,7 @@ resource "aws_organizations_account" "security_tooling_prd" {
 
 # resource "aws_organizations_account" "security_tooling_stg" {
 #   name  = "${var.account_name_slug.security_tooling}-stg"
-#   email = "${var.org_owner_email_prefix}-${var.account_name_slug.security_tooling}-stg@${var.org_owner_email_domain_tld}"
+#   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name_slug.security_tooling}-stg@${var.org_owner_email_domain_tld}"
 
 #   close_on_deletion          = true
 #   create_govcloud            = false
@@ -22,7 +22,7 @@ resource "aws_organizations_account" "security_tooling_prd" {
 
 # resource "aws_organizations_account" "security_tooling_tst" {
 #   name  = "${var.account_name_slug.security_tooling}-tst"
-#   email = "${var.org_owner_email_prefix}-${var.account_name_slug.security_tooling}-tst@${var.org_owner_email_domain_tld}"
+#   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name_slug.security_tooling}-tst@${var.org_owner_email_domain_tld}"
 
 #   close_on_deletion          = true
 #   create_govcloud            = false
@@ -33,7 +33,7 @@ resource "aws_organizations_account" "security_tooling_prd" {
 
 # resource "aws_organizations_account" "security_tooling_dev" {
 #   name  = "${var.account_name_slug.security_tooling}-dev"
-#   email = "${var.org_owner_email_prefix}-${var.account_name_slug.security_tooling}-dev@${var.org_owner_email_domain_tld}"
+#   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name_slug.security_tooling}-dev@${var.org_owner_email_domain_tld}"
 
 #   close_on_deletion          = true
 #   create_govcloud            = false
