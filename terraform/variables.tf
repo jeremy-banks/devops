@@ -388,10 +388,10 @@ locals {
   resource_name_primary_globally_unique  = lower("${var.company_name_abbr}-${local.resource_name_primary}-${local.unique_id}")
   resource_name_failover_globally_unique = lower("${var.company_name_abbr}-${local.resource_name_failover}-${local.unique_id}")
 
-  # this_slug_prd = join("_", ["workload", replace(var.this_slug, "-", "_"), "prd"])
-  # this_slug_stg = join("_", ["workload", replace(var.this_slug, "-", "_"), "stg"])
-  # this_slug_tst = join("_", ["workload", replace(var.this_slug, "-", "_"), "tst"])
-  # this_slug_dev = join("_", ["workload", replace(var.this_slug, "-", "_"), "dev"])
+  this_prd = join("_", [replace(var.this_slug, "-", "_"), "prd"])
+  this_stg = join("_", [replace(var.this_slug, "-", "_"), "stg"])
+  this_tst = join("_", [replace(var.this_slug, "-", "_"), "tst"])
+  this_dev = join("_", [replace(var.this_slug, "-", "_"), "dev"])
 
   # this_snake          = join("_", ["workload", replace(var.this_slug, "-", "_"), var.environment])
   # this_snake_primary  = join("_", ["workload", replace(var.this_slug, "-", "_"), var.environment, "primary"])
