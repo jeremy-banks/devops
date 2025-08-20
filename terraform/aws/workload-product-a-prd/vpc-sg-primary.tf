@@ -3,11 +3,11 @@ module "sg_main_primary" {
   version   = "5.3.0"
   providers = { aws = aws.this }
 
-  name        = "${local.resource_name_primary}-${var.this_slug}-main-sg"
-  description = "${local.resource_name_primary}-${var.this_slug}-main-sg"
+  name        = "${local.resource_name_primary}-main-sg"
+  description = "${local.resource_name_primary}-main-sg"
   vpc_id      = module.vpc_primary.vpc_id
 
-  tags = { Name = "${local.resource_name_primary}-${var.this_slug}-main-sg" }
+  tags = { Name = "${local.resource_name_primary}-main-sg" }
 }
 
 module "sg_main_rules_primary" {
@@ -76,11 +76,11 @@ module "sg_ingress_primary" {
   version   = "5.3.0"
   providers = { aws = aws.this }
 
-  name        = "${local.resource_name_primary}-${var.this_slug}-ingress-sg"
-  description = "${local.resource_name_primary}-${var.this_slug}-ingress-sg"
+  name        = "${local.resource_name_primary}-ingress-sg"
+  description = "${local.resource_name_primary}-ingress-sg"
   vpc_id      = module.vpc_primary.vpc_id
 
-  tags = { Name = "${local.resource_name_primary}-${var.this_slug}-ingress-sg" }
+  tags = { Name = "${local.resource_name_primary}-ingress-sg" }
 }
 
 module "sg_ingress_rules_primary" {

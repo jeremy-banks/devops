@@ -1,9 +1,9 @@
 module "s3_primary" {
   source    = "terraform-aws-modules/s3-bucket/aws"
-  version   = "5.2.0"
+  version   = "5.4.0"
   providers = { aws = aws.this }
 
-  bucket = "${local.resource_name_primary}-${var.this_slug}-storage-blob-${local.unique_id}"
+  bucket = local.resource_name_primary_globally_unique
 
   force_destroy = true
 
@@ -140,10 +140,10 @@ module "iam_role_s3_primary_replicate_to_failover" {
 
 module "s3_failover" {
   source    = "terraform-aws-modules/s3-bucket/aws"
-  version   = "5.2.0"
+  version   = "5.4.0"
   providers = { aws = aws.this_failover }
 
-  bucket = "${local.resource_name_failover}-${var.this_slug}-storage-blob-${local.unique_id}"
+  bucket = local.resource_name_failover_globally_unique
 
   force_destroy = true
 

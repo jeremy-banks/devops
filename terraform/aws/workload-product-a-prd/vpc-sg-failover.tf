@@ -5,11 +5,11 @@ module "sg_main_failover" {
 
   count = var.create_failover_region ? 1 : 0
 
-  name        = "${local.resource_name_failover}-${var.this_slug}-main-sg"
-  description = "${local.resource_name_failover}-${var.this_slug}-main-sg"
+  name        = "${local.resource_name_failover}-main-sg"
+  description = "${local.resource_name_failover}-main-sg"
   vpc_id      = module.vpc_failover[0].vpc_id
 
-  tags = { Name = "${local.resource_name_failover}-${var.this_slug}-main-sg" }
+  tags = { Name = "${local.resource_name_failover}-main-sg" }
 }
 
 module "sg_main_rules_failover" {
@@ -82,11 +82,11 @@ module "sg_ingress_failover" {
 
   count = var.create_failover_region ? 1 : 0
 
-  name        = "${local.resource_name_failover}-${var.this_slug}-ingress-sg"
-  description = "${local.resource_name_failover}-${var.this_slug}-ingress-sg"
+  name        = "${local.resource_name_failover}-ingress-sg"
+  description = "${local.resource_name_failover}-ingress-sg"
   vpc_id      = module.vpc_failover[0].vpc_id
 
-  tags = { Name = "${local.resource_name_failover}-${var.this_slug}-ingress-sg" }
+  tags = { Name = "${local.resource_name_failover}-ingress-sg" }
 }
 
 module "sg_ingress_rules_failover" {
