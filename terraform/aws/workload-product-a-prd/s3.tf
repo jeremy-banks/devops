@@ -3,7 +3,7 @@ module "s3_primary" {
   version   = "5.2.0"
   providers = { aws = aws.this }
 
-  bucket = "${local.resource_name_stub_primary}-${var.this_slug}-storage-blob-${local.unique_id}"
+  bucket = "${local.resource_name_primary}-${var.this_slug}-storage-blob-${local.unique_id}"
 
   force_destroy = true
 
@@ -143,7 +143,7 @@ module "s3_failover" {
   version   = "5.2.0"
   providers = { aws = aws.this_failover }
 
-  bucket = "${local.resource_name_stub_failover}-${var.this_slug}-storage-blob-${local.unique_id}"
+  bucket = "${local.resource_name_failover}-${var.this_slug}-storage-blob-${local.unique_id}"
 
   force_destroy = true
 

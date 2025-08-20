@@ -83,7 +83,7 @@ data "aws_ec2_transit_gateway_vpc_attachment" "tgw_post_central_inspection_prima
 
   filter {
     name   = "tag:Name"
-    values = ["${local.resource_name_stub_primary}-network-tgw-attach-central-inspection-vpc"]
+    values = ["${local.resource_name_primary}-network-tgw-attach-central-inspection-vpc"]
   }
 
   filter {
@@ -97,7 +97,7 @@ data "aws_ec2_transit_gateway_route_table" "tgw_pre_central_inspection_primary" 
 
   filter {
     name   = "tag:Name"
-    values = ["${local.resource_name_stub_primary}-network-tgw-pre-inspection"]
+    values = ["${local.resource_name_primary}-network-tgw-pre-inspection"]
   }
 
   filter {
@@ -111,7 +111,7 @@ data "aws_ec2_transit_gateway_route_table" "tgw_post_central_inspection_primary"
 
   filter {
     name   = "tag:Name"
-    values = ["${local.resource_name_stub_primary}-network-tgw-post-inspection"]
+    values = ["${local.resource_name_primary}-network-tgw-post-inspection"]
   }
 
   filter {
@@ -127,7 +127,7 @@ data "aws_ec2_transit_gateway_peering_attachment" "tgw_peer_primary" {
 
   filter {
     name   = "tag:Name"
-    values = ["${local.resource_name_stub_primary}-network-tgw-peer-accepter"]
+    values = ["${local.resource_name_primary}-network-tgw-peer-accepter"]
   }
 
   filter {
@@ -143,7 +143,7 @@ data "aws_ec2_transit_gateway_vpc_attachment" "tgw_post_inspection_failover" {
 
   filter {
     name   = "tag:Name"
-    values = ["${local.resource_name_stub_failover}-network-tgw-attach-central-inspection-vpc"]
+    values = ["${local.resource_name_failover}-network-tgw-attach-central-inspection-vpc"]
   }
 
   filter {
@@ -159,7 +159,7 @@ data "aws_ec2_transit_gateway_route_table" "tgw_pre_inspection_failover" {
 
   filter {
     name   = "tag:Name"
-    values = ["${local.resource_name_stub_failover}-network-tgw-pre-inspection"]
+    values = ["${local.resource_name_failover}-network-tgw-pre-inspection"]
   }
 
   filter {
@@ -175,7 +175,7 @@ data "aws_ec2_transit_gateway_route_table" "tgw_post_inspection_failover" {
 
   filter {
     name   = "tag:Name"
-    values = ["${local.resource_name_stub_failover}-network-tgw-post-inspection"]
+    values = ["${local.resource_name_failover}-network-tgw-post-inspection"]
   }
 
   filter {
@@ -191,7 +191,7 @@ data "aws_ec2_transit_gateway_peering_attachment" "tgw_peer_failover" {
 
   filter {
     name   = "tag:Name"
-    values = ["${local.resource_name_stub_failover}-network-tgw-peer-requester"]
+    values = ["${local.resource_name_failover}-network-tgw-peer-requester"]
   }
 
   filter {

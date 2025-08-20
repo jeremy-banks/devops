@@ -39,7 +39,7 @@ module "vpc_failover" {
 
   count = var.create_failover_region ? 1 : 0
 
-  name = "${local.resource_name_stub_failover}-${var.this_slug}-vpc-failover"
+  name = "${local.resource_name_failover}-${var.this_slug}-vpc-failover"
   cidr = local.vpc_cidr_failover
 
   azs                 = slice(var.azs_failover, 0, var.azs_number_used)
