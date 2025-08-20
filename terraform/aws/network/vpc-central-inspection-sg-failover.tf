@@ -13,10 +13,12 @@ module "sg_inspection_main_failover" {
   egress_with_self  = [{ rule = "all-all" }]
 
   ingress_cidr_blocks = ["0.0.0.0/0"]
+  ingress_ipv6_cidr_blocks = ["::/0"]
   ingress_rules       = ["all-all"]
 
-  egress_cidr_blocks = ["0.0.0.0/0"]
-  egress_rules       = ["all-all"]
+  egress_cidr_blocks      = ["0.0.0.0/0"]
+  egress_ipv6_cidr_blocks = ["::/0"]
+  egress_rules            = ["all-all"]
 
   tags = { Name = "${local.resource_name_failover}-central-inspection-main-sg" }
 }

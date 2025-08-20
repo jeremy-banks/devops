@@ -12,11 +12,13 @@ module "sg_central_egress_main_failover" {
   ingress_with_self = [{ rule = "all-all" }]
   egress_with_self  = [{ rule = "all-all" }]
 
-  ingress_cidr_blocks = ["0.0.0.0/0"]
-  ingress_rules       = ["all-all"]
+  ingress_cidr_blocks      = ["0.0.0.0/0"]
+  ingress_ipv6_cidr_blocks = ["::/0"]
+  ingress_rules            = ["all-all"]
 
-  egress_cidr_blocks = ["0.0.0.0/0"]
-  egress_rules       = ["all-all"]
+  egress_cidr_blocks      = ["0.0.0.0/0"]
+  egress_ipv6_cidr_blocks = ["::/0"]
+  egress_rules            = ["all-all"]
 
   tags = { Name = "${local.resource_name_failover}-central-egress-main-sg" }
 }
