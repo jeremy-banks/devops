@@ -5,7 +5,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_workload_product_a_to_tgw
   transit_gateway_id = data.aws_ec2_transit_gateway.tgw_primary.id
   vpc_id             = module.vpc_primary.vpc_id
 
-  appliance_mode_support             = "disable"
+  appliance_mode_support             = "enable"
   dns_support                        = "enable"
   security_group_referencing_support = "enable"
 

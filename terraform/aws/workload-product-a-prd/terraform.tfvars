@@ -1,10 +1,14 @@
-this_slug = "product-a"
+cli_profile_name = "superadmin"
+
+provider_role_name = "superadmin"
 
 environment = "prd"
 
-# create_failover_region_networking = false
+this_slug = "product-a"
 
-azs_number_used_networking = 2
+# create_failover_region_network = false
+
+azs_number_used_network = 2
 
 # create_failover_region = false
 
