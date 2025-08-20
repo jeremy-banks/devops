@@ -5,7 +5,7 @@ resource "aws_ec2_transit_gateway_route_table" "pre_inspection_failover" {
 
   transit_gateway_id = aws_ec2_transit_gateway.tgw_failover[0].id
 
-  tags = { Name = "${local.resource_name_failover}-tgw-pre-inspection" }
+  tags = { Name = "tgw-pre-inspection-failover" }
 }
 
 resource "aws_ec2_transit_gateway_route" "pre_inspection_failover" {
@@ -34,7 +34,7 @@ resource "aws_ec2_transit_gateway_route_table" "post_inspection_failover" {
 
   transit_gateway_id = aws_ec2_transit_gateway.tgw_failover[0].id
 
-  tags = { Name = "${local.resource_name_failover}-tgw-post-inspection" }
+  tags = { Name = "tgw-post-inspection-failover" }
 }
 
 resource "aws_ec2_transit_gateway_route" "post_inspection_central_egress_failover" {

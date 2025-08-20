@@ -3,7 +3,7 @@ resource "aws_ec2_transit_gateway_route_table" "pre_inspection_primary" {
 
   transit_gateway_id = aws_ec2_transit_gateway.tgw_primary.id
 
-  tags = { Name = "${local.resource_name_primary}-tgw-pre-inspection" }
+  tags = { Name = "tgw-pre-inspection-primary" }
 }
 
 resource "aws_ec2_transit_gateway_route" "pre_inspection_primary" {
@@ -26,7 +26,7 @@ resource "aws_ec2_transit_gateway_route_table" "post_inspection_primary" {
 
   transit_gateway_id = aws_ec2_transit_gateway.tgw_primary.id
 
-  tags = { Name = "${local.resource_name_primary}-tgw-post-inspection" }
+  tags = { Name = "tgw-post-inspection-primary" }
 }
 
 resource "aws_ec2_transit_gateway_route" "post_inspection_central_egress_primary" {

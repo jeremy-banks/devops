@@ -88,5 +88,5 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inspection_to_tgw_primary
   # transit_gateway_default_route_table_association = false
   # transit_gateway_default_route_table_propagation = false
 
-  tags = { Name = "${local.resource_name_primary}-tgw-attach" }
+  tags = { Name = "vpc-central-inspection-tgw-attach-primary" }
 }
