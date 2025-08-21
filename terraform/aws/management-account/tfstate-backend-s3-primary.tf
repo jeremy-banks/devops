@@ -119,7 +119,7 @@ resource "aws_s3_bucket_replication_configuration" "s3_tfstate_backend_primary" 
   bucket = module.s3_tfstate_backend_primary.s3_bucket_id
 
   rule {
-    id = "primary-to-failover"
+    id = "bidirectional-crr"
 
     status = "Enabled"
 

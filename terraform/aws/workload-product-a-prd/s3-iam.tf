@@ -33,8 +33,8 @@ data "aws_iam_policy_document" "s3_crr" {
 }
 
 module "iam_policy_s3_crr" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "6.1.2"
+  source    = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version   = "6.1.2"
   providers = { aws = aws.this }
 
   name = "${local.resource_name_primary}-crr"
@@ -43,8 +43,8 @@ module "iam_policy_s3_crr" {
 }
 
 module "iam_role_s3_crr" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role"
-  version = "6.1.2"
+  source    = "terraform-aws-modules/iam/aws//modules/iam-role"
+  version   = "6.1.2"
   providers = { aws = aws.this }
 
   name            = "${local.resource_name_primary}-crr"

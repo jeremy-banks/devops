@@ -39,7 +39,7 @@ resource "aws_s3_bucket_replication_configuration" "s3_failover" {
   bucket = module.s3_failover.s3_bucket_id
 
   rule {
-    id = "failover-to-primary"
+    id = "bidirectional-crr"
 
     status = "Enabled"
 
