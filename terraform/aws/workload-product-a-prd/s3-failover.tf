@@ -47,15 +47,11 @@ resource "aws_s3_bucket_replication_configuration" "s3_failover" {
       bucket        = module.s3_primary.s3_bucket_arn
       storage_class = "INTELLIGENT_TIERING"
 
-      encryption_configuration {
-        replica_kms_key_id = module.kms_primary.key_arn
-      }
+      encryption_configuration { replica_kms_key_id = module.kms_primary.key_arn }
     }
 
     source_selection_criteria {
-      sse_kms_encrypted_objects {
-        status = "Enabled"
-      }
+      sse_kms_encrypted_objects { status = "Enabled" }
     }
   }
 }
