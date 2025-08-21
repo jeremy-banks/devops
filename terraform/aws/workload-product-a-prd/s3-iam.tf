@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "s3_tfstate_region_replicate" {
+data "aws_iam_policy_document" "s3_crr" {
   statement {
     effect = "Allow"
     actions = [
@@ -26,24 +26,26 @@ data "aws_iam_policy_document" "s3_tfstate_region_replicate" {
       "kms:GenerateDataKey",
     ]
     resources = [
-      module.kms_tfstate_backend_primary.key_arn,
-      module.kms_tfstate_backend_failover.key_arn,
+      module.kms_primary.key_arn,
+      module.kms_failover.key_arn,
     ]
   }
 }
 
-module "iam_policy_tfstate_s3_region_replicate" {
+module "iam_policy_s3_crr" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version = "6.1.2"
+  providers = { aws = aws.this }
 
   name = "${local.resource_name_primary}-crr"
 
-  policy = data.aws_iam_policy_document.s3_tfstate_region_replicate.json
+  policy = data.aws_iam_policy_document.s3_crr.json
 }
 
-module "iam_role_tfstate_s3_region_replicate" {
+module "iam_role_s3_crr" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role"
   version = "6.1.2"
+  providers = { aws = aws.this }
 
   name            = "${local.resource_name_primary}-crr"
   use_name_prefix = false
@@ -67,6 +69,6 @@ module "iam_role_tfstate_s3_region_replicate" {
   }
 
   policies = {
-    replicate = module.iam_policy_tfstate_s3_region_replicate.arn,
+    replicate = module.iam_policy_s3_crr.arn,
   }
 }
