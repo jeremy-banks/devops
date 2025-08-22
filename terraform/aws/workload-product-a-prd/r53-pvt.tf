@@ -3,7 +3,7 @@ resource "aws_route53_zone" "pvt_primary" {
 
   count = length(var.r53_zones_parents)
 
-  name = count.index
+  name = "pvt.${var.r53_zones_parents[count.index]}"
 
   vpc {
     vpc_id = module.vpc_primary.vpc_id
@@ -15,7 +15,7 @@ resource "aws_route53_zone" "pvt_failover" {
 
   count = length(var.r53_zones_parents)
 
-  name = count.index
+  name = "pvt.${var.r53_zones_parents[count.index]}"
 
   vpc {
     vpc_id = module.vpc_failover[0].vpc_id
