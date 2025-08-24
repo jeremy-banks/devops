@@ -1,30 +1,21 @@
 data "aws_iam_policy_document" "s3_primary" {
   statement {
-    sid = "AllowAccountScopedPrefixAccess"
-
+    sid    = "allowOrgRolesPutObjectInsideAccountPrefix"
     effect = "Allow"
-
     principals {
       type        = "AWS"
       identifiers = ["*"]
     }
-
-    actions = [
-      "s3:GetObject",
-      "s3:PutObject",
-      "s3:DeleteObject"
-    ]
-
-    resources = [
-      "${module.s3_primary.s3_bucket_arn}/${"$${aws:PrincipalAccount}"}/*"
-    ]
-
+    actions   = ["s3:PutObject"]
+    resources = ["${module.s3_primary.s3_bucket_arn}/${"$${aws:PrincipalAccount}"}/*"]
     condition {
-      test     = "StringEquals"
+      test     = "StringLike"
       variable = "aws:PrincipalArn"
-      values   = ["arn:aws:iam::*:role/superadmin"]
+      values = [
+        "arn:aws:iam::*:role/${var.admin_user_names.superadmin}",
+        "arn:aws:iam::*:role/${var.admin_user_names.admin}",
+      ]
     }
-
     condition {
       test     = "StringEquals"
       variable = "aws:PrincipalOrgID"
@@ -76,7 +67,9 @@ module "s3_primary" {
 resource "aws_s3_bucket_replication_configuration" "s3_primary" {
   provider = aws.shared_services_prd
 
-  role   = module.iam_role_s3_crr.arn
+  count = var.create_failover_region_network ? 1 : 0
+
+  role   = module.iam_role_s3_crr[0].arn
   bucket = module.s3_primary.s3_bucket_id
 
   rule {
@@ -85,10 +78,10 @@ resource "aws_s3_bucket_replication_configuration" "s3_primary" {
     status = "Enabled"
 
     destination {
-      bucket        = module.s3_failover.s3_bucket_arn
+      bucket        = module.s3_failover[0].s3_bucket_arn
       storage_class = "INTELLIGENT_TIERING"
 
-      encryption_configuration { replica_kms_key_id = module.kms_failover.key_arn }
+      encryption_configuration { replica_kms_key_id = module.kms_failover[0].key_arn }
     }
 
     source_selection_criteria {

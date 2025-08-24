@@ -1,11 +1,13 @@
-module "network_firewall_primary" {
+
+module "network_firewall_failover" {
   source = "terraform-aws-modules/network-firewall/aws"
-  # version   = "1.0.2"
   version   = "2.0.1"
-  providers = { aws = aws.network_prd }
+  providers = { aws = aws.network_prd_failover }
+
+  count = var.create_failover_region_network ? 1 : 0
 
   # Firewall
-  name        = "${local.resource_name_primary}-firewall"
+  name        = "${local.resource_name_failover}-firewall"
   description = "Example network firewall"
 
   # Only for example
@@ -13,10 +15,10 @@ module "network_firewall_primary" {
   firewall_policy_change_protection = false
   subnet_change_protection          = false
 
-  vpc_id = module.vpc_inspection_primary.vpc_id
-  subnet_mapping = { for i in range(0, length(module.vpc_inspection_primary.private_subnets)) :
+  vpc_id = module.vpc_inspection_failover[0].vpc_id
+  subnet_mapping = { for i in range(0, length(module.vpc_inspection_failover[0].private_subnets)) :
     "subnet-${i}" => {
-      subnet_id       = element(module.vpc_inspection_primary.private_subnets, i)
+      subnet_id       = element(module.vpc_inspection_failover[0].private_subnets, i)
       ip_address_type = "IPV4"
     }
   }
@@ -26,15 +28,15 @@ module "network_firewall_primary" {
   logging_configuration_destination_config = [
     {
       log_destination = {
-        logGroup = aws_cloudwatch_log_group.logs_primary.name
+        logGroup = aws_cloudwatch_log_group.logs_failover[0].name
       }
       log_destination_type = "CloudWatchLogs"
       log_type             = "ALERT"
     },
     {
       log_destination = {
-        bucketName = aws_s3_bucket.network_firewall_logs_primary.id
-        prefix     = "${local.resource_name_primary}-${var.this_slug}"
+        bucketName = aws_s3_bucket.network_firewall_logs_failover[0].id
+        prefix     = "${local.resource_name_failover}-${var.this_slug}"
       }
       log_destination_type = "S3"
       log_type             = "FLOW"
@@ -42,7 +44,7 @@ module "network_firewall_primary" {
   ]
 
   # Policy
-  policy_name        = "${local.resource_name_primary}-${var.this_slug}-policy"
+  policy_name        = "${local.resource_name_failover}-${var.this_slug}-policy"
   policy_description = "Example network firewall policy"
 
   # policy_stateful_rule_group_reference = {

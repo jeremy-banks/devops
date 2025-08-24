@@ -1,6 +1,6 @@
 module "iam_assumable_roles_product_a_prd" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-role"
-  version   = "6.1.2"
+  version   = "6.2.0"
   providers = { aws = aws.product_a_prd }
 
   for_each = {
@@ -36,7 +36,7 @@ module "iam_assumable_roles_product_a_prd" {
 
 module "iam_assumable_roles_product_a_stg" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-role"
-  version   = "6.1.2"
+  version   = "6.2.0"
   providers = { aws = aws.product_a_stg }
 
   for_each = {
@@ -72,7 +72,7 @@ module "iam_assumable_roles_product_a_stg" {
 
 module "iam_assumable_roles_product_a_tst" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-role"
-  version   = "6.1.2"
+  version   = "6.2.0"
   providers = { aws = aws.product_a_tst }
 
   for_each = {

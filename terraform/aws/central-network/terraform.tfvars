@@ -8,4 +8,4 @@ this_slug = "network"
 
 # create_failover_region = false
 
-# azs_number_used = 2
+azs_number_used = 2

@@ -1,55 +1,25 @@
 data "aws_iam_policy_document" "s3_failover" {
   statement {
-    sid = "fooBar"
-
+    sid    = "allowOrgRolesPutObjectInsideAccountPrefix"
     effect = "Allow"
-
     principals {
       type        = "AWS"
       identifiers = ["*"]
     }
-
-    actions = [
-      "s3:GetObject",
-      "s3:PutObject",
-      "s3:DeleteObject"
-    ]
-
-    resources = [
-      "${module.s3_failover.s3_bucket_arn}/*"
-    ]
-
+    actions   = ["s3:PutObject"]
+    resources = ["${module.s3_failover[0].s3_bucket_arn}/${"$${aws:PrincipalAccount}"}/*"]
+    condition {
+      test     = "StringLike"
+      variable = "aws:PrincipalArn"
+      values = [
+        "arn:aws:iam::*:role/${var.admin_user_names.superadmin}",
+        "arn:aws:iam::*:role/${var.admin_user_names.admin}",
+      ]
+    }
     condition {
       test     = "StringEquals"
-      variable = "s3:prefix"
-      values   = ["${"aws:PrincipalAccount"}/"]
-    }
-  }
-
-  statement {
-    sid = "fooBar2"
-
-    effect = "Deny"
-
-    principals {
-      type        = "AWS"
-      identifiers = ["*"]
-    }
-
-    actions = [
-      "s3:GetObject",
-      "s3:PutObject",
-      "s3:DeleteObject"
-    ]
-
-    resources = [
-      "${module.s3_failover.s3_bucket_arn}/*"
-    ]
-
-    condition {
-      test     = "StringNotEquals"
-      variable = "s3:prefix"
-      values   = ["${"aws:PrincipalAccount"}/"]
+      variable = "aws:PrincipalOrgID"
+      values   = [data.aws_organizations_organization.this.id]
     }
   }
 }
@@ -59,6 +29,8 @@ module "s3_failover" {
   version   = "5.5.0"
   providers = { aws = aws.shared_services_prd_failover }
 
+  count = var.create_failover_region_network ? 1 : 0
+
   bucket = local.resource_name_failover_globally_unique
 
   force_destroy = true
@@ -66,7 +38,7 @@ module "s3_failover" {
   server_side_encryption_configuration = {
     rule = {
       apply_server_side_encryption_by_default = {
-        kms_master_key_id = module.kms_failover.key_arn
+        kms_master_key_id = module.kms_failover[0].key_arn
         sse_algorithm     = "aws:kms"
       }
       bucket_key_enabled = true
@@ -83,13 +55,13 @@ module "s3_failover" {
 
   versioning = { enabled = true }
 
-  # attach_policy                             = true
-  # policy                                    = data.aws_iam_policy_document.s3_failover.json
+  attach_policy                             = true
+  policy                                    = data.aws_iam_policy_document.s3_failover.json
   attach_deny_insecure_transport_policy     = true
   attach_require_latest_tls_policy          = true
   attach_deny_incorrect_encryption_headers  = true
   attach_deny_incorrect_kms_key_sse         = true
-  allowed_kms_key_arn                       = module.kms_failover.key_arn
+  allowed_kms_key_arn                       = module.kms_failover[0].key_arn
   attach_deny_unencrypted_object_uploads    = true
   attach_deny_ssec_encrypted_object_uploads = true
 }
@@ -97,8 +69,10 @@ module "s3_failover" {
 resource "aws_s3_bucket_replication_configuration" "s3_failover" {
   provider = aws.shared_services_prd_failover
 
-  role   = module.iam_role_s3_crr.arn
-  bucket = module.s3_failover.s3_bucket_id
+  count = var.create_failover_region_network ? 1 : 0
+
+  role   = module.iam_role_s3_crr[0].arn
+  bucket = module.s3_failover[0].s3_bucket_id
 
   rule {
     id = "bidirectional-crr"

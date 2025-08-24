@@ -27,7 +27,7 @@ data "aws_iam_policy_document" "s3_crr" {
     ]
     resources = [
       module.kms_primary.key_arn,
-      module.kms_failover.key_arn,
+      module.kms_failover[0].key_arn,
     ]
   }
 }
@@ -36,6 +36,8 @@ module "iam_policy_s3_crr" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version   = "6.1.2"
   providers = { aws = aws.shared_services_prd }
+
+  count = var.create_failover_region_network ? 1 : 0
 
   name = "${local.resource_name_primary}-crr"
 
@@ -46,6 +48,8 @@ module "iam_role_s3_crr" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-role"
   version   = "6.1.2"
   providers = { aws = aws.shared_services_prd }
+
+  count = var.create_failover_region_network ? 1 : 0
 
   name            = "${local.resource_name_primary}-crr"
   use_name_prefix = false
@@ -69,6 +73,6 @@ module "iam_role_s3_crr" {
   }
 
   policies = {
-    replicate = module.iam_policy_s3_crr.arn,
+    replicate = module.iam_policy_s3_crr[0].arn,
   }
 }

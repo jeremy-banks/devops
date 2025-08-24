@@ -48,7 +48,7 @@ data "aws_iam_policy_document" "iam_user_admin" {
 
 module "iam_user_admin_policy" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "6.1.2"
+  version = "6.2.0"
 
   name = var.admin_user_names.admin
 
@@ -57,7 +57,7 @@ module "iam_user_admin_policy" {
 
 module "iam_user_admin" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-user"
-  version = "6.1.2"
+  version = "6.2.0"
 
   name = var.admin_user_names.admin
 

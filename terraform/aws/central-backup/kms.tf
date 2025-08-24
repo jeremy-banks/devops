@@ -12,70 +12,34 @@ data "aws_iam_policy_document" "kms" {
   }
 
   statement {
-    sid    = "Allow use of the key"
+    sid    = "Allow cryptographic operations by authorized roles in the org"
     effect = "Allow"
     principals {
       type        = "AWS"
       identifiers = ["*"]
     }
     actions = [
-      "kms:DescribeKey",
       "kms:Decrypt",
       "kms:DescribeKey",
       "kms:Encrypt",
       "kms:GenerateDataKey*",
       "kms:ReEncrypt*",
-      "kms:Decrypt",
-      "kms:DeriveSharedSecret",
-      "kms:DescribeKey",
-      "kms:Encrypt",
-      "kms:GenerateDataKey*",
-      "kms:GenerateMac",
-      "kms:GetPublicKey",
-      "kms:ReEncrypt*",
-      "kms:ReEncrypt*",
-      "kms:Sign",
-      "kms:Verify",
-      "kms:VerifyMac",
     ]
     resources = ["*"]
-    condition {
-      test     = "StringLike"
-      variable = "aws:PrincipalArn"
-      values = [
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:instance-profile/*",
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:role/*",
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:role/aws-service-role/*",
-      ]
-    }
-  }
 
-  statement {
-    sid    = "Allow attachment of persistent resources"
-    effect = "Allow"
-    principals {
-      type        = "AWS"
-      identifiers = ["*"]
-    }
-    actions = [
-      "kms:CreateGrant",
-      "kms:ListGrants",
-      "kms:RevokeGrant",
-    ]
-    resources = ["*"]
-    condition {
-      test     = "Bool"
-      variable = "kms:GrantIsForAWSResource"
-      values   = [true]
-    }
     condition {
       test     = "StringLike"
       variable = "aws:PrincipalArn"
       values = [
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:instance-profile/*",
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:role/*",
-        "arn:aws:iam::${data.aws_caller_identity.this.id}:role/aws-service-role/*",
+        "arn:aws:iam::*:role/${var.admin_user_names.superadmin}",
+        "arn:aws:iam::*:role/${var.admin_user_names.admin}",
       ]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:PrincipalOrgID"
+      values   = [data.aws_organizations_organization.this.id]
     }
   }
 }
@@ -100,6 +64,8 @@ module "kms_failover" {
   source    = "terraform-aws-modules/kms/aws"
   version   = "4.0.0"
   providers = { aws = aws.shared_services_prd_failover }
+
+  count = var.create_failover_region_network ? 1 : 0
 
   deletion_window_in_days = 30
   create_replica          = true
@@ -131,5 +97,5 @@ resource "aws_ebs_encryption_by_default" "kms_failover" {
 resource "aws_ebs_default_kms_key" "kms_failover" {
   provider = aws.shared_services_prd_failover
 
-  key_arn = module.kms_failover.key_arn
+  key_arn = module.kms_failover[0].key_arn
 }
