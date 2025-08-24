@@ -81,7 +81,7 @@ data "aws_iam_policy_document" "s3_tfstate_backend_failover" {
 
 module "s3_tfstate_backend_failover" {
   source    = "terraform-aws-modules/s3-bucket/aws"
-  version   = "5.2.0"
+  version   = "5.5.0"
   providers = { aws = aws.management_failover }
 
   bucket = local.resource_name_failover_globally_unique
@@ -108,11 +108,15 @@ module "s3_tfstate_backend_failover" {
 
   versioning = { enabled = true }
 
-  attach_policy                            = true
-  policy                                   = data.aws_iam_policy_document.s3_tfstate_backend_failover.json
-  attach_deny_incorrect_encryption_headers = true
-  attach_deny_incorrect_kms_key_sse        = true
-  allowed_kms_key_arn                      = module.kms_tfstate_backend_failover.key_arn
+  attach_policy                             = true
+  policy                                    = data.aws_iam_policy_document.s3_tfstate_backend_failover.json
+  attach_deny_insecure_transport_policy     = true
+  attach_require_latest_tls_policy          = true
+  attach_deny_incorrect_encryption_headers  = true
+  attach_deny_incorrect_kms_key_sse         = true
+  allowed_kms_key_arn                       = module.kms_tfstate_backend_failover.key_arn
+  attach_deny_unencrypted_object_uploads    = true
+  attach_deny_ssec_encrypted_object_uploads = true
 }
 
 resource "aws_s3_bucket_replication_configuration" "s3_tfstate_backend_failover" {
