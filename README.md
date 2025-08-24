@@ -23,7 +23,7 @@ The goal of this repo is to provide a comprehensive codebase to lift-and-shift a
 - [x] Codebase optionally supports failover region for all resources, 2-4 AZs for VPCs, and public subnets with R53 and ACM
 
 ## To Do
-- [ ] Add RDS to Workload Spoke
+- [ ] Add multi-region active-active Postgres to EKS deployments
 - [ ] Implement StackSet Deployments
 - [ ] Mozilla Secrets OPerationS (SOPS) implementation to keep secrets protected
 - [ ] Test Site-to-Site VPN connection between my home hardware and AWS
@@ -38,6 +38,7 @@ The goal of this repo is to provide a comprehensive codebase to lift-and-shift a
 - [Centralized Inspection Architecture](https://aws.amazon.com/blogs/networking-and-content-delivery/centralized-central-inspection-architecture-with-aws-gateway-load-balancer-and-aws-transit-gateway/)
 - [Transit Gateway Design Best Practices](https://docs.aws.amazon.com/vpc/latest/tgw/tgw-best-design-practices.html)
 - [How Transit Gateways Work in Appliance Mode](https://docs.aws.amazon.com/vpc/latest/tgw/how-transit-gateways-work.html#transit-gateway-appliance-scenario)
+- [Automating Domain Delegation for Public Applications](https://aws.amazon.com/blogs/networking-and-content-delivery/automating-domain-delegation-for-public-applications-in-aws/)
 - [Prescriptive Guidance Security Reference Architecture](https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture/org-management.html)
 - [Guidance to Render Unsecured PHI Unusable](https://www.hhs.gov/hipaa/for-professionals/breach-notification/guidance/index.html)
 
