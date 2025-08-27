@@ -1,5 +1,5 @@
 module "network_firewall_rule_group_stateful_failover" {
-  source = "terraform-aws-modules/network-firewall/aws//modules/rule-group"
+  source    = "terraform-aws-modules/network-firewall/aws//modules/rule-group"
   version   = "2.0.1"
   providers = { aws = aws.network_prd_failover }
 
@@ -29,7 +29,7 @@ module "network_firewall_rule_group_stateful_failover" {
 }
 
 module "network_firewall_rule_group_stateless_failover" {
-  source = "terraform-aws-modules/network-firewall/aws//modules/rule-group"
+  source    = "terraform-aws-modules/network-firewall/aws//modules/rule-group"
   version   = "2.0.1"
   providers = { aws = aws.network_prd_failover }
 
