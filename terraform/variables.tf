@@ -7,7 +7,7 @@ variable "account_id" {
     security_tooling_prd = "000000000000"
     shared_services_prd  = "000000000000"
 
-    sdlc_dev = "v"
+    sdlc_dev = "000000000000"
     sdlc_prd = "000000000000"
     sdlc_stg = "000000000000"
     sdlc_tst = "000000000000"
@@ -170,16 +170,12 @@ variable "resource_owner_email" {
   default     = null
 }
 
-variable "admin_user_names" {
-  type = map(string)
-  default = {
-    superadmin = "superadmin"
-    admin      = "admin"
-    breakglass = "breakglass"
-  }
+variable "cli_profile_name" {
+  type    = string
+  default = "admin"
 }
 
-variable "cli_profile_name" {
+variable "provider_role_name" {
   type    = string
   default = "admin"
 }
@@ -199,9 +195,9 @@ variable "breakglass_user_name" {
   default = "breakglass"
 }
 
-variable "provider_role_name" {
+variable "billing_user_name" {
   type    = string
-  default = "admin"
+  default = "billing"
 }
 
 variable "org_service_access_principals" {
@@ -301,7 +297,7 @@ variable "azs_primary" {
     "usw2-az1",
     "usw2-az2",
     "usw2-az3",
-    "usw2-az4", # firewall not supported
+    # "usw2-az4", # firewall not supported
   ]
 
   validation {
@@ -315,10 +311,10 @@ variable "azs_failover" {
   default = [
     "use1-az1",
     "use1-az2",
+    # "use1-az3", # firewall not supported
     "use1-az4",
     "use1-az5",
     "use1-az6",
-    "use1-az3", # firewall not supported
   ]
 
   validation {
@@ -392,15 +388,6 @@ locals {
   # company-project-region-env-slug-unique_id
   resource_name_primary_globally_unique  = lower("${var.company_name_abbr}-${local.resource_name_primary}-${local.unique_id}")
   resource_name_failover_globally_unique = lower("${var.company_name_abbr}-${local.resource_name_failover}-${local.unique_id}")
-
-  this_prd = join("_", [replace(var.this_slug, "-", "_"), "prd"])
-  this_stg = join("_", [replace(var.this_slug, "-", "_"), "stg"])
-  this_tst = join("_", [replace(var.this_slug, "-", "_"), "tst"])
-  this_dev = join("_", [replace(var.this_slug, "-", "_"), "dev"])
-
-  # this_snake          = join("_", ["workload", replace(var.this_slug, "-", "_"), var.environment])
-  # this_snake_primary  = join("_", ["workload", replace(var.this_slug, "-", "_"), var.environment, "primary"])
-  # this_snake_failover = join("_", ["workload", replace(var.this_slug, "-", "_"), var.environment, "failover"])
 
   unique_id = substr(sha256("${var.unique_id_seed}${data.aws_caller_identity.this.account_id}"), 0, 8)
 

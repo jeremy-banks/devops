@@ -12,8 +12,8 @@ data "aws_iam_policy_document" "s3_failover" {
       test     = "StringLike"
       variable = "aws:PrincipalArn"
       values = [
-        "arn:aws:iam::*:role/${var.admin_user_names.superadmin}",
-        "arn:aws:iam::*:role/${var.admin_user_names.admin}",
+        "arn:aws:iam::*:role/${var.account_role_name}",
+        "arn:aws:iam::*:role/${var.admin_role_name}",
       ]
     }
     condition {

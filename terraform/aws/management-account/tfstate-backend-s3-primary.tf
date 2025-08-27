@@ -18,7 +18,7 @@ data "aws_iam_policy_document" "s3_tfstate_backend_primary" {
         [
           "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
           "${module.iam_role_tfstate_s3_region_replicate.arn}",
-          "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
+          "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.account_role_name}",
         ],
         [for user in module.iam_user_breakglass : user.arn]
       )
@@ -34,8 +34,8 @@ data "aws_iam_policy_document" "s3_tfstate_backend_primary" {
     }
     actions = ["s3:*"]
     resources = [
-      "${module.s3_tfstate_backend_primary.s3_bucket_arn}/${var.admin_user_names.superadmin}",
-      "${module.s3_tfstate_backend_primary.s3_bucket_arn}/${var.admin_user_names.superadmin}/*",
+      "${module.s3_tfstate_backend_primary.s3_bucket_arn}/${var.account_role_name}",
+      "${module.s3_tfstate_backend_primary.s3_bucket_arn}/${var.account_role_name}/*",
     ]
     condition {
       test     = "StringNotEquals"
@@ -44,7 +44,7 @@ data "aws_iam_policy_document" "s3_tfstate_backend_primary" {
         [
           "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
           "${module.iam_role_tfstate_s3_region_replicate.arn}",
-          "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
+          "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.account_role_name}",
         ],
         [for user in module.iam_user_breakglass : user.arn]
       )
@@ -60,8 +60,8 @@ data "aws_iam_policy_document" "s3_tfstate_backend_primary" {
     }
     actions = ["s3:*"]
     resources = [
-      "${module.s3_tfstate_backend_primary.s3_bucket_arn}/${var.admin_user_names.admin}",
-      "${module.s3_tfstate_backend_primary.s3_bucket_arn}/${var.admin_user_names.admin}/*",
+      "${module.s3_tfstate_backend_primary.s3_bucket_arn}/${var.admin_role_name}",
+      "${module.s3_tfstate_backend_primary.s3_bucket_arn}/${var.admin_role_name}/*",
     ]
     condition {
       test     = "StringNotEquals"
@@ -70,8 +70,8 @@ data "aws_iam_policy_document" "s3_tfstate_backend_primary" {
         [
           "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
           "${module.iam_role_tfstate_s3_region_replicate.arn}",
-          "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.superadmin}",
-          "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_user_names.admin}",
+          "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.account_role_name}",
+          "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_role_name}",
         ],
         [for user in module.iam_user_breakglass : user.arn]
       )

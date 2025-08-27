@@ -1,38 +1,39 @@
 locals {
-  cockydevops_com_prd = "cockydevops.com"
+  cockydevops_com = "cockydevops.com"
+  cockydevops_com_hyphen = replace(local.cockydevops_com, "/\\./", "-")
 }
 
 resource "aws_route53_zone" "cockydevops_com_prd" {
   provider = aws.network_prd
 
-  name = local.cockydevops_com_prd
+  name = local.cockydevops_com
 }
 
-resource "aws_ram_resource_share" "cockydevops_com_prd" {
-  provider = aws.network_prd
+# resource "aws_ram_resource_share" "cockydevops_com_prd" {
+#   provider = aws.network_prd
 
-  name                      = local.cockydevops_com_prd
-  allow_external_principals = false
-}
+#   name                      = local.cockydevops_com_hyphen
+#   allow_external_principals = false
+# }
 
 # resource "aws_route53profiles_profile" "cockydevops_com_prd" {
 #   provider = aws.network_prd
 
-#   name = local.cockydevops_com_prd
+#   name = local.cockydevops_com_hyphen
 # }
 
 # resource "aws_route53profiles_resource_association" "cockydevops_com_prd" {
 #   provider = aws.network_prd
 
-#   name         = local.cockydevops_com_prd
+#   name         = aws_route53profiles_profile.cockydevops_com_prd.name
 #   profile_id   = aws_route53profiles_profile.cockydevops_com_prd.id
-#   resource_arn = aws_route53_zone.cockydevops_com_prd.arn
+#   resource_arn = aws_route53profiles_profile.cockydevops_com_prd.arn
 # }
 
 # resource "aws_ram_resource_association" "cockydevops_com_prd_workload" {
 #   provider = aws.network_prd
 
-#   resource_arn       = aws_route53_zone.cockydevops_com_prd.arn
+#   resource_arn       = aws_route53profiles_profile.cockydevops_com_prd.arn
 #   resource_share_arn = aws_ram_resource_share.cockydevops_com_prd.arn
 # }
 
