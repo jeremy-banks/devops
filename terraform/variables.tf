@@ -211,7 +211,7 @@ variable "this_slug" {
       var.this_slug != "" &&                       #not empty
       can(regex("^[a-zA-Z0-9-]+$", var.this_slug)) #only has alphanumerics and dashes
     )
-    error_message = "variable 'this_slug' must be defined, and contain alphanumerics and dashes only"
+    error_message = "variable 'this_slug' must be defined, and only contain alphanumerics and dashes"
   }
 }
 
@@ -277,7 +277,7 @@ variable "vpc_azs_number_used_network" {
 
   validation {
     condition     = var.vpc_azs_number_used_network >= 2 && var.vpc_azs_number_used_network <= 4
-    error_message = "this codebase supports 2, 3, or 4 availability zones"
+    error_message = "variable 'vpc_azs_number_used_network' must be 2, 3, or 4"
   }
 }
 
@@ -287,7 +287,7 @@ variable "vpc_azs_number_used" {
 
   validation {
     condition     = var.vpc_azs_number_used >= 2 && var.vpc_azs_number_used <= 4
-    error_message = "this codebase supports 2, 3, or 4 availability zones"
+    error_message = "variable 'vpc_azs_number_used' must be 2, 3, or 4"
   }
 }
 
@@ -302,10 +302,10 @@ variable "vpc_azs_primary" {
     # "az6", # zone does not exist
   ]
 
-  # validation {
-  #   condition     = alltrue([for az in var.azs_primary : can(regex("^us[a-z0-9]+-az[0-9]+$", az))])
-  #   error_message = "must be AWS AZ IDs like 'usw2-az1', not AZ names like 'us-east-1a'"
-  # }
+  validation {
+    condition     = alltrue([for az in var.vpc_azs_primary : can(regex("^az[1-6]$", az))])
+    error_message = "variable 'vpc_azs_primary' must be a list of strings matching 'azN' where N is the number 1 through 6"
+  }
 }
 
 variable "vpc_azs_failover" {
@@ -319,10 +319,10 @@ variable "vpc_azs_failover" {
     "az6",
   ]
 
-  # validation {
-  #   condition     = alltrue([for az in var.azs_failover : can(regex("^[a-z0-9-]+-az[0-9]+$", az))])
-  #   error_message = "must be AWS AZ IDs like 'usw2-az1' or 'sae1-az1', not AZ names like 'us-east-1a'"
-  # }
+  validation {
+    condition     = alltrue([for az in var.vpc_azs_failover : can(regex("^az[1-6]$", az))])
+    error_message = "variable 'vpc_azs_failover' must be a list of strings matching 'azN' where N is the number 1 through 6"
+  }
 }
 
 variable "vpc_cidr_primary" {
