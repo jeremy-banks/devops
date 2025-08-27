@@ -1,6 +1,6 @@
 module "s3_failover" {
   source    = "terraform-aws-modules/s3-bucket/aws"
-  version   = "5.4.0"
+  version   = "5.5.0"
   providers = { aws = aws.this_failover }
 
   bucket = local.resource_name_failover_globally_unique

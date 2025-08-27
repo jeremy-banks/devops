@@ -2,7 +2,7 @@ provider "aws" {
   alias   = "this"
   profile = var.cli_profile_name
   region  = var.region_primary.full
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.product_a_prd}:role/${var.provider_role_name}" }
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.workload_product_a_prd}:role/${var.provider_role_name}" }
   default_tags { tags = local.default_tags_map }
 }
 
@@ -10,7 +10,7 @@ provider "aws" {
   alias   = "this_failover"
   profile = var.cli_profile_name
   region  = var.region_failover.full
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.product_a_prd}:role/${var.provider_role_name}" }
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.workload_product_a_prd}:role/${var.provider_role_name}" }
   default_tags { tags = local.default_tags_map }
 }
 
@@ -201,6 +201,6 @@ data "aws_ec2_transit_gateway_peering_attachment" "tgw_peer_failover" {
 }
 
 locals {
-  vpc_cidr_primary  = var.vpc_cidr_infrastructure.product_a_prd_primary
-  vpc_cidr_failover = var.vpc_cidr_infrastructure.product_a_prd_failover
+  vpc_cidr_primary  = var.vpc_cidr_infrastructure.workload_product_a_prd_primary
+  vpc_cidr_failover = var.vpc_cidr_infrastructure.workload_product_a_prd_failover
 }

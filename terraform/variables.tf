@@ -7,15 +7,15 @@ variable "account_id" {
     security_tooling_prd = "000000000000"
     shared_services_prd  = "000000000000"
 
-    sdlc_dev = "000000000000"
+    sdlc_dev = "v"
     sdlc_prd = "000000000000"
     sdlc_stg = "000000000000"
     sdlc_tst = "000000000000"
 
-    product_a_dev = "000000000000"
-    product_a_prd = "000000000000"
-    product_a_stg = "000000000000"
-    product_a_tst = "000000000000"
+    workload_product_a_dev = "000000000000"
+    workload_product_a_prd = "000000000000"
+    workload_product_a_stg = "000000000000"
+    workload_product_a_tst = "000000000000"
   }
 }
 
@@ -30,7 +30,7 @@ variable "account_name_slug" {
 
     sdlc = "sdlc"
 
-    product_a = "product-a"
+    workload_product_a = "product-a"
   }
 }
 
@@ -63,14 +63,14 @@ variable "vpc_cidr_infrastructure" {
     sdlc_dev_primary  = "10.18.0.0/16"
     sdlc_dev_failover = "10.19.0.0/16"
 
-    product_a_prd_primary  = "10.20.0.0/16"
-    product_a_prd_failover = "10.21.0.0/16"
-    product_a_stg_primary  = "10.22.0.0/16"
-    product_a_stg_failover = "10.23.0.0/16"
-    product_a_tst_primary  = "10.24.0.0/16"
-    product_a_tst_failover = "10.25.0.0/16"
-    product_a_dev_primary  = "10.26.0.0/16"
-    product_a_dev_failover = "10.27.0.0/16"
+    workload_product_a_prd_primary  = "10.20.0.0/16"
+    workload_product_a_prd_failover = "10.21.0.0/16"
+    workload_product_a_stg_primary  = "10.22.0.0/16"
+    workload_product_a_stg_failover = "10.23.0.0/16"
+    workload_product_a_tst_primary  = "10.24.0.0/16"
+    workload_product_a_tst_failover = "10.25.0.0/16"
+    workload_product_a_dev_primary  = "10.26.0.0/16"
+    workload_product_a_dev_failover = "10.27.0.0/16"
 
     customer_a_prd_primary  = "10.28.0.0/16"
     customer_a_prd_failover = "10.29.0.0/16"
@@ -192,6 +192,11 @@ variable "account_role_name" {
 variable "admin_role_name" {
   type    = string
   default = "admin"
+}
+
+variable "breakglass_user_name" {
+  type    = string
+  default = "breakglass"
 }
 
 variable "provider_role_name" {

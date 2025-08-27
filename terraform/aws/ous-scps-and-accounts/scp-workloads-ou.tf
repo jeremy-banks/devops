@@ -126,6 +126,29 @@ data "aws_iam_policy_document" "workloads_ou" {
       values   = ["true"]
     }
   }
+
+  statement {
+    sid       = "DenyR53ChangesToEnvRecords"
+    effect    = "Deny"
+    actions   = ["route53:ChangeResourceRecordSets"]
+    resources = ["*"]
+    condition {
+      test     = "StringLike"
+      variable = "route53:ChangeResourceRecordSetsRecordNames"
+      values = [
+        "dev.*",
+        "tst.*",
+        "stg.*"
+      ]
+    }
+    condition {
+      test     = "StringNotLikeIfExists"
+      variable = "aws:PrincipalArn"
+      values = [
+        "arn:aws:iam::*:role/superadmin"
+      ]
+    }
+  }
 }
 
 resource "aws_organizations_policy" "workloads_ou" {

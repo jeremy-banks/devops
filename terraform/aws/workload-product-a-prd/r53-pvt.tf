@@ -13,7 +13,7 @@ resource "aws_route53_zone" "pvt_primary" {
 resource "aws_route53_zone" "pvt_failover" {
   provider = aws.this_failover
 
-  count = length(var.r53_zones_parents)
+  count = var.create_failover_region ? length(var.r53_zones_parents) : 0
 
   name = "pvt.${var.r53_zones_parents[count.index]}"
 

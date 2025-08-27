@@ -19,12 +19,6 @@ data "aws_iam_policy_document" "kms" {
       identifiers = ["*"]
     }
     actions = [
-      "kms:DescribeKey",
-      "kms:Decrypt",
-      "kms:DescribeKey",
-      "kms:Encrypt",
-      "kms:GenerateDataKey*",
-      "kms:ReEncrypt*",
       "kms:Decrypt",
       "kms:DeriveSharedSecret",
       "kms:DescribeKey",
@@ -32,7 +26,6 @@ data "aws_iam_policy_document" "kms" {
       "kms:GenerateDataKey*",
       "kms:GenerateMac",
       "kms:GetPublicKey",
-      "kms:ReEncrypt*",
       "kms:ReEncrypt*",
       "kms:Sign",
       "kms:Verify",

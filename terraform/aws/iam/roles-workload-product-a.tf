@@ -1,7 +1,7 @@
-module "iam_assumable_roles_product_a_prd" {
+module "iam_assumable_roles_workload_product_a_prd" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-role"
   version   = "6.2.0"
-  providers = { aws = aws.product_a_prd }
+  providers = { aws = aws.workload_product_a_prd }
 
   for_each = {
     "${var.admin_role_name}" = {
@@ -34,10 +34,10 @@ module "iam_assumable_roles_product_a_prd" {
   policies = each.value.policies
 }
 
-module "iam_assumable_roles_product_a_stg" {
+module "iam_assumable_roles_workload_product_a_stg" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-role"
   version   = "6.2.0"
-  providers = { aws = aws.product_a_stg }
+  providers = { aws = aws.workload_product_a_stg }
 
   for_each = {
     "${var.admin_role_name}" = {
@@ -70,10 +70,10 @@ module "iam_assumable_roles_product_a_stg" {
   policies = each.value.policies
 }
 
-module "iam_assumable_roles_product_a_tst" {
+module "iam_assumable_roles_workload_product_a_tst" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-role"
   version   = "6.2.0"
-  providers = { aws = aws.product_a_tst }
+  providers = { aws = aws.workload_product_a_tst }
 
   for_each = {
     "${var.admin_role_name}" = {
@@ -106,10 +106,10 @@ module "iam_assumable_roles_product_a_tst" {
   policies = each.value.policies
 }
 
-module "iam_assumable_roles_product_a_dev" {
+module "iam_assumable_roles_workload_product_a_dev" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-role"
   version   = "6.1.2"
-  providers = { aws = aws.product_a_dev }
+  providers = { aws = aws.workload_product_a_dev }
 
   for_each = {
     "${var.admin_role_name}" = {

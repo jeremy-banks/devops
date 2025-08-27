@@ -1,6 +1,6 @@
 module "s3_primary" {
   source    = "terraform-aws-modules/s3-bucket/aws"
-  version   = "5.4.0"
+  version   = "5.5.0"
   providers = { aws = aws.this }
 
   bucket = local.resource_name_primary_globally_unique
