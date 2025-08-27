@@ -1,22 +1,22 @@
 locals {
   vpc_inspection_cidrsubnets_failover = (
-    var.azs_number_used_network == 4 ? cidrsubnets(var.vpc_cidr_infrastructure.central_inspection_failover, 3, 3, 3, 3, 12, 12, 12, 12) :
-    var.azs_number_used_network == 3 ? cidrsubnets(var.vpc_cidr_infrastructure.central_inspection_failover, 2, 2, 2, 12, 12, 12) :
-    var.azs_number_used_network == 2 ? cidrsubnets(var.vpc_cidr_infrastructure.central_inspection_failover, 2, 2, 12, 12) :
+    var.vpc_azs_number_used_network == 4 ? cidrsubnets(var.vpc_cidr_infrastructure.central_inspection_failover, 3, 3, 3, 3, 12, 12, 12, 12) :
+    var.vpc_azs_number_used_network == 3 ? cidrsubnets(var.vpc_cidr_infrastructure.central_inspection_failover, 2, 2, 2, 12, 12, 12) :
+    var.vpc_azs_number_used_network == 2 ? cidrsubnets(var.vpc_cidr_infrastructure.central_inspection_failover, 2, 2, 12, 12) :
     null
   )
 
   vpc_inspection_private_subnets_failover = (
-    var.azs_number_used_network == 4 ? [local.vpc_inspection_cidrsubnets_failover[0], local.vpc_inspection_cidrsubnets_failover[1], local.vpc_inspection_cidrsubnets_failover[2], local.vpc_inspection_cidrsubnets_failover[3]] :
-    var.azs_number_used_network == 3 ? [local.vpc_inspection_cidrsubnets_failover[0], local.vpc_inspection_cidrsubnets_failover[1], local.vpc_inspection_cidrsubnets_failover[2]] :
-    var.azs_number_used_network == 2 ? [local.vpc_inspection_cidrsubnets_failover[0], local.vpc_inspection_cidrsubnets_failover[1]] :
+    var.vpc_azs_number_used_network == 4 ? [local.vpc_inspection_cidrsubnets_failover[0], local.vpc_inspection_cidrsubnets_failover[1], local.vpc_inspection_cidrsubnets_failover[2], local.vpc_inspection_cidrsubnets_failover[3]] :
+    var.vpc_azs_number_used_network == 3 ? [local.vpc_inspection_cidrsubnets_failover[0], local.vpc_inspection_cidrsubnets_failover[1], local.vpc_inspection_cidrsubnets_failover[2]] :
+    var.vpc_azs_number_used_network == 2 ? [local.vpc_inspection_cidrsubnets_failover[0], local.vpc_inspection_cidrsubnets_failover[1]] :
     null
   )
 
   vpc_inspection_intra_subnets_failover = (
-    var.azs_number_used_network == 4 ? [local.vpc_inspection_cidrsubnets_failover[4], local.vpc_inspection_cidrsubnets_failover[5], local.vpc_inspection_cidrsubnets_failover[6], local.vpc_inspection_cidrsubnets_failover[7]] :
-    var.azs_number_used_network == 3 ? [local.vpc_inspection_cidrsubnets_failover[3], local.vpc_inspection_cidrsubnets_failover[4], local.vpc_inspection_cidrsubnets_failover[5]] :
-    var.azs_number_used_network == 2 ? [local.vpc_inspection_cidrsubnets_failover[2], local.vpc_inspection_cidrsubnets_failover[3]] :
+    var.vpc_azs_number_used_network == 4 ? [local.vpc_inspection_cidrsubnets_failover[4], local.vpc_inspection_cidrsubnets_failover[5], local.vpc_inspection_cidrsubnets_failover[6], local.vpc_inspection_cidrsubnets_failover[7]] :
+    var.vpc_azs_number_used_network == 3 ? [local.vpc_inspection_cidrsubnets_failover[3], local.vpc_inspection_cidrsubnets_failover[4], local.vpc_inspection_cidrsubnets_failover[5]] :
+    var.vpc_azs_number_used_network == 2 ? [local.vpc_inspection_cidrsubnets_failover[2], local.vpc_inspection_cidrsubnets_failover[3]] :
     null
   )
 
@@ -33,7 +33,7 @@ module "vpc_inspection_failover" {
   name = "${local.resource_name_failover}-vpc-central-inspection"
   cidr = var.vpc_cidr_infrastructure.central_inspection_failover
 
-  azs                 = slice(var.azs_failover, 0, var.azs_number_used_network)
+  azs                 = slice(local.vpc_az_ids_failover, 0, var.vpc_azs_number_used_network)
   private_subnets     = local.vpc_inspection_private_subnets_failover
   public_subnets      = []
   database_subnets    = []

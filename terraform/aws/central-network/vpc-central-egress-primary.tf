@@ -1,22 +1,22 @@
 locals {
   vpc_central_egress_cidrsubnets_primary = (
-    var.azs_number_used_network == 4 ? cidrsubnets(var.vpc_cidr_infrastructure.central_egress_primary, 3, 3, 3, 3, 12, 12, 12, 12) :
-    var.azs_number_used_network == 3 ? cidrsubnets(var.vpc_cidr_infrastructure.central_egress_primary, 2, 2, 2, 12, 12, 12) :
-    var.azs_number_used_network == 2 ? cidrsubnets(var.vpc_cidr_infrastructure.central_egress_primary, 2, 2, 12, 12) :
+    var.vpc_azs_number_used_network == 4 ? cidrsubnets(var.vpc_cidr_infrastructure.central_egress_primary, 3, 3, 3, 3, 12, 12, 12, 12) :
+    var.vpc_azs_number_used_network == 3 ? cidrsubnets(var.vpc_cidr_infrastructure.central_egress_primary, 2, 2, 2, 12, 12, 12) :
+    var.vpc_azs_number_used_network == 2 ? cidrsubnets(var.vpc_cidr_infrastructure.central_egress_primary, 2, 2, 12, 12) :
     null
   )
 
   vpc_central_egress_public_subnets_primary = (
-    var.azs_number_used_network == 4 ? [local.vpc_central_egress_cidrsubnets_primary[0], local.vpc_central_egress_cidrsubnets_primary[1], local.vpc_central_egress_cidrsubnets_primary[2], local.vpc_central_egress_cidrsubnets_primary[3]] :
-    var.azs_number_used_network == 3 ? [local.vpc_central_egress_cidrsubnets_primary[0], local.vpc_central_egress_cidrsubnets_primary[1], local.vpc_central_egress_cidrsubnets_primary[2]] :
-    var.azs_number_used_network == 2 ? [local.vpc_central_egress_cidrsubnets_primary[0], local.vpc_central_egress_cidrsubnets_primary[1]] :
+    var.vpc_azs_number_used_network == 4 ? [local.vpc_central_egress_cidrsubnets_primary[0], local.vpc_central_egress_cidrsubnets_primary[1], local.vpc_central_egress_cidrsubnets_primary[2], local.vpc_central_egress_cidrsubnets_primary[3]] :
+    var.vpc_azs_number_used_network == 3 ? [local.vpc_central_egress_cidrsubnets_primary[0], local.vpc_central_egress_cidrsubnets_primary[1], local.vpc_central_egress_cidrsubnets_primary[2]] :
+    var.vpc_azs_number_used_network == 2 ? [local.vpc_central_egress_cidrsubnets_primary[0], local.vpc_central_egress_cidrsubnets_primary[1]] :
     null
   )
 
   vpc_central_egress_intra_subnets_primary = (
-    var.azs_number_used_network == 4 ? [local.vpc_central_egress_cidrsubnets_primary[4], local.vpc_central_egress_cidrsubnets_primary[5], local.vpc_central_egress_cidrsubnets_primary[6], local.vpc_central_egress_cidrsubnets_primary[7]] :
-    var.azs_number_used_network == 3 ? [local.vpc_central_egress_cidrsubnets_primary[3], local.vpc_central_egress_cidrsubnets_primary[4], local.vpc_central_egress_cidrsubnets_primary[5]] :
-    var.azs_number_used_network == 2 ? [local.vpc_central_egress_cidrsubnets_primary[2], local.vpc_central_egress_cidrsubnets_primary[3]] :
+    var.vpc_azs_number_used_network == 4 ? [local.vpc_central_egress_cidrsubnets_primary[4], local.vpc_central_egress_cidrsubnets_primary[5], local.vpc_central_egress_cidrsubnets_primary[6], local.vpc_central_egress_cidrsubnets_primary[7]] :
+    var.vpc_azs_number_used_network == 3 ? [local.vpc_central_egress_cidrsubnets_primary[3], local.vpc_central_egress_cidrsubnets_primary[4], local.vpc_central_egress_cidrsubnets_primary[5]] :
+    var.vpc_azs_number_used_network == 2 ? [local.vpc_central_egress_cidrsubnets_primary[2], local.vpc_central_egress_cidrsubnets_primary[3]] :
     null
   )
 
@@ -31,7 +31,7 @@ module "vpc_central_egress_primary" {
   name = "${local.resource_name_primary}-vpc-central-egress"
   cidr = var.vpc_cidr_infrastructure.central_egress_primary
 
-  azs                 = slice(var.azs_primary, 0, var.azs_number_used_network)
+  azs                 = slice(local.vpc_az_ids_primary, 0, var.vpc_azs_number_used_network)
   private_subnets     = []
   public_subnets      = local.vpc_central_egress_public_subnets_primary
   database_subnets    = []

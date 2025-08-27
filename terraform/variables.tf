@@ -72,10 +72,10 @@ variable "vpc_cidr_infrastructure" {
     workload_product_a_dev_primary  = "10.26.0.0/16"
     workload_product_a_dev_failover = "10.27.0.0/16"
 
-    customer_a_prd_primary  = "10.28.0.0/16"
-    customer_a_prd_failover = "10.29.0.0/16"
-    customer_a_stg_primary  = "10.30.0.0/16"
-    customer_a_stg_failover = "10.31.0.0/16"
+    workload_customer_a_prd_primary  = "10.28.0.0/16"
+    workload_customer_a_prd_failover = "10.29.0.0/16"
+    workload_customer_a_stg_primary  = "10.30.0.0/16"
+    workload_customer_a_stg_failover = "10.31.0.0/16"
   }
 }
 
@@ -200,18 +200,6 @@ variable "billing_user_name" {
   default = "billing"
 }
 
-variable "org_service_access_principals" {
-  type = list(string)
-  default = [
-    "account.amazonaws.com",                  #account management
-    "cloudtrail.amazonaws.com",               #cloudtrail
-    "config-multiaccountsetup.amazonaws.com", #config
-    "config.amazonaws.com",                   #config
-    "ds.amazonaws.com",                       #enterprise active directory
-    "ram.amazonaws.com",                      #resource access manager
-  ]
-}
-
 variable "this_slug" {
   description = "used to programatically declare resource names"
   type        = string
@@ -237,22 +225,16 @@ variable "environment" {
   }
 }
 
-variable "tgw_asn" {
-  type = map(number)
-  default = {
-    primary  = 65434
-    failover = 65433
-  }
-}
-
-variable "create_failover_region_network" {
-  type    = bool
-  default = true
-}
-
-variable "create_failover_region" {
-  type    = bool
-  default = true
+variable "org_service_access_principals" {
+  type = list(string)
+  default = [
+    "account.amazonaws.com",                  #account management
+    "cloudtrail.amazonaws.com",               #cloudtrail
+    "config-multiaccountsetup.amazonaws.com", #config
+    "config.amazonaws.com",                   #config
+    "ds.amazonaws.com",                       #enterprise active directory
+    "ram.amazonaws.com",                      #resource access manager
+  ]
 }
 
 variable "region_primary" {
@@ -271,56 +253,76 @@ variable "region_failover" {
   }
 }
 
-variable "azs_number_used_network" {
+variable "create_failover_region_network" {
+  type    = bool
+  default = true
+}
+
+variable "create_failover_region" {
+  type    = bool
+  default = true
+}
+
+variable "tgw_asn" {
+  type = map(number)
+  default = {
+    primary  = 65434
+    failover = 65433
+  }
+}
+
+variable "vpc_azs_number_used_network" {
   type    = number
   default = 3
 
   validation {
-    condition     = var.azs_number_used_network >= 2 && var.azs_number_used_network <= 4
+    condition     = var.vpc_azs_number_used_network >= 2 && var.vpc_azs_number_used_network <= 4
     error_message = "this codebase supports 2, 3, or 4 availability zones"
   }
 }
 
-variable "azs_number_used" {
+variable "vpc_azs_number_used" {
   type    = number
   default = 3
 
   validation {
-    condition     = var.azs_number_used >= 2 && var.azs_number_used <= 4
+    condition     = var.vpc_azs_number_used >= 2 && var.vpc_azs_number_used <= 4
     error_message = "this codebase supports 2, 3, or 4 availability zones"
   }
 }
 
-variable "azs_primary" {
+variable "vpc_azs_primary" {
   type = list(string)
   default = [
-    "usw2-az1",
-    "usw2-az2",
-    "usw2-az3",
-    # "usw2-az4", # firewall not supported
+    "az1",
+    "az2",
+    "az3",
+    # "az4", # firewall not supported
+    # "az5", # zone does not exist
+    # "az6", # zone does not exist
   ]
 
-  validation {
-    condition     = alltrue([for az in var.azs_primary : can(regex("^us[a-z0-9]+-az[0-9]+$", az))])
-    error_message = "must be AWS AZ IDs like 'usw2-az1', not AZ names like 'us-east-1a'"
-  }
+  # validation {
+  #   condition     = alltrue([for az in var.azs_primary : can(regex("^us[a-z0-9]+-az[0-9]+$", az))])
+  #   error_message = "must be AWS AZ IDs like 'usw2-az1', not AZ names like 'us-east-1a'"
+  # }
 }
 
-variable "azs_failover" {
+variable "vpc_azs_failover" {
   type = list(string)
   default = [
-    "use1-az1",
-    "use1-az2",
-    # "use1-az3", # firewall not supported
-    "use1-az4",
-    "use1-az5",
-    "use1-az6",
+    "az1",
+    "az2",
+    # "az3", # firewall not supported
+    "az4",
+    "az5",
+    "az6",
   ]
 
-  validation {
-    condition     = alltrue([for az in var.azs_failover : can(regex("^[a-z0-9-]+-az[0-9]+$", az))])
-    error_message = "must be AWS AZ IDs like 'usw2-az1' or 'sae1-az1', not AZ names like 'us-east-1a'"
-  }
+  # validation {
+  #   condition     = alltrue([for az in var.azs_failover : can(regex("^[a-z0-9-]+-az[0-9]+$", az))])
+  #   error_message = "must be AWS AZ IDs like 'usw2-az1' or 'sae1-az1', not AZ names like 'us-east-1a'"
+  # }
 }
 
 variable "vpc_cidr_primary" {
@@ -341,26 +343,6 @@ variable "create_vpc_public_subnets" {
 variable "ntp_servers" {
   type    = list(string)
   default = ["169.254.169.123"]
-}
-
-variable "r53_zones_parents" {
-  type    = list(string)
-  default = null
-}
-
-variable "r53_zones_delegates_stg" {
-  type    = list(string)
-  default = null
-}
-
-variable "r53_zones_delegates_tst" {
-  type    = list(string)
-  default = null
-}
-
-variable "r53_zones_delegates_dev" {
-  type    = list(string)
-  default = null
 }
 
 variable "log_retention_days" {
@@ -388,6 +370,18 @@ locals {
   # company-project-region-env-slug-unique_id
   resource_name_primary_globally_unique  = lower("${var.company_name_abbr}-${local.resource_name_primary}-${local.unique_id}")
   resource_name_failover_globally_unique = lower("${var.company_name_abbr}-${local.resource_name_failover}-${local.unique_id}")
+
+  # this_prd = join("_", [replace(var.this_slug, "-", "_"), "prd"])
+  # this_stg = join("_", [replace(var.this_slug, "-", "_"), "stg"])
+  # this_tst = join("_", [replace(var.this_slug, "-", "_"), "tst"])
+  # this_dev = join("_", [replace(var.this_slug, "-", "_"), "dev"])
+
+  # this_snake          = join("_", ["workload", replace(var.this_slug, "-", "_"), var.environment])
+  # this_snake_primary  = join("_", ["workload", replace(var.this_slug, "-", "_"), var.environment, "primary"])
+  # this_snake_failover = join("_", ["workload", replace(var.this_slug, "-", "_"), var.environment, "failover"])
+
+  vpc_az_ids_primary  = [for az in var.vpc_azs_primary : "${var.region_primary.short}-${az}"]
+  vpc_az_ids_failover = [for az in var.vpc_azs_failover : "${var.region_failover.short}-${az}"]
 
   unique_id = substr(sha256("${var.unique_id_seed}${data.aws_caller_identity.this.account_id}"), 0, 8)
 
