@@ -80,8 +80,9 @@ data "aws_iam_policy_document" "s3_tfstate_backend_primary" {
 }
 
 module "s3_tfstate_backend_primary" {
-  source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.5.0"
+  source    = "terraform-aws-modules/s3-bucket/aws"
+  version   = "5.5.0"
+  providers = { aws = aws.management }
 
   bucket = local.resource_name_primary_globally_unique
 
@@ -119,6 +120,8 @@ module "s3_tfstate_backend_primary" {
 }
 
 resource "aws_s3_bucket_replication_configuration" "s3_tfstate_backend_primary" {
+  provider = aws.management
+
   role   = module.iam_role_tfstate_s3_region_replicate.arn
   bucket = module.s3_tfstate_backend_primary.s3_bucket_id
 

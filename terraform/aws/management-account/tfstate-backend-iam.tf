@@ -33,8 +33,9 @@ data "aws_iam_policy_document" "s3_tfstate_region_replicate" {
 }
 
 module "iam_policy_tfstate_s3_region_replicate" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "6.2.0"
+  source    = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version   = "6.2.0"
+  providers = { aws = aws.management }
 
   name = "${local.resource_name_primary}-crr"
 
@@ -42,8 +43,9 @@ module "iam_policy_tfstate_s3_region_replicate" {
 }
 
 module "iam_role_tfstate_s3_region_replicate" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role"
-  version = "6.2.0"
+  source    = "terraform-aws-modules/iam/aws//modules/iam-role"
+  version   = "6.2.0"
+  providers = { aws = aws.management }
 
   name            = "${local.resource_name_primary}-crr"
   use_name_prefix = false

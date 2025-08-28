@@ -13,8 +13,9 @@ data "aws_iam_policy_document" "kms_tfstate_backend" {
 }
 
 module "kms_tfstate_backend_primary" {
-  source  = "terraform-aws-modules/kms/aws"
-  version = "4.0.0"
+  source    = "terraform-aws-modules/kms/aws"
+  version   = "4.0.0"
+  providers = { aws = aws.management }
 
   deletion_window_in_days = 30
   enable_key_rotation     = true
