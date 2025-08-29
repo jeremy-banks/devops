@@ -15,7 +15,7 @@ resource "aws_s3_bucket" "network_firewall_logs_failover" {
 
   count = var.create_failover_region_network ? 1 : 0
 
-  bucket        = local.resource_name_failover_globally_unique
+  bucket        = local.resource_name_globally_unique_failover
   force_destroy = true
 
   #   tags = local.tags

@@ -368,8 +368,8 @@ locals {
   resource_name_failover = lower("${var.project_name_abbr}-${var.region_failover.short}-${var.environment}-${var.this_slug}")
 
   # company-project-region-env-slug-unique_id
-  resource_name_primary_globally_unique  = lower("${var.company_name_abbr}-${local.resource_name_primary}-${local.unique_id}")
-  resource_name_failover_globally_unique = lower("${var.company_name_abbr}-${local.resource_name_failover}-${local.unique_id}")
+  resource_name_globally_unique_primary  = lower("${var.company_name_abbr}-${local.resource_name_primary}-${local.unique_id}")
+  resource_name_globally_unique_failover = lower("${var.company_name_abbr}-${local.resource_name_failover}-${local.unique_id}")
 
   vpc_az_ids_primary  = [for az in var.vpc_azs_primary : "${var.region_primary.short}-${az}"]
   vpc_az_ids_failover = [for az in var.vpc_azs_failover : "${var.region_failover.short}-${az}"]

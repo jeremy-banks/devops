@@ -83,10 +83,10 @@ data "aws_iam_policy_document" "s3_tfstate_backend_failover" {
 
 module "s3_tfstate_backend_failover" {
   source    = "terraform-aws-modules/s3-bucket/aws"
-  version   = "5.5.0"
+  version   = "5.7.0"
   providers = { aws = aws.management_failover }
 
-  bucket = local.resource_name_failover_globally_unique
+  bucket = local.resource_name_globally_unique_failover
 
   force_destroy = true
 

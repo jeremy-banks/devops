@@ -18,10 +18,10 @@ data "aws_iam_policy_document" "iam_user_admin" {
     effect  = "Allow"
     actions = ["s3:*"]
     resources = [
-      "arn:aws:s3:::${local.resource_name_primary_globally_unique}/${var.admin_role_name}",
-      "arn:aws:s3:::${local.resource_name_primary_globally_unique}/${var.admin_role_name}/*",
-      "arn:aws:s3:::${local.resource_name_failover_globally_unique}/${var.admin_role_name}",
-      "arn:aws:s3:::${local.resource_name_failover_globally_unique}/${var.admin_role_name}/*",
+      "arn:aws:s3:::${local.resource_name_globally_unique_primary}/${var.admin_role_name}",
+      "arn:aws:s3:::${local.resource_name_globally_unique_primary}/${var.admin_role_name}/*",
+      "arn:aws:s3:::${local.resource_name_globally_unique_failover}/${var.admin_role_name}",
+      "arn:aws:s3:::${local.resource_name_globally_unique_failover}/${var.admin_role_name}/*",
     ]
   }
 
@@ -50,7 +50,7 @@ data "aws_iam_policy_document" "iam_user_admin" {
 
 module "iam_user_admin_policy" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version   = "6.2.0"
+  version   = "6.2.1"
   providers = { aws = aws.management }
 
   name = var.admin_role_name
@@ -60,7 +60,7 @@ module "iam_user_admin_policy" {
 
 module "iam_user_admin" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-user"
-  version   = "6.2.0"
+  version   = "6.2.1"
   providers = { aws = aws.management }
 
   name = var.admin_role_name

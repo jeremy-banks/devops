@@ -11,7 +11,7 @@ resource "aws_cloudwatch_log_group" "logs_primary" {
 resource "aws_s3_bucket" "network_firewall_logs_primary" {
   provider = aws.network_prd
 
-  bucket        = local.resource_name_primary_globally_unique
+  bucket        = local.resource_name_globally_unique_primary
   force_destroy = true
 
   #   tags = local.tags

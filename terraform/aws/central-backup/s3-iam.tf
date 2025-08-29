@@ -12,10 +12,10 @@ data "aws_iam_policy_document" "s3_crr" {
       "s3:ReplicateTags",
     ]
     resources = [
-      "arn:aws:s3:::${local.resource_name_primary_globally_unique}",
-      "arn:aws:s3:::${local.resource_name_primary_globally_unique}/*",
-      "arn:aws:s3:::${local.resource_name_failover_globally_unique}",
-      "arn:aws:s3:::${local.resource_name_failover_globally_unique}/*",
+      "arn:aws:s3:::${local.resource_name_globally_unique_primary}",
+      "arn:aws:s3:::${local.resource_name_globally_unique_primary}/*",
+      "arn:aws:s3:::${local.resource_name_globally_unique_failover}",
+      "arn:aws:s3:::${local.resource_name_globally_unique_failover}/*",
     ]
   }
   statement {

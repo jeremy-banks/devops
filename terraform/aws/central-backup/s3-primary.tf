@@ -29,7 +29,7 @@ module "s3_primary" {
   version   = "5.5.0"
   providers = { aws = aws.shared_services_prd }
 
-  bucket = local.resource_name_primary_globally_unique
+  bucket = local.resource_name_globally_unique_primary
 
   force_destroy = true
 

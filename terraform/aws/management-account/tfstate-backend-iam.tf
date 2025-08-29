@@ -14,10 +14,10 @@ data "aws_iam_policy_document" "s3_tfstate_region_replicate" {
       "s3:ReplicateTags",
     ]
     resources = [
-      "arn:aws:s3:::${local.resource_name_primary_globally_unique}",
-      "arn:aws:s3:::${local.resource_name_primary_globally_unique}/*",
-      "arn:aws:s3:::${local.resource_name_failover_globally_unique}",
-      "arn:aws:s3:::${local.resource_name_failover_globally_unique}/*",
+      "arn:aws:s3:::${local.resource_name_globally_unique_primary}",
+      "arn:aws:s3:::${local.resource_name_globally_unique_primary}/*",
+      "arn:aws:s3:::${local.resource_name_globally_unique_failover}",
+      "arn:aws:s3:::${local.resource_name_globally_unique_failover}/*",
     ]
   }
   statement {
@@ -36,7 +36,7 @@ data "aws_iam_policy_document" "s3_tfstate_region_replicate" {
 
 module "iam_policy_tfstate_s3_region_replicate" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version   = "6.2.0"
+  version   = "6.2.1"
   providers = { aws = aws.management }
 
   name = "${local.resource_name_primary}-crr"
@@ -46,7 +46,7 @@ module "iam_policy_tfstate_s3_region_replicate" {
 
 module "iam_role_tfstate_s3_region_replicate" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-role"
-  version   = "6.2.0"
+  version   = "6.2.1"
   providers = { aws = aws.management }
 
   name            = "${local.resource_name_primary}-crr"
