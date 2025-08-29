@@ -86,7 +86,7 @@ module "s3_tfstate_backend_primary" {
   version   = "5.7.0"
   providers = { aws = aws.management }
 
-  bucket = local.resource_name_unique.primary
+  bucket = local.resource_name_full_unique.primary
 
   force_destroy = true
 

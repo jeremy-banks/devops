@@ -1,5 +1,5 @@
 data "aws_iam_policy_document" "s3_tfstate_backend_failover" {
-  provider = aws.management
+  provider = aws.management_failover
 
   statement {
     sid    = "denyUnintendedAccessToBucket"
@@ -86,7 +86,7 @@ module "s3_tfstate_backend_failover" {
   version   = "5.7.0"
   providers = { aws = aws.management_failover }
 
-  bucket = local.resource_name_unique.failover
+  bucket = local.resource_name_full_unique.failover
 
   force_destroy = true
 

@@ -14,10 +14,10 @@ data "aws_iam_policy_document" "iam_policy_tfstate_backend_crr" {
       "s3:ReplicateTags",
     ]
     resources = [
-      "arn:aws:s3:::${local.resource_name_unique.primary}",
-      "arn:aws:s3:::${local.resource_name_unique.primary}/*",
-      "arn:aws:s3:::${local.resource_name_unique.failover}",
-      "arn:aws:s3:::${local.resource_name_unique.failover}/*",
+      "arn:aws:s3:::${local.resource_name_full_unique.primary}",
+      "arn:aws:s3:::${local.resource_name_full_unique.primary}/*",
+      "arn:aws:s3:::${local.resource_name_full_unique.failover}",
+      "arn:aws:s3:::${local.resource_name_full_unique.failover}/*",
     ]
   }
   statement {

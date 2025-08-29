@@ -103,11 +103,13 @@ variable "company_name_abbr" {
 
   validation {
     condition = (
-      var.this_slug != null &&                         # not undefined
-      var.this_slug != "" &&                           # not empty
+      var.company_name_abbr != null &&      # not undefined
+      var.company_name_abbr != "" &&        # not empty
+      length(var.company_name_abbr) >= 1 && # between 1-6 characters
+      length(var.company_name_abbr) <= 6 &&
       can(regex("^[a-z0-9]+$", var.company_name_abbr)) # only lowercase letters and numbers
     )
-    error_message = "variable 'company_name_abbr' must be defined, and consist only of lowercase letters and numbers"
+    error_message = "variable 'company_name_abbr' must be defined, consist only of lowercase letters and numbers, and 1-6 characters in length"
   }
 }
 
@@ -120,11 +122,13 @@ variable "team_name_abbr" {
 
   validation {
     condition = (
-      var.this_slug != null &&                      # not undefined
-      var.this_slug != "" &&                        # not empty
+      var.team_name_abbr != null &&      # not undefined
+      var.team_name_abbr != "" &&        # not empty
+      length(var.team_name_abbr) >= 1 && # between 1-6 characters
+      length(var.team_name_abbr) <= 6 &&
       can(regex("^[a-z0-9]+$", var.team_name_abbr)) # only lowercase letters and numbers
     )
-    error_message = "variable 'team_name_abbr' must be defined, and consist only of lowercase letters and numbers"
+    error_message = "variable 'team_name_abbr' must be defined, consist only of lowercase letters and numbers, and 1-6 characters in length"
   }
 }
 
@@ -137,11 +141,13 @@ variable "project_name_abbr" {
 
   validation {
     condition = (
-      var.this_slug != null &&                         # not undefined
-      var.this_slug != "" &&                           # not empty
+      var.project_name_abbr != null &&      # not undefined
+      var.project_name_abbr != "" &&        # not empty
+      length(var.project_name_abbr) >= 1 && # between 1-6 characters
+      length(var.project_name_abbr) <= 6 &&
       can(regex("^[a-z0-9]+$", var.project_name_abbr)) # only lowercase letters and numbers
     )
-    error_message = "variable 'project_name_abbr' must be defined, and consist only of lowercase letters and numbers"
+    error_message = "variable 'project_name_abbr' must be defined, consist only of lowercase letters and numbers, and 1-6 characters in length"
   }
 }
 
@@ -356,7 +362,7 @@ locals {
   vpc_az_ids_primary  = [for az in var.vpc_azs_primary : "${var.region_primary.short}-${az}"]
   vpc_az_ids_failover = [for az in var.vpc_azs_failover : "${var.region_failover.short}-${az}"]
 
-  unique_id = substr(sha256("${var.unique_id_seed}${data.aws_caller_identity.this.account_id}"), 0, 5)
+  unique_id = substr(sha256("${var.unique_id_seed}${data.aws_caller_identity.this.account_id}"), 0, 6)
 
   number_words = { 1 = "one", 2 = "two", 3 = "three", 4 = "four", 5 = "five", 6 = "six", 7 = "seven", 8 = "eight", 9 = "nine", 10 = "ten", }
 
