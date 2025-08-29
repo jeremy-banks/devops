@@ -81,142 +81,116 @@ variable "vpc_cidr_infrastructure" {
 
 variable "org_owner_email_prefix" {
   description = "the 'jeremybankstech' in 'jeremybankstech+awscloud@gmail.com'"
-  type        = string
   default     = "jeremybankstech"
 }
 
 variable "org_owner_email_plus_address" {
   description = "the 'awscloud' in 'jeremybankstech+awscloud@gmail.com'"
-  type        = string
   default     = "awscloud"
 }
 
 variable "org_owner_email_domain_tld" {
   description = "the 'gmail.com' in 'jeremybankstech+awscloud@gmail.com'"
-  type        = string
   default     = "gmail.com"
 }
 
 variable "company_name" {
-  description = "name of the company"
-  type        = string
-  default     = "Genovus Labs"
+  default = "Genovus Labs"
 }
 
 variable "company_name_abbr" {
-  description = "abbreviated name of the company"
-  type        = string
-  default     = "gn"
+  default = "gn"
 
   validation {
     condition = (
       var.this_slug != null &&                         # not undefined
       var.this_slug != "" &&                           # not empty
-      can(regex("^[a-z0-9]+$", var.company_name_abbr)) # alphanumerics only
+      can(regex("^[a-z0-9]+$", var.company_name_abbr)) # only lowercase letters and numbers
     )
-    error_message = "variable 'company_name_abbr' must be defined, and contain alphanumerics and dashes only"
+    error_message = "variable 'company_name_abbr' must be defined, and consist only of lowercase letters and numbers"
   }
 }
 
 variable "team_name" {
-  description = "name of the team"
-  type        = string
-  default     = "devops"
+  default = "devops"
 }
 
 variable "team_name_abbr" {
-  type    = string
   default = "devops"
 
   validation {
     condition = (
       var.this_slug != null &&                      # not undefined
       var.this_slug != "" &&                        # not empty
-      can(regex("^[a-z0-9]+$", var.team_name_abbr)) # alphanumerics only
+      can(regex("^[a-z0-9]+$", var.team_name_abbr)) # only lowercase letters and numbers
     )
-    error_message = "variable 'team_name_abbr' must be defined, and contain alphanumerics and dashes only"
+    error_message = "variable 'team_name_abbr' must be defined, and consist only of lowercase letters and numbers"
   }
 }
 
 variable "project_name" {
-  description = "name of the project"
-  type        = string
-  default     = "Another Final Test Bed"
+  default = "Another Final Test Bed"
 }
 
 variable "project_name_abbr" {
-  type    = string
   default = "aftb"
 
   validation {
     condition = (
       var.this_slug != null &&                         # not undefined
       var.this_slug != "" &&                           # not empty
-      can(regex("^[a-z0-9]+$", var.project_name_abbr)) # alphanumerics only
+      can(regex("^[a-z0-9]+$", var.project_name_abbr)) # only lowercase letters and numbers
     )
-    error_message = "variable 'project_name_abbr' must be defined, and contain alphanumerics and dashes only"
+    error_message = "variable 'project_name_abbr' must be defined, and consist only of lowercase letters and numbers"
   }
 }
 
 variable "cost_center" {
-  description = "for billing"
-  type        = string
-  default     = "1-EU"
+  default = "1-EU"
 }
 
 variable "resource_owner_email" {
-  description = "point of escalation for ownership"
-  type        = string
-  default     = null
+  default = null
 }
 
 variable "cli_profile_name" {
-  type    = string
   default = "admin"
 }
 
 variable "provider_role_name" {
-  type    = string
   default = "admin"
 }
 
 variable "account_role_name" {
-  type    = string
   default = "superadmin"
 }
 
 variable "admin_role_name" {
-  type    = string
   default = "admin"
 }
 
 variable "breakglass_user_name" {
-  type    = string
   default = "breakglass"
 }
 
 variable "billing_user_name" {
-  type    = string
   default = "billing"
 }
 
 variable "this_slug" {
-  description = "used to programatically declare resource names"
-  type        = string
-  default     = null
+  default = null
 
   validation {
     condition = (
-      var.this_slug != null &&                     # not undefined
-      var.this_slug != "" &&                       # not empty
-      can(regex("^[a-zA-Z0-9-]+$", var.this_slug)) # only has alphanumerics and dashes
+      var.this_slug != null &&                  # not undefined
+      var.this_slug != "" &&                    # not empty
+      can(regex("^[a-z0-9-]+$", var.this_slug)) # only lowercase letters, numbers, and dashes
     )
-    error_message = "variable 'this_slug' must be defined, and only contain alphanumerics and dashes"
+    error_message = "variable 'this_slug' must be defined, and consist only of lowercase letters, numbers, and dashes"
   }
 }
 
 variable "environment" {
-  type    = string
   default = "dev"
 
   validation {
@@ -254,12 +228,10 @@ variable "region_failover" {
 }
 
 variable "create_failover_region_network" {
-  type    = bool
   default = true
 }
 
 variable "create_failover_region" {
-  type    = bool
   default = true
 }
 
@@ -272,7 +244,6 @@ variable "tgw_asn" {
 }
 
 variable "vpc_azs_number_used_network" {
-  type    = number
   default = 3
 
   validation {
@@ -282,7 +253,6 @@ variable "vpc_azs_number_used_network" {
 }
 
 variable "vpc_azs_number_used" {
-  type    = number
   default = 3
 
   validation {
@@ -326,17 +296,14 @@ variable "vpc_azs_failover" {
 }
 
 variable "vpc_cidr_primary" {
-  type    = string
   default = null
 }
 
 variable "vpc_cidr_failover" {
-  type    = string
   default = null
 }
 
 variable "create_vpc_public_subnets" {
-  type    = bool
   default = false
 }
 
@@ -346,45 +313,50 @@ variable "ntp_servers" {
 }
 
 variable "log_retention_days" {
-  type    = number
   default = 2192 # six years per HIPAA NIST SP 800-66 section 4.22
 }
 
 variable "iam_immutable_tag_key" {
-  description = "key used to prevent users from changing critical immutable infrastructure"
-  type        = string
-  default     = "immutable"
+  default = "immutable"
 }
 
 variable "unique_id_seed" {
-  default = "foo"
+  default = "barFooWorldHello"
 }
 
 locals {
-  org_owner_email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}@${var.org_owner_email_domain_tld}"
+  # project-env-region-slug
+  resource_name = {
+    primary  = "${var.project_name_abbr}-${var.environment}-${var.region_primary.short}-${var.this_slug}"
+    failover = "${var.project_name_abbr}-${var.environment}-${var.region_failover.short}-${var.this_slug}"
+    global   = "${var.project_name_abbr}-${var.environment}-${var.this_slug}"
+  }
 
-  # project-region-env-slug
-  resource_name_primary  = lower("${var.project_name_abbr}-${var.region_primary.short}-${var.environment}-${var.this_slug}")
-  resource_name_failover = lower("${var.project_name_abbr}-${var.region_failover.short}-${var.environment}-${var.this_slug}")
-
-  # company-project-region-env-slug-unique_id
-  resource_name_globally_unique_primary  = lower("${var.company_name_abbr}-${local.resource_name_primary}-${local.unique_id}")
-  resource_name_globally_unique_failover = lower("${var.company_name_abbr}-${local.resource_name_failover}-${local.unique_id}")
+  # company-team-project-env-region-slug
+  resource_name_full = {
+    primary  = "${var.company_name_abbr}-${var.team_name_abbr}-${local.resource_name.primary}"
+    failover = "${var.company_name_abbr}-${var.team_name_abbr}-${local.resource_name.failover}"
+    global   = "${var.company_name_abbr}-${var.team_name_abbr}-${local.resource_name.global}"
+  }
 
   vpc_az_ids_primary  = [for az in var.vpc_azs_primary : "${var.region_primary.short}-${az}"]
   vpc_az_ids_failover = [for az in var.vpc_azs_failover : "${var.region_failover.short}-${az}"]
 
-  unique_id = substr(sha256("${var.unique_id_seed}${data.aws_caller_identity.this.account_id}"), 0, 8)
+  unique_id = substr(sha256("${var.unique_id_seed}${data.aws_caller_identity.this.account_id}"), 0, 5)
 
   number_words = { 1 = "one", 2 = "two", 3 = "three", 4 = "four", 5 = "five", 6 = "six", 7 = "seven", 8 = "eight", 9 = "nine", 10 = "ten", }
 
+  org_owner_email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}@${var.org_owner_email_domain_tld}"
+
   default_tags_map = {
-    "${var.company_name_abbr}:company"        = "${var.company_name}"
-    "${var.company_name_abbr}:team"           = "${var.team_name}"
-    "${var.company_name_abbr}:cost_center"    = "${var.cost_center}"
-    "${var.company_name_abbr}:project"        = "${var.project_name}"
-    "${var.company_name_abbr}:environment"    = "${var.environment}"
+    "${var.company_name_abbr}:company"     = "${var.company_name}"
+    "${var.company_name_abbr}:team"        = "${var.team_name}"
+    "${var.company_name_abbr}:project"     = "${var.project_name}"
+    "${var.company_name_abbr}:environment" = "${var.environment}"
+
     "${var.company_name_abbr}:resource_owner" = var.resource_owner_email != null ? "${var.resource_owner_email}" : "${local.org_owner_email}"
+
+    "${var.company_name_abbr}:cost_center" = "${var.cost_center}"
 
     "${var.company_name_abbr}:${var.iam_immutable_tag_key}" = "true"
   }
