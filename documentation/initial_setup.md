@@ -18,7 +18,7 @@ Make an email, update relevant files with your unique information, and begin dep
 1. Create an email address to use as org owner
    1. Ideally this mailbox should be shared by senior engineers
    1. `org_owner_email_prefix` "jeremybankstech"
-   1. `org_owner_email_plus_address` "onemoretestbed"
+   1. `org_owner_email_plus_address` "awscloud"
    1. `org_owner_email_domain_tld` "gmail.com"
 1. Add your company information
    1. `company_name` "photon craze" and `company_name_abbr` "pc"
