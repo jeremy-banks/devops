@@ -332,11 +332,25 @@ locals {
     global   = "${var.project_name_abbr}-${var.environment}-${var.this_slug}"
   }
 
+  # project-env-region-slug-unique
+  resource_name_unique = {
+    primary  = "${local.resource_name.primary}-${local.unique_id}"
+    failover = "${local.resource_name.failover}-${local.unique_id}"
+    global   = "${local.resource_name.global}-${local.unique_id}"
+  }
+
   # company-team-project-env-region-slug
   resource_name_full = {
     primary  = "${var.company_name_abbr}-${var.team_name_abbr}-${local.resource_name.primary}"
     failover = "${var.company_name_abbr}-${var.team_name_abbr}-${local.resource_name.failover}"
     global   = "${var.company_name_abbr}-${var.team_name_abbr}-${local.resource_name.global}"
+  }
+
+  # company-team-project-env-region-slug-unique
+  resource_name_full_unique = {
+    primary  = "${local.resource_name_full.primary}-${local.unique_id}"
+    failover = "${local.resource_name_full.failover}-${local.unique_id}"
+    global   = "${local.resource_name_full.global}-${local.unique_id}"
   }
 
   vpc_az_ids_primary  = [for az in var.vpc_azs_primary : "${var.region_primary.short}-${az}"]
