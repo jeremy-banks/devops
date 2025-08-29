@@ -36,7 +36,7 @@ data "aws_iam_policy_document" "iam_policy_tfstate_backend_crr" {
 
 module "iam_policy_tfstate_backend_crr" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version   = "6.2.1"
+  version   = "~> 6.2.1"
   providers = { aws = aws.management }
 
   name = "${local.resource_name.global}-crr"
@@ -46,7 +46,7 @@ module "iam_policy_tfstate_backend_crr" {
 
 module "iam_role_tfstate_backend_crr" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-role"
-  version   = "6.2.1"
+  version   = "~> 6.2.1"
   providers = { aws = aws.management }
 
   name            = "${local.resource_name.global}-crr"

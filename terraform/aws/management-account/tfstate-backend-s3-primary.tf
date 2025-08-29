@@ -83,7 +83,7 @@ data "aws_iam_policy_document" "s3_tfstate_backend_primary" {
 
 module "s3_tfstate_backend_primary" {
   source    = "terraform-aws-modules/s3-bucket/aws"
-  version   = "5.7.0"
+  version   = "~> 5.7.0"
   providers = { aws = aws.management }
 
   bucket = local.resource_name_full_unique.primary
