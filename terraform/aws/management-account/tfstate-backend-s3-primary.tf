@@ -19,7 +19,7 @@ data "aws_iam_policy_document" "s3_tfstate_backend_primary" {
       values = concat(
         [
           "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
-          "${module.iam_role_tfstate_s3_region_replicate.arn}",
+          "${module.iam_role_tfstate_backend_crr.arn}",
           "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.account_role_name}",
         ],
         [for user in module.iam_user_breakglass : user.arn]
@@ -45,7 +45,7 @@ data "aws_iam_policy_document" "s3_tfstate_backend_primary" {
       values = concat(
         [
           "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
-          "${module.iam_role_tfstate_s3_region_replicate.arn}",
+          "${module.iam_role_tfstate_backend_crr.arn}",
           "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.account_role_name}",
         ],
         [for user in module.iam_user_breakglass : user.arn]
@@ -71,7 +71,7 @@ data "aws_iam_policy_document" "s3_tfstate_backend_primary" {
       values = concat(
         [
           "arn:aws:iam::${data.aws_caller_identity.this.id}:root",
-          "${module.iam_role_tfstate_s3_region_replicate.arn}",
+          "${module.iam_role_tfstate_backend_crr.arn}",
           "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.account_role_name}",
           "arn:aws:iam::${data.aws_caller_identity.this.id}:user/${var.admin_role_name}",
         ],
@@ -86,7 +86,7 @@ module "s3_tfstate_backend_primary" {
   version   = "5.7.0"
   providers = { aws = aws.management }
 
-  bucket = local.resource_name_globally_unique_primary
+  bucket = local.resource_name_unique.primary
 
   force_destroy = true
 
@@ -124,7 +124,7 @@ module "s3_tfstate_backend_primary" {
 resource "aws_s3_bucket_replication_configuration" "s3_tfstate_backend_primary" {
   provider = aws.management
 
-  role   = module.iam_role_tfstate_s3_region_replicate.arn
+  role   = module.iam_role_tfstate_backend_crr.arn
   bucket = module.s3_tfstate_backend_primary.s3_bucket_id
 
   rule {

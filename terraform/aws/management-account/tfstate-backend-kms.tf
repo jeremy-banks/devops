@@ -25,7 +25,7 @@ module "kms_tfstate_backend_primary" {
   key_usage               = "ENCRYPT_DECRYPT"
   multi_region            = true
 
-  aliases = ["${local.resource_name_primary}"]
+  aliases = ["${local.resource_name.primary}"]
 
   policy = data.aws_iam_policy_document.kms_tfstate_backend.json
 }
@@ -39,7 +39,7 @@ module "kms_tfstate_backend_failover" {
   create_replica          = true
   primary_key_arn         = module.kms_tfstate_backend_primary.key_arn
 
-  aliases = ["${local.resource_name_failover}"]
+  aliases = ["${local.resource_name.failover}"]
 
   policy = data.aws_iam_policy_document.kms_tfstate_backend.json
 }

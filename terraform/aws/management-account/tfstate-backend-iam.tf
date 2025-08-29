@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "s3_tfstate_region_replicate" {
+data "aws_iam_policy_document" "iam_policy_tfstate_backend_crr" {
   provider = aws.management
 
   statement {
@@ -14,10 +14,10 @@ data "aws_iam_policy_document" "s3_tfstate_region_replicate" {
       "s3:ReplicateTags",
     ]
     resources = [
-      "arn:aws:s3:::${local.resource_name_globally_unique_primary}",
-      "arn:aws:s3:::${local.resource_name_globally_unique_primary}/*",
-      "arn:aws:s3:::${local.resource_name_globally_unique_failover}",
-      "arn:aws:s3:::${local.resource_name_globally_unique_failover}/*",
+      "arn:aws:s3:::${local.resource_name_unique.primary}",
+      "arn:aws:s3:::${local.resource_name_unique.primary}/*",
+      "arn:aws:s3:::${local.resource_name_unique.failover}",
+      "arn:aws:s3:::${local.resource_name_unique.failover}/*",
     ]
   }
   statement {
@@ -34,22 +34,22 @@ data "aws_iam_policy_document" "s3_tfstate_region_replicate" {
   }
 }
 
-module "iam_policy_tfstate_s3_region_replicate" {
+module "iam_policy_tfstate_backend_crr" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version   = "6.2.1"
   providers = { aws = aws.management }
 
-  name = "${local.resource_name_primary}-crr"
+  name = "${local.resource_name.global}-crr"
 
-  policy = data.aws_iam_policy_document.s3_tfstate_region_replicate.json
+  policy = data.aws_iam_policy_document.iam_policy_tfstate_backend_crr.json
 }
 
-module "iam_role_tfstate_s3_region_replicate" {
+module "iam_role_tfstate_backend_crr" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-role"
   version   = "6.2.1"
   providers = { aws = aws.management }
 
-  name            = "${local.resource_name_primary}-crr"
+  name            = "${local.resource_name.global}-crr"
   use_name_prefix = false
 
   trust_policy_permissions = {
@@ -71,6 +71,6 @@ module "iam_role_tfstate_s3_region_replicate" {
   }
 
   policies = {
-    replicate = module.iam_policy_tfstate_s3_region_replicate.arn,
+    replicate = module.iam_policy_tfstate_backend_crr.arn,
   }
 }
