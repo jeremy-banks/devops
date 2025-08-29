@@ -1,4 +1,6 @@
 data "aws_iam_policy_document" "kms_tfstate_backend" {
+  provider = aws.management
+
   # https://docs.aws.amazon.com/kms/latest/prdeloperguide/key-policy-default.html
   statement {
     sid    = "Enable IAM User Permissions"

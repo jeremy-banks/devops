@@ -80,19 +80,19 @@ variable "vpc_cidr_infrastructure" {
 }
 
 variable "org_owner_email_prefix" {
-  description = "the 'jeremybankstech' in 'jeremybankstech+onemoretestbed@gmail.com'"
+  description = "the 'jeremybankstech' in 'jeremybankstech+awscloud@gmail.com'"
   type        = string
   default     = "jeremybankstech"
 }
 
 variable "org_owner_email_plus_address" {
-  description = "the 'onemoretestbed' in 'jeremybankstech+onemoretestbed@gmail.com'"
+  description = "the 'awscloud' in 'jeremybankstech+awscloud@gmail.com'"
   type        = string
-  default     = "onemoretestbed"
+  default     = "awscloud"
 }
 
 variable "org_owner_email_domain_tld" {
-  description = "the 'gmail.com' in 'jeremybankstech+onemoretestbed@gmail.com'"
+  description = "the 'gmail.com' in 'jeremybankstech+awscloud@gmail.com'"
   type        = string
   default     = "gmail.com"
 }
@@ -100,19 +100,19 @@ variable "org_owner_email_domain_tld" {
 variable "company_name" {
   description = "name of the company"
   type        = string
-  default     = "Photonic Labs"
+  default     = "Genovus Labs"
 }
 
 variable "company_name_abbr" {
   description = "abbreviated name of the company"
   type        = string
-  default     = "pl"
+  default     = "gn"
 
   validation {
     condition = (
-      var.this_slug != null &&                         #not undefined
-      var.this_slug != "" &&                           #not empty
-      can(regex("^[a-z0-9]+$", var.company_name_abbr)) #alphanumerics only
+      var.this_slug != null &&                         # not undefined
+      var.this_slug != "" &&                           # not empty
+      can(regex("^[a-z0-9]+$", var.company_name_abbr)) # alphanumerics only
     )
     error_message = "variable 'company_name_abbr' must be defined, and contain alphanumerics and dashes only"
   }
@@ -130,9 +130,9 @@ variable "team_name_abbr" {
 
   validation {
     condition = (
-      var.this_slug != null &&                      #not undefined
-      var.this_slug != "" &&                        #not empty
-      can(regex("^[a-z0-9]+$", var.team_name_abbr)) #alphanumerics only
+      var.this_slug != null &&                      # not undefined
+      var.this_slug != "" &&                        # not empty
+      can(regex("^[a-z0-9]+$", var.team_name_abbr)) # alphanumerics only
     )
     error_message = "variable 'team_name_abbr' must be defined, and contain alphanumerics and dashes only"
   }
@@ -141,18 +141,18 @@ variable "team_name_abbr" {
 variable "project_name" {
   description = "name of the project"
   type        = string
-  default     = "one more test bed"
+  default     = "Another Final Test Bed"
 }
 
 variable "project_name_abbr" {
   type    = string
-  default = "omtb"
+  default = "aftb"
 
   validation {
     condition = (
-      var.this_slug != null &&                         #not undefined
-      var.this_slug != "" &&                           #not empty
-      can(regex("^[a-z0-9]+$", var.project_name_abbr)) #alphanumerics only
+      var.this_slug != null &&                         # not undefined
+      var.this_slug != "" &&                           # not empty
+      can(regex("^[a-z0-9]+$", var.project_name_abbr)) # alphanumerics only
     )
     error_message = "variable 'project_name_abbr' must be defined, and contain alphanumerics and dashes only"
   }
@@ -207,9 +207,9 @@ variable "this_slug" {
 
   validation {
     condition = (
-      var.this_slug != null &&                     #not undefined
-      var.this_slug != "" &&                       #not empty
-      can(regex("^[a-zA-Z0-9-]+$", var.this_slug)) #only has alphanumerics and dashes
+      var.this_slug != null &&                     # not undefined
+      var.this_slug != "" &&                       # not empty
+      can(regex("^[a-zA-Z0-9-]+$", var.this_slug)) # only has alphanumerics and dashes
     )
     error_message = "variable 'this_slug' must be defined, and only contain alphanumerics and dashes"
   }
@@ -228,12 +228,12 @@ variable "environment" {
 variable "org_service_access_principals" {
   type = list(string)
   default = [
-    "account.amazonaws.com",                  #account management
-    "cloudtrail.amazonaws.com",               #cloudtrail
-    "config-multiaccountsetup.amazonaws.com", #config
-    "config.amazonaws.com",                   #config
-    "ds.amazonaws.com",                       #enterprise active directory
-    "ram.amazonaws.com",                      #resource access manager
+    "account.amazonaws.com",                  # account management
+    "cloudtrail.amazonaws.com",               # cloudtrail
+    "config-multiaccountsetup.amazonaws.com", # config
+    "config.amazonaws.com",                   # config
+    "ds.amazonaws.com",                       # enterprise active directory
+    "ram.amazonaws.com",                      # resource access manager
   ]
 }
 
@@ -347,7 +347,7 @@ variable "ntp_servers" {
 
 variable "log_retention_days" {
   type    = number
-  default = 2192 #six years per HIPAA NIST SP 800-66 section 4.22
+  default = 2192 # six years per HIPAA NIST SP 800-66 section 4.22
 }
 
 variable "iam_immutable_tag_key" {
@@ -370,15 +370,6 @@ locals {
   # company-project-region-env-slug-unique_id
   resource_name_primary_globally_unique  = lower("${var.company_name_abbr}-${local.resource_name_primary}-${local.unique_id}")
   resource_name_failover_globally_unique = lower("${var.company_name_abbr}-${local.resource_name_failover}-${local.unique_id}")
-
-  # this_prd = join("_", [replace(var.this_slug, "-", "_"), "prd"])
-  # this_stg = join("_", [replace(var.this_slug, "-", "_"), "stg"])
-  # this_tst = join("_", [replace(var.this_slug, "-", "_"), "tst"])
-  # this_dev = join("_", [replace(var.this_slug, "-", "_"), "dev"])
-
-  # this_snake          = join("_", ["workload", replace(var.this_slug, "-", "_"), var.environment])
-  # this_snake_primary  = join("_", ["workload", replace(var.this_slug, "-", "_"), var.environment, "primary"])
-  # this_snake_failover = join("_", ["workload", replace(var.this_slug, "-", "_"), var.environment, "failover"])
 
   vpc_az_ids_primary  = [for az in var.vpc_azs_primary : "${var.region_primary.short}-${az}"]
   vpc_az_ids_failover = [for az in var.vpc_azs_failover : "${var.region_failover.short}-${az}"]

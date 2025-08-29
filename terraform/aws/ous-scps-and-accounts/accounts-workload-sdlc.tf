@@ -1,4 +1,6 @@
 resource "aws_organizations_account" "sdlc_prd" {
+  provider = aws.management
+
   name  = "${var.account_name_slug.sdlc}-prd"
   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name_slug.sdlc}-prd@${var.org_owner_email_domain_tld}"
 
@@ -10,6 +12,8 @@ resource "aws_organizations_account" "sdlc_prd" {
 }
 
 resource "aws_organizations_account" "sdlc_stg" {
+  provider = aws.management
+
   name  = "${var.account_name_slug.sdlc}-stg"
   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name_slug.sdlc}-stg@${var.org_owner_email_domain_tld}"
 
@@ -21,6 +25,8 @@ resource "aws_organizations_account" "sdlc_stg" {
 }
 
 resource "aws_organizations_account" "sdlc_tst" {
+  provider = aws.management
+
   name  = "${var.account_name_slug.sdlc}-tst"
   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name_slug.sdlc}-tst@${var.org_owner_email_domain_tld}"
 
@@ -32,6 +38,8 @@ resource "aws_organizations_account" "sdlc_tst" {
 }
 
 resource "aws_organizations_account" "sdlc_dev" {
+  provider = aws.management
+
   name  = "${var.account_name_slug.sdlc}-dev"
   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name_slug.sdlc}-dev@${var.org_owner_email_domain_tld}"
 

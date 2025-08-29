@@ -1,4 +1,6 @@
 data "aws_iam_policy_document" "iam_user_admin" {
+  provider = aws.management
+
   statement {
     sid       = "AllowAssumeRolesInOrg"
     effect    = "Allow"

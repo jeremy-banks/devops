@@ -1,4 +1,6 @@
 data "aws_iam_policy_document" "org_root" {
+  provider = aws.management
+
   # https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_general.html#example-scp-leave-org
   statement {
     sid       = "PreventMemberAccountsFromLeavingTheOrganization"
@@ -99,11 +101,15 @@ data "aws_iam_policy_document" "org_root" {
 }
 
 resource "aws_organizations_policy" "org_root" {
+  provider = aws.management
+
   name    = "org-root"
   content = data.aws_iam_policy_document.org_root.json
 }
 
 resource "aws_organizations_policy_attachment" "org_root" {
+  provider = aws.management
+
   policy_id = aws_organizations_policy.org_root.id
   target_id = data.aws_organizations_organization.this.roots[0].id
 }

@@ -1,4 +1,6 @@
 data "aws_iam_policy_document" "s3_tfstate_region_replicate" {
+  provider = aws.management
+
   statement {
     effect = "Allow"
     actions = [

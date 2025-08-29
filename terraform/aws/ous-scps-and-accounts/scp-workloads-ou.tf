@@ -1,4 +1,6 @@
 data "aws_iam_policy_document" "workloads_ou" {
+  provider = aws.management
+
   # https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_general.html
   statement {
     sid    = "DenyRestrictedRegions"
@@ -152,11 +154,15 @@ data "aws_iam_policy_document" "workloads_ou" {
 }
 
 resource "aws_organizations_policy" "workloads_ou" {
+  provider = aws.management
+
   name    = "workloads-ou"
   content = data.aws_iam_policy_document.workloads_ou.json
 }
 
 resource "aws_organizations_policy_attachment" "workloads_ou" {
+  provider = aws.management
+
   policy_id = aws_organizations_policy.workloads_ou.id
   target_id = aws_organizations_organizational_unit.workloads.id
 }

@@ -1,4 +1,6 @@
 data "aws_iam_policy_document" "s3_tfstate_backend_primary" {
+  provider = aws.management
+
   statement {
     sid    = "denyUnintendedAccessToBucket"
     effect = "Deny"
