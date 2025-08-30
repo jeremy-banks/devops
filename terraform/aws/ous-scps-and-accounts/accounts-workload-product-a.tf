@@ -1,3 +1,5 @@
+output "workload_product_a_prd" { value = aws_organizations_account.workload_product_a_prd.id }
+
 resource "aws_organizations_account" "workload_product_a_prd" {
   provider = aws.management
 
@@ -10,6 +12,8 @@ resource "aws_organizations_account" "workload_product_a_prd" {
   parent_id                  = aws_organizations_organizational_unit.workloads_product_a_prd.id
   role_name                  = var.account_role_name
 }
+
+output "workload_product_a_stg" { value = aws_organizations_account.workload_product_a_stg.id }
 
 resource "aws_organizations_account" "workload_product_a_stg" {
   provider = aws.management
@@ -24,6 +28,8 @@ resource "aws_organizations_account" "workload_product_a_stg" {
   role_name                  = var.account_role_name
 }
 
+output "workload_product_a_tst" { value = aws_organizations_account.workload_product_a_tst.id }
+
 resource "aws_organizations_account" "workload_product_a_tst" {
   provider = aws.management
 
@@ -36,6 +42,8 @@ resource "aws_organizations_account" "workload_product_a_tst" {
   parent_id                  = aws_organizations_organizational_unit.workloads_product_a_tst.id
   role_name                  = var.account_role_name
 }
+
+output "workload_product_a_dev" { value = aws_organizations_account.workload_product_a_dev.id }
 
 resource "aws_organizations_account" "workload_product_a_dev" {
   provider = aws.management

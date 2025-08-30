@@ -1,4 +1,6 @@
 data "aws_iam_policy_document" "s3_crr" {
+  provider = aws.this
+
   statement {
     effect = "Allow"
     actions = [
@@ -12,10 +14,10 @@ data "aws_iam_policy_document" "s3_crr" {
       "s3:ReplicateTags",
     ]
     resources = [
-      "arn:aws:s3:::${local.resource_name_globally_unique_primary}",
-      "arn:aws:s3:::${local.resource_name_globally_unique_primary}/*",
-      "arn:aws:s3:::${local.resource_name_globally_unique_failover}",
-      "arn:aws:s3:::${local.resource_name_globally_unique_failover}/*",
+      "arn:aws:s3:::${local.resource_name_full_unique.primary}",
+      "arn:aws:s3:::${local.resource_name_full_unique.primary}/*",
+      "arn:aws:s3:::${local.resource_name_full_unique.failover}",
+      "arn:aws:s3:::${local.resource_name_full_unique.failover}/*",
     ]
   }
   statement {
@@ -34,24 +36,24 @@ data "aws_iam_policy_document" "s3_crr" {
 
 module "iam_policy_s3_crr" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version   = "6.1.2"
-  providers = { aws = aws.shared_services_prd }
+  version   = "~> 6.2.1"
+  providers = { aws = aws.this }
 
   count = var.create_failover_region_network ? 1 : 0
 
-  name = "${local.resource_name_primary}-crr"
+  name = "${local.resource_name.global}-crr"
 
   policy = data.aws_iam_policy_document.s3_crr.json
 }
 
 module "iam_role_s3_crr" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-role"
-  version   = "6.1.2"
-  providers = { aws = aws.shared_services_prd }
+  version   = "~> 6.2.1"
+  providers = { aws = aws.this }
 
   count = var.create_failover_region_network ? 1 : 0
 
-  name            = "${local.resource_name_primary}-crr"
+  name            = "${local.resource_name.global}-crr"
   use_name_prefix = false
 
   trust_policy_permissions = {

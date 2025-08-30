@@ -1,4 +1,6 @@
 data "aws_iam_policy_document" "s3_primary" {
+  provider = aws.this
+
   statement {
     sid    = "allowOrgRolesPutObjectInsideAccountPrefix"
     effect = "Allow"
@@ -26,10 +28,10 @@ data "aws_iam_policy_document" "s3_primary" {
 
 module "s3_primary" {
   source    = "terraform-aws-modules/s3-bucket/aws"
-  version   = "5.5.0"
-  providers = { aws = aws.shared_services_prd }
+  version   = "~> 5.7.0"
+  providers = { aws = aws.this }
 
-  bucket = local.resource_name_globally_unique_primary
+  bucket = local.resource_name_full_unique.primary
 
   force_destroy = true
 
@@ -65,7 +67,7 @@ module "s3_primary" {
 }
 
 resource "aws_s3_bucket_replication_configuration" "s3_primary" {
-  provider = aws.shared_services_prd
+  provider = aws.this
 
   count = var.create_failover_region_network ? 1 : 0
 

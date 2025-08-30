@@ -1,4 +1,6 @@
 data "aws_iam_policy_document" "s3_failover" {
+  provider = aws.this_failover
+
   statement {
     sid    = "allowOrgRolesPutObjectInsideAccountPrefix"
     effect = "Allow"
@@ -26,12 +28,12 @@ data "aws_iam_policy_document" "s3_failover" {
 
 module "s3_failover" {
   source    = "terraform-aws-modules/s3-bucket/aws"
-  version   = "5.5.0"
-  providers = { aws = aws.shared_services_prd_failover }
+  version   = "~> 5.7.0"
+  providers = { aws = aws.this_failover }
 
   count = var.create_failover_region_network ? 1 : 0
 
-  bucket = local.resource_name_globally_unique_failover
+  bucket = local.resource_name_full_unique.failover
 
   force_destroy = true
 
@@ -67,7 +69,7 @@ module "s3_failover" {
 }
 
 resource "aws_s3_bucket_replication_configuration" "s3_failover" {
-  provider = aws.shared_services_prd_failover
+  provider = aws.this_failover
 
   count = var.create_failover_region_network ? 1 : 0
 

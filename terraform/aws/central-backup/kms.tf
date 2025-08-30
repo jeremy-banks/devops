@@ -1,4 +1,6 @@
 data "aws_iam_policy_document" "kms" {
+  provider = aws.this
+
   # https://docs.aws.amazon.com/kms/latest/prdeloperguide/key-policy-default.html
   statement {
     sid    = "Enable IAM User Permissions"
@@ -46,8 +48,8 @@ data "aws_iam_policy_document" "kms" {
 
 module "kms_primary" {
   source    = "terraform-aws-modules/kms/aws"
-  version   = "4.0.0"
-  providers = { aws = aws.shared_services_prd }
+  version   = "~> 4.0.0"
+  providers = { aws = aws.this }
 
   deletion_window_in_days = 30
   enable_key_rotation     = true
@@ -55,15 +57,15 @@ module "kms_primary" {
   key_usage               = "ENCRYPT_DECRYPT"
   multi_region            = true
 
-  aliases = ["${local.resource_name_primary}"]
+  aliases = ["${local.resource_name.primary}"]
 
   policy = data.aws_iam_policy_document.kms.json
 }
 
 module "kms_failover" {
   source    = "terraform-aws-modules/kms/aws"
-  version   = "4.0.0"
-  providers = { aws = aws.shared_services_prd_failover }
+  version   = "~> 4.0.0"
+  providers = { aws = aws.this_failover }
 
   count = var.create_failover_region_network ? 1 : 0
 
@@ -71,31 +73,7 @@ module "kms_failover" {
   create_replica          = true
   primary_key_arn         = module.kms_primary.key_arn
 
-  aliases = ["${local.resource_name_failover}"]
+  aliases = ["${local.resource_name.failover}"]
 
   policy = data.aws_iam_policy_document.kms.json
-}
-
-resource "aws_ebs_encryption_by_default" "kms_primary" {
-  provider = aws.shared_services_prd
-
-  enabled = true
-}
-
-resource "aws_ebs_default_kms_key" "kms_primary" {
-  provider = aws.shared_services_prd
-
-  key_arn = module.kms_primary.key_arn
-}
-
-resource "aws_ebs_encryption_by_default" "kms_failover" {
-  provider = aws.shared_services_prd_failover
-
-  enabled = true
-}
-
-resource "aws_ebs_default_kms_key" "kms_failover" {
-  provider = aws.shared_services_prd_failover
-
-  key_arn = module.kms_failover[0].key_arn
 }

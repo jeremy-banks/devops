@@ -51,9 +51,9 @@ Make an email, update relevant files with your unique information, and begin dep
 1. Enable Terraform State Backend
    1. Use the `terraform output` to update the backend.tf files in `terraform/aws/` and subdirectories
       ```sh
-      find . -name 'backend.tf' -exec sed -i '' 's,TFSTATEBACKENDKMSARN,tfstate_kms_arn,g' {} + &&\
-      find . -name 'backend.tf' -exec sed -i '' 's,TFSTATEBACKENDREGION,tfstate_region,g' {} + &&\
-      find . -name 'backend.tf' -exec sed -i '' 's,TFSTATEBACKENDS3BUCKETNAME,tfstate_s3_bucket_name,g' {} +
+      find . -name 'backend.tf' -exec sed -i '' 's,tfstate_kms_arn,output,g' {} + &&\
+      find . -name 'backend.tf' -exec sed -i '' 's,tfstate_region,output,g' {} + &&\
+      find . -name 'backend.tf' -exec sed -i '' 's,tfstate_s3_bucket_name,output,g' {} +
       ```
    1. Uncomment `terraform/aws/management-account/backend.tf` and migrate state with `terraform init -force-copy`
 1. Save `breakglass` user information
