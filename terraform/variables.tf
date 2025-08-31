@@ -7,11 +7,6 @@ variable "account_id" {
     security_tooling_prd = "000000000000"
     shared_services_prd  = "000000000000"
 
-    sdlc_dev = "000000000000"
-    sdlc_prd = "000000000000"
-    sdlc_stg = "000000000000"
-    sdlc_tst = "000000000000"
-
     workload_product_a_dev = "000000000000"
     workload_product_a_prd = "000000000000"
     workload_product_a_stg = "000000000000"
@@ -19,7 +14,7 @@ variable "account_id" {
   }
 }
 
-variable "account_name_slug" {
+variable "account_name" {
   type = map(string)
   default = {
     identity         = "identity"
@@ -34,7 +29,21 @@ variable "account_name_slug" {
   }
 }
 
-variable "vpc_cidr_infrastructure" {
+variable "r53_delegate" {
+  type = map(string)
+  default = {
+    audit       = "aud"
+    identity    = "id"
+    log_archive = "log"
+    # network          = "network"
+    security_tooling = "sec"
+    shared_services  = "svc" # git.svc.aws.domain.tld
+
+    sdlc = "sdlc"
+  }
+}
+
+variable "vpc_cidr" {
   type = map(string)
   default = {
     transit_gateway = "10.0.0.0/8"

@@ -83,7 +83,7 @@ data "aws_vpc" "central_ingress_primary" {
 
   filter {
     name   = "cidr-block"
-    values = [var.vpc_cidr_infrastructure.central_ingress_primary]
+    values = [var.vpc_cidr.central_ingress_primary]
   }
 }
 
@@ -117,7 +117,7 @@ data "aws_vpc" "central_ingress_failover" {
 
   filter {
     name   = "cidr-block"
-    values = [var.vpc_cidr_infrastructure.central_ingress_failover]
+    values = [var.vpc_cidr.central_ingress_failover]
   }
 }
 
@@ -153,7 +153,7 @@ data "aws_vpc" "inspection_primary" {
 
   filter {
     name   = "cidr-block"
-    values = [var.vpc_cidr_infrastructure.central_inspection_primary]
+    values = [var.vpc_cidr.central_inspection_primary]
   }
 }
 
@@ -187,7 +187,7 @@ data "aws_vpc" "inspection_failover" {
 
   filter {
     name   = "cidr-block"
-    values = [var.vpc_cidr_infrastructure.central_inspection_failover]
+    values = [var.vpc_cidr.central_inspection_failover]
   }
 }
 
@@ -223,7 +223,7 @@ data "aws_vpc" "central_egress_primary" {
 
   filter {
     name   = "cidr-block"
-    values = [var.vpc_cidr_infrastructure.central_egress_primary]
+    values = [var.vpc_cidr.central_egress_primary]
   }
 }
 
@@ -257,7 +257,7 @@ data "aws_vpc" "central_egress_failover" {
 
   filter {
     name   = "cidr-block"
-    values = [var.vpc_cidr_infrastructure.central_egress_failover]
+    values = [var.vpc_cidr.central_egress_failover]
   }
 }
 
@@ -293,7 +293,7 @@ data "aws_vpc" "spoke_a_prd_primary" {
 
   filter {
     name   = "cidr-block"
-    values = [var.vpc_cidr_infrastructure.workload_spoke_a_prd_primary]
+    values = [var.vpc_cidr.workload_spoke_a_prd_primary]
   }
 }
 
@@ -327,7 +327,7 @@ data "aws_vpc" "spoke_a_prd_failover" {
 
   filter {
     name   = "cidr-block"
-    values = [var.vpc_cidr_infrastructure.workload_spoke_a_prd_failover]
+    values = [var.vpc_cidr.workload_spoke_a_prd_failover]
   }
 }
 
@@ -363,7 +363,7 @@ data "aws_vpc" "spoke_b_prd_primary" {
 
   filter {
     name   = "cidr-block"
-    values = [var.vpc_cidr_infrastructure.workload_spoke_b_prd_primary]
+    values = [var.vpc_cidr.workload_spoke_b_prd_primary]
   }
 }
 
@@ -397,7 +397,7 @@ data "aws_vpc" "spoke_b_prd_failover" {
 
   filter {
     name   = "cidr-block"
-    values = [var.vpc_cidr_infrastructure.workload_spoke_b_prd_failover]
+    values = [var.vpc_cidr.workload_spoke_b_prd_failover]
   }
 }
 

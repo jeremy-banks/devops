@@ -14,7 +14,7 @@ resource "aws_route" "public_to_tgw_primary" {
   count = length(module.vpc_primary.public_route_table_ids)
 
   route_table_id         = module.vpc_primary.public_route_table_ids[count.index]
-  destination_cidr_block = var.vpc_cidr_infrastructure.transit_gateway
+  destination_cidr_block = var.vpc_cidr.transit_gateway
   transit_gateway_id     = data.aws_ec2_transit_gateway.tgw_primary.id
 }
 

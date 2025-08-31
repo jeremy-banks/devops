@@ -1,7 +1,7 @@
 resource "aws_organizations_organizational_unit" "security_tooling" {
   provider = aws.management
 
-  name      = var.account_name_slug.security_tooling
+  name      = var.account_name.security_tooling
   parent_id = aws_organizations_organizational_unit.security.id
 }
 

@@ -1,7 +1,7 @@
 resource "aws_organizations_organizational_unit" "sdlc" {
   provider = aws.management
 
-  name      = var.account_name_slug.sdlc
+  name      = var.account_name.sdlc
   parent_id = aws_organizations_organizational_unit.workloads.id
 }
 

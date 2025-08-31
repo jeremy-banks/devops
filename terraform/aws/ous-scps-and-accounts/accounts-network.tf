@@ -3,8 +3,8 @@ output "network_prd" { value = aws_organizations_account.network_prd.id }
 resource "aws_organizations_account" "network_prd" {
   provider = aws.management
 
-  name  = "${var.account_name_slug.network}-prd"
-  email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name_slug.network}-prd@${var.org_owner_email_domain_tld}"
+  name  = "${var.account_name.network}-prd"
+  email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name.network}-prd@${var.org_owner_email_domain_tld}"
 
   close_on_deletion          = true
   create_govcloud            = false
@@ -18,8 +18,8 @@ resource "aws_organizations_account" "network_prd" {
 # resource "aws_organizations_account" "network_stg" {
 #   provider = aws.management
 
-#   name  = "${var.account_name_slug.network}-stg"
-#   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name_slug.network}-stg@${var.org_owner_email_domain_tld}"
+#   name  = "${var.account_name.network}-stg"
+#   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name.network}-stg@${var.org_owner_email_domain_tld}"
 
 #   close_on_deletion          = true
 #   create_govcloud            = false
@@ -33,8 +33,8 @@ resource "aws_organizations_account" "network_prd" {
 # resource "aws_organizations_account" "network_tst" {
 #   provider = aws.management
 
-#   name  = "${var.account_name_slug.network}-tst"
-#   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name_slug.network}-tst@${var.org_owner_email_domain_tld}"
+#   name  = "${var.account_name.network}-tst"
+#   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name.network}-tst@${var.org_owner_email_domain_tld}"
 
 #   close_on_deletion          = true
 #   create_govcloud            = false
@@ -48,8 +48,8 @@ resource "aws_organizations_account" "network_prd" {
 # resource "aws_organizations_account" "network_dev" {
 #   provider = aws.management
 
-#   name  = "${var.account_name_slug.network}-dev"
-#   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name_slug.network}-dev@${var.org_owner_email_domain_tld}"
+#   name  = "${var.account_name.network}-dev"
+#   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name.network}-dev@${var.org_owner_email_domain_tld}"
 
 #   close_on_deletion          = true
 #   create_govcloud            = false

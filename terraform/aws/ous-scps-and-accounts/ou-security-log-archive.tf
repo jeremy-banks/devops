@@ -1,7 +1,7 @@
 resource "aws_organizations_organizational_unit" "log_archive" {
   provider = aws.management
 
-  name      = var.account_name_slug.log_archive
+  name      = var.account_name.log_archive
   parent_id = aws_organizations_organizational_unit.security.id
 }
 

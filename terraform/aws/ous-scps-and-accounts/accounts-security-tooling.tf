@@ -3,8 +3,8 @@ output "security_tooling_prd" { value = aws_organizations_account.security_tooli
 resource "aws_organizations_account" "security_tooling_prd" {
   provider = aws.management
 
-  name  = "${var.account_name_slug.security_tooling}-prd"
-  email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name_slug.security_tooling}-prd@${var.org_owner_email_domain_tld}"
+  name  = "${var.account_name.security_tooling}-prd"
+  email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name.security_tooling}-prd@${var.org_owner_email_domain_tld}"
 
   close_on_deletion          = true
   create_govcloud            = false
@@ -18,8 +18,8 @@ resource "aws_organizations_account" "security_tooling_prd" {
 # resource "aws_organizations_account" "security_tooling_stg" {
 #   provider = aws.management
 
-#   name  = "${var.account_name_slug.security_tooling}-stg"
-#   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name_slug.security_tooling}-stg@${var.org_owner_email_domain_tld}"
+#   name  = "${var.account_name.security_tooling}-stg"
+#   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name.security_tooling}-stg@${var.org_owner_email_domain_tld}"
 
 #   close_on_deletion          = true
 #   create_govcloud            = false
@@ -33,8 +33,8 @@ resource "aws_organizations_account" "security_tooling_prd" {
 # resource "aws_organizations_account" "security_tooling_tst" {
 #   provider = aws.management
 
-#   name  = "${var.account_name_slug.security_tooling}-tst"
-#   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name_slug.security_tooling}-tst@${var.org_owner_email_domain_tld}"
+#   name  = "${var.account_name.security_tooling}-tst"
+#   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name.security_tooling}-tst@${var.org_owner_email_domain_tld}"
 
 #   close_on_deletion          = true
 #   create_govcloud            = false
@@ -48,8 +48,8 @@ resource "aws_organizations_account" "security_tooling_prd" {
 # resource "aws_organizations_account" "security_tooling_dev" {
 #   provider = aws.management
 
-#   name  = "${var.account_name_slug.security_tooling}-dev"
-#   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name_slug.security_tooling}-dev@${var.org_owner_email_domain_tld}"
+#   name  = "${var.account_name.security_tooling}-dev"
+#   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name.security_tooling}-dev@${var.org_owner_email_domain_tld}"
 
 #   close_on_deletion          = true
 #   create_govcloud            = false

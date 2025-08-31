@@ -1,7 +1,7 @@
 resource "aws_organizations_organizational_unit" "workloads_product_a" {
   provider = aws.management
 
-  name      = var.account_name_slug.workload_product_a
+  name      = var.account_name.workload_product_a
   parent_id = aws_organizations_organizational_unit.workloads.id
 }
 

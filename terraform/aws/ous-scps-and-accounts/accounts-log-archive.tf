@@ -3,8 +3,8 @@ output "log_archive_prd" { value = aws_organizations_account.log_archive_prd.id 
 resource "aws_organizations_account" "log_archive_prd" {
   provider = aws.management
 
-  name  = "${var.account_name_slug.log_archive}-prd"
-  email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name_slug.log_archive}-prd@${var.org_owner_email_domain_tld}"
+  name  = "${var.account_name.log_archive}-prd"
+  email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name.log_archive}-prd@${var.org_owner_email_domain_tld}"
 
   close_on_deletion          = true
   create_govcloud            = false
@@ -18,8 +18,8 @@ resource "aws_organizations_account" "log_archive_prd" {
 # resource "aws_organizations_account" "log_archive_stg" {
 #   provider = aws.management
 
-#   name  = "${var.account_name_slug.log_archive}-stg"
-#   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name_slug.log_archive}-stg@${var.org_owner_email_domain_tld}"
+#   name  = "${var.account_name.log_archive}-stg"
+#   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name.log_archive}-stg@${var.org_owner_email_domain_tld}"
 
 #   close_on_deletion          = true
 #   create_govcloud            = false
@@ -33,8 +33,8 @@ resource "aws_organizations_account" "log_archive_prd" {
 # resource "aws_organizations_account" "log_archive_tst" {
 #   provider = aws.management
 
-#   name  = "${var.account_name_slug.log_archive}-tst"
-#   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name_slug.log_archive}-tst@${var.org_owner_email_domain_tld}"
+#   name  = "${var.account_name.log_archive}-tst"
+#   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name.log_archive}-tst@${var.org_owner_email_domain_tld}"
 
 #   close_on_deletion          = true
 #   create_govcloud            = false
@@ -48,8 +48,8 @@ resource "aws_organizations_account" "log_archive_prd" {
 # resource "aws_organizations_account" "log_archive_dev" {
 #   provider = aws.management
 
-#   name  = "${var.account_name_slug.log_archive}-dev"
-#   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name_slug.log_archive}-dev@${var.org_owner_email_domain_tld}"
+#   name  = "${var.account_name.log_archive}-dev"
+#   email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}-${var.account_name.log_archive}-dev@${var.org_owner_email_domain_tld}"
 
 #   close_on_deletion          = true
 #   create_govcloud            = false
