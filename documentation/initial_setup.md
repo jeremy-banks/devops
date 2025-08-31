@@ -73,11 +73,11 @@ Make an email, update relevant files with your unique information, and begin dep
 1. Deploy `terraform/aws/ous-scps-and-accounts`
 1. Update the terraform/variables.tf `account_id` map with the output
 
-### Deploy Central Backup
-1. Deploy `terraform/aws/central-backup`
-
 ### Deploy Central R53
 1. Deploy `terraform/aws/central-r53`
+
+### Deploy Central Backup
+1. Deploy `terraform/aws/central-backup`
 
 ### Deploy Central Network
 1. Deploy `terraform/aws/central-network`
