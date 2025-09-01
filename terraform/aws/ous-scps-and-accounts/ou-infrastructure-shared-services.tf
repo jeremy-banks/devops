@@ -18,17 +18,3 @@ resource "aws_organizations_organizational_unit" "shared_services_stg" {
   name      = "stg"
   parent_id = aws_organizations_organizational_unit.shared_services.id
 }
-
-resource "aws_organizations_organizational_unit" "shared_services_tst" {
-  provider = aws.management
-
-  name      = "tst"
-  parent_id = aws_organizations_organizational_unit.shared_services.id
-}
-
-resource "aws_organizations_organizational_unit" "shared_services_dev" {
-  provider = aws.management
-
-  name      = "dev"
-  parent_id = aws_organizations_organizational_unit.shared_services.id
-}

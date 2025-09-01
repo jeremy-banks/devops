@@ -18,17 +18,3 @@ resource "aws_organizations_organizational_unit" "security_tooling_stg" {
   name      = "stg"
   parent_id = aws_organizations_organizational_unit.security_tooling.id
 }
-
-resource "aws_organizations_organizational_unit" "security_tooling_tst" {
-  provider = aws.management
-
-  name      = "tst"
-  parent_id = aws_organizations_organizational_unit.security_tooling.id
-}
-
-resource "aws_organizations_organizational_unit" "security_tooling_dev" {
-  provider = aws.management
-
-  name      = "dev"
-  parent_id = aws_organizations_organizational_unit.security_tooling.id
-}

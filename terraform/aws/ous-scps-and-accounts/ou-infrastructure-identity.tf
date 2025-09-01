@@ -18,17 +18,3 @@ resource "aws_organizations_organizational_unit" "identity_stg" {
   name      = "stg"
   parent_id = aws_organizations_organizational_unit.identity.id
 }
-
-resource "aws_organizations_organizational_unit" "identity_tst" {
-  provider = aws.management
-
-  name      = "tst"
-  parent_id = aws_organizations_organizational_unit.identity.id
-}
-
-resource "aws_organizations_organizational_unit" "identity_dev" {
-  provider = aws.management
-
-  name      = "dev"
-  parent_id = aws_organizations_organizational_unit.identity.id
-}
