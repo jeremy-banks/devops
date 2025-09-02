@@ -3,12 +3,8 @@ module "shared_services_acm_prd_primary" {
   version   = "~> 6.1.0"
   providers = { aws = aws.shared_services_prd }
 
-  domain_name = aws_route53_zone.central_root.name
-  subject_alternative_names = [
-    "*.${aws_route53_zone.central_root.name}",
-    "${aws_route53_zone.central_aws_shared_services_prd.name}",
-    "*.${aws_route53_zone.central_aws_shared_services_prd.name}",
-  ]
+  domain_name               = aws_route53_zone.central_root.name
+  subject_alternative_names = ["*.${aws_route53_zone.central_root.name}"]
 
   create_route53_records = false
   validation_method      = "DNS"
@@ -20,12 +16,8 @@ module "shared_services_acm_prd_failover" {
   version   = "~> 6.1.0"
   providers = { aws = aws.shared_services_prd_failover }
 
-  domain_name = aws_route53_zone.central_root.name
-  subject_alternative_names = [
-    "*.${aws_route53_zone.central_root.name}",
-    "${aws_route53_zone.central_aws_shared_services_prd.name}",
-    "*.${aws_route53_zone.central_aws_shared_services_prd.name}",
-  ]
+  domain_name               = aws_route53_zone.central_root.name
+  subject_alternative_names = ["*.${aws_route53_zone.central_root.name}"]
 
   create_route53_records = false
   validation_method      = "DNS"
@@ -37,12 +29,8 @@ module "shared_services_acm_stg_primary" {
   version   = "~> 6.1.0"
   providers = { aws = aws.shared_services_stg }
 
-  domain_name = aws_route53_zone.central_root.name
-  subject_alternative_names = [
-    "*.${aws_route53_zone.central_root.name}",
-    "${aws_route53_zone.central_aws_shared_services_stg.name}",
-    "*.${aws_route53_zone.central_aws_shared_services_stg.name}",
-  ]
+  domain_name               = aws_route53_zone.central_root.name
+  subject_alternative_names = ["*.${aws_route53_zone.central_root.name}"]
 
   create_route53_records = false
   validation_method      = "DNS"
@@ -54,12 +42,8 @@ module "shared_services_acm_stg_failover" {
   version   = "~> 6.1.0"
   providers = { aws = aws.shared_services_stg_failover }
 
-  domain_name = aws_route53_zone.central_root.name
-  subject_alternative_names = [
-    "*.${aws_route53_zone.central_root.name}",
-    "${aws_route53_zone.central_aws_shared_services_stg.name}",
-    "*.${aws_route53_zone.central_aws_shared_services_stg.name}",
-  ]
+  domain_name               = aws_route53_zone.central_root.name
+  subject_alternative_names = ["*.${aws_route53_zone.central_root.name}"]
 
   create_route53_records = false
   validation_method      = "DNS"
@@ -77,17 +61,17 @@ module "shared_services_acm_records" {
 
   zone_id = aws_route53_zone.central_root.zone_id
 
-  distinct_domain_names = distinct(flatten([
+  distinct_domain_names = flatten([
     module.shared_services_acm_prd_primary.distinct_domain_names,
     module.shared_services_acm_prd_failover.distinct_domain_names,
     module.shared_services_acm_stg_primary.distinct_domain_names,
     module.shared_services_acm_stg_failover.distinct_domain_names,
-  ]))
+  ])
 
-  acm_certificate_domain_validation_options = distinct(flatten([
+  acm_certificate_domain_validation_options = flatten([
     module.shared_services_acm_prd_primary.acm_certificate_domain_validation_options,
     module.shared_services_acm_prd_failover.acm_certificate_domain_validation_options,
     module.shared_services_acm_stg_primary.acm_certificate_domain_validation_options,
     module.shared_services_acm_stg_failover.acm_certificate_domain_validation_options,
-  ]))
+  ])
 }

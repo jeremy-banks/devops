@@ -3,12 +3,9 @@ module "sdlc_acm_prd_primary" {
   version   = "~> 6.1.0"
   providers = { aws = aws.sdlc_prd }
 
-  domain_name = aws_route53_zone.central_root.name
-  subject_alternative_names = [
-    "*.${aws_route53_zone.central_root.name}",
-    "${aws_route53_zone.central_aws_sdlc_prd.name}",
-    "*.${aws_route53_zone.central_aws_sdlc_prd.name}",
-  ]
+  domain_name               = aws_route53_zone.central_root.name
+  subject_alternative_names = ["*.${aws_route53_zone.central_root.name}"]
+
 
   create_route53_records = false
   validation_method      = "DNS"
@@ -20,12 +17,9 @@ module "sdlc_acm_prd_failover" {
   version   = "~> 6.1.0"
   providers = { aws = aws.sdlc_prd_failover }
 
-  domain_name = aws_route53_zone.central_root.name
-  subject_alternative_names = [
-    "*.${aws_route53_zone.central_root.name}",
-    "${aws_route53_zone.central_aws_sdlc_prd.name}",
-    "*.${aws_route53_zone.central_aws_sdlc_prd.name}",
-  ]
+  domain_name               = aws_route53_zone.central_root.name
+  subject_alternative_names = ["*.${aws_route53_zone.central_root.name}"]
+
 
   create_route53_records = false
   validation_method      = "DNS"
@@ -37,12 +31,9 @@ module "sdlc_acm_stg_primary" {
   version   = "~> 6.1.0"
   providers = { aws = aws.sdlc_stg }
 
-  domain_name = aws_route53_zone.central_root.name
-  subject_alternative_names = [
-    "*.${aws_route53_zone.central_root.name}",
-    "${aws_route53_zone.central_aws_sdlc_stg.name}",
-    "*.${aws_route53_zone.central_aws_sdlc_stg.name}",
-  ]
+  domain_name               = aws_route53_zone.central_root.name
+  subject_alternative_names = ["*.${aws_route53_zone.central_root.name}"]
+
 
   create_route53_records = false
   validation_method      = "DNS"
@@ -54,12 +45,8 @@ module "sdlc_acm_stg_failover" {
   version   = "~> 6.1.0"
   providers = { aws = aws.sdlc_stg_failover }
 
-  domain_name = aws_route53_zone.central_root.name
-  subject_alternative_names = [
-    "*.${aws_route53_zone.central_root.name}",
-    "${aws_route53_zone.central_aws_sdlc_stg.name}",
-    "*.${aws_route53_zone.central_aws_sdlc_stg.name}",
-  ]
+  domain_name               = aws_route53_zone.central_root.name
+  subject_alternative_names = ["*.${aws_route53_zone.central_root.name}"]
 
   create_route53_records = false
   validation_method      = "DNS"
@@ -71,12 +58,8 @@ module "sdlc_acm_tst_primary" {
   version   = "~> 6.1.0"
   providers = { aws = aws.sdlc_tst }
 
-  domain_name = aws_route53_zone.central_root.name
-  subject_alternative_names = [
-    "*.${aws_route53_zone.central_root.name}",
-    "${aws_route53_zone.central_aws_sdlc_tst.name}",
-    "*.${aws_route53_zone.central_aws_sdlc_tst.name}",
-  ]
+  domain_name               = aws_route53_zone.central_root.name
+  subject_alternative_names = ["*.${aws_route53_zone.central_root.name}"]
 
   create_route53_records = false
   validation_method      = "DNS"
@@ -88,12 +71,8 @@ module "sdlc_acm_tst_failover" {
   version   = "~> 6.1.0"
   providers = { aws = aws.sdlc_tst_failover }
 
-  domain_name = aws_route53_zone.central_root.name
-  subject_alternative_names = [
-    "*.${aws_route53_zone.central_root.name}",
-    "${aws_route53_zone.central_aws_sdlc_tst.name}",
-    "*.${aws_route53_zone.central_aws_sdlc_tst.name}",
-  ]
+  domain_name               = aws_route53_zone.central_root.name
+  subject_alternative_names = ["*.${aws_route53_zone.central_root.name}"]
 
   create_route53_records = false
   validation_method      = "DNS"
@@ -105,12 +84,8 @@ module "sdlc_acm_dev_primary" {
   version   = "~> 6.1.0"
   providers = { aws = aws.sdlc_dev }
 
-  domain_name = aws_route53_zone.central_root.name
-  subject_alternative_names = [
-    "*.${aws_route53_zone.central_root.name}",
-    "${aws_route53_zone.central_aws_sdlc_dev.name}",
-    "*.${aws_route53_zone.central_aws_sdlc_dev.name}",
-  ]
+  domain_name               = aws_route53_zone.central_root.name
+  subject_alternative_names = ["*.${aws_route53_zone.central_root.name}"]
 
   create_route53_records = false
   validation_method      = "DNS"
@@ -122,12 +97,8 @@ module "sdlc_acm_dev_failover" {
   version   = "~> 6.1.0"
   providers = { aws = aws.sdlc_dev_failover }
 
-  domain_name = aws_route53_zone.central_root.name
-  subject_alternative_names = [
-    "*.${aws_route53_zone.central_root.name}",
-    "${aws_route53_zone.central_aws_sdlc_dev.name}",
-    "*.${aws_route53_zone.central_aws_sdlc_dev.name}",
-  ]
+  domain_name               = aws_route53_zone.central_root.name
+  subject_alternative_names = ["*.${aws_route53_zone.central_root.name}"]
 
   create_route53_records = false
   validation_method      = "DNS"
@@ -145,7 +116,7 @@ module "sdlc_acm_records" {
 
   zone_id = aws_route53_zone.central_root.zone_id
 
-  distinct_domain_names = distinct(flatten([
+  distinct_domain_names = flatten([
     module.sdlc_acm_prd_primary.distinct_domain_names,
     module.sdlc_acm_prd_failover.distinct_domain_names,
     module.sdlc_acm_stg_primary.distinct_domain_names,
@@ -154,9 +125,9 @@ module "sdlc_acm_records" {
     module.sdlc_acm_tst_failover.distinct_domain_names,
     module.sdlc_acm_dev_primary.distinct_domain_names,
     module.sdlc_acm_dev_failover.distinct_domain_names,
-  ]))
+  ])
 
-  acm_certificate_domain_validation_options = distinct(flatten([
+  acm_certificate_domain_validation_options = flatten([
     module.sdlc_acm_prd_primary.acm_certificate_domain_validation_options,
     module.sdlc_acm_prd_failover.acm_certificate_domain_validation_options,
     module.sdlc_acm_stg_primary.acm_certificate_domain_validation_options,
@@ -165,5 +136,5 @@ module "sdlc_acm_records" {
     module.sdlc_acm_tst_failover.acm_certificate_domain_validation_options,
     module.sdlc_acm_dev_primary.acm_certificate_domain_validation_options,
     module.sdlc_acm_dev_failover.acm_certificate_domain_validation_options,
-  ]))
+  ])
 }
