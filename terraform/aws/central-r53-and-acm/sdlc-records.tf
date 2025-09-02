@@ -1,6 +1,3 @@
-#api
-#www
-
 resource "aws_route53_record" "www_to_sdlc" {
   provider = aws.this
 
