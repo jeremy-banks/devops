@@ -53,17 +53,112 @@ data "aws_iam_policy_document" "org_root" {
       values   = ["false"]
     }
   }
+
   statement {
-    sid       = "PreventKMSDeleteUnlessSuperAdmin"
+    sid       = "PreventKMSCreateUnlessSuperAdmin"
     effect    = "Deny"
-    actions   = ["kms:ScheduleKeyDeletion", "kms:Delete"]
+    actions   = ["kms:CreateKey"]
     resources = ["*"]
     condition {
       test     = "StringNotLike"
       variable = "aws:PrincipalArn"
       values = [
         "arn:aws:iam::${data.aws_caller_identity.this.account_id}:user/${var.account_role_name}",
-        "arn:aws:iam::*:role/${var.account_role_name}",
+        "arn:aws:iam::${"$${aws:PrincipalAccount}"}:role/${var.account_role_name}",
+      ]
+    }
+    condition {
+      test     = "StringEquals"
+      variable = "aws:PrincipalOrgID"
+      values = [
+        "${data.aws_organizations_organization.this.id}",
+      ]
+    }
+  }
+
+  statement {
+    sid    = "PreventKMSWriteUnlessSuperAdmin"
+    effect = "Deny"
+    not_actions = [
+      "kms:CreateGrant",
+      "kms:DescribeCustomKeyStores",
+      "kms:DescribeKey",
+      "kms:GetKeyPolicy",
+      "kms:GetKeyRotationStatus",
+      "kms:GetParametersForImport",
+      "kms:GetPublicKey",
+      "kms:ListAliases",
+      "kms:ListGrants",
+      "kms:ListKeyPolicies",
+      "kms:ListKeyRotations",
+      "kms:ListKeys",
+      "kms:ListResourceTags",
+      "kms:ListRetirableGrants",
+      "kms:PutKeyPolicy",
+      "kms:RetireGrant",
+      "kms:RevokeGrant"
+    ]
+    resources = ["arn:aws:kms:*:*:key/*"]
+    condition {
+      test     = "StringNotLike"
+      variable = "aws:PrincipalArn"
+      values = [
+        "arn:aws:iam::${data.aws_caller_identity.this.account_id}:user/${var.account_role_name}",
+        "arn:aws:iam::${"$${aws:PrincipalAccount}"}:role/${var.account_role_name}",
+      ]
+    }
+    condition {
+      test     = "StringEquals"
+      variable = "aws:PrincipalOrgID"
+      values = [
+        "${data.aws_organizations_organization.this.id}",
+      ]
+    }
+  }
+
+  statement {
+    sid    = "PreventACMCreateUnlessSuperAdmin"
+    effect = "Deny"
+    actions = [
+      "acm:ImportCertificate",
+      "acm:RequestCertificate",
+    ]
+    resources = ["*"]
+    condition {
+      test     = "StringNotLike"
+      variable = "aws:PrincipalArn"
+      values = [
+        "arn:aws:iam::${data.aws_caller_identity.this.account_id}:user/${var.account_role_name}",
+        "arn:aws:iam::${"$${aws:PrincipalAccount}"}:role/${var.account_role_name}",
+      ]
+    }
+    condition {
+      test     = "StringEquals"
+      variable = "aws:PrincipalOrgID"
+      values = [
+        "${data.aws_organizations_organization.this.id}",
+      ]
+    }
+  }
+
+  statement {
+    sid    = "PreventACMWriteUnlessSuperAdmin"
+    effect = "Deny"
+    not_actions = [
+      "acm:DescribeCertificate",
+      "acm:ExportCertificate",
+      "acm:GetAccountConfiguration",
+      "acm:GetCertificate",
+      "acm:ListCertificates",
+      "acm:ListTagsForCertificate",
+    ]
+    resources = ["arn:aws:kms:*:*:key/*"]
+    condition {
+      test     = "StringNotLike"
+      variable = "aws:PrincipalArn"
+      values = [
+        "arn:aws:iam::${data.aws_caller_identity.this.account_id}:user/${var.account_role_name}",
+        "arn:aws:iam::${"$${aws:PrincipalAccount}"}:role/${var.account_role_name}",
       ]
     }
     condition {
