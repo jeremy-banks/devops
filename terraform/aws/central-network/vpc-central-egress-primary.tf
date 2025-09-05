@@ -25,7 +25,7 @@ locals {
 
 module "vpc_central_egress_primary" {
   source    = "terraform-aws-modules/vpc/aws"
-  version   = "6.0.1"
+  version   = "~> 6.0.1"
   providers = { aws = aws.network_prd }
 
   name = "${local.resource_name_primary}-vpc-central-egress"

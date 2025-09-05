@@ -1,6 +1,6 @@
 module "iam_assumable_roles_sdlc_prd" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-role"
-  version   = "6.2.0"
+  version   = "~> 6.2.1"
   providers = { aws = aws.sdlc_prd }
 
   for_each = {
@@ -36,7 +36,7 @@ module "iam_assumable_roles_sdlc_prd" {
 
 module "iam_assumable_roles_sdlc_stg" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-role"
-  version   = "6.2.0"
+  version   = "~> 6.2.1"
   providers = { aws = aws.sdlc_stg }
 
   for_each = {
@@ -72,7 +72,7 @@ module "iam_assumable_roles_sdlc_stg" {
 
 module "iam_assumable_roles_sdlc_tst" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-role"
-  version   = "6.2.0"
+  version   = "~> 6.2.1"
   providers = { aws = aws.sdlc_tst }
 
   for_each = {
@@ -108,7 +108,7 @@ module "iam_assumable_roles_sdlc_tst" {
 
 module "iam_assumable_roles_sdlc_dev" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-role"
-  version   = "6.2.0"
+  version   = "~> 6.2.1"
   providers = { aws = aws.sdlc_dev }
 
   for_each = {

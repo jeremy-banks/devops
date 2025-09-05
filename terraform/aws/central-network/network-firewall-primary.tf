@@ -1,6 +1,6 @@
 module "network_firewall_primary" {
   source    = "terraform-aws-modules/network-firewall/aws"
-  version   = "2.0.1"
+  version   = "~> 2.0.1"
   providers = { aws = aws.network_prd }
 
   # Firewall

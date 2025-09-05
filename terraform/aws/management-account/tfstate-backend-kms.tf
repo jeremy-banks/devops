@@ -16,7 +16,7 @@ data "aws_iam_policy_document" "kms_tfstate_backend" {
 
 module "kms_tfstate_backend_primary" {
   source    = "terraform-aws-modules/kms/aws"
-  version   = "~> 4.0.0"
+  version   = "~> 4.1.0"
   providers = { aws = aws.management }
 
   deletion_window_in_days = 30
@@ -32,7 +32,7 @@ module "kms_tfstate_backend_primary" {
 
 module "kms_tfstate_backend_failover" {
   source    = "terraform-aws-modules/kms/aws"
-  version   = "~> 4.0.0"
+  version   = "~> 4.1.0"
   providers = { aws = aws.management_failover }
 
   deletion_window_in_days = 30
