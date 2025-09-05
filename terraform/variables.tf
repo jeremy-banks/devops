@@ -385,15 +385,11 @@ locals {
   org_owner_email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}@${var.org_owner_email_domain_tld}"
 
   default_tags_map = {
-    "${var.company_name_abbr}:company"     = "${var.company_name}"
-    "${var.company_name_abbr}:team"        = "${var.team_name}"
-    "${var.company_name_abbr}:project"     = "${var.project_name}"
-    "${var.company_name_abbr}:environment" = "${var.environment}"
-
+    "${var.company_name_abbr}:company"        = "${var.company_name}"
+    "${var.company_name_abbr}:cost_center"    = "${var.cost_center}"
+    "${var.company_name_abbr}:environment"    = "${var.environment}"
+    "${var.company_name_abbr}:project"        = "${var.project_name}"
     "${var.company_name_abbr}:resource_owner" = var.resource_owner_email != null ? "${var.resource_owner_email}" : "${local.org_owner_email}"
-
-    "${var.company_name_abbr}:cost_center" = "${var.cost_center}"
-
-    "${var.company_name_abbr}:${var.iam_immutable_tag_key}" = "true"
+    "${var.company_name_abbr}:team"           = "${var.team_name}"
   }
 }

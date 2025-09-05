@@ -80,9 +80,13 @@ data "aws_iam_policy_document" "org_1" {
 
   # no 00000
   statement {
-    sid       = "DenyAnyActionUsing00000CIDR"
-    effect    = "Deny"
-    actions   = ["*"]
+    sid    = "DenySecGrpActionUsing00000CIDR"
+    effect = "Deny"
+    actions = [
+      "ec2:AuthorizeSecurityGroup*",
+      "ec2:RevokeSecurityGroup*",
+      "ec2:UpdateSecurityGroup*",
+    ]
     resources = ["*"]
     condition {
       test     = "IpAddress"
@@ -114,7 +118,7 @@ data "aws_iam_policy_document" "org_1" {
       "acm:RevokeCertificate",
       "acm:UpdateCertificateOptions",
       "ec2:AssociateEnclaveCertificateIamRole",
-      "ec2:DisassociateEnclaveCertificateIamRole"
+      "ec2:DisassociateEnclaveCertificateIamRole",
     ]
     resources = ["*"]
     condition {
