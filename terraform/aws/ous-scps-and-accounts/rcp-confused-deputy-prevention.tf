@@ -25,7 +25,7 @@ data "aws_iam_policy_document" "confused_deputy_protection" {
     # condition {
     #   test     = "StringNotEqualsIfExists"
     #   variable = "aws:SourceAccount"
-    #   values = local.third_party_account_ids
+    #   values = local.confused_deputy_protection_allowed_accounts
     # }
     condition {
       test     = "Bool"
