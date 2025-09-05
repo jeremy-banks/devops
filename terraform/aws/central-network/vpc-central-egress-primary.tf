@@ -1,8 +1,8 @@
 locals {
   vpc_central_egress_cidrsubnets_primary = (
-    var.vpc_azs_number_used_network == 4 ? cidrsubnets(var.vpc_cidr.central_egress_primary, 3, 3, 3, 3, 12, 12, 12, 12) :
-    var.vpc_azs_number_used_network == 3 ? cidrsubnets(var.vpc_cidr.central_egress_primary, 2, 2, 2, 12, 12, 12) :
-    var.vpc_azs_number_used_network == 2 ? cidrsubnets(var.vpc_cidr.central_egress_primary, 2, 2, 12, 12) :
+    var.vpc_azs_number_used_network == 4 ? cidrsubnets(var.vpc_cidr.central_egress_prd_primary, 3, 3, 3, 3, 12, 12, 12, 12) :
+    var.vpc_azs_number_used_network == 3 ? cidrsubnets(var.vpc_cidr.central_egress_prd_primary, 2, 2, 2, 12, 12, 12) :
+    var.vpc_azs_number_used_network == 2 ? cidrsubnets(var.vpc_cidr.central_egress_prd_primary, 2, 2, 12, 12) :
     null
   )
 
@@ -28,8 +28,8 @@ module "vpc_central_egress_primary" {
   version   = "~> 6.0.1"
   providers = { aws = aws.this }
 
-  name = "${local.resource_name_primary}-vpc-central-egress"
-  cidr = var.vpc_cidr.central_egress_primary
+  name = "${local.resource_name.primary}-vpc-central-egress"
+  cidr = var.vpc_cidr.central_egress_prd_primary
 
   azs                 = slice(local.vpc_az_ids_primary, 0, var.vpc_azs_number_used_network)
   private_subnets     = []

@@ -7,7 +7,7 @@ module "network_firewall_failover" {
   count = var.create_failover_region_network ? 1 : 0
 
   # Firewall
-  name        = "${local.resource_name_failover}-firewall"
+  name        = "${local.resource_name.failover}-firewall"
   description = "Example network firewall"
 
   # Only for example
@@ -36,7 +36,7 @@ module "network_firewall_failover" {
     {
       log_destination = {
         bucketName = aws_s3_bucket.network_firewall_logs_failover[0].id
-        prefix     = "${local.resource_name_failover}-${var.this_slug}"
+        prefix     = "${local.resource_name.failover}-${var.this_slug}"
       }
       log_destination_type = "S3"
       log_type             = "FLOW"
@@ -44,7 +44,7 @@ module "network_firewall_failover" {
   ]
 
   # Policy
-  policy_name        = "${local.resource_name_failover}-${var.this_slug}-policy"
+  policy_name        = "${local.resource_name.failover}-${var.this_slug}-policy"
   policy_description = "Example network firewall policy"
 
   # policy_stateful_rule_group_reference = {

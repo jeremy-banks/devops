@@ -5,8 +5,8 @@ module "sg_inspection_main_failover" {
 
   count = var.create_failover_region_network ? 1 : 0
 
-  name        = "${local.resource_name_failover}-central-inspection-main-sg"
-  description = "${local.resource_name_failover}-central-inspection-main-sg"
+  name        = "${local.resource_name.failover}-central-inspection-main-sg"
+  description = "${local.resource_name.failover}-central-inspection-main-sg"
   vpc_id      = module.vpc_inspection_failover[0].vpc_id
 
   ingress_with_self = [{ rule = "all-all" }]
@@ -20,5 +20,5 @@ module "sg_inspection_main_failover" {
   egress_ipv6_cidr_blocks = ["::/0"]
   egress_rules            = ["all-all"]
 
-  tags = { Name = "${local.resource_name_failover}-central-inspection-main-sg" }
+  tags = { Name = "${local.resource_name.failover}-central-inspection-main-sg" }
 }

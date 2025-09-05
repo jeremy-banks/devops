@@ -1,7 +1,7 @@
 resource "aws_ram_resource_share" "primary" {
   provider = aws.this
 
-  name                      = "${local.resource_name_primary}-ram"
+  name                      = "${local.resource_name.primary}-ram"
   allow_external_principals = false
 }
 
@@ -12,33 +12,33 @@ resource "aws_ram_resource_association" "ram_tgw_primary" {
   resource_share_arn = aws_ram_resource_share.primary.arn
 }
 
-resource "aws_ram_principal_association" "ram_ou_infrastructure_primary" {
+resource "aws_ram_principal_association" "ram_org_primary" {
   provider = aws.this
 
-  principal          = data.aws_organizations_organizational_unit.infrastructure.arn
+  principal          = data.aws_organizations_organization.this.arn
   resource_share_arn = aws_ram_resource_share.primary.arn
 }
 
-resource "aws_ram_principal_association" "ram_ou_security_primary" {
-  provider = aws.this
+# resource "aws_ram_principal_association" "ram_ou_security_primary" {
+#   provider = aws.this
 
-  principal          = data.aws_organizations_organizational_unit.security.arn
-  resource_share_arn = aws_ram_resource_share.primary.arn
-}
+#   principal          = data.aws_organizations_organizational_unit.security.arn
+#   resource_share_arn = aws_ram_resource_share.primary.arn
+# }
 
-resource "aws_ram_principal_association" "ram_ou_workloads_primary" {
-  provider = aws.this
+# resource "aws_ram_principal_association" "ram_ou_workloads_primary" {
+#   provider = aws.this
 
-  principal          = data.aws_organizations_organizational_unit.workloads.arn
-  resource_share_arn = aws_ram_resource_share.primary.arn
-}
+#   principal          = data.aws_organizations_organizational_unit.workloads.arn
+#   resource_share_arn = aws_ram_resource_share.primary.arn
+# }
 
 resource "aws_ram_resource_share" "failover" {
   provider = aws.this_failover
 
   count = var.create_failover_region_network ? 1 : 0
 
-  name                      = "${local.resource_name_failover}-ram"
+  name                      = "${local.resource_name.failover}-ram"
   allow_external_principals = false
 }
 
@@ -51,29 +51,29 @@ resource "aws_ram_resource_association" "ram_tgw_failover" {
   resource_share_arn = aws_ram_resource_share.failover[0].arn
 }
 
-resource "aws_ram_principal_association" "ram_ou_infrastructure_failover" {
+resource "aws_ram_principal_association" "ram_org_failover" {
   provider = aws.this_failover
 
   count = var.create_failover_region_network ? 1 : 0
 
-  principal          = data.aws_organizations_organizational_unit.infrastructure.arn
+  principal          = data.aws_organizations_organization.this.arn
   resource_share_arn = aws_ram_resource_share.failover[0].arn
 }
 
-resource "aws_ram_principal_association" "ram_ou_security_failover" {
-  provider = aws.this_failover
+# resource "aws_ram_principal_association" "ram_ou_security_failover" {
+#   provider = aws.this_failover
 
-  count = var.create_failover_region_network ? 1 : 0
+#   count = var.create_failover_region_network ? 1 : 0
 
-  principal          = data.aws_organizations_organizational_unit.security.arn
-  resource_share_arn = aws_ram_resource_share.failover[0].arn
-}
+#   principal          = data.aws_organizations_organizational_unit.security.arn
+#   resource_share_arn = aws_ram_resource_share.failover[0].arn
+# }
 
-resource "aws_ram_principal_association" "ram_ou_workloads_failover" {
-  provider = aws.this_failover
+# resource "aws_ram_principal_association" "ram_ou_workloads_failover" {
+#   provider = aws.this_failover
 
-  count = var.create_failover_region_network ? 1 : 0
+#   count = var.create_failover_region_network ? 1 : 0
 
-  principal          = data.aws_organizations_organizational_unit.workloads.arn
-  resource_share_arn = aws_ram_resource_share.failover[0].arn
-}
+#   principal          = data.aws_organizations_organizational_unit.workloads.arn
+#   resource_share_arn = aws_ram_resource_share.failover[0].arn
+# }

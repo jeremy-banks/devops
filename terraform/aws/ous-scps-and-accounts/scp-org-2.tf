@@ -217,6 +217,13 @@ data "aws_iam_policy_document" "org_2" {
       "globalaccelerator:Update*"
     ]
     resources = ["*"]
+    condition {
+      test     = "StringNotEquals"
+      variable = "aws:PrincipalArn"
+      values = [
+        "arn:aws:iam::${"$${aws:PrincipalAccount}"}:role/${var.account_role_name}",
+      ]
+    }
   }
 }
 

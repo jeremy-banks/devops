@@ -4,7 +4,7 @@ module "network_firewall_primary" {
   providers = { aws = aws.this }
 
   # Firewall
-  name        = "${local.resource_name_primary}-firewall"
+  name        = "${local.resource_name.primary}-firewall"
   description = "Example network firewall"
 
   # Only for example
@@ -33,7 +33,7 @@ module "network_firewall_primary" {
     {
       log_destination = {
         bucketName = aws_s3_bucket.network_firewall_logs_primary.id
-        prefix     = "${local.resource_name_primary}-${var.this_slug}"
+        prefix     = "${local.resource_name.primary}-${var.this_slug}"
       }
       log_destination_type = "S3"
       log_type             = "FLOW"
@@ -41,7 +41,7 @@ module "network_firewall_primary" {
   ]
 
   # Policy
-  policy_name        = "${local.resource_name_primary}-${var.this_slug}-policy"
+  policy_name        = "${local.resource_name.primary}-${var.this_slug}-policy"
   policy_description = "Example network firewall policy"
 
   # policy_stateful_rule_group_reference = {

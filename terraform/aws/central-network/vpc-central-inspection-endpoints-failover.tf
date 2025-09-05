@@ -9,7 +9,7 @@
 
 #   create_security_group = false
 #   # create_security_group      = true
-#   # security_group_name_prefix = "${local.resource_name_failover}-central-inspection-firewall-sg"
+#   # security_group_name_prefix = "${local.resource_name.failover}-central-inspection-firewall-sg"
 #   # security_group_rules       = { ingress_https = { cidr_blocks = ["0.0.0.0/0"] } }
 
 #   endpoints = {
