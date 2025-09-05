@@ -11,6 +11,10 @@ module "shared_services_acm_prd_primary" {
   wait_for_validation    = false
 }
 
+output "shared_services_acm_prd_primary_arn" {
+  value = module.shared_services_acm_prd_primary.acm_certificate_arn
+}
+
 module "shared_services_acm_prd_failover" {
   source    = "terraform-aws-modules/acm/aws"
   version   = "~> 6.1.0"
@@ -22,6 +26,10 @@ module "shared_services_acm_prd_failover" {
   create_route53_records = false
   validation_method      = "DNS"
   wait_for_validation    = false
+}
+
+output "shared_services_acm_prd_failover_arn" {
+  value = module.shared_services_acm_prd_failover.acm_certificate_arn
 }
 
 module "shared_services_acm_stg_primary" {
@@ -37,6 +45,10 @@ module "shared_services_acm_stg_primary" {
   wait_for_validation    = false
 }
 
+output "shared_services_acm_stg_primary_arn" {
+  value = module.shared_services_acm_stg_primary.acm_certificate_arn
+}
+
 module "shared_services_acm_stg_failover" {
   source    = "terraform-aws-modules/acm/aws"
   version   = "~> 6.1.0"
@@ -48,6 +60,10 @@ module "shared_services_acm_stg_failover" {
   create_route53_records = false
   validation_method      = "DNS"
   wait_for_validation    = false
+}
+
+output "shared_services_acm_stg_failover_arn" {
+  value = module.shared_services_acm_stg_failover.acm_certificate_arn
 }
 
 module "shared_services_acm_records" {

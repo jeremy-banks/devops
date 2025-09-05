@@ -12,6 +12,10 @@ module "sdlc_acm_prd_primary" {
   wait_for_validation    = false
 }
 
+output "sdlc_acm_prd_primary_arn" {
+  value = module.sdlc_acm_prd_primary.acm_certificate_arn
+}
+
 module "sdlc_acm_prd_failover" {
   source    = "terraform-aws-modules/acm/aws"
   version   = "~> 6.1.0"
@@ -24,6 +28,10 @@ module "sdlc_acm_prd_failover" {
   create_route53_records = false
   validation_method      = "DNS"
   wait_for_validation    = false
+}
+
+output "sdlc_acm_prd_failover_arn" {
+  value = module.sdlc_acm_prd_failover.acm_certificate_arn
 }
 
 module "sdlc_acm_stg_primary" {
@@ -40,6 +48,10 @@ module "sdlc_acm_stg_primary" {
   wait_for_validation    = false
 }
 
+output "sdlc_acm_stg_primary_arn" {
+  value = module.sdlc_acm_stg_primary.acm_certificate_arn
+}
+
 module "sdlc_acm_stg_failover" {
   source    = "terraform-aws-modules/acm/aws"
   version   = "~> 6.1.0"
@@ -51,6 +63,10 @@ module "sdlc_acm_stg_failover" {
   create_route53_records = false
   validation_method      = "DNS"
   wait_for_validation    = false
+}
+
+output "sdlc_acm_stg_failover_arn" {
+  value = module.sdlc_acm_stg_failover.acm_certificate_arn
 }
 
 module "sdlc_acm_tst_primary" {
@@ -66,6 +82,10 @@ module "sdlc_acm_tst_primary" {
   wait_for_validation    = false
 }
 
+output "sdlc_acm_tst_primary_arn" {
+  value = module.sdlc_acm_tst_primary.acm_certificate_arn
+}
+
 module "sdlc_acm_tst_failover" {
   source    = "terraform-aws-modules/acm/aws"
   version   = "~> 6.1.0"
@@ -77,6 +97,10 @@ module "sdlc_acm_tst_failover" {
   create_route53_records = false
   validation_method      = "DNS"
   wait_for_validation    = false
+}
+
+output "sdlc_acm_tst_failover_arn" {
+  value = module.sdlc_acm_tst_failover.acm_certificate_arn
 }
 
 module "sdlc_acm_dev_primary" {
@@ -92,6 +116,10 @@ module "sdlc_acm_dev_primary" {
   wait_for_validation    = false
 }
 
+output "sdlc_acm_dev_primary_arn" {
+  value = module.sdlc_acm_dev_primary.acm_certificate_arn
+}
+
 module "sdlc_acm_dev_failover" {
   source    = "terraform-aws-modules/acm/aws"
   version   = "~> 6.1.0"
@@ -103,6 +131,10 @@ module "sdlc_acm_dev_failover" {
   create_route53_records = false
   validation_method      = "DNS"
   wait_for_validation    = false
+}
+
+output "sdlc_acm_dev_failover_arn" {
+  value = module.sdlc_acm_dev_failover.acm_certificate_arn
 }
 
 module "sdlc_acm_records" {

@@ -11,6 +11,10 @@ module "workload_product_a_acm_prd_primary" {
   wait_for_validation    = false
 }
 
+output "workload_product_a_acm_prd_primary_arn" {
+  value = module.workload_product_a_acm_prd_primary.acm_certificate_arn
+}
+
 module "workload_product_a_acm_prd_failover" {
   source    = "terraform-aws-modules/acm/aws"
   version   = "~> 6.1.0"
@@ -22,6 +26,10 @@ module "workload_product_a_acm_prd_failover" {
   create_route53_records = false
   validation_method      = "DNS"
   wait_for_validation    = false
+}
+
+output "workload_product_a_acm_prd_failover_arn" {
+  value = module.workload_product_a_acm_prd_failover.acm_certificate_arn
 }
 
 module "workload_product_a_acm_stg_primary" {
@@ -37,6 +45,10 @@ module "workload_product_a_acm_stg_primary" {
   wait_for_validation    = false
 }
 
+output "workload_product_a_acm_stg_primary_arn" {
+  value = module.workload_product_a_acm_stg_primary.acm_certificate_arn
+}
+
 module "workload_product_a_acm_stg_failover" {
   source    = "terraform-aws-modules/acm/aws"
   version   = "~> 6.1.0"
@@ -48,6 +60,10 @@ module "workload_product_a_acm_stg_failover" {
   create_route53_records = false
   validation_method      = "DNS"
   wait_for_validation    = false
+}
+
+output "workload_product_a_acm_stg_failover_arn" {
+  value = module.workload_product_a_acm_stg_failover.acm_certificate_arn
 }
 
 module "workload_product_a_acm_tst_primary" {
@@ -67,6 +83,10 @@ module "workload_product_a_acm_tst_primary" {
   wait_for_validation    = false
 }
 
+output "workload_product_a_acm_tst_primary_arn" {
+  value = module.workload_product_a_acm_tst_primary.acm_certificate_arn
+}
+
 module "workload_product_a_acm_tst_failover" {
   source    = "terraform-aws-modules/acm/aws"
   version   = "~> 6.1.0"
@@ -82,6 +102,10 @@ module "workload_product_a_acm_tst_failover" {
   create_route53_records = false
   validation_method      = "DNS"
   wait_for_validation    = false
+}
+
+output "workload_product_a_acm_tst_failover_arn" {
+  value = module.workload_product_a_acm_tst_failover.acm_certificate_arn
 }
 
 module "workload_product_a_acm_dev_primary" {
@@ -101,6 +125,10 @@ module "workload_product_a_acm_dev_primary" {
   wait_for_validation    = false
 }
 
+output "workload_product_a_acm_dev_primary_arn" {
+  value = module.workload_product_a_acm_dev_primary.acm_certificate_arn
+}
+
 module "workload_product_a_acm_dev_failover" {
   source    = "terraform-aws-modules/acm/aws"
   version   = "~> 6.1.0"
@@ -116,6 +144,10 @@ module "workload_product_a_acm_dev_failover" {
   create_route53_records = false
   validation_method      = "DNS"
   wait_for_validation    = false
+}
+
+output "workload_product_a_acm_dev_failover_arn" {
+  value = module.workload_product_a_acm_dev_failover.acm_certificate_arn
 }
 
 module "workload_product_a_acm_records" {
