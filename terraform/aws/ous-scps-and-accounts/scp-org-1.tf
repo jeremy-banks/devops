@@ -1,138 +1,97 @@
 data "aws_iam_policy_document" "org_1" {
   provider = aws.management
 
-  # https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_general.html#example-scp-leave-org
+  # deny account changes
   statement {
-    sid       = "PreventMemberAccountsFromLeavingTheOrganization"
-    actions   = ["organizations:LeaveOrganization"]
-    resources = ["*"]
-    effect    = "Deny"
-  }
-
-  # https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_ec2.html#example-ec2-3
-  statement {
-    sid       = "PreventDisablingOfDefaultAmazonEBSEncryption"
-    effect    = "Deny"
-    actions   = ["ec2:DisableEbsEncryptionByDefault"]
-    resources = ["*"]
-  }
-
-  # https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_s3.html#example-s3-1
-  statement {
-    sid       = "PreventAmazonS3UnencryptedObjectUploads"
-    effect    = "Deny"
-    actions   = ["s3:PutObject"]
-    resources = ["*"]
-    condition {
-      test     = "Null"
-      variable = "s3:x-amz-server-side-encryption"
-      values   = ["true"]
-    }
-  }
-
-  # https://aws.amazon.com/blogs/mt/identity-guide-preventive-controls-with-aws-identity-scps/
-  statement {
-    sid       = "PreventRDSUnencryptedDBCreation"
-    effect    = "Deny"
-    actions   = ["rds:CreateDBInstance"]
-    resources = ["*"]
-    condition {
-      test     = "Bool"
-      variable = "rds:StorageEncrypted"
-      values   = ["false"]
-    }
-  }
-  statement {
-    sid       = "PreventEFSUnencryptedClusterCreation"
-    effect    = "Deny"
-    actions   = ["elasticfilesystem:CreateFileSystem"]
-    resources = ["*"]
-    condition {
-      test     = "Bool"
-      variable = "elasticfilesystem:Encrypted"
-      values   = ["false"]
-    }
-  }
-
-  # S3 bucket controls from terraform modules
-  statement {
-    sid       = "PreventS3OutdatedTLS"
-    effect    = "Deny"
-    actions   = ["s3:*"]
-    resources = ["*"]
-    condition {
-      test     = "NumericLessThan"
-      variable = "s3:TlsVersion"
-      values   = ["1.2"]
-    }
-  }
-  statement {
-    sid       = "PreventS3InsecureTransport"
-    effect    = "Deny"
-    actions   = ["s3:*"]
-    resources = ["*"]
-    condition {
-      test     = "Bool"
-      variable = "aws:SecureTransport"
-      values   = ["false"]
-    }
-  }
-
-  # no 00000
-  statement {
-    sid    = "DenySecGrpActionUsing00000CIDR"
     effect = "Deny"
     actions = [
-      "ec2:AuthorizeSecurityGroup*",
-      "ec2:RevokeSecurityGroup*",
-      "ec2:UpdateSecurityGroup*",
+      "account:AcceptPrimaryEmailUpdate",
+      "account:CloseAccount",
+      "account:DeleteAlternateContact",
+      "account:DisableRegion",
+      "account:EnableRegion",
+      "account:Put*",
+      "account:StartPrimaryEmailUpdate",
     ]
     resources = ["*"]
     condition {
-      test     = "IpAddress"
-      variable = "ec2:CIDR"
-      values   = ["0.0.0.0/0"]
-    }
-    condition {
-      test     = "StringNotEquals"
+      test     = "ArnNotLike"
       variable = "aws:PrincipalArn"
       values = [
         "arn:aws:iam::${"$${aws:PrincipalAccount}"}:role/${var.account_role_name}",
+        "arn:aws:iam::${"$${aws:PrincipalAccount}"}:root",
       ]
     }
   }
 
-  # acm controls
+  # deny unused regions
+  # https://docs.aws.amazon.com/controltower/latest/controlreference/primary-region-deny-policy.html
   statement {
-    sid    = "PreventACMMutability"
     effect = "Deny"
-    actions = [
-      "acm:AddTagsToCertificate",
-      "acm:DeleteCertificate",
-      "acm:ImportCertificate",
-      "acm:PutAccountConfiguration",
-      "acm:RemoveTagsFromCertificate",
-      "acm:RenewCertificate",
-      "acm:RequestCertificate",
-      "acm:ResendValidationEmail",
-      "acm:RevokeCertificate",
-      "acm:UpdateCertificateOptions",
-      "ec2:AssociateEnclaveCertificateIamRole",
-      "ec2:DisassociateEnclaveCertificateIamRole",
+    not_actions = [
+      "a4b:*",
+      "acm:*",
+      "aws-marketplace-management:*",
+      "aws-marketplace:*",
+      "aws-portal:*",
+      "budgets:*",
+      "ce:*",
+      "chime:*",
+      "cloudfront:*",
+      "config:*",
+      "cur:*",
+      "directconnect:*",
+      "ec2:DescribeRegions",
+      "ec2:DescribeTransitGateways",
+      "ec2:DescribeVpnGateways",
+      "fms:*",
+      "globalaccelerator:*",
+      "health:*",
+      "iam:*",
+      "importexport:*",
+      "kms:*",
+      "mobileanalytics:*",
+      "networkmanager:*",
+      "organizations:*",
+      "pricing:*",
+      "route53-recovery-cluster:*",
+      "route53-recovery-control-config:*",
+      "route53-recovery-readiness:*",
+      "route53:*",
+      "route53domains:*",
+      "s3:GetAccountPublic*",
+      "s3:ListAllMyBuckets",
+      "s3:ListMultiRegionAccessPoints",
+      "s3:PutAccountPublic*",
+      "shield:*",
+      "sts:*",
+      "support:*",
+      "trustedadvisor:*",
+      "waf-regional:*",
+      "waf:*",
+      "wafv2:*",
+      "wellarchitected:*"
     ]
     resources = ["*"]
     condition {
       test     = "StringNotEquals"
+      variable = "aws:RequestedRegion"
+      values   = [var.region_primary.full, var.region_failover.full]
+    }
+    condition {
+      test     = "ArnNotLike"
       variable = "aws:PrincipalArn"
       values = [
         "arn:aws:iam::${"$${aws:PrincipalAccount}"}:role/${var.account_role_name}",
+        "arn:aws:iam::${"$${aws:PrincipalAccount}"}:role/AWSControlTowerExecution",
+        "arn:aws:iam::${"$${aws:PrincipalAccount}"}:root",
       ]
     }
   }
 
-  # iam controls
+  # deny iam
+  # https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_general.html#example-scp-restricts-iam-principals
   statement {
-    sid    = "PreventIAMMutability"
     effect = "Deny"
     actions = [
       "codestar:CreateUserProfile",
@@ -165,62 +124,101 @@ data "aws_iam_policy_document" "org_1" {
     condition {
       test     = "StringNotEqualsIfExists"
       variable = "aws:PrincipalArn"
-      values   = ["$${aws:ResourceArn}"]
-    }
-    condition {
-      test     = "StringNotLikeIfExists"
-      variable = "aws:PrincipalArn"
-      values   = ["arn:aws:iam::${"$${aws:PrincipalAccount}"}:role/${var.account_role_name}"]
+      values = [
+        "$${aws:ResourceArn}",
+        "arn:aws:iam::${"$${aws:PrincipalAccount}"}:role/${var.account_role_name}",
+        "arn:aws:iam::${"$${aws:PrincipalAccount}"}:root",
+      ]
     }
   }
 
-  # kms controls
+  # deny accounts leaving org
+  # https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_general.html#example-scp-leave-org
   statement {
-    sid    = "PreventKMSMutability"
+    effect    = "Deny"
+    actions   = ["organizations:LeaveOrganization"]
+    resources = ["*"]
+  }
+
+  # deny cloudwatch changes
+  # https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_cloudwatch.html
+  statement {
     effect = "Deny"
     actions = [
-      "events:CreateArchive",
-      "events:UpdateArchive",
-      "kinesis:StartStreamEncryption",
-      "kinesis:StopStreamEncryption",
-      "kms:CancelKeyDeletion",
-      "kms:ConnectCustomKeyStore",
-      "kms:Create*",
-      #   "kms:Decrypt",
-      "kms:Delete*",
-      "kms:DeriveSharedSecret",
-      "kms:Disable*",
-      "kms:DisconnectCustomKeyStore",
-      "kms:Enable*",
-      #   "kms:Encrypt",
-      #   "kms:GenerateDataKey",
-      #   "kms:GenerateDataKeyPair",
-      #   "kms:GenerateDataKeyPairWithoutPlaintext",
-      #   "kms:GenerateDataKeyWithoutPlaintext",
-      "kms:GenerateMac",
-      "kms:GenerateRandom",
-      "kms:ImportKeyMaterial",
-      "kms:PutKeyPolicy",
-      #   "kms:ReEncryptFrom",
-      #   "kms:ReEncryptTo",
-      "kms:ReplicateKey",
-      "kms:RetireGrant",
-      "kms:RevokeGrant",
-      "kms:RotateKeyOnDemand",
-      "kms:ScheduleKeyDeletion",
-      "kms:Sign",
-      "kms:SynchronizeMultiRegionKey",
-      "kms:TagResource",
-      "kms:UntagResource",
-      "kms:Update*",
-      "kms:Verify*"
+      "cloudwatch:Delete*",
+      "cloudwatch:Disable*",
+      "cloudwatch:Put*",
+      "cloudwatch:SetAlarmState",
     ]
     resources = ["*"]
     condition {
-      test     = "StringNotEquals"
+      test     = "ArnNotLike"
       variable = "aws:PrincipalArn"
       values = [
         "arn:aws:iam::${"$${aws:PrincipalAccount}"}:role/${var.account_role_name}",
+        "arn:aws:iam::${"$${aws:PrincipalAccount}"}:root",
+      ]
+    }
+  }
+
+  # deny config changes
+  # https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_config.html
+  statement {
+    effect    = "Deny"
+    actions   = ["config:*"]
+    resources = ["*"]
+    condition {
+      test     = "ArnNotLike"
+      variable = "aws:PrincipalArn"
+      values = [
+        "arn:aws:iam::${"$${aws:PrincipalAccount}"}:role/${var.account_role_name}",
+        "arn:aws:iam::${"$${aws:PrincipalAccount}"}:root",
+      ]
+    }
+  }
+
+  # deny disable ebs encryption
+  # https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_ec2.html#example-ec2-3
+  statement {
+    effect    = "Deny"
+    actions   = ["ec2:DisableEbsEncryptionByDefault"]
+    resources = ["*"]
+  }
+
+  # deny non gp3 volumes
+  # https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_ec2.html#example-ec2-4
+  statement {
+    effect = "Deny"
+    actions = [
+      "ec2:AttachVolume",
+      "ec2:CreateVolume",
+      "ec2:RunInstances"
+    ]
+    resources = ["arn:aws:ec2:*:*:volume/*"]
+    condition {
+      test     = "StringNotEquals"
+      variable = "ec2:VolumeType"
+      values   = ["gp3"]
+    }
+  }
+
+  # deny guardduty
+  # https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_ec2.html#example-ec2-4
+  statement {
+    effect    = "Deny"
+    actions   = ["guardduty:*"]
+    resources = ["*"]
+    condition {
+      test     = "StringNotEquals"
+      variable = "ec2:VolumeType"
+      values   = ["gp3"]
+    }
+    condition {
+      test     = "ArnNotLike"
+      variable = "aws:PrincipalArn"
+      values = [
+        "arn:aws:iam::${"$${aws:PrincipalAccount}"}:role/${var.account_role_name}",
+        "arn:aws:iam::${"$${aws:PrincipalAccount}"}:root",
       ]
     }
   }
