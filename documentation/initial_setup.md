@@ -74,16 +74,16 @@ Make an email, update relevant files with your unique information, and begin dep
 1. Update the terraform/variables.tf `account_id` map with the output
 
 ### Deploy Central R53
-1. Deploy `terraform/aws/central-r53`
-
-### Deploy Central Backup
-1. Deploy `terraform/aws/central-backup`
+1. Deploy `terraform/aws/central-r53-and-acm`
 
 ### Deploy Central Network
 1. Deploy `terraform/aws/central-network`
 
 ### Deploy IAM Resources
 1. Deploy `terraform/aws/iam`
+
+### Deploy Central Backup
+1. Deploy `terraform/aws/central-archive`
 
 ### Deploy Workload Product A
 1. `create_failover_region` used to declare whether this deployment should have a failover region
