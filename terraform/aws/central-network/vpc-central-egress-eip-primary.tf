@@ -1,5 +1,5 @@
 resource "aws_eip" "vpc_central_egress_primary_nat" {
-  provider = aws.network_prd
+  provider = aws.this
   # lifecycle { prevent_destroy = true } # YOU NEVER WANT TO DELETE THESE
 
   count = var.vpc_azs_number_used_network

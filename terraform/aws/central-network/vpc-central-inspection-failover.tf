@@ -26,7 +26,7 @@ locals {
 module "vpc_inspection_failover" {
   source    = "terraform-aws-modules/vpc/aws"
   version   = "~> 6.0.1"
-  providers = { aws = aws.network_prd_failover }
+  providers = { aws = aws.this_failover }
 
   count = var.create_failover_region_network ? 1 : 0
 
@@ -77,7 +77,7 @@ module "vpc_inspection_failover" {
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inspection_to_tgw_failover" {
-  provider = aws.network_prd_failover
+  provider = aws.this_failover
 
   count = var.create_failover_region_network ? 1 : 0
 

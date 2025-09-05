@@ -1,7 +1,7 @@
 module "network_firewall_rule_group_stateful_primary" {
   source    = "terraform-aws-modules/network-firewall/aws//modules/rule-group"
   version   = "~> 2.0.1"
-  providers = { aws = aws.network_prd }
+  providers = { aws = aws.this }
 
   name        = "${local.resource_name_primary}-rule-group-stateful"
   description = "Stateful Inspection for denying access to a domain"
@@ -29,7 +29,7 @@ module "network_firewall_rule_group_stateful_primary" {
 module "network_firewall_rule_group_stateless_primary" {
   source    = "terraform-aws-modules/network-firewall/aws//modules/rule-group"
   version   = "~> 2.0.1"
-  providers = { aws = aws.network_prd }
+  providers = { aws = aws.this }
 
   name        = "${local.resource_name_primary}-rule-group-stateless"
   description = "Stateless Inspection with a Custom Action"

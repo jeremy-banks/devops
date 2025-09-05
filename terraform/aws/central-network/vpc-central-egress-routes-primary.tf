@@ -1,5 +1,5 @@
 resource "aws_route" "central_egress_pub_to_tgw_primary" {
-  provider = aws.network_prd
+  provider = aws.this
 
   count = length(module.vpc_central_egress_primary.public_route_table_ids)
 
@@ -9,7 +9,7 @@ resource "aws_route" "central_egress_pub_to_tgw_primary" {
 }
 
 resource "aws_route" "central_egress_intra_to_tgw_primary" {
-  provider = aws.network_prd
+  provider = aws.this
 
   count = length(module.vpc_central_egress_primary.intra_route_table_ids)
 
@@ -19,7 +19,7 @@ resource "aws_route" "central_egress_intra_to_tgw_primary" {
 }
 
 resource "aws_route" "central_egress_intra_to_nat_primary" {
-  provider = aws.network_prd
+  provider = aws.this
 
   count = length(module.vpc_central_egress_primary.intra_route_table_ids)
 

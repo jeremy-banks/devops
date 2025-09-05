@@ -26,7 +26,7 @@ locals {
 module "vpc_inspection_primary" {
   source    = "terraform-aws-modules/vpc/aws"
   version   = "~> 6.0.1"
-  providers = { aws = aws.network_prd }
+  providers = { aws = aws.this }
 
   name = "${local.resource_name_primary}-vpc-central-inspection"
   cidr = var.vpc_cidr.central_inspection_primary
@@ -75,7 +75,7 @@ module "vpc_inspection_primary" {
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inspection_to_tgw_primary" {
-  provider = aws.network_prd
+  provider = aws.this
 
   subnet_ids         = module.vpc_inspection_primary.intra_subnets
   transit_gateway_id = aws_ec2_transit_gateway.tgw_primary.id

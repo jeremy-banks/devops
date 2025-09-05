@@ -1,5 +1,5 @@
 resource "aws_route" "central_egress_pub_to_tgw_failover" {
-  provider = aws.network_prd_failover
+  provider = aws.this_failover
 
   count = var.create_failover_region_network ? length(module.vpc_central_egress_failover[0].public_route_table_ids) : 0
 
@@ -9,7 +9,7 @@ resource "aws_route" "central_egress_pub_to_tgw_failover" {
 }
 
 resource "aws_route" "central_egress_intra_to_tgw_failover" {
-  provider = aws.network_prd_failover
+  provider = aws.this_failover
 
   count = var.create_failover_region_network ? length(module.vpc_central_egress_failover[0].intra_route_table_ids) : 0
 
@@ -19,7 +19,7 @@ resource "aws_route" "central_egress_intra_to_tgw_failover" {
 }
 
 resource "aws_route" "central_egress_intra_to_nat_failover" {
-  provider = aws.network_prd_failover
+  provider = aws.this_failover
 
   count = var.create_failover_region_network ? length(module.vpc_central_egress_failover[0].intra_route_table_ids) : 0
 

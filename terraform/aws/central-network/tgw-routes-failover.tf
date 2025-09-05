@@ -1,5 +1,5 @@
 resource "aws_ec2_transit_gateway_route_table" "pre_inspection_failover" {
-  provider = aws.network_prd_failover
+  provider = aws.this_failover
 
   count = var.create_failover_region_network ? 1 : 0
 
@@ -9,7 +9,7 @@ resource "aws_ec2_transit_gateway_route_table" "pre_inspection_failover" {
 }
 
 resource "aws_ec2_transit_gateway_route" "pre_inspection_failover" {
-  provider = aws.network_prd_failover
+  provider = aws.this_failover
 
   count = var.create_failover_region_network ? 1 : 0
 
@@ -19,7 +19,7 @@ resource "aws_ec2_transit_gateway_route" "pre_inspection_failover" {
 }
 
 resource "aws_ec2_transit_gateway_route_table_association" "vpc_central_egress_to_tgw_failover" {
-  provider = aws.network_prd_failover
+  provider = aws.this_failover
 
   count = var.create_failover_region_network ? 1 : 0
 
@@ -28,7 +28,7 @@ resource "aws_ec2_transit_gateway_route_table_association" "vpc_central_egress_t
 }
 
 resource "aws_ec2_transit_gateway_route_table" "post_inspection_failover" {
-  provider = aws.network_prd_failover
+  provider = aws.this_failover
 
   count = var.create_failover_region_network ? 1 : 0
 
@@ -38,7 +38,7 @@ resource "aws_ec2_transit_gateway_route_table" "post_inspection_failover" {
 }
 
 resource "aws_ec2_transit_gateway_route" "post_inspection_central_egress_failover" {
-  provider = aws.network_prd_failover
+  provider = aws.this_failover
 
   count = var.create_failover_region_network ? 1 : 0
 
@@ -48,7 +48,7 @@ resource "aws_ec2_transit_gateway_route" "post_inspection_central_egress_failove
 }
 
 resource "aws_ec2_transit_gateway_route_table_association" "vpc_inspection_to_tgw_failover" {
-  provider = aws.network_prd_failover
+  provider = aws.this_failover
 
   count = var.create_failover_region_network ? 1 : 0
 

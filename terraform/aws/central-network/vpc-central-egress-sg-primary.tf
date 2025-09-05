@@ -1,7 +1,7 @@
 module "sg_central_egress_main_primary" {
   source    = "terraform-aws-modules/security-group/aws"
   version   = "~> 5.3.0"
-  providers = { aws = aws.network_prd }
+  providers = { aws = aws.this }
 
   name        = "${local.resource_name_primary}-central-egress-main-sg"
   description = "${local.resource_name_primary}-central-egress-main-sg"

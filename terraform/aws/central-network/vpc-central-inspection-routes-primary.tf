@@ -1,5 +1,5 @@
 resource "aws_route" "inspection_intra_to_firewall_endpoint_primary" {
-  provider = aws.network_prd
+  provider = aws.this
 
   count = length(module.vpc_inspection_primary.intra_route_table_ids)
 
@@ -13,7 +13,7 @@ resource "aws_route" "inspection_intra_to_firewall_endpoint_primary" {
 }
 
 resource "aws_route" "inspection_private_to_tgw_primary" {
-  provider = aws.network_prd
+  provider = aws.this
 
   count = length(module.vpc_inspection_primary.private_route_table_ids)
 

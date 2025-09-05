@@ -1,6 +1,6 @@
 
 resource "aws_cloudwatch_log_group" "logs_failover" {
-  provider = aws.network_prd_failover
+  provider = aws.this_failover
 
   count = var.create_failover_region_network ? 1 : 0
 
@@ -11,7 +11,7 @@ resource "aws_cloudwatch_log_group" "logs_failover" {
 }
 
 resource "aws_s3_bucket" "network_firewall_logs_failover" {
-  provider = aws.network_prd_failover
+  provider = aws.this_failover
 
   count = var.create_failover_region_network ? 1 : 0
 
@@ -23,7 +23,7 @@ resource "aws_s3_bucket" "network_firewall_logs_failover" {
 
 # Logging configuration automatically adds this policy if not present
 resource "aws_s3_bucket_policy" "network_firewall_logs_failover" {
-  provider = aws.network_prd_failover
+  provider = aws.this_failover
 
   count = var.create_failover_region_network ? 1 : 0
 

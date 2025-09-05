@@ -1,7 +1,7 @@
 # module "vpc_inspection_endpoints_primary" {
 #   source    = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
 #   version   = "~> 6.0.1"
-#   providers = { aws = aws.network_prd }
+#   providers = { aws = aws.this }
 
 #   vpc_id = module.vpc_inspection_primary.vpc_id
 

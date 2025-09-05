@@ -1,7 +1,7 @@
 # module "vpc_inspection_endpoints_failover" {
 #   source    = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
 #   version   = "~> 6.0.1"
-#   providers = { aws = aws.network_prd_failover }
+#   providers = { aws = aws.this_failover }
 
 #   count = var.create_failover_region_network ? 1 : 0
 

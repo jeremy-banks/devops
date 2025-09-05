@@ -1,7 +1,7 @@
 module "sg_central_egress_main_failover" {
   source    = "terraform-aws-modules/security-group/aws"
   version   = "~> 5.3.0"
-  providers = { aws = aws.network_prd_failover }
+  providers = { aws = aws.this_failover }
 
   count = var.create_failover_region_network ? 1 : 0
 

@@ -1,7 +1,7 @@
 module "sg_inspection_main_primary" {
   source    = "terraform-aws-modules/security-group/aws"
   version   = "~> 5.3.0"
-  providers = { aws = aws.network_prd }
+  providers = { aws = aws.this }
 
   name        = "${local.resource_name_primary}-central-inspection-main-sg"
   description = "${local.resource_name_primary}-central-inspection-main-sg"
