@@ -37,7 +37,7 @@ module "vpc_primary" {
   version   = "6.0.1"
   providers = { aws = aws.this }
 
-  name = "${local.resource_name_primary}-vpc"
+  name = "${local.resource_name.primary}-vpc"
   cidr = local.vpc_cidr_primary
 
   azs                 = slice(local.vpc_az_ids_primary, 0, var.vpc_azs_number_used)

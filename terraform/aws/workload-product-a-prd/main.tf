@@ -2,7 +2,7 @@ provider "aws" {
   alias   = "this"
   profile = var.cli_profile_name
   region  = var.region_primary.full
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.workload_product_a_prd}:role/${var.provider_role_name}" }
+  assume_role { role_arn = "arn:aws:iam::${local.this_account_id}:role/${var.provider_role_name}" }
   default_tags { tags = local.default_tags_map }
 }
 
@@ -10,17 +10,25 @@ provider "aws" {
   alias   = "this_failover"
   profile = var.cli_profile_name
   region  = var.region_failover.full
-  assume_role { role_arn = "arn:aws:iam::${var.account_id.workload_product_a_prd}:role/${var.provider_role_name}" }
+  assume_role { role_arn = "arn:aws:iam::${local.this_account_id}:role/${var.provider_role_name}" }
   default_tags { tags = local.default_tags_map }
 }
 
-# provider "aws" {
-#   alias   = "this_prd"
-#   profile = var.cli_profile_name
-#   region  = var.region_primary.full
-#   assume_role { role_arn = "arn:aws:iam::${var.account_id[local.this_prd]}:role/${var.provider_role_name}" }
-#   default_tags { tags = local.default_tags_map }
-# }
+provider "aws" {
+  alias   = "network_prd"
+  profile = var.cli_profile_name
+  region  = var.region_primary.full
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.network_prd}:role/${var.provider_role_name}" }
+  default_tags { tags = local.default_tags_map }
+}
+
+provider "aws" {
+  alias   = "network_prd_failover"
+  profile = var.cli_profile_name
+  region  = var.region_primary.full
+  assume_role { role_arn = "arn:aws:iam::${var.account_id.network_prd}:role/${var.provider_role_name}" }
+  default_tags { tags = local.default_tags_map }
+}
 
 # provider "aws" {
 #   alias   = "this_stg"
@@ -201,6 +209,7 @@ data "aws_ec2_transit_gateway_peering_attachment" "tgw_peer_failover" {
 }
 
 locals {
+  this_account_id   = var.account_id.workload_product_a_prd
   vpc_cidr_primary  = var.vpc_cidr.workload_product_a_prd_primary
   vpc_cidr_failover = var.vpc_cidr.workload_product_a_prd_failover
 }

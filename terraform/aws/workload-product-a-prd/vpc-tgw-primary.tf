@@ -12,7 +12,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_workload_product_a_to_tgw
   # transit_gateway_default_route_table_association = false
   # transit_gateway_default_route_table_propagation = false
 
-  tags = { Name = "${local.resource_name_primary}-tgw-attach" }
+  tags = { Name = "${local.resource_name.primary}-tgw-attach" }
 }
 
 resource "aws_ec2_transit_gateway_route_table_association" "vpc_workload_product_a_to_tgw_primary" {

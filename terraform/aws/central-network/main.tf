@@ -18,33 +18,4 @@ data "aws_caller_identity" "this" { provider = aws.this }
 
 data "aws_organizations_organization" "this" { provider = aws.this }
 
-# data "aws_organizations_organizational_units" "top_level" {
-#   provider = aws.management
-
-#   parent_id = data.aws_organizations_organization.this.roots[0].id
-# }
-
-# data "aws_organizations_organizational_unit" "infrastructure" {
-#   provider = aws.management
-
-#   parent_id = data.aws_organizations_organization.this.roots[0].id
-#   name      = "infrastructure"
-# }
-
-# data "aws_organizations_organizational_unit" "security" {
-#   provider = aws.management
-
-#   parent_id = data.aws_organizations_organization.this.roots[0].id
-#   name      = "security"
-# }
-
-# data "aws_organizations_organizational_unit" "workloads" {
-#   provider = aws.management
-
-#   parent_id = data.aws_organizations_organization.this.roots[0].id
-#   name      = "workloads"
-# }
-
-locals {
-  this_account_id = var.account_id.network_prd
-}
+locals { this_account_id = var.account_id.network_prd }

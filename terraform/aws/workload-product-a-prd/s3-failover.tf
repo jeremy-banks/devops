@@ -3,7 +3,7 @@ module "s3_failover" {
   version   = "5.5.0"
   providers = { aws = aws.this_failover }
 
-  bucket = local.resource_name_globally_unique_failover
+  bucket = local.resource_name_full_unique.failover
 
   force_destroy = true
 

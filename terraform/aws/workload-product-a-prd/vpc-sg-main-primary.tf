@@ -3,8 +3,8 @@ module "sg_main_primary" {
   version   = "5.3.0"
   providers = { aws = aws.this }
 
-  name        = "${local.resource_name_primary}-main-sg"
-  description = "${local.resource_name_primary}-main-sg"
+  name        = "${local.resource_name.primary}-main-sg"
+  description = "${local.resource_name.primary}-main-sg"
   vpc_id      = module.vpc_primary.vpc_id
 
   ingress_with_self = [{ rule = "all-all" }]
@@ -14,5 +14,5 @@ module "sg_main_primary" {
   egress_ipv6_cidr_blocks = ["::/0"]
   egress_rules            = ["all-all"]
 
-  tags = { Name = "${local.resource_name_primary}-main-sg" }
+  tags = { Name = "${local.resource_name.primary}-main-sg" }
 }

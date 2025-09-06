@@ -1,4 +1,6 @@
 data "aws_iam_policy_document" "kms" {
+  provider = aws.this
+
   # https://docs.aws.amazon.com/kms/latest/prdeloperguide/key-policy-default.html
   statement {
     sid    = "Enable IAM User Permissions"
@@ -84,7 +86,7 @@ module "kms_primary" {
   key_usage               = "ENCRYPT_DECRYPT"
   multi_region            = true
 
-  aliases = ["${local.resource_name_primary}"]
+  aliases = ["${local.resource_name.primary}"]
 
   policy = data.aws_iam_policy_document.kms.json
 }
@@ -98,7 +100,7 @@ module "kms_failover" {
   create_replica          = true
   primary_key_arn         = module.kms_primary.key_arn
 
-  aliases = ["${local.resource_name_failover}"]
+  aliases = ["${local.resource_name.failover}"]
 
   policy = data.aws_iam_policy_document.kms.json
 }

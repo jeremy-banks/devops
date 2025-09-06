@@ -1,4 +1,6 @@
 data "aws_iam_policy_document" "s3_crr" {
+  provider = aws.this
+
   statement {
     effect = "Allow"
     actions = [
@@ -12,10 +14,10 @@ data "aws_iam_policy_document" "s3_crr" {
       "s3:ReplicateTags",
     ]
     resources = [
-      "arn:aws:s3:::${local.resource_name_globally_unique_primary}",
-      "arn:aws:s3:::${local.resource_name_globally_unique_primary}/*",
-      "arn:aws:s3:::${local.resource_name_globally_unique_failover}",
-      "arn:aws:s3:::${local.resource_name_globally_unique_failover}/*",
+      "arn:aws:s3:::${local.resource_name_full_unique.primary}",
+      "arn:aws:s3:::${local.resource_name_full_unique.primary}/*",
+      "arn:aws:s3:::${local.resource_name_full_unique.failover}",
+      "arn:aws:s3:::${local.resource_name_full_unique.failover}/*",
     ]
   }
   statement {
@@ -37,7 +39,7 @@ module "iam_policy_s3_crr" {
   version   = "6.1.2"
   providers = { aws = aws.this }
 
-  name = "${local.resource_name_primary}-crr"
+  name = "${local.resource_name.primary}-crr"
 
   policy = data.aws_iam_policy_document.s3_crr.json
 }
@@ -47,7 +49,7 @@ module "iam_role_s3_crr" {
   version   = "6.1.2"
   providers = { aws = aws.this }
 
-  name            = "${local.resource_name_primary}-crr"
+  name            = "${local.resource_name.primary}-crr"
   use_name_prefix = false
 
   trust_policy_permissions = {

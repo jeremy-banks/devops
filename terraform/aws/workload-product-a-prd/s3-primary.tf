@@ -3,7 +3,7 @@ module "s3_primary" {
   version   = "5.5.0"
   providers = { aws = aws.this }
 
-  bucket = local.resource_name_globally_unique_primary
+  bucket = local.resource_name_full_unique.primary
 
   force_destroy = true
 
