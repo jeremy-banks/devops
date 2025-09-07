@@ -1,0 +1,110 @@
+.anchors:
+  clusterName: &clusterName blue
+  region: &region us-west-2
+  podReplicaCount: &podReplicaCount 1
+  acmArnPrimary: &acmArnPrimary "acm_arn_primary"
+  acmArnFailover: &acmArnFailover "acm_arn_primary"
+
+cluster-autoscaler:
+  fullnameOverride: &awsClusterAutoscaler aws-cluster-autoscaler
+  autoDiscovery:
+    clusterName: *clusterName
+  cloudProvider: aws
+  awsRegion: *region
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+              - *awsClusterAutoscaler
+          topologyKey: "topology.kubernetes.io/zone"
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 10
+        preference:
+          matchExpressions:
+          - key: role
+            operator: In
+            values:
+            - *awsClusterAutoscaler
+      - weight: 1
+        preference:
+          matchExpressions:
+          - key: node.kubernetes.io/taint
+            operator: DoesNotExist
+  nodeSelector: {}
+  tolerations:
+    - operator: "Exists"
+      effect: "NoSchedule"
+  topologySpreadConstraints: []
+  rbac:
+    serviceAccount:
+      create: false
+      name: *awsClusterAutoscaler
+  replicaCount: *podReplicaCount
+
+aws-ebs-csi-driver:
+  controller:
+    region: *region
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - ebs-csi-controller
+            topologyKey: "topology.kubernetes.io/zone"
+    nodeSelector: {}
+    tolerations: []
+    topologySpreadConstraints: []
+    serviceAccount:
+      create: false
+      name: ebs-csi-controller-sa
+    replicaCount: *podReplicaCount
+  enableVolumeResizing: true
+  node.tolerateAllTaints: true
+
+external-dns:
+  fullnameOverride: external-dns
+  provider:
+    name: aws
+  env:
+  - name: AWS_DEFAULT_REGION
+    value: *region
+  affinity: {}
+  nodeSelector: {}
+  tolerations: []
+  topologySpreadConstraints: []
+  serviceAccount:
+    create: false
+    name: external-dns
+
+aws-load-balancer-controller:
+  fullnameOverride: aws-load-balancer-controller
+  clusterName: *clusterName
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+          - key: app.kubernetes.io/name
+            operator: In
+            values:
+            - aws-load-balancer-controller
+        topologyKey: "topology.kubernetes.io/zone"
+  nodeSelector: {}
+  tolerations: []
+  topologySpreadConstraints: []
+  rbac.create: false
+  serviceAccount:
+    create: false
+    name: aws-load-balancer-controller
+  replicaCount: *podReplicaCount
+  region: *region
