@@ -27,22 +27,29 @@ To align with best practices for DNS and service isolation DNS delegation is fea
 
 |   | type | account | direct |
 | ---: | :--- | :--- | :--- |
-| domain.tld | zone | network | |
-| github.domain.tld | CNAME | network | github.svc.aws.domain.tld |
+| domain.tld | zone |  | |
+| <span style="color: green;">www.domain.tld</span> | CNAME | network | www.sdlc.aws.domain.tld |
+| <span style="color: blue;">github.domain.tld</span> | CNAME | network | github.svc.aws.domain.tld |
+| <span style="color: red;">jhm.domain.tld</span> | CNAME | network | jhm.aws.domain.tld |
 | aws.domain.tld | zone | network | |
-| svc.aws.domain.tld | zone | shared-services | |
-| github.svc.aws.domain.tld | CNAME | shared-services | github-blue.svc.aws.domain.tld |
-| github-blue.svc.aws.domain.tld | A Latency | shared-services | load balancer use1, load balancer usw2 |
+| <span style="color: green;">sdlc.aws.domain.tld</span> | zone | sdlc | |
+| <span style="color: blue;">svc.aws.domain.tld</span> | zone | shared-services | |
+| <span style="color: red;">jhm.aws.domain.tld</span> | zone | workload-jhm | |
+| <span style="color: green;">www.sdlc.aws.domain.tld</span> | CNAME | sdlc | www-blue.svc.aws.domain.tld |
+| <span style="color: green;">www-blue.svc.aws.domain.tld</span> | A Latency | sdlc | load balancer use1, load balancer usw2 |
+| <span style="color: blue;">github.svc.aws.domain.tld</span> | CNAME | shared-services | github-blue.svc.aws.domain.tld |
+| <span style="color: blue;">github-blue.svc.aws.domain.tld</span> | A Latency | shared-services | load balancer use1, load balancer usw2 |
+| <span style="color: red;">jhm.jhm.aws.domain.tld</span> | CNAME | workload-jhm | www-blue.svc.aws.domain.tld |
+| <span style="color: red;">jhm-blue.jhm.aws.domain</span> | A Latency | workload-jhm | load balancer use1, load balancer usw2 |
 
-Visiting github.domain.tld will:
-1. Direct to github.svc.aws.domain.tld
-1. Directs again to github-blue.svc.aws.domain.tld
-1. Direct via A Latency record to fastest-responding load balancer
+<span style="color: green;">www</span> is the marketing website hosted in the sdlc account. The sdlc account also hosts multi-tenant deployments and pooled resources like api and ftp.
 
-The domain.tld zone and records directing traffic to svc.aws.domain.tld are contained in the network account, their records are not likely to change, and service control policies protect anyone but superadmin from changing them. This provides complete blast radius isolation for the service to the owners, because a deployment only needs to change the records in the delegated account.
+<span style="color: blue;">github</span> is the private source code management hosted in the shared services account. The shared services account also hosts applications like artifactory, jenkins, nagios, etc.
 
-All services which can be designed this way should be.
+<span style="color: red;">jhm</span> is an example deployment for John Hopkins Medicine hosted in an isolated workload account. Workload accounts ***only*** contain services and data for that workload in accordance with data protection and privacy laws and standards.
 
-For services deployed in the multi-tenant sdlc accounts, or isolated accounts, the concept is the same. Just replace github with the service name and the svc with the sdlc or the workload's r53 identifier.
+The domain.tld zone and records directing traffic to delegated subdomains are contained in the network account, and service control policies protect anyone but superadmin from changing them. This provides complete blast radius isolation for the service to the owners, because a deployment only needs to change the records in the delegated account.
 
 When changes to subdomain configuration need to be tested they can be done on `dev`, `tst`, and `stg` environments respective to that subdomain. For example to roll out changes on shared services, the addresses would be `application.svcdev.aws.domain.tld`, where as changes on the network itself would be rolled out to `application.svc.devaws.domain.tld`. The production environment does not and should not include any indication of its specific environment; eg production does not contain `prod` or `prd` anywhere in the DNS.
+
+***All*** services which can be designed this way should be.

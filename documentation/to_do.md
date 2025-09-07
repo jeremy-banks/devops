@@ -1,8 +1,14 @@
 [Return Home](../README.md#documentation)
 
-# To-Do
-- rework the eks stuff
-   append k8s 'bare metal' to demonstrate skill and pass CKA
+## To Do
+- [ ] central egress of NAT and endpoints for services
+- [ ] immutable log archiving with N-day retention
+- [ ] cVPN with Federated Access using Active Directory
+- [ ] test Site-to-Site VPN connection between my home hardware and AWS
+- [ ] Create a faux DR event by creating terraform code that blocks traffic in ACL of one AZs subnets
+- [ ] Add multi-region active-active Postgres to EKS deployments
+- [ ] Mozilla Secrets OPerationS (SOPS) implementation to keep secrets protected
+- [ ] Implement StackSet Deployments
 
 - StackSet Deployments
    - Disable unlimited burstable instance credits

@@ -1,5 +1,5 @@
 # DevOps
-Thank you for visiting my repo and please consider leaving a Star!
+Thank you for visiting my repo, and please consider leaving a Star!
 
 The goal of this repo is to provide a comprehensive codebase to lift-and-shift any organinzation into the ideal AWS and EKS deployment using official documented best practices, prescriptive guidance, and white papers.
 
@@ -13,21 +13,6 @@ The goal of this repo is to provide a comprehensive codebase to lift-and-shift a
 - [Architectural Overview](./documentation/architectural_overview.md)
 - [Initial Setup](./documentation/initial_setup.md)
 - [To-Do](./documentation/to_do.md)
-
-## Features
-- [x] Centralized Inspection of *all* ingress ***and*** egress traffic
-- [ ] Immutable log archiving with N-day retention
-- [ ] Centralized Egress of NAT and endpoints for improved security, faster speed, and cost savings
-- [x] AZ IDz used so traffic stays in the intended AZs even when crossing to other VPCs through TGW
-- [ ] Client VPN with Federated Access using Active Directory
-- [x] Codebase optionally supports failover region for all resources, 2-4 AZs for VPCs, and public subnets with R53 and ACM
-
-## To Do
-- [ ] Add multi-region active-active Postgres to EKS deployments
-- [ ] Implement StackSet Deployments
-- [ ] Mozilla Secrets OPerationS (SOPS) implementation to keep secrets protected
-- [ ] Test Site-to-Site VPN connection between my home hardware and AWS
-- [ ] Create a faux DR event by creating terraform code that blocks traffic in ACL of one AZs subnets
 
 ## Reference Material
 - [Whitepaper: Genomics Data Transfer, Analytics, and Machine Learning using AWS Services](https://aws.amazon.com/blogs/industries/whitepaper-genomics-data-transfer-analytics-and-machine-learning-using-aws-services/)
