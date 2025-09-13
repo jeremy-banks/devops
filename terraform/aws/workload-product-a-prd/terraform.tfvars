@@ -8,26 +8,10 @@ this_slug = "product-a"
 
 # create_failover_region_network = false
 
-vpc_azs_number_used_network = 2
+# vpc_azs_number_used_network = 2
 
 # create_failover_region = false
 
 create_vpc_public_subnets = true
 
-vpc_azs_number_used = 2
-
-vpc_cidr_primary  = "10.20.0.0/16"
-vpc_cidr_failover = "10.21.0.0/16"
-
-# r53_zones_parents = [
-#   "bar.com",
-#   "foo.com",
-#   "foobar.com"
-# ]
-# r53_zones_delegates_stg = [
-#   "bar.com",
-#   "foo.com",
-#   "foobar.com"
-# ]
-# r53_zones_delegates_tst = []
-# r53_zones_delegates_dev = []
+# vpc_azs_number_used = 2

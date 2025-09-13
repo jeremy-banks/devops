@@ -1,6 +1,27 @@
 data "aws_iam_policy_document" "org_2" {
   provider = aws.management
 
+  # deny guardduty
+  # https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_ec2.html#example-ec2-4
+  statement {
+    effect    = "Deny"
+    actions   = ["guardduty:*"]
+    resources = ["*"]
+    condition {
+      test     = "StringNotEquals"
+      variable = "ec2:VolumeType"
+      values   = ["gp3"]
+    }
+    condition {
+      test     = "ArnNotLike"
+      variable = "aws:PrincipalArn"
+      values = [
+        "arn:aws:iam::${"$${aws:PrincipalAccount}"}:role/${var.account_role_name}",
+        "arn:aws:iam::${"$${aws:PrincipalAccount}"}:root",
+      ]
+    }
+  }
+
   # prevent external sharing
   # https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_ram.html#example_ram_1
   statement {
