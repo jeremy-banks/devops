@@ -18,11 +18,11 @@ vpc:
     private:
       one:    { id: subnet-11111111111111111 }
       two:    { id: subnet-22222222222222222 }
-      three:  { id: subnet-33333333333333333 }
-      four:   { id: subnet-44444444444444444 }
+      # three:  { id: subnet-33333333333333333 }
+      # four:   { id: subnet-44444444444444444 }
 
 secretsEncryption:
-  keyARN: kms_key_arn
+  keyARN: kms_arn_primary
 
 # cloudWatch:
 #   clusterLogging:
