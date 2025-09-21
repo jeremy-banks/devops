@@ -94,7 +94,6 @@ variable "vpc_cidr" {
   }
 }
 
-
 variable "org_owner_email_prefix" {
   description = "the 'jeremybankstech' in 'jeremybankstech+awscloud@gmail.com'"
   default     = "jeremybankstech"
@@ -171,33 +170,19 @@ variable "cost_center" {
   default = "1-EU"
 }
 
-variable "resource_owner_email" {
-  default = null
-}
+variable "resource_owner_email" { default = null }
 
-variable "cli_profile_name" {
-  default = "admin"
-}
+variable "cli_profile_name" { default = "admin" }
 
-variable "provider_role_name" {
-  default = "admin"
-}
+variable "provider_role_name" { default = "admin" }
 
-variable "account_role_name" {
-  default = "superadmin"
-}
+variable "account_role_name" { default = "superadmin" }
 
-variable "admin_role_name" {
-  default = "admin"
-}
+variable "admin_role_name" { default = "admin" }
 
-variable "breakglass_user_name" {
-  default = "breakglass"
-}
+variable "breakglass_user_name" { default = "breakglass" }
 
-variable "billing_user_name" {
-  default = "billing"
-}
+variable "billing_user_name" { default = "billing" }
 
 variable "this_slug" {
   default = null
@@ -249,13 +234,9 @@ variable "region_failover" {
   }
 }
 
-variable "create_failover_region_network" {
-  default = true
-}
+variable "create_failover_region_network" { default = true }
 
-variable "create_failover_region" {
-  default = true
-}
+variable "create_failover_region" { default = true }
 
 variable "tgw_asn" {
   type = map(number)
@@ -317,34 +298,19 @@ variable "vpc_azs_failover" {
   }
 }
 
-variable "vpc_cidr_primary" {
-  default = null
-}
+variable "vpc_cidr_primary" { default = null }
 
-variable "vpc_cidr_failover" {
-  default = null
-}
+variable "vpc_cidr_failover" { default = null }
 
-variable "create_vpc_public_subnets" {
-  default = false
-}
+variable "create_vpc_public_subnets" { default = false }
 
-variable "ntp_servers" {
-  type    = list(string)
-  default = ["169.254.169.123"]
-}
+variable "ntp_servers" { default = ["169.254.169.123"] }
 
-variable "log_retention_days" {
-  default = 2192 # six years per HIPAA NIST SP 800-66 section 4.22
-}
+variable "log_retention_days" { default = 2192 } # six years per HIPAA NIST SP 800-66 section 4.22
 
-variable "iam_immutable_tag_key" {
-  default = "immutable"
-}
+variable "iam_immutable_tag_key" { default = "immutable" }
 
-variable "unique_id_seed" {
-  default = "barFooWorldHello"
-}
+variable "unique_id_seed" { default = "barFooWorldHello" }
 
 locals {
   # project-env-region-slug

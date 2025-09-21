@@ -159,6 +159,13 @@ data "aws_iam_policy_document" "org_2" {
         "arn:aws:iam::${"$${aws:PrincipalAccount}"}:role/${var.account_role_name}",
       ]
     }
+    condition {
+      test     = "StringNotLikeIfExists"
+      variable = "aws:PrincipalArn"
+      values = [
+        "arn:aws:iam::${"$${aws:PrincipalAccount}"}:role/eksctl-*"
+      ]
+    }
   }
 
   # kms controls
@@ -210,6 +217,13 @@ data "aws_iam_policy_document" "org_2" {
         "arn:aws:iam::${"$${aws:PrincipalAccount}"}:role/${var.account_role_name}",
       ]
     }
+    condition {
+      test     = "StringNotLikeIfExists"
+      variable = "aws:PrincipalArn"
+      values = [
+        "arn:aws:iam::${"$${aws:PrincipalAccount}"}:role/eksctl-*"
+      ]
+    }
   }
 
   # prevent deleting flow logs
@@ -222,29 +236,6 @@ data "aws_iam_policy_document" "org_2" {
       "logs:DeleteLogStream"
     ]
     resources = ["*"]
-  }
-
-  # prevent adding internet access to VPC
-  # https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_vpc.html#example_vpc_2
-  statement {
-    effect = "Deny"
-    actions = [
-      "ec2:AttachInternetGateway",
-      "ec2:CreateInternetGateway",
-      "ec2:CreateEgressOnlyInternetGateway",
-      "ec2:CreateVpcPeeringConnection",
-      "ec2:AcceptVpcPeeringConnection",
-      "globalaccelerator:Create*",
-      "globalaccelerator:Update*"
-    ]
-    resources = ["*"]
-    condition {
-      test     = "StringNotEquals"
-      variable = "aws:PrincipalArn"
-      values = [
-        "arn:aws:iam::${"$${aws:PrincipalAccount}"}:role/${var.account_role_name}",
-      ]
-    }
   }
 }
 
