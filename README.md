@@ -60,12 +60,9 @@ To align with best practices for DNS and service isolation DNS delegation is fea
 | ${\color{green}sdlc.aws.domain.tld}$ | zone | workload-sdlc | |
 | ${\color{blue}svc.aws.domain.tld}$ | zone | shared-services | |
 | ${\color{red}wsu.aws.domain.tld}$ | zone | workload-wsu | |
-| ${\color{green}www .sdlc.aws.domain.tld}$ | CNAME | workload-sdlc | `www-blue.sdlc.aws.domain.tld` |
-| ${\color{green}www-blue.svc.aws.domain.tld}$ | A Latency | workload-sdlc | load balancer use1, load balancer usw2 |
-| ${\color{blue}gitlab.svc.aws.domain.tld}$ | CNAME | shared-services | `gitlab-blue.svc.aws.domain.tld` |
-| ${\color{blue}gitlab-blue.svc.aws.domain.tld}$ | A Latency | shared-services | load balancer use1, load balancer usw2 |
-| ${\color{red}wsu.wsu.aws.domain.tld}$ | CNAME | workload-wsu | `wsu-blue.wsu.aws.domain.tld` |
-| ${\color{red}wsu-blue.jhm.aws.domain}$ | A Latency | workload-wsu | load balancer use1, load balancer usw2 |
+| ${\color{green}www .sdlc.aws.domain.tld}$ | A | workload-sdlc | load balancers |
+| ${\color{blue}gitlab.svc.aws.domain.tld}$ | A | shared-services | load balancers |
+| ${\color{red}wsu.wsu.aws.domain.tld}$ | A | workload-wsu | load balancers |
 
 ${\color{green}www .domain.tld‌}$ is the marketing website hosted in the sdlc account. The sdlc account also hosts multi-tenant deployments and pooled resources like api and ftp.
 
