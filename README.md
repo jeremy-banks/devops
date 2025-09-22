@@ -51,21 +51,21 @@ To align with best practices for DNS and service isolation DNS delegation is fea
 |   | type | account | direct |
 | ---: | :--- | :--- | :--- |
 | domain.tld | zone |  | |
-| <span style="color: green;">www.domain.tld</span> | CNAME | network | www.sdlc.aws.domain.tld |
+| ${\color{green}www.domain.tld}$ | CNAME | network | www.sdlc.aws.domain.tld |
 | <span style="color: blue;">github.domain.tld</span> | CNAME | network | github.svc.aws.domain.tld |
 | <span style="color: red;">wsu.domain.tld</span> | CNAME | network | wsu.aws.domain.tld |
 | aws.domain.tld | zone | network | |
-| <span style="color: green;">sdlc.aws.domain.tld</span> | zone | sdlc | |
+| ${\color{green}sdlc.aws.domain.tld}$ | zone | sdlc | |
 | <span style="color: blue;">svc.aws.domain.tld</span> | zone | shared-services | |
 | <span style="color: red;">wsu.aws.domain.tld</span> | zone | workload-wsu | |
-| <span style="color: green;">www.sdlc.aws.domain.tld</span> | CNAME | sdlc | www-blue.svc.aws.domain.tld |
-| <span style="color: green;">www-blue.svc.aws.domain.tld</span> | A Latency | sdlc | load balancer use1, load balancer usw2 |
+| ${\color{green}www.sdlc.aws.domain.tld}$ | CNAME | sdlc | www-blue.svc.aws.domain.tld |
+| ${\color{green}www-blue.svc.aws.domain.tld}$ | A Latency | sdlc | load balancer use1, load balancer usw2 |
 | <span style="color: blue;">github.svc.aws.domain.tld</span> | CNAME | shared-services | github-blue.svc.aws.domain.tld |
 | <span style="color: blue;">github-blue.svc.aws.domain.tld</span> | A Latency | shared-services | load balancer use1, load balancer usw2 |
 | <span style="color: red;">wsu.wsu.aws.domain.tld</span> | CNAME | workload-wsu | www-blue.svc.aws.domain.tld |
 | <span style="color: red;">wsu-blue.jhm.aws.domain</span> | A Latency | workload-wsu | load balancer use1, load balancer usw2 |
 
-<span style="color: green;">www</span> is the marketing website hosted in the sdlc account. The sdlc account also hosts multi-tenant deployments and pooled resources like api and ftp.
+${\color{green}www.domain.tld}$www</span> is the marketing website hosted in the sdlc account. The sdlc account also hosts multi-tenant deployments and pooled resources like api and ftp.
 
 <span style="color: blue;">github</span> is the private source code management hosted in the shared services account. The shared services account also hosts applications like artifactory, jenkins, nagios, etc.
 
