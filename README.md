@@ -51,14 +51,14 @@ To align with best practices for DNS and service isolation DNS delegation is fea
 |   | type | account | direct |
 | ---: | :--- | :--- | :--- |
 | domain.tld | zone |  | |
-| ${\color{green}www. ‌domain.tld}$ | CNAME | network | www.‌sdlc.aws.domain.tld |
-| ${\color{blue}gitlab.domain.tld}$ | CNAME | network | gitlab.svc.aws.domain.tld |
-| ${\color{red}wsu.domain.tld}$ | CNAME | network | wsu.aws.domain.tld |
+| ${\color{green}www .domain.tld}$ | CNAME | network | `www.‌sdlc.aws.domain.tld` |
+| ${\color{blue}gitlab.domain.tld}$ | CNAME | network | `gitlab.svc.aws.domain.tld` |
+| ${\color{red}wsu.domain.tld}$ | CNAME | network | `wsu.aws.domain.tld` |
 | aws.domain.tld | zone | network | |
 | ${\color{green}sdlc.aws.domain.tld}$ | zone | sdlc | |
 | ${\color{blue}svc.aws.domain.tld}$ | zone | shared-services | |
 | ${\color{red}wsu.aws.domain.tld}$ | zone | workload-wsu | |
-| ${\color{green}www. sdlc.aws.domain.tld}$ | CNAME | sdlc | www-blue.svc.aws.domain.tld |
+| ${\color{green}www .sdlc.aws.domain.tld}$ | CNAME | sdlc | www-blue.svc.aws.domain.tld |
 | ${\color{green}www-blue.svc.aws.domain.tld}$ | A Latency | sdlc | load balancer use1, load balancer usw2 |
 | ${\color{blue}gitlab.svc.aws.domain.tld}$ | CNAME | shared-services | gitlab-blue.svc.aws.domain.tld |
 | ${\color{blue}gitlab-blue.svc.aws.domain.tld}$ | A Latency | shared-services | load balancer use1, load balancer usw2 |
