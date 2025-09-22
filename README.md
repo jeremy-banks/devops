@@ -30,8 +30,6 @@ The goal of this repo is to provide a comprehensive codebase to lift-and-shift a
 ### Org and Accounts
 The organization, organization units, and accounts layout is designed in accordance to the documented [Best practices for a multi-account environment](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_best-practices.html) and [Best practices for managing organizational units (OUs) with AWS Organizations](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_ous_best_practices.html). Specifically, the [Separating business units with significantly different policies](https://docs.aws.amazon.com/whitepapers/latest/organizing-your-aws-environment/advanced-ous.html#extended-workload-oriented-ou-structure) is utilized for maximum security granularity and scaleability.
 
-<!-- ![Organization layout](./drawings/org-and-account-layout.drawio.png) -->
-
 <p align="center"><img src="./drawings/org-and-account-layout.drawio.png" width="55%"/></p>
 
 ### VPC Central Inspection Model
