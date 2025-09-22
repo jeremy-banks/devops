@@ -19,5 +19,5 @@ data "aws_caller_identity" "this" { provider = aws.this }
 data "aws_organizations_organization" "this" { provider = aws.this }
 
 locals {
-  this_account_id = var.account_id.shared_services_prd
+  this_account_id = var.account_id.log_archive_prd
 }
