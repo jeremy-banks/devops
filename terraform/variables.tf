@@ -1,51 +1,55 @@
 variable "account_id" {
   type = map(string)
   default = {
-    identity_prd           = "000000000000"
-    identity_stg           = "000000000000"
-    log_archive_prd        = "000000000000"
-    log_archive_stg        = "000000000000"
-    network_prd            = "000000000000"
-    network_stg            = "000000000000"
-    sdlc_dev               = "000000000000"
-    sdlc_prd               = "000000000000"
-    sdlc_stg               = "000000000000"
-    sdlc_tst               = "000000000000"
-    security_tooling_prd   = "000000000000"
-    security_tooling_stg   = "000000000000"
-    shared_services_prd    = "000000000000"
-    shared_services_stg    = "000000000000"
-    workload_product_a_dev = "000000000000"
-    workload_product_a_prd = "000000000000"
-    workload_product_a_stg = "000000000000"
-    workload_product_a_tst = "000000000000"
+    identity_prd         = "000000000000"
+    identity_stg         = "000000000000"
+    log_archive_prd      = "000000000000"
+    log_archive_stg      = "000000000000"
+    network_prd          = "000000000000"
+    network_stg          = "000000000000"
+    security_tooling_prd = "000000000000"
+    security_tooling_stg = "000000000000"
+    shared_services_prd  = "000000000000"
+    shared_services_stg  = "000000000000"
+    workload_wsu_dev     = "000000000000"
+    workload_wsu_prd     = "000000000000"
+    workload_wsu_stg     = "000000000000"
+    workload_wsu_tst     = "000000000000"
+    workload_sdlc_dev    = "000000000000"
+    workload_sdlc_prd    = "000000000000"
+    workload_sdlc_stg    = "000000000000"
+    workload_sdlc_tst    = "000000000000"
   }
 }
 
 variable "account_name" {
   type = map(string)
   default = {
-    identity           = "identity"
-    log_archive        = "log-archive"
-    network            = "network"
-    sandbox            = "sandbox"
-    sdlc               = "sdlc"
-    security_tooling   = "security-tooling"
-    shared_services    = "shared-services"
-    workload_product_a = "product-a"
+    identity         = "identity"
+    log_archive      = "log-archive"
+    network          = "network"
+    sandbox          = "sandbox"
+    security_tooling = "security-tooling"
+    shared_services  = "shared-services"
+
+    workload_sdlc = "sdlc"
+
+    workload_wsu = "washington-state-university"
   }
 }
 
 variable "r53_delegate" {
   type = map(string)
   default = {
-    identity           = "id"
-    log_archive        = "log"
-    sandbox            = "sbx"
-    sdlc               = "sdlc"
-    security_tooling   = "sec"
-    shared_services    = "svc"
-    workload_product_a = "pa"
+    identity         = "id"
+    log_archive      = "log"
+    sandbox          = "sbx"
+    security_tooling = "sec"
+    shared_services  = "svc"
+
+    workload_sdlc = "sdlc"
+
+    workload_wsu = "wsu"
   }
 }
 
@@ -74,23 +78,23 @@ variable "vpc_cidr" {
     shared_services_stg_primary  = "10.14.0.0/16"
     shared_services_stg_failover = "10.15.0.0/16"
 
-    sdlc_prd_primary  = "10.16.0.0/16"
-    sdlc_prd_failover = "10.17.0.0/16"
-    sdlc_stg_primary  = "10.18.0.0/16"
-    sdlc_stg_failover = "10.19.0.0/16"
-    sdlc_tst_primary  = "10.20.0.0/16"
-    sdlc_tst_failover = "10.21.0.0/16"
-    sdlc_dev_primary  = "10.22.0.0/16"
-    sdlc_dev_failover = "10.23.0.0/16"
+    workload_sdlc_prd_primary  = "10.16.0.0/16"
+    workload_sdlc_prd_failover = "10.17.0.0/16"
+    workload_sdlc_stg_primary  = "10.18.0.0/16"
+    workload_sdlc_stg_failover = "10.19.0.0/16"
+    workload_sdlc_tst_primary  = "10.20.0.0/16"
+    workload_sdlc_tst_failover = "10.21.0.0/16"
+    workload_sdlc_dev_primary  = "10.22.0.0/16"
+    workload_sdlc_dev_failover = "10.23.0.0/16"
 
-    workload_product_a_prd_primary  = "10.24.0.0/16"
-    workload_product_a_prd_failover = "10.25.0.0/16"
-    workload_product_a_stg_primary  = "10.26.0.0/16"
-    workload_product_a_stg_failover = "10.27.0.0/16"
-    workload_product_a_tst_primary  = "10.28.0.0/16"
-    workload_product_a_tst_failover = "10.29.0.0/16"
-    workload_product_a_dev_primary  = "10.30.0.0/16"
-    workload_product_a_dev_failover = "10.31.0.0/16"
+    workload_wsu_prd_primary  = "10.24.0.0/16"
+    workload_wsu_prd_failover = "10.25.0.0/16"
+    workload_wsu_stg_primary  = "10.26.0.0/16"
+    workload_wsu_stg_failover = "10.27.0.0/16"
+    workload_wsu_tst_primary  = "10.28.0.0/16"
+    workload_wsu_tst_failover = "10.29.0.0/16"
+    workload_wsu_dev_primary  = "10.30.0.0/16"
+    workload_wsu_dev_failover = "10.31.0.0/16"
   }
 }
 
@@ -307,8 +311,6 @@ variable "create_vpc_public_subnets" { default = false }
 variable "ntp_servers" { default = ["169.254.169.123"] }
 
 variable "log_retention_days" { default = 2192 } # six years per HIPAA NIST SP 800-66 section 4.22
-
-variable "iam_immutable_tag_key" { default = "immutable" }
 
 variable "unique_id_seed" { default = "barFooWorldHello" }
 

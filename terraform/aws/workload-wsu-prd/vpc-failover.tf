@@ -1,6 +1,4 @@
 locals {
-  # vpc_cidr_failover = var.vpc_cidr_failover
-
   vpc_cidrsubnets_failover = (
     var.vpc_azs_number_used == 4 ? cidrsubnets(local.vpc_cidr_failover, 3, 3, 3, 3, 4, 4, 4, 4, 12, 12, 12, 12) :
     var.vpc_azs_number_used == 3 ? cidrsubnets(local.vpc_cidr_failover, 2, 2, 2, 4, 4, 4, 12, 12, 12) :
@@ -28,8 +26,6 @@ locals {
     var.vpc_azs_number_used == 2 ? [local.vpc_cidrsubnets_failover[4], local.vpc_cidrsubnets_failover[5]] :
     null
   )
-
-  vpc_workload_product_a_tags_failover = {}
 }
 
 module "vpc_failover" {
@@ -94,12 +90,9 @@ module "vpc_failover" {
   dhcp_options_domain_name_servers = [replace(local.vpc_cidr_failover, "0/16", "2")]
   dhcp_options_ntp_servers         = var.ntp_servers
 
-  vpc_tags = merge(
-    local.vpc_workload_product_a_tags_failover,
-    {
-      "kubernetes.io/cluster/blue"        = "owned"
-      "kubernetes.io/cluster/green"       = "owned"
-      "k8s.io/cluster-autoscaler/enabled" = true
-    }
-  )
+  vpc_tags = {
+    "kubernetes.io/cluster/blue"        = "owned"
+    "kubernetes.io/cluster/green"       = "owned"
+    "k8s.io/cluster-autoscaler/enabled" = true
+  }
 }

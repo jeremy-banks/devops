@@ -185,7 +185,7 @@ data "aws_ec2_transit_gateway_peering_attachment" "tgw_peer_failover" {
 }
 
 locals {
-  this_account_id   = var.account_id.workload_product_a_prd
-  vpc_cidr_primary  = var.vpc_cidr.workload_product_a_prd_primary
-  vpc_cidr_failover = var.vpc_cidr.workload_product_a_prd_failover
+  this_account_id   = var.account_id.workload_jhu_prd
+  vpc_cidr_primary  = var.vpc_cidr.workload_jhu_prd_primary
+  vpc_cidr_failover = var.vpc_cidr.workload_jhu_prd_failover
 }
