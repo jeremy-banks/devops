@@ -11,14 +11,14 @@ variable "account_id" {
     security_tooling_stg = "000000000000"
     shared_services_prd  = "000000000000"
     shared_services_stg  = "000000000000"
-    workload_wsu_dev     = "000000000000"
-    workload_wsu_prd     = "000000000000"
-    workload_wsu_stg     = "000000000000"
-    workload_wsu_tst     = "000000000000"
     workload_sdlc_dev    = "000000000000"
     workload_sdlc_prd    = "000000000000"
     workload_sdlc_stg    = "000000000000"
     workload_sdlc_tst    = "000000000000"
+    workload_wsu_dev     = "000000000000"
+    workload_wsu_prd     = "000000000000"
+    workload_wsu_stg     = "000000000000"
+    workload_wsu_tst     = "000000000000"
   }
 }
 
@@ -35,6 +35,21 @@ variable "account_name" {
     workload_sdlc = "sdlc"
 
     workload_wsu = "washington-state-university"
+  }
+}
+
+variable "email_suffix" {
+  default = {
+    identity         = "identity"
+    log_archive      = "log-archive"
+    network          = "network"
+    sandbox          = "sandbox"
+    security_tooling = "security-tooling"
+    shared_services  = "shared-services"
+
+    workload_sdlc = "sdlc"
+
+    workload_wsu = "wsu"
   }
 }
 
@@ -99,17 +114,17 @@ variable "vpc_cidr" {
 }
 
 variable "org_owner_email_prefix" {
-  description = "the 'jeremybankstech' in 'jeremybankstech+awscloud@gmail.com'"
+  description = "the 'jeremybankstech' in 'jeremybankstech+aws@gmail.com'"
   default     = "jeremybankstech"
 }
 
 variable "org_owner_email_plus_address" {
-  description = "the 'awscloud' in 'jeremybankstech+awscloud@gmail.com'"
-  default     = "awscloud"
+  description = "the 'aws' in 'jeremybankstech+aws@gmail.com'"
+  default     = "aws"
 }
 
 variable "org_owner_email_domain_tld" {
-  description = "the 'gmail.com' in 'jeremybankstech+awscloud@gmail.com'"
+  description = "the 'gmail.com' in 'jeremybankstech+aws@gmail.com'"
   default     = "gmail.com"
 }
 
