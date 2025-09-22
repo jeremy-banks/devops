@@ -65,7 +65,7 @@ To align with best practices for DNS and service isolation DNS delegation is fea
 | ${\color{red}wsu.wsu.aws.domain.tld}$ | CNAME | workload-wsu | `www-blue.svc.aws.domain.tld` |
 | ${\color{red}wsu-blue.jhm.aws.domain}$ | A Latency | workload-wsu | load balancer use1, load balancer usw2 |
 
-${\color{green}www.domain.tld‌}$ is the marketing website hosted in the sdlc account. The sdlc account also hosts multi-tenant deployments and pooled resources like api and ftp.
+${\color{green}www .domain.tld‌}$ is the marketing website hosted in the sdlc account. The sdlc account also hosts multi-tenant deployments and pooled resources like api and ftp.
 
 ${\color{blue}gitlab}$ is the private source code management hosted in the shared services account. The shared services account also hosts applications like artifactory, jenkins, nagios, etc.
 
