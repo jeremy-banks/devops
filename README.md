@@ -46,30 +46,30 @@ This repo follows the documented guide for North-South Inspection with AWS Netwo
 Because everything deployed is a "workload", this setup enables maximum scalability and cost savings. Each additional account benefits from the same Central Inspection model, Logging, Central Service Endpoints, and Central Egress to Internet, without any additional configuration requirements.
 
 ### Delegated DNS
-To align with best practices for DNS and service isolation DNS delegation is featured. The table below represents an example featuring GitHub being hosted in the shared services account.
+To align with best practices for DNS and service isolation DNS delegation is featured. The table below represents an example featuring GitLab being hosted in the shared services account.
 
 |   | type | account | direct |
 | ---: | :--- | :--- | :--- |
 | domain.tld | zone |  | |
 | ${\color{green}www.‌domain.tld}$ | CNAME | network | www.sdlc.aws.domain.tld |
-| <span style="color: blue;">github.domain.tld</span> | CNAME | network | github.svc.aws.domain.tld |
-| <span style="color: red;">wsu.domain.tld</span> | CNAME | network | wsu.aws.domain.tld |
+| ${\color{blue}gitlab.domain.tld}$ | CNAME | network | gitlab.svc.aws.domain.tld |
+| ${\color{red}wsu.domain.tld}$ | CNAME | network | wsu.aws.domain.tld |
 | aws.domain.tld | zone | network | |
 | ${\color{green}sdlc.aws.domain.tld}$ | zone | sdlc | |
-| <span style="color: blue;">svc.aws.domain.tld</span> | zone | shared-services | |
-| <span style="color: red;">wsu.aws.domain.tld</span> | zone | workload-wsu | |
+| ${\color{blue}svc.aws.domain.tld}$ | zone | shared-services | |
+| ${\color{red}wsu.aws.domain.tld}$ | zone | workload-wsu | |
 | ${\color{green}www.sdlc.aws.domain.tld}$ | CNAME | sdlc | www-blue.svc.aws.domain.tld |
 | ${\color{green}www-blue.svc.aws.domain.tld}$ | A Latency | sdlc | load balancer use1, load balancer usw2 |
-| <span style="color: blue;">github.svc.aws.domain.tld</span> | CNAME | shared-services | github-blue.svc.aws.domain.tld |
-| <span style="color: blue;">github-blue.svc.aws.domain.tld</span> | A Latency | shared-services | load balancer use1, load balancer usw2 |
-| <span style="color: red;">wsu.wsu.aws.domain.tld</span> | CNAME | workload-wsu | www-blue.svc.aws.domain.tld |
-| <span style="color: red;">wsu-blue.jhm.aws.domain</span> | A Latency | workload-wsu | load balancer use1, load balancer usw2 |
+| ${\color{blue}gitlab.svc.aws.domain.tld}$ | CNAME | shared-services | gitlab-blue.svc.aws.domain.tld |
+| ${\color{blue}gitlab-blue.svc.aws.domain.tld}$ | A Latency | shared-services | load balancer use1, load balancer usw2 |
+| ${\color{red}wsu.wsu.aws.domain.tld}$ | CNAME | workload-wsu | www-blue.svc.aws.domain.tld |
+| ${\color{red}wsu-blue.jhm.aws.domain}$ | A Latency | workload-wsu | load balancer use1, load balancer usw2 |
 
-${\color{green}www.domain.tld}$www</span> is the marketing website hosted in the sdlc account. The sdlc account also hosts multi-tenant deployments and pooled resources like api and ftp.
+${\color{green}www.domain.tld}$ is the marketing website hosted in the sdlc account. The sdlc account also hosts multi-tenant deployments and pooled resources like api and ftp.
 
-<span style="color: blue;">github</span> is the private source code management hosted in the shared services account. The shared services account also hosts applications like artifactory, jenkins, nagios, etc.
+${\color{blue}gitlab}$ is the private source code management hosted in the shared services account. The shared services account also hosts applications like artifactory, jenkins, nagios, etc.
 
-<span style="color: red;">wsu</span> is an example deployment for Washington State University hosted in an isolated workload account. Workload accounts ***only*** contain services and data for that workload in accordance with data protection and privacy laws and standards.
+${\color{red}wsu}$ is an example deployment for Washington State University hosted in an isolated workload account. Workload accounts ***only*** contain services and data for that workload in accordance with data protection and privacy laws and standards.
 
 The domain.tld zone and records directing traffic to delegated subdomains are contained in the network account, and service control policies protect anyone but superadmin from changing them. This provides complete blast radius isolation for the service to the owners, because a deployment only needs to change the records in the delegated account.
 
