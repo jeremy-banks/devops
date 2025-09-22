@@ -1,24 +1,6 @@
 variable "account_id" {
   type = map(string)
   default = {
-    identity_prd         = "000000000000"
-    identity_stg         = "000000000000"
-    log_archive_prd      = "000000000000"
-    log_archive_stg      = "000000000000"
-    network_prd          = "000000000000"
-    network_stg          = "000000000000"
-    security_tooling_prd = "000000000000"
-    security_tooling_stg = "000000000000"
-    shared_services_prd  = "000000000000"
-    shared_services_stg  = "000000000000"
-    workload_sdlc_dev    = "000000000000"
-    workload_sdlc_prd    = "000000000000"
-    workload_sdlc_stg    = "000000000000"
-    workload_sdlc_tst    = "000000000000"
-    workload_wsu_dev     = "000000000000"
-    workload_wsu_prd     = "000000000000"
-    workload_wsu_stg     = "000000000000"
-    workload_wsu_tst     = "000000000000"
   }
 }
 
@@ -323,7 +305,7 @@ variable "vpc_cidr_failover" { default = null }
 
 variable "create_vpc_public_subnets" { default = false }
 
-variable "ntp_servers" { default = ["169.254.169.123"] }
+variable "ntp_servers" { default = ["169.254.169.123"] } # local Amazon Time Sync Service
 
 variable "log_retention_days" { default = 2192 } # six years per HIPAA NIST SP 800-66 section 4.22
 
