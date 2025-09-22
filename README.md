@@ -6,13 +6,11 @@ The goal of this repo is to provide a comprehensive codebase to lift-and-shift a
 ## My Education and Certifications
 [![Bachelor's: Genetics and Cell Biology - Washington State University](https://img.shields.io/badge/Bachelor's-Genetics_and_Cell_Biology_--_WSU_(PURSUING)-rgb(152,36,49)?style=plastic)](https://degrees.wsu.edu/degree/genetics-cell-biology/)<br>
 [![Terraform Associate](https://img.shields.io/badge/Certificate-HashiCorp_Certified:_Terraform_Associate-rgb(115,73,182)?style=plastic)](https://www.credly.com/badges/736aae79-b1fd-4567-a3d2-d1e1a27ff182)<br>
-[![Certified Kubernetes Administrator](https://img.shields.io/badge/Certificate-Certified_Kubernetes_Administrator-rgb(77,134,235)?style=plastic)](https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/)<br>
 [![Unity Prototyping UW](https://img.shields.io/badge/Certificate-Specialization_in_Game_Prototyping_with_Unity-rgb(255,255,255)?style=plastic)](https://badgr.com/public/assertions/HtqMeP7NSSaEzOeMzOowCA)
 
-## Documentation
-- [Architectural Overview](./documentation/architectural_overview.md)
+<!-- ## Documentation
 - [Initial Setup](./documentation/initial_setup.md)
-- [To-Do](./documentation/to_do.md)
+- [Processes](./documentation/processes.md) -->
 
 ## Reference Material
 - [Whitepaper: Genomics Data Transfer, Analytics, and Machine Learning using AWS Services](https://aws.amazon.com/blogs/industries/whitepaper-genomics-data-transfer-analytics-and-machine-learning-using-aws-services/)
@@ -26,6 +24,82 @@ The goal of this repo is to provide a comprehensive codebase to lift-and-shift a
 - [Automating Domain Delegation for Public Applications](https://aws.amazon.com/blogs/networking-and-content-delivery/automating-domain-delegation-for-public-applications-in-aws/)
 - [Prescriptive Guidance Security Reference Architecture](https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture/org-management.html)
 - [Guidance to Render Unsecured PHI Unusable](https://www.hhs.gov/hipaa/for-professionals/breach-notification/guidance/index.html)
+
+## Details
+
+### Org and Accounts
+The organization, organization units, and accounts layout is designed in accordance to the documented [Best practices for a multi-account environment](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_best-practices.html) and [Best practices for managing organizational units (OUs) with AWS Organizations](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_ous_best_practices.html). Specifically, the [Separating business units with significantly different policies](https://docs.aws.amazon.com/whitepapers/latest/organizing-your-aws-environment/advanced-ous.html#extended-workload-oriented-ou-structure) is utilized for maximum security granularity and scaleability.
+
+<p align="center"><img src="./drawings/org-and-account-layout.drawio.png"/></p>
+
+### VPC Central Inspection Model
+This repo follows the documented guide for North-South Inspection with AWS Network Firewall as [documented by AWS](https://d1.awsstatic.com/architecture-diagrams/ArchitectureDiagrams/inspection-deployment-models-with-AWS-network-firewall-ra.pdf). Behold, the Central Inspection Cephalopod (resemblence unintended):
+
+<p align="center"><img src="./drawings/central-inspection.drawio.png"/></p>
+
+1. Public Ingress to Inspection to Workload
+1. Client VPN / Direct Connect / Site-to-Site VPN to Inspection to Workload (bi-directional)
+1. Workload to Inspection to Service Endpoint
+1. Workload to Inspection to Internet
+1. Workload to Inspection to VPC Peer / NAT / VPN (bi-directional)
+
+Because everything deployed is a "workload", this setup enables maximum scalability and cost savings. Each additional account benefits from the same Central Inspection model, Logging, Central Service Endpoints, and Central Egress to Internet, without any additional configuration requirements.
+
+### Delegated DNS
+To align with best practices for DNS and service isolation DNS delegation is featured. The table below represents an example featuring GitHub being hosted in the shared services account.
+
+|   | type | account | direct |
+| ---: | :--- | :--- | :--- |
+| domain.tld | zone |  | |
+| <span style="color: green;">www.domain.tld</span> | CNAME | network | www.sdlc.aws.domain.tld |
+| <span style="color: blue;">github.domain.tld</span> | CNAME | network | github.svc.aws.domain.tld |
+| <span style="color: red;">wsu.domain.tld</span> | CNAME | network | wsu.aws.domain.tld |
+| aws.domain.tld | zone | network | |
+| <span style="color: green;">sdlc.aws.domain.tld</span> | zone | sdlc | |
+| <span style="color: blue;">svc.aws.domain.tld</span> | zone | shared-services | |
+| <span style="color: red;">wsu.aws.domain.tld</span> | zone | workload-wsu | |
+| <span style="color: green;">www.sdlc.aws.domain.tld</span> | CNAME | sdlc | www-blue.svc.aws.domain.tld |
+| <span style="color: green;">www-blue.svc.aws.domain.tld</span> | A Latency | sdlc | load balancer use1, load balancer usw2 |
+| <span style="color: blue;">github.svc.aws.domain.tld</span> | CNAME | shared-services | github-blue.svc.aws.domain.tld |
+| <span style="color: blue;">github-blue.svc.aws.domain.tld</span> | A Latency | shared-services | load balancer use1, load balancer usw2 |
+| <span style="color: red;">wsu.wsu.aws.domain.tld</span> | CNAME | workload-wsu | www-blue.svc.aws.domain.tld |
+| <span style="color: red;">wsu-blue.jhm.aws.domain</span> | A Latency | workload-wsu | load balancer use1, load balancer usw2 |
+
+<span style="color: green;">www</span> is the marketing website hosted in the sdlc account. The sdlc account also hosts multi-tenant deployments and pooled resources like api and ftp.
+
+<span style="color: blue;">github</span> is the private source code management hosted in the shared services account. The shared services account also hosts applications like artifactory, jenkins, nagios, etc.
+
+<span style="color: red;">wsu</span> is an example deployment for Washington State University hosted in an isolated workload account. Workload accounts ***only*** contain services and data for that workload in accordance with data protection and privacy laws and standards.
+
+The domain.tld zone and records directing traffic to delegated subdomains are contained in the network account, and service control policies protect anyone but superadmin from changing them. This provides complete blast radius isolation for the service to the owners, because a deployment only needs to change the records in the delegated account.
+
+When changes to subdomain configuration need to be tested they can be done on `dev`, `tst`, and `stg` environments respective to that subdomain. For example to roll out changes on shared services, the addresses would be `application.svc-dev.aws.domain.tld`, where as changes on the network itself would be rolled out to `application.svc.aws-stg.domain.tld`. The production environment does not and should not include any indication of its specific environment; eg production does not contain `prod` or `prd` anywhere in the DNS.
+
+AWS documentation and white papers are explicit that ***all*** services which can be designed this way should be.
+
+## To Do
+- central egress of NAT and endpoints for services
+- immutable log archiving with N-day retention
+- cVPN with Federated Access using Active Directory
+- test Site-to-Site VPN connection between my home hardware and AWS
+- implement r53 resolver
+- Create a faux DR event by creating terraform code that blocks traffic in ACL of one AZs subnets
+- Add multi-region active-active Postgres to EKS deployments
+- Mozilla Secrets OPerationS (SOPS) implementation to keep secrets protected
+- Implement StackSet Deployments
+   - Disable unlimited burstable instance credits
+   - delete all default VPCs in all regions of every account
+   - AWS config for hipaa, CIS, NIST
+      - aggregate to security account probably
+   - AWS Backup with Multi-AZ and glacier
+   - SCP enforcing features
+      - S3 buckets never public
+      - aws_ebs_snapshot_block_public_access
+      - block public s3 access
+   - MFA enforced organization-wide
+- Centralized logging with compression and glacier archive
+   - DNS logs sent to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
+   - ALB logs send to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
 
 ## License
 This project is licensed under the [Creative Commons Attribution-NonCommercial 4.0 International License](https://creativecommons.org/licenses/by-nc/4.0/).

@@ -101,7 +101,7 @@ Make an email, update relevant files with your unique information, and begin dep
       ```sh
       # replace 012345678912 with the account_id
       AWS_PROFILE=superadmin aws sts assume-role \
-         --role-arn arn:aws:iam::012345678912:role/admin \
+         --role-arn arn:aws:iam::825442073177:role/superadmin \
          --role-session-name workload-product-a-prd \
          --duration-seconds 36000
       # replace foo, bar, and helloworld with matching outputs
