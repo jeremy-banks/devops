@@ -67,9 +67,9 @@ To align with best practices for DNS and service isolation DNS delegation is fea
 
 ${\color{green}www .domain.tld‌}$ is the marketing website hosted in the sdlc account. The sdlc account also hosts multi-tenant deployments and pooled resources like api and ftp.
 
-${\color{blue}gitlab}$ is the private source code management hosted in the shared services account. The shared services account also hosts applications like artifactory, jenkins, nagios, etc.
+${\color{blue}gitlab .domain.tld}$ is the private source code management hosted in the shared services account. The shared services account also hosts applications like artifactory, jenkins, nagios, etc.
 
-${\color{red}wsu}$ is an example deployment for Washington State University hosted in an isolated workload account. Workload accounts ***only*** contain services and data for that workload in accordance with data protection and privacy laws and standards.
+${\color{red}wsu .domain.tld}$ is an example deployment for Washington State University hosted in an isolated workload account. Workload accounts ***only*** contain services and data for that workload in accordance with data protection and privacy laws and standards.
 
 The domain.tld zone and records directing traffic to delegated subdomains are contained in the network account, and service control policies protect anyone but superadmin from changing them. This provides complete blast radius isolation for the service to the owners, because a deployment only needs to change the records in the delegated account.
 
