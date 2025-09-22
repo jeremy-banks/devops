@@ -19,8 +19,6 @@ locals {
     var.vpc_azs_number_used_network == 2 ? [local.vpc_inspection_cidrsubnets_failover[2], local.vpc_inspection_cidrsubnets_failover[3]] :
     null
   )
-
-  vpc_inspection_tags_failover = {}
 }
 
 module "vpc_inspection_failover" {
@@ -33,13 +31,9 @@ module "vpc_inspection_failover" {
   name = "${local.resource_name.failover}-vpc-central-inspection"
   cidr = var.vpc_cidr.central_inspection_prd_failover
 
-  azs                 = slice(local.vpc_az_ids_failover, 0, var.vpc_azs_number_used_network)
-  private_subnets     = local.vpc_inspection_private_subnets_failover
-  public_subnets      = []
-  database_subnets    = []
-  elasticache_subnets = []
-  redshift_subnets    = []
-  intra_subnets       = local.vpc_inspection_intra_subnets_failover
+  azs             = slice(local.vpc_az_ids_failover, 0, var.vpc_azs_number_used_network)
+  private_subnets = local.vpc_inspection_private_subnets_failover
+  intra_subnets   = local.vpc_inspection_intra_subnets_failover
 
   private_subnet_suffix = "pvt"
   intra_subnet_suffix   = "tgw"
@@ -48,9 +42,6 @@ module "vpc_inspection_failover" {
   create_elasticache_subnet_group = false
   create_redshift_subnet_group    = false
 
-  manage_default_network_acl = true
-
-  manage_default_route_table = true
   default_route_table_name   = "DO-NOT-USE"
   default_route_table_routes = []
 
@@ -58,22 +49,14 @@ module "vpc_inspection_failover" {
 
   create_multiple_intra_route_tables = true
 
-  manage_default_security_group  = true
   default_security_group_name    = "DO-NOT-USE"
   default_security_group_ingress = []
   default_security_group_egress  = []
   default_security_group_tags    = {}
 
-  enable_dns_hostnames = true
-  enable_dns_support   = true
-
-  enable_nat_gateway = false
-
   enable_dhcp_options              = true
-  dhcp_options_domain_name_servers = ["AmazonProvidedDNS"]
+  dhcp_options_domain_name_servers = var.dns_servers
   dhcp_options_ntp_servers         = var.ntp_servers
-
-  vpc_tags = local.vpc_inspection_tags_failover
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_inspection_to_tgw_failover" {

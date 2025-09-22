@@ -1,6 +1,7 @@
 variable "account_id" {
   type = map(string)
   default = {
+
   }
 }
 
@@ -305,7 +306,35 @@ variable "vpc_cidr_failover" { default = null }
 
 variable "create_vpc_public_subnets" { default = false }
 
+variable "dns_servers" { default = ["AmazonProvidedDNS"] }
+
 variable "ntp_servers" { default = ["169.254.169.123"] } # local Amazon Time Sync Service
+
+variable "vpc_tags" {
+  default = {
+    "k8s.io/cluster-autoscaler/enabled" = true
+    "kubernetes.io/cluster/blue"        = "owned"
+    "kubernetes.io/cluster/green"       = "owned"
+  }
+}
+
+variable "public_subnet_tags" {
+  default = {
+    "kubernetes.io/cluster/blue"     = "shared"
+    "kubernetes.io/cluster/green"    = "shared"
+    "kubernetes.io/role/alb-ingress" = 1
+    "kubernetes.io/role/elb"         = 1
+  }
+}
+
+variable "private_subnet_tags" {
+  default = {
+    "kubernetes.io/cluster/blue"      = "shared"
+    "kubernetes.io/cluster/green"     = "shared"
+    "kubernetes.io/role/alb-ingress"  = 1
+    "kubernetes.io/role/internal-elb" = 1
+  }
+}
 
 variable "log_retention_days" { default = 2192 } # six years per HIPAA NIST SP 800-66 section 4.22
 

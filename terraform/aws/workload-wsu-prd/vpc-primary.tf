@@ -36,61 +36,35 @@ module "vpc_primary" {
   name = "${local.resource_name.primary}-vpc"
   cidr = local.vpc_cidr_primary
 
-  azs                 = slice(local.vpc_az_ids_primary, 0, var.vpc_azs_number_used)
-  private_subnets     = local.vpc_private_subnets_primary
-  public_subnets      = var.create_vpc_public_subnets ? local.vpc_public_subnets_primary : []
-  database_subnets    = []
-  elasticache_subnets = []
-  redshift_subnets    = []
-  intra_subnets       = local.vpc_intra_subnets_primary
+  azs             = slice(local.vpc_az_ids_primary, 0, var.vpc_azs_number_used)
+  private_subnets = local.vpc_private_subnets_primary
+  public_subnets  = var.create_vpc_public_subnets ? local.vpc_public_subnets_primary : []
+  intra_subnets   = local.vpc_intra_subnets_primary
 
   private_subnet_suffix = "pvt"
   public_subnet_suffix  = "pub"
   intra_subnet_suffix   = "tgw"
 
-  private_subnet_tags = {
-    "kubernetes.io/role/alb-ingress"  = 1
-    "kubernetes.io/role/internal-elb" = 1
-    "kubernetes.io/cluster/blue"      = "shared"
-    "kubernetes.io/cluster/green"     = "shared"
-  }
-  public_subnet_tags = {
-    "kubernetes.io/role/alb-ingress" = 1
-    "kubernetes.io/role/elb"         = 1
-    "kubernetes.io/cluster/blue"     = "shared"
-    "kubernetes.io/cluster/green"    = "shared"
-  }
+  private_subnet_tags = var.private_subnet_tags
+  public_subnet_tags  = var.public_subnet_tags
 
   create_database_subnet_group    = false
   create_elasticache_subnet_group = false
   create_redshift_subnet_group    = false
 
-  manage_default_network_acl = true
-
-  manage_default_route_table = true
   default_route_table_name   = "DO-NOT-USE"
   default_route_table_routes = []
 
   create_multiple_intra_route_tables = true
 
-  manage_default_security_group  = true
   default_security_group_name    = "DO-NOT-USE"
   default_security_group_ingress = []
   default_security_group_egress  = []
   default_security_group_tags    = {}
 
-  enable_dns_hostnames = true
-  enable_dns_support   = true
-
-  enable_nat_gateway = false
-
   enable_dhcp_options              = true
-  dhcp_options_domain_name_servers = ["AmazonProvidedDNS"]
+  dhcp_options_domain_name_servers = var.dns_servers
   dhcp_options_ntp_servers         = var.ntp_servers
 
-  vpc_tags = {
-    "kubernetes.io/cluster/blue"        = "owned"
-    "kubernetes.io/cluster/green"       = "owned"
-    "k8s.io/cluster-autoscaler/enabled" = true
-  }
+  vpc_tags = var.vpc_tags
 }
