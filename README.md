@@ -51,7 +51,7 @@ To align with best practices for DNS and service isolation DNS delegation is fea
 |   | type | account | direct |
 | ---: | :--- | :--- | :--- |
 | domain.tld | zone |  | |
-| ${\color{green}www.domain.tld}$ | CNAME | network | www.sdlc.aws.domain.tld |
+| ${\color{green}www.‌domain.tld}$ | CNAME | network | www.sdlc.aws.domain.tld |
 | <span style="color: blue;">github.domain.tld</span> | CNAME | network | github.svc.aws.domain.tld |
 | <span style="color: red;">wsu.domain.tld</span> | CNAME | network | wsu.aws.domain.tld |
 | aws.domain.tld | zone | network | |
