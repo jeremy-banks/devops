@@ -11,9 +11,7 @@ module "shared_services_acm_prd_primary" {
   wait_for_validation    = false
 }
 
-output "shared_services_acm_prd_primary_arn" {
-  value = module.shared_services_acm_prd_primary.acm_certificate_arn
-}
+output "shared_services_acm_arn_prd_primary" { value = module.shared_services_acm_prd_primary.acm_certificate_arn }
 
 module "shared_services_acm_prd_failover" {
   source    = "terraform-aws-modules/acm/aws"
@@ -28,9 +26,7 @@ module "shared_services_acm_prd_failover" {
   wait_for_validation    = false
 }
 
-output "shared_services_acm_prd_failover_arn" {
-  value = module.shared_services_acm_prd_failover.acm_certificate_arn
-}
+output "shared_services_acm_arn_prd_failover" { value = module.shared_services_acm_prd_failover.acm_certificate_arn }
 
 module "shared_services_acm_stg_primary" {
   source    = "terraform-aws-modules/acm/aws"
@@ -45,9 +41,7 @@ module "shared_services_acm_stg_primary" {
   wait_for_validation    = false
 }
 
-output "shared_services_acm_stg_primary_arn" {
-  value = module.shared_services_acm_stg_primary.acm_certificate_arn
-}
+output "shared_services_acm_arn_stg_primary" { value = module.shared_services_acm_stg_primary.acm_certificate_arn }
 
 module "shared_services_acm_stg_failover" {
   source    = "terraform-aws-modules/acm/aws"
@@ -62,9 +56,7 @@ module "shared_services_acm_stg_failover" {
   wait_for_validation    = false
 }
 
-output "shared_services_acm_stg_failover_arn" {
-  value = module.shared_services_acm_stg_failover.acm_certificate_arn
-}
+output "shared_services_acm_arn_stg_failover" { value = module.shared_services_acm_stg_failover.acm_certificate_arn }
 
 module "shared_services_acm_records" {
   source    = "terraform-aws-modules/acm/aws"

@@ -1,7 +1,7 @@
-module "sdlc_acm_prd_primary" {
+module "workload_sdlc_acm_prd_primary" {
   source    = "terraform-aws-modules/acm/aws"
   version   = "~> 6.1.0"
-  providers = { aws = aws.sdlc_prd }
+  providers = { aws = aws.workload_sdlc_prd }
 
   domain_name               = aws_route53_zone.central_root.name
   subject_alternative_names = ["*.${aws_route53_zone.central_root.name}"]
@@ -12,14 +12,12 @@ module "sdlc_acm_prd_primary" {
   wait_for_validation    = false
 }
 
-output "sdlc_acm_prd_primary_arn" {
-  value = module.sdlc_acm_prd_primary.acm_certificate_arn
-}
+output "workload_sdlc_acm_arn_prd_primary" { value = module.workload_sdlc_acm_prd_primary.acm_certificate_arn }
 
-module "sdlc_acm_prd_failover" {
+module "workload_sdlc_acm_prd_failover" {
   source    = "terraform-aws-modules/acm/aws"
   version   = "~> 6.1.0"
-  providers = { aws = aws.sdlc_prd_failover }
+  providers = { aws = aws.workload_sdlc_prd_failover }
 
   domain_name               = aws_route53_zone.central_root.name
   subject_alternative_names = ["*.${aws_route53_zone.central_root.name}"]
@@ -30,14 +28,12 @@ module "sdlc_acm_prd_failover" {
   wait_for_validation    = false
 }
 
-output "sdlc_acm_prd_failover_arn" {
-  value = module.sdlc_acm_prd_failover.acm_certificate_arn
-}
+output "workload_sdlc_acm_arn_prd_failover" { value = module.workload_sdlc_acm_prd_failover.acm_certificate_arn }
 
-module "sdlc_acm_stg_primary" {
+module "workload_sdlc_acm_stg_primary" {
   source    = "terraform-aws-modules/acm/aws"
   version   = "~> 6.1.0"
-  providers = { aws = aws.sdlc_stg }
+  providers = { aws = aws.workload_sdlc_stg }
 
   domain_name               = aws_route53_zone.central_root.name
   subject_alternative_names = ["*.${aws_route53_zone.central_root.name}"]
@@ -48,14 +44,12 @@ module "sdlc_acm_stg_primary" {
   wait_for_validation    = false
 }
 
-output "sdlc_acm_stg_primary_arn" {
-  value = module.sdlc_acm_stg_primary.acm_certificate_arn
-}
+output "workload_sdlc_acm_arn_stg_primary" { value = module.workload_sdlc_acm_stg_primary.acm_certificate_arn }
 
-module "sdlc_acm_stg_failover" {
+module "workload_sdlc_acm_stg_failover" {
   source    = "terraform-aws-modules/acm/aws"
   version   = "~> 6.1.0"
-  providers = { aws = aws.sdlc_stg_failover }
+  providers = { aws = aws.workload_sdlc_stg_failover }
 
   domain_name               = aws_route53_zone.central_root.name
   subject_alternative_names = ["*.${aws_route53_zone.central_root.name}"]
@@ -65,14 +59,12 @@ module "sdlc_acm_stg_failover" {
   wait_for_validation    = false
 }
 
-output "sdlc_acm_stg_failover_arn" {
-  value = module.sdlc_acm_stg_failover.acm_certificate_arn
-}
+output "workload_sdlc_acm_arn_stg_failover" { value = module.workload_sdlc_acm_stg_failover.acm_certificate_arn }
 
-module "sdlc_acm_tst_primary" {
+module "workload_sdlc_acm_tst_primary" {
   source    = "terraform-aws-modules/acm/aws"
   version   = "~> 6.1.0"
-  providers = { aws = aws.sdlc_tst }
+  providers = { aws = aws.workload_sdlc_tst }
 
   domain_name               = aws_route53_zone.central_root.name
   subject_alternative_names = ["*.${aws_route53_zone.central_root.name}"]
@@ -82,14 +74,12 @@ module "sdlc_acm_tst_primary" {
   wait_for_validation    = false
 }
 
-output "sdlc_acm_tst_primary_arn" {
-  value = module.sdlc_acm_tst_primary.acm_certificate_arn
-}
+output "workload_sdlc_acm_arn_tst_primary" { value = module.workload_sdlc_acm_tst_primary.acm_certificate_arn }
 
-module "sdlc_acm_tst_failover" {
+module "workload_sdlc_acm_tst_failover" {
   source    = "terraform-aws-modules/acm/aws"
   version   = "~> 6.1.0"
-  providers = { aws = aws.sdlc_tst_failover }
+  providers = { aws = aws.workload_sdlc_tst_failover }
 
   domain_name               = aws_route53_zone.central_root.name
   subject_alternative_names = ["*.${aws_route53_zone.central_root.name}"]
@@ -99,14 +89,12 @@ module "sdlc_acm_tst_failover" {
   wait_for_validation    = false
 }
 
-output "sdlc_acm_tst_failover_arn" {
-  value = module.sdlc_acm_tst_failover.acm_certificate_arn
-}
+output "workload_sdlc_acm_arn_tst_failover" { value = module.workload_sdlc_acm_tst_failover.acm_certificate_arn }
 
-module "sdlc_acm_dev_primary" {
+module "workload_sdlc_acm_dev_primary" {
   source    = "terraform-aws-modules/acm/aws"
   version   = "~> 6.1.0"
-  providers = { aws = aws.sdlc_dev }
+  providers = { aws = aws.workload_sdlc_dev }
 
   domain_name               = aws_route53_zone.central_root.name
   subject_alternative_names = ["*.${aws_route53_zone.central_root.name}"]
@@ -116,14 +104,12 @@ module "sdlc_acm_dev_primary" {
   wait_for_validation    = false
 }
 
-output "sdlc_acm_dev_primary_arn" {
-  value = module.sdlc_acm_dev_primary.acm_certificate_arn
-}
+output "workload_sdlc_acm_arn_dev_primary" { value = module.workload_sdlc_acm_dev_primary.acm_certificate_arn }
 
-module "sdlc_acm_dev_failover" {
+module "workload_sdlc_acm_dev_failover" {
   source    = "terraform-aws-modules/acm/aws"
   version   = "~> 6.1.0"
-  providers = { aws = aws.sdlc_dev_failover }
+  providers = { aws = aws.workload_sdlc_dev_failover }
 
   domain_name               = aws_route53_zone.central_root.name
   subject_alternative_names = ["*.${aws_route53_zone.central_root.name}"]
@@ -133,11 +119,9 @@ module "sdlc_acm_dev_failover" {
   wait_for_validation    = false
 }
 
-output "sdlc_acm_dev_failover_arn" {
-  value = module.sdlc_acm_dev_failover.acm_certificate_arn
-}
+output "workload_sdlc_acm_arn_dev_failover" { value = module.workload_sdlc_acm_dev_failover.acm_certificate_arn }
 
-module "sdlc_acm_records" {
+module "workload_sdlc_acm_records" {
   source    = "terraform-aws-modules/acm/aws"
   version   = "~> 6.1.0"
   providers = { aws = aws.this }
@@ -149,24 +133,24 @@ module "sdlc_acm_records" {
   zone_id = aws_route53_zone.central_root.zone_id
 
   distinct_domain_names = flatten([
-    module.sdlc_acm_prd_primary.distinct_domain_names,
-    module.sdlc_acm_prd_failover.distinct_domain_names,
-    module.sdlc_acm_stg_primary.distinct_domain_names,
-    module.sdlc_acm_stg_failover.distinct_domain_names,
-    module.sdlc_acm_tst_primary.distinct_domain_names,
-    module.sdlc_acm_tst_failover.distinct_domain_names,
-    module.sdlc_acm_dev_primary.distinct_domain_names,
-    module.sdlc_acm_dev_failover.distinct_domain_names,
+    module.workload_sdlc_acm_prd_primary.distinct_domain_names,
+    module.workload_sdlc_acm_prd_failover.distinct_domain_names,
+    module.workload_sdlc_acm_stg_primary.distinct_domain_names,
+    module.workload_sdlc_acm_stg_failover.distinct_domain_names,
+    module.workload_sdlc_acm_tst_primary.distinct_domain_names,
+    module.workload_sdlc_acm_tst_failover.distinct_domain_names,
+    module.workload_sdlc_acm_dev_primary.distinct_domain_names,
+    module.workload_sdlc_acm_dev_failover.distinct_domain_names,
   ])
 
   acm_certificate_domain_validation_options = flatten([
-    module.sdlc_acm_prd_primary.acm_certificate_domain_validation_options,
-    module.sdlc_acm_prd_failover.acm_certificate_domain_validation_options,
-    module.sdlc_acm_stg_primary.acm_certificate_domain_validation_options,
-    module.sdlc_acm_stg_failover.acm_certificate_domain_validation_options,
-    module.sdlc_acm_tst_primary.acm_certificate_domain_validation_options,
-    module.sdlc_acm_tst_failover.acm_certificate_domain_validation_options,
-    module.sdlc_acm_dev_primary.acm_certificate_domain_validation_options,
-    module.sdlc_acm_dev_failover.acm_certificate_domain_validation_options,
+    module.workload_sdlc_acm_prd_primary.acm_certificate_domain_validation_options,
+    module.workload_sdlc_acm_prd_failover.acm_certificate_domain_validation_options,
+    module.workload_sdlc_acm_stg_primary.acm_certificate_domain_validation_options,
+    module.workload_sdlc_acm_stg_failover.acm_certificate_domain_validation_options,
+    module.workload_sdlc_acm_tst_primary.acm_certificate_domain_validation_options,
+    module.workload_sdlc_acm_tst_failover.acm_certificate_domain_validation_options,
+    module.workload_sdlc_acm_dev_primary.acm_certificate_domain_validation_options,
+    module.workload_sdlc_acm_dev_failover.acm_certificate_domain_validation_options,
   ])
 }
