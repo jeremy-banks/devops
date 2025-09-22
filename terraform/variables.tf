@@ -240,6 +240,13 @@ variable "create_failover_region_network" { default = true }
 
 variable "create_failover_region" { default = true }
 
+variable "ttl" {
+  default = {
+    cname = 300
+    ns    = 86400
+  }
+}
+
 variable "tgw_asn" {
   type = map(number)
   default = {

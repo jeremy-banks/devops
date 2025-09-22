@@ -58,7 +58,7 @@ resource "aws_route53_record" "workload_sdlc_ns_prd" {
   zone_id = aws_route53_zone.aws_prd.zone_id
   name    = aws_route53_zone.workload_sdlc_prd.name
   type    = "NS"
-  ttl     = 86400
+  ttl     = var.ttl.ns
   records = aws_route53_zone.workload_sdlc_prd.name_servers
 }
 
@@ -68,7 +68,7 @@ resource "aws_route53_record" "workload_sdlc_www_prd" {
   zone_id = aws_route53_zone.central_root.zone_id
   name    = "www.${aws_route53_zone.central_root.name}"
   type    = "CNAME"
-  ttl     = 300
+  ttl     = var.ttl.cname
   records = ["www.sdlc.aws.${aws_route53_zone.central_root.name}"]
 }
 
@@ -131,7 +131,7 @@ resource "aws_route53_record" "workload_sdlc_ns_stg" {
   zone_id = aws_route53_zone.aws_prd.zone_id
   name    = aws_route53_zone.workload_sdlc_stg.name
   type    = "NS"
-  ttl     = 86400
+  ttl     = var.ttl.ns
   records = aws_route53_zone.workload_sdlc_stg.name_servers
 }
 
@@ -141,7 +141,7 @@ resource "aws_route53_record" "workload_sdlc_www_stg" {
   zone_id = aws_route53_zone.central_root.zone_id
   name    = "www-stg.${aws_route53_zone.central_root.name}"
   type    = "CNAME"
-  ttl     = 300
+  ttl     = var.ttl.cname
   records = ["www.sdlc-stg.aws.${aws_route53_zone.central_root.name}"]
 }
 
@@ -203,7 +203,7 @@ resource "aws_route53_record" "workload_sdlc_ns_tst" {
   zone_id = aws_route53_zone.aws_prd.zone_id
   name    = aws_route53_zone.workload_sdlc_tst.name
   type    = "NS"
-  ttl     = 86400
+  ttl     = var.ttl.ns
   records = aws_route53_zone.workload_sdlc_tst.name_servers
 }
 
@@ -213,7 +213,7 @@ resource "aws_route53_record" "workload_sdlc_www_tst" {
   zone_id = aws_route53_zone.central_root.zone_id
   name    = "www-tst.${aws_route53_zone.central_root.name}"
   type    = "CNAME"
-  ttl     = 300
+  ttl     = var.ttl.cname
   records = ["www.sdlc-tst.aws.${aws_route53_zone.central_root.name}"]
 }
 
@@ -275,7 +275,7 @@ resource "aws_route53_record" "workload_sdlc_ns_dev" {
   zone_id = aws_route53_zone.aws_prd.zone_id
   name    = aws_route53_zone.workload_sdlc_dev.name
   type    = "NS"
-  ttl     = 86400
+  ttl     = var.ttl.ns
   records = aws_route53_zone.workload_sdlc_dev.name_servers
 }
 
@@ -285,7 +285,7 @@ resource "aws_route53_record" "workload_sdlc_www_dev" {
   zone_id = aws_route53_zone.central_root.zone_id
   name    = "www-dev.${aws_route53_zone.central_root.name}"
   type    = "CNAME"
-  ttl     = 300
+  ttl     = var.ttl.cname
   records = ["www.sdlc-dev.aws.${aws_route53_zone.central_root.name}"]
 }
 

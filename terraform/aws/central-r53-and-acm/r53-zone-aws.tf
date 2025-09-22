@@ -10,7 +10,7 @@ resource "aws_route53_record" "aws_ns_prd" {
   zone_id = aws_route53_zone.central_root.zone_id
   name    = aws_route53_zone.aws_prd.name
   type    = "NS"
-  ttl     = 86400
+  ttl     = var.ttl.ns
   records = aws_route53_zone.aws_prd.name_servers
 }
 
@@ -26,6 +26,6 @@ resource "aws_route53_record" "aws_ns_stg" {
   zone_id = aws_route53_zone.central_root.zone_id
   name    = aws_route53_zone.aws_stg.name
   type    = "NS"
-  ttl     = 86400
+  ttl     = var.ttl.ns
   records = aws_route53_zone.aws_stg.name_servers
 }

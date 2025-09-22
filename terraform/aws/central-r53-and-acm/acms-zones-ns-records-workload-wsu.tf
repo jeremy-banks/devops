@@ -58,7 +58,7 @@ resource "aws_route53_record" "workload_wsu_ns_prd" {
   zone_id = aws_route53_zone.aws_prd.zone_id
   name    = aws_route53_zone.workload_wsu_prd.name
   type    = "NS"
-  ttl     = 86400
+  ttl     = var.ttl.ns
   records = aws_route53_zone.workload_wsu_prd.name_servers
 }
 
@@ -68,7 +68,7 @@ resource "aws_route53_record" "workload_wsu_www_prd" {
   zone_id = aws_route53_zone.central_root.zone_id
   name    = "wsu.${aws_route53_zone.central_root.name}"
   type    = "CNAME"
-  ttl     = 300
+  ttl     = var.ttl.cname
   records = ["wsu.wsu.aws.${aws_route53_zone.central_root.name}"]
 }
 
@@ -131,7 +131,7 @@ resource "aws_route53_record" "workload_wsu_ns_stg" {
   zone_id = aws_route53_zone.aws_prd.zone_id
   name    = aws_route53_zone.workload_wsu_stg.name
   type    = "NS"
-  ttl     = 86400
+  ttl     = var.ttl.ns
   records = aws_route53_zone.workload_wsu_stg.name_servers
 }
 
@@ -141,7 +141,7 @@ resource "aws_route53_record" "workload_wsu_www_stg" {
   zone_id = aws_route53_zone.central_root.zone_id
   name    = "wsu-stg.${aws_route53_zone.central_root.name}"
   type    = "CNAME"
-  ttl     = 300
+  ttl     = var.ttl.cname
   records = ["wsu.wsu-stg.aws.${aws_route53_zone.central_root.name}"]
 }
 
@@ -203,7 +203,7 @@ resource "aws_route53_record" "workload_wsu_ns_tst" {
   zone_id = aws_route53_zone.aws_prd.zone_id
   name    = aws_route53_zone.workload_wsu_tst.name
   type    = "NS"
-  ttl     = 86400
+  ttl     = var.ttl.ns
   records = aws_route53_zone.workload_wsu_tst.name_servers
 }
 
@@ -213,7 +213,7 @@ resource "aws_route53_record" "workload_wsu_www_tst" {
   zone_id = aws_route53_zone.central_root.zone_id
   name    = "wsu-tst.${aws_route53_zone.central_root.name}"
   type    = "CNAME"
-  ttl     = 300
+  ttl     = var.ttl.cname
   records = ["wsu.wsu-tst.aws.${aws_route53_zone.central_root.name}"]
 }
 
@@ -275,7 +275,7 @@ resource "aws_route53_record" "workload_wsu_ns_dev" {
   zone_id = aws_route53_zone.aws_prd.zone_id
   name    = aws_route53_zone.workload_wsu_dev.name
   type    = "NS"
-  ttl     = 86400
+  ttl     = var.ttl.ns
   records = aws_route53_zone.workload_wsu_dev.name_servers
 }
 
@@ -285,7 +285,7 @@ resource "aws_route53_record" "workload_wsu_www_dev" {
   zone_id = aws_route53_zone.central_root.zone_id
   name    = "wsu-dev.${aws_route53_zone.central_root.name}"
   type    = "CNAME"
-  ttl     = 300
+  ttl     = var.ttl.cname
   records = ["wsu.wsu-dev.aws.${aws_route53_zone.central_root.name}"]
 }
 
