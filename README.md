@@ -32,12 +32,12 @@ The organization, organization units, and accounts layout is designed in accorda
 
 <!-- ![Organization layout](./drawings/org-and-account-layout.drawio.png) -->
 
-<p align="center"><img src="./drawings/org-and-account-layout.drawio.png" width="67%"/></p>
+<p align="center"><img src="./drawings/org-and-account-layout.drawio.png" width="55%"/></p>
 
 ### VPC Central Inspection Model
 This repo follows the documented guide for North-South Inspection with AWS Network Firewall as [documented by AWS](https://d1.awsstatic.com/architecture-diagrams/ArchitectureDiagrams/inspection-deployment-models-with-AWS-network-firewall-ra.pdf). Behold, the Central Inspection Cephalopod (resemblence unintended):
 
-<p align="center"><img src="./drawings/central-inspection.drawio.png" width="67%"/></p>
+<p align="center"><img src="./drawings/central-inspection.drawio.png" width="55%"/></p>
 
 1. Public Ingress to Inspection to Workload
 1. Client VPN / Direct Connect / Site-to-Site VPN to Inspection to Workload (bi-directional)
