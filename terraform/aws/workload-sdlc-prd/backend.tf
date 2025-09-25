@@ -3,7 +3,7 @@ terraform {
     profile      = "superadmin"
     region       = "tfstate_region"
     bucket       = "tfstate_s3_bucket_name"
-    key          = "superadmin/central-r53-and-acm"
+    key          = "superadmin/workload-sdlc-prd"
     use_lockfile = true
     insecure     = false
     encrypt      = true

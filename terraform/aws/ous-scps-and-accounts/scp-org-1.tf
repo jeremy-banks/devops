@@ -127,7 +127,6 @@ data "aws_iam_policy_document" "org_1" {
       values = [
         "$${aws:ResourceArn}",
         "arn:aws:iam::${"$${aws:PrincipalAccount}"}:role/${var.account_role_name}",
-        # "arn:aws:iam::${"$${aws:PrincipalAccount}"}:role/eksctl-*",
         "arn:aws:iam::${"$${aws:PrincipalAccount}"}:root",
       ]
     }

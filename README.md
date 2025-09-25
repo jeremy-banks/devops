@@ -75,6 +75,11 @@ When changes to subdomain configuration need to be tested they can be done on `d
 AWS documentation and white papers are explicit that ***all*** services which can be designed this way should be.
 
 ## To Do
+- central endpoints
+- Centralized logging with compression and glacier archive
+   - DNS logs sent to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
+   - ALB logs send to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
+- monitoring (open source)
 - central egress of NAT and endpoints for services
 - immutable log archiving with N-day retention
 - cVPN with Federated Access using Active Directory
@@ -89,14 +94,7 @@ AWS documentation and white papers are explicit that ***all*** services which ca
    - AWS config for hipaa, CIS, NIST
       - aggregate to security account probably
    - AWS Backup with Multi-AZ and glacier
-   - SCP enforcing features
-      - S3 buckets never public
-      - aws_ebs_snapshot_block_public_access
-      - block public s3 access
    - MFA enforced organization-wide
-- Centralized logging with compression and glacier archive
-   - DNS logs sent to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
-   - ALB logs send to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
 
 ## License
 This project is licensed under the [Creative Commons Attribution-NonCommercial 4.0 International License](https://creativecommons.org/licenses/by-nc/4.0/).
