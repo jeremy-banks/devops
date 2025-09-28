@@ -1,12 +1,12 @@
-# terraform {
-#   backend "s3" {
-#     profile      = "superadmin"
-#     region       = "TFSTATEBACKENDREGION"
-#     bucket       = "TFSTATEBACKENDS3BUCKETNAME"
-#     key          = "superadmin/ous-scps-and-accounts"
-#     use_lockfile = true
-#     insecure     = false
-#     encrypt      = true
-#     kms_key_id   = "TFSTATEBACKENDKMSARN"
-#   }
-# }
+terraform {
+  backend "s3" {
+    profile      = "superadmin"
+    region       = "tfstate_region"
+    bucket       = "tfstate_s3_bucket_name"
+    key          = "superadmin/ous-scps-and-accounts"
+    use_lockfile = true
+    insecure     = false
+    encrypt      = true
+    kms_key_id   = "tfstate_kms_arn"
+  }
+}

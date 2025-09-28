@@ -35,6 +35,10 @@ override.tf.json
 terraform.rc
 
 backend.tf
+**/backend.tf
 
 # Mac OS
 .DS_Store
+
+#helm
+*.tar.gz

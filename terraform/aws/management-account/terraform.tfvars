@@ -1,7 +1,5 @@
 cli_profile_name = "superadmin"
 
-provider_role_name = "superadmin"
+environment = "prd"
 
-deployment_environment = "prd"
-
-this_slug = "management-account"
+this_slug = "tfstate"

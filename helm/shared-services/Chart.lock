@@ -1,0 +1,15 @@
+dependencies:
+- name: gitlab
+  repository: https://charts.gitlab.io
+  version: 9.4.0
+# - name: artifactory
+#   repository: https://charts.jfrog.io
+#   version: 107.117.17
+# - name: grafana
+#   repository: https://grafana.github.io/helm-charts
+#   version: 10.0.0
+# - name: prometheus
+#   repository: https://prometheus-community.github.io/helm-charts
+#   version: 27.39.0
+digest: sha256:46cce63b4f6a73a208b5b8e06bf79e2d9d7cc3531045d853c31f8e4d9123042c
+generated: "2025-09-25T11:02:52.915483-07:00"

@@ -3,79 +3,106 @@
 # Initial Setup
 
 ## Prerequisites
-- aws-cli/2.25.5
-- Terraform v1.11.3
-- eksctl version 0.191.0
-- kubectl v1.31.1
-- helm v3.16.1
+- aws-cli/2.27.52
+- Terraform v1.12.2
+- eksctl version 0.210.0
+- kubectl v1.33.3
+- helm v3.18.4
 
 ## Instructions
 
+### High-Level Overview
+Make an email, update relevant files with your unique information, and begin deploying!
+
 ### Update terraform/variables.tf with Your Unique Information
-1. Update the terraform/variables.tf with your unique information
-   1. `org_owner_email_prefix` "billg" and `org_owner_email_domain_tld` "microsoft.com"
-   1. `company_name` "microsoft" and `company_name_abbr` "ms"
-   1. `team_name` "blue" and `team_name_abbr` "blu"
-   1. `project_name` "windows13" and `project_name_abbr` "w13"
+1. Create an email address to use as org owner
+   1. Ideally this mailbox should be shared by senior engineers
+   1. `org_owner_email_prefix` "jeremybankstech"
+   1. `org_owner_email_plus_address` "awscloud"
+   1. `org_owner_email_domain_tld` "gmail.com"
+1. Add your company information
+   1. `company_name` "photon craze" and `company_name_abbr` "pc"
+   1. `team_name` "devops" and `team_name_abbr` "devops"
+   1. `project_name` "newtestbed" and `project_name_abbr` "ntb"
    1. `cost_center` for billing
-1. Enable Failover Region
-   1. `create_failover_region` (true|false)
-1. Declare your Region(s)
-   1. `region.primary` "us-west-2"
-   1. `region.primary_short` "usw2"
-   1. `region.failover` "us-east-1"
-   1. `region.failover_short` "use1"
-1. Also Declare your Availability Zones
-   1. Explicitly defined AZs tightly control network traffic and reduce costs
-   1. `azs_used` 2-6
+1. Declare use of Failover Region and the Region(s) to use
+   1. `create_failover_region_network` creates tgw and central network vpcs in failover region
+   1. `create_failover_region` creates workload vpcs in failover region
+   1. `region_primary.full` "us-west-2" and `region_primary.short` "usw2"
+   1. `region_failover.full` "us-east-1" and `region_failover.short` "use1"
+1. Explicitly defined availability zones limit network traffic and reduce costs
+   1. `azs_number_used_network` number of AZs for the central network to use
+   1. `azs_number_used` number of AZs for workloads to use
    1. `azs_primary` ["usw2-az1","usw2-az2","usw2-az3"]
    1. `azs_failover` ["use1-az1","use1-az2","use1-az3"]
 
 ### Deploy Org Management / Root Account
-1. Create AWS Account to be Org Management / Root
-   1. During account creation enable Developer tier AWS Support
-1. Create IAM User "superadmin"
+1. Create AWS Account to be Root and Org Management
+   1. The root user has the absolute highest authority in the organization. It should be:
+      1. Assigned MFA
+      1. Never given security credentials
+      1. Only shared with principal engineers to reduce blast radius
+      1. Used only in the event that `breakglass` user access has failed
+1. Create AWS CLI User `superadmin`
    1. Attach AdministratorAccess policy
-   1. Create an access key and AWS CLI profile named "superadmin" `aws configure --profile superadmin`
+   1. Create an access key and AWS CLI profile named superadmin `aws configure --profile superadmin`
+   1. These same credentials should be used to create a superadmin profile for CI/CD
 1. Deploy `terraform/aws/management-account`
-1. Update the backend.tf files in `terraform/aws/` and subdirectories
-   ```sh
-   find . -name 'backend.tf' -exec sed -i '' 's,TFSTATEBACKENDORGACCOUNTID,012345678912,g' {} + &&\
-   find . -name 'backend.tf' -exec sed -i '' 's,TFSTATEBACKENDREGION,us-west-2,g' {} + &&\
-   find . -name 'backend.tf' -exec sed -i '' 's,TFSTATEBACKENDDYNAMODBTABLE,scc-blu-w12-usw2-tfstate,g' {} + &&\
-   find . -name 'backend.tf' -exec sed -i '' 's,TFSTATEBACKENDKMSARN,KEY_ARN,g' {} + &&\
-   find . -name 'backend.tf' -exec sed -i '' 's,TFSTATEBACKENDS3BUCKETNAME,scc-blu-w12-usw2-tfstate-storage-blob-569d758c,g' {} +
-   ```
-1. Uncomment `terraform/aws/management-account/backend.tf` and migrate state with `terraform init -force-copy`
-1. Open a `Chat` AWS Support Case with `Account and Billing` in category `Organization` requesting `Default maximum number of accounts` increased to `1000`.
+1. Enable Terraform State Backend
+   1. Use the `terraform output` to update the backend.tf files in `terraform/aws/` and subdirectories
+      ```sh
+      find . -name 'backend.tf' -exec sed -i '' 's,tfstate_kms_arn,output,g' {} + &&\
+      find . -name 'backend.tf' -exec sed -i '' 's,tfstate_region,output,g' {} + &&\
+      find . -name 'backend.tf' -exec sed -i '' 's,tfstate_s3_bucket_name,output,g' {} +
+      ```
+   1. Uncomment `terraform/aws/management-account/backend.tf` and migrate state with `terraform init -force-copy`
+1. Save `breakglass` user information
+   1. Use `terraform output -json` to reveal passwords for the three breakglass users
+   1. Save the credentials in a LastPass or other secured location
+   1. breakglass users should:
+      1. Never be given security credentials
+      1. Only be shared with principal engineers
+      1. Used only in the event that `superadmin` and `admin` access has failed
+1. Create CI/CD CLI Profile `admin`
+   1. Use the `terraform output -json` to create CI/CD profile named admin for non-superadmin operations
+1. Increase max number of accounts
+   1. In AWS Console, navigate to Service Quotas -> AWS services -> AWS Organizations
+   1. Request `Default maximum number of accounts` to 100
 
 ### Deploy OUs, Accounts, and SCPs
 1. Deploy `terraform/aws/ous-scps-and-accounts`
 1. Update the terraform/variables.tf `account_id` map with the output
 
-### Deploy IAM Groups and Roles
+### Deploy Central R53
+1. Deploy `terraform/aws/central-r53-and-acm`
+
+### Deploy Central Network
+1. Deploy `terraform/aws/central-network`
+
+### Deploy IAM Resources
 1. Deploy `terraform/aws/iam`
-1. Create AWS CLI profile named "admin" with the output
-   ```sh
-   terraform output -json
-   aws configure --profile admin
-   ```
 
-### Deploy Networking
-1. Deploy `terraform/aws/networking`
+### Deploy Central Backup
+1. Deploy `terraform/aws/central-archive`
 
-### Deploy Workload Spoke A
-1. Deploy `terraform/aws/workload-spoke-a-prd`
+### Deploy Workload Product A
+1. `create_failover_region` used to declare whether this deployment should have a failover region
+1. `azs_number_used` 2-4
+1. `create_vpc_public_subnets`
+1. Deploy `terraform/aws/workload-product-a-prd`
 
-### Desploy EKS in 
-1. Update eksctl/sdlc-prd-blue.yaml and eksctl/sdlc-prd-failover-blue.yaml with vpc_id and private_subnets for primary and failover from terraform output of workload-spoke-a-prd
-1. Deploy eksctl/blue.yaml
+### Deploy EKS in Workload Product A
+1. Update deployment files with relevant outputs
+   1. `eksctl/blue.yaml` and `eksctl/green.yaml` with `kms_arn_primary`, `vpc_id_primary`, `vpc_private_subnets_ids_primary`, `vpc_security_group_id_ingress_primary`, and `vpc_security_group_id_main_primary`
+   1. `helm/cluster-services/values.yaml` with `acm_arn_primary`
+   1. `helm/nginx-welcome-example/values.yaml` with `acm_arn_primary`, and `workload_fqdn`
+1. Deploy `eksctl/blue.yaml`
    1. Assume admin role in account
       ```sh
-      # replace 012345678912 with the account id
-      AWS_PROFILE=admin aws sts assume-role \
-         --role-arn arn:aws:iam::012345678912:role/admin \
-         --role-session-name workload-spoke-a-prd \
+      # replace 012345678912 with the account_id
+      AWS_PROFILE=superadmin aws sts assume-role \
+         --role-arn arn:aws:iam::975705621738:role/superadmin \
+         --role-session-name workload-sdlc \
          --duration-seconds 36000
       # replace foo, bar, and helloworld with matching outputs
       export AWS_ACCESS_KEY_ID=foo
@@ -84,21 +111,25 @@
       unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
       ```
    1. Deploy Cluster
-      Update the vpc-id and subnet-ids in blue.yml
       ```sh
-      eksctl create cluster -f blue.yml &
-      eksctl delete cluster --name scc-blue-w12-usw2-blue --region us-west-2 &
-      eksctl create nodegroup -f blue.yml &
-      eksctl delete nodegroup --cluster scc-blue-w12-usw2-blue --name general --region us-west-2 &
+      eksctl create cluster -f prd-blue.yml &
+      eksctl delete cluster --name blue --region us-west-2 &
+      eksctl create nodegroup -f prd-blue.yml &
+      eksctl delete nodegroup --cluster blue --name general --region us-west-2 &
       ```
    1. Deploy cluster-services
       ```sh
-      helm upgrade --install cluster-services . --namespace kube-system --force &
+      helm upgrade --install cluster-services . --namespace kube-system --force
+      helm uninstall cluster-services --namespace kube-system &
+      ```
+   1. Deploy shared-services
+      ```sh
+      helm upgrade --install shared-services . --force
       helm uninstall cluster-services --namespace kube-system &
       ```
    1. Deploy nginx welcome page
       ```sh
-      helm upgrade --install nginx-welcome bitnami/nginx -f values.yaml --force &
+      helm upgrade --install nginx-welcome bitnami/nginx -f values.yaml --force
       helm uninstall nginx-welcome &
       ```
       1. Great for troubleshooting deployments
@@ -108,8 +139,8 @@
          ```
    1. Test your website
       ```sh
-      curl www.yourwebsite.com
+      curl workload_fqdn
       ```
 
-### Deploy Workload Spoke B (Optional)
-1. Deploy `terraform/aws/workload-spoke-a-prd`
+### Deploy Workload Product B (Optional)
+1. Deploy `terraform/aws/workload-product-a-prd`

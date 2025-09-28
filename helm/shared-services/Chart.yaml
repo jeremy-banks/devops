@@ -1,0 +1,17 @@
+apiVersion: v2
+name: shared-services
+description: A Helm chart for Kubernetes to deploy AWS cluster services
+version: 0.1.0
+dependencies:
+  - name: gitlab
+    version: 9.4.0
+    repository: https://charts.gitlab.io
+  # - name: artifactory
+  #   version: 107.117.17
+  #   repository: https://charts.jfrog.io
+  # - name: grafana
+  #   version: 10.0.0
+  #   repository: https://grafana.github.io/helm-charts
+  # - name: prometheus
+  #   version: 27.39.0
+  #   repository: https://prometheus-community.github.io/helm-charts

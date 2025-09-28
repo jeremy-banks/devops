@@ -1,59 +1,6 @@
 data "aws_iam_policy_document" "workloads_ou" {
-  # https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples_general.html
-  statement {
-    sid    = "DenyRestrictedRegions"
-    effect = "Deny"
-    not_actions = [
-      "a4b:*",
-      "acm:*",
-      "aws-marketplace-management:*",
-      "aws-marketplace:*",
-      "aws-portal:*",
-      "budgets:*",
-      "ce:*",
-      "chime:*",
-      "cloudfront:*",
-      "config:*",
-      "cur:*",
-      "directconnect:*",
-      "ec2:DescribeRegions",
-      "ec2:DescribeTransitGateways",
-      "ec2:DescribeVpnGateways",
-      "fms:*",
-      "globalaccelerator:*",
-      "health:*",
-      "iam:*",
-      "importexport:*",
-      "kms:*",
-      "mobileanalytics:*",
-      "networkmanager:*",
-      "organizations:*",
-      "pricing:*",
-      "route53-recovery-cluster:*",
-      "route53-recovery-control-config:*",
-      "route53-recovery-readiness:*",
-      "route53:*",
-      "route53domains:*",
-      "s3:GetAccountPublic*",
-      "s3:ListAllMyBuckets",
-      "s3:ListMultiRegionAccessPoints",
-      "s3:PutAccountPublic*",
-      "shield:*",
-      "sts:*",
-      "support:*",
-      "trustedadvisor:*",
-      "waf-regional:*",
-      "waf:*",
-      "wafv2:*",
-      "wellarchitected:*"
-    ]
-    resources = ["*"]
-    condition {
-      test     = "StringNotEquals"
-      variable = "aws:RequestedRegion"
-      values   = [var.region.primary, var.region.failover]
-    }
-  }
+  provider = aws.management
+
   statement {
     sid       = "DenyRegionInteraction"
     actions   = ["account:EnableRegion", "account:DisableRegion"]
@@ -126,14 +73,41 @@ data "aws_iam_policy_document" "workloads_ou" {
       values   = ["true"]
     }
   }
+
+  statement {
+    sid       = "DenyR53ChangesToEnvRecords"
+    effect    = "Deny"
+    actions   = ["route53:ChangeResourceRecordSets"]
+    resources = ["*"]
+    condition {
+      test     = "StringLike"
+      variable = "route53:ChangeResourceRecordSetsRecordNames"
+      values = [
+        "dev.*",
+        "tst.*",
+        "stg.*"
+      ]
+    }
+    condition {
+      test     = "StringNotLikeIfExists"
+      variable = "aws:PrincipalArn"
+      values = [
+        "arn:aws:iam::*:role/superadmin"
+      ]
+    }
+  }
 }
 
 resource "aws_organizations_policy" "workloads_ou" {
+  provider = aws.management
+
   name    = "workloads-ou"
   content = data.aws_iam_policy_document.workloads_ou.json
 }
 
 resource "aws_organizations_policy_attachment" "workloads_ou" {
+  provider = aws.management
+
   policy_id = aws_organizations_policy.workloads_ou.id
   target_id = aws_organizations_organizational_unit.workloads.id
 }

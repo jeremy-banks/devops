@@ -1,14 +1,45 @@
+replicaCount: 1
+
+image:
+  repository: bitnami/nginx
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+
+containerPorts:
+  http: 8080
+
 ingress:
   enabled: true
-  hostname: outerplanes.org
+  ingressClassName: alb
+  hostname: "www.sdlc.aws.cockydevops.com"  # Ignored if rules provided
   annotations:
-    kubernetes.io/ingress.class: alb
-    alb.ingress.kubernetes.io/group.name: one-alb-to-rule-them-all
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
-    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/load-balancer-name: shared
+    alb.ingress.kubernetes.io/group.name: shared
     alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-west-2:920373017681:certificate/f1879129-3b2b-49e3-8cd8-f25c335b36ff
-    alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS13-1-2-2021-06
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443},{"HTTP":80}]'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-west-2:975705621738:certificate/b23a3ab3-c7f1-4868-a975-8b865fcc6420
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS13-1-2-Res-2021-06
+  rules:
+    - host: www.sdlc.aws.cockydevops.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx-welcome
+                port:
+                  number: 8080
+  extraHosts:
+   - name: www.cockydevops.com
+     path: /    
+
 html:
   index: |
     <html>

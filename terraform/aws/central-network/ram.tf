@@ -1,0 +1,47 @@
+resource "aws_ram_resource_share" "primary" {
+  provider = aws.this
+
+  name                      = "${local.resource_name.primary}-ram"
+  allow_external_principals = false
+}
+
+resource "aws_ram_resource_association" "ram_tgw_primary" {
+  provider = aws.this
+
+  resource_arn       = aws_ec2_transit_gateway.tgw_primary.arn
+  resource_share_arn = aws_ram_resource_share.primary.arn
+}
+
+resource "aws_ram_principal_association" "ram_org_primary" {
+  provider = aws.this
+
+  principal          = data.aws_organizations_organization.this.arn
+  resource_share_arn = aws_ram_resource_share.primary.arn
+}
+
+resource "aws_ram_resource_share" "failover" {
+  provider = aws.this_failover
+
+  count = var.create_failover_region_network ? 1 : 0
+
+  name                      = "${local.resource_name.failover}-ram"
+  allow_external_principals = false
+}
+
+resource "aws_ram_resource_association" "ram_tgw_failover" {
+  provider = aws.this_failover
+
+  count = var.create_failover_region_network ? 1 : 0
+
+  resource_arn       = aws_ec2_transit_gateway.tgw_failover[0].arn
+  resource_share_arn = aws_ram_resource_share.failover[0].arn
+}
+
+resource "aws_ram_principal_association" "ram_org_failover" {
+  provider = aws.this_failover
+
+  count = var.create_failover_region_network ? 1 : 0
+
+  principal          = data.aws_organizations_organization.this.arn
+  resource_share_arn = aws_ram_resource_share.failover[0].arn
+}

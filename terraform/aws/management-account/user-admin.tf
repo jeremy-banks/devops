@@ -1,13 +1,15 @@
 data "aws_iam_policy_document" "iam_user_admin" {
+  provider = aws.management
+
   statement {
     sid       = "AllowAssumeRolesInOrg"
     effect    = "Allow"
     actions   = ["sts:AssumeRole"]
-    resources = ["arn:aws:iam::*:role/${var.admin_user_names.admin}"]
+    resources = ["arn:aws:iam::*:role/${var.admin_role_name}"]
     condition {
       test     = "StringEquals"
       variable = "aws:PrincipalOrgID"
-      values   = [data.aws_organizations_organization.this.id]
+      values   = [aws_organizations_organization.this.id]
     }
   }
 
@@ -16,10 +18,10 @@ data "aws_iam_policy_document" "iam_user_admin" {
     effect  = "Allow"
     actions = ["s3:*"]
     resources = [
-      "arn:aws:s3:::${local.resource_name_stub_primary}-tfstate-storage-blob-${local.unique_id}/${var.admin_user_names.admin}",
-      "arn:aws:s3:::${local.resource_name_stub_primary}-tfstate-storage-blob-${local.unique_id}/${var.admin_user_names.admin}/*",
-      "arn:aws:s3:::${local.resource_name_stub_failover}-tfstate-storage-blob-${local.unique_id}/${var.admin_user_names.admin}",
-      "arn:aws:s3:::${local.resource_name_stub_failover}-tfstate-storage-blob-${local.unique_id}/${var.admin_user_names.admin}/*",
+      "arn:aws:s3:::${local.resource_name_unique.primary}/${var.admin_role_name}",
+      "arn:aws:s3:::${local.resource_name_unique.primary}/${var.admin_role_name}/*",
+      "arn:aws:s3:::${local.resource_name_unique.failover}/${var.admin_role_name}",
+      "arn:aws:s3:::${local.resource_name_unique.failover}/${var.admin_role_name}/*",
     ]
   }
 
@@ -27,12 +29,6 @@ data "aws_iam_policy_document" "iam_user_admin" {
     sid    = "AllowUseOfTerraformStateS3BucketKMS"
     effect = "Allow"
     actions = [
-      "kms:DescribeKey",
-      "kms:Decrypt",
-      "kms:DescribeKey",
-      "kms:Encrypt",
-      "kms:GenerateDataKey*",
-      "kms:ReEncrypt*",
       "kms:Decrypt",
       "kms:DeriveSharedSecret",
       "kms:DescribeKey",
@@ -41,37 +37,39 @@ data "aws_iam_policy_document" "iam_user_admin" {
       "kms:GenerateMac",
       "kms:GetPublicKey",
       "kms:ReEncrypt*",
-      "kms:ReEncrypt*",
       "kms:Sign",
       "kms:Verify",
       "kms:VerifyMac",
     ]
     resources = [
-      "arn:aws:kms:${var.region.primary}:${data.aws_caller_identity.this.id}:alias/${local.resource_name_stub_primary}-${var.this_slug}",
-      "arn:aws:kms:${var.region.failover}:${data.aws_caller_identity.this.id}:alias/${local.resource_name_stub_failover}-${var.this_slug}",
+      module.kms_tfstate_backend_primary.key_arn,
+      module.kms_tfstate_backend_failover.key_arn,
     ]
   }
 }
 
 module "iam_user_admin_policy" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
-  version = "5.55.0"
+  source    = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version   = "~> 6.2.1"
+  providers = { aws = aws.management }
 
-  name = "admin"
+  name = var.admin_role_name
 
   policy = data.aws_iam_policy_document.iam_user_admin.json
 }
 
 module "iam_user_admin" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-user"
-  version = "5.55.0"
+  source    = "terraform-aws-modules/iam/aws//modules/iam-user"
+  version   = "~> 6.2.1"
+  providers = { aws = aws.management }
 
-  name = var.admin_user_names.admin
+  name = var.admin_role_name
 
-  create_iam_user_login_profile = false
-  create_iam_access_key         = true
-  policy_arns = [
-    module.iam_user_admin_policy.arn,
-    "arn:aws:iam::aws:policy/AWSOrganizationsReadOnlyAccess",
-  ]
+  create_login_profile = false
+  create_access_key    = true
+
+  policies = {
+    admin-user    = module.iam_user_admin_policy.arn,
+    org-read-only = "arn:aws:iam::aws:policy/AWSOrganizationsReadOnlyAccess",
+  }
 }

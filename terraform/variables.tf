@@ -1,230 +1,250 @@
 variable "account_id" {
   type = map(string)
   default = {
-    # identity_prd         = ""
-    # log_archive_prd      = ""
-    networking_prd = "421954349749"
-    # security_tooling_prd = ""
-    workload_spoke_a_prd = "236147389059"
-    workload_spoke_b_prd = "232762586621"
+
+  }
+}
+
+variable "account_name" {
+  type = map(string)
+  default = {
+    identity         = "identity"
+    log_archive      = "log-archive"
+    network          = "network"
+    sandbox          = "sandbox"
+    security_tooling = "security-tooling"
+    shared_services  = "shared-services"
+
+    workload_sdlc = "sdlc"
+
+    workload_wsu = "washington-state-university"
+  }
+}
+
+variable "email_suffix" {
+  default = {
+    identity         = "identity"
+    log_archive      = "log-archive"
+    network          = "network"
+    sandbox          = "sandbox"
+    security_tooling = "security-tooling"
+    shared_services  = "shared-services"
+
+    workload_sdlc = "sdlc"
+
+    workload_wsu = "wsu"
+  }
+}
+
+variable "r53_delegate" {
+  type = map(string)
+  default = {
+    identity         = "id"
+    log_archive      = "log"
+    sandbox          = "sbx"
+    security_tooling = "sec"
+    shared_services  = "svc"
+
+    workload_sdlc = "sdlc"
+
+    workload_wsu = "wsu"
+  }
+}
+
+variable "vpc_cidr" {
+  type = map(string)
+  default = {
+    transit_gateway = "10.0.0.0/8"
+
+    central_inspection_prd_primary  = "10.0.0.0/16"
+    central_inspection_prd_failover = "10.1.0.0/16"
+    central_inspection_stg_primary  = "10.2.0.0/16"
+    central_inspection_stg_failover = "10.3.0.0/16"
+
+    central_egress_prd_primary  = "10.4.0.0/16"
+    central_egress_prd_failover = "10.5.0.0/16"
+    central_egress_stg_primary  = "10.6.0.0/16"
+    central_egress_stg_failover = "10.7.0.0/16"
+
+    client_vpn_prd_primary  = "10.8.0.0/16"
+    client_vpn_prd_failover = "10.9.0.0/16"
+    client_vpn_stg_primary  = "10.10.0.0/16"
+    client_vpn_stg_failover = "10.11.0.0/16"
+
+    shared_services_prd_primary  = "10.12.0.0/16"
+    shared_services_prd_failover = "10.13.0.0/16"
+    shared_services_stg_primary  = "10.14.0.0/16"
+    shared_services_stg_failover = "10.15.0.0/16"
+
+    workload_sdlc_prd_primary  = "10.16.0.0/16"
+    workload_sdlc_prd_failover = "10.17.0.0/16"
+    workload_sdlc_stg_primary  = "10.18.0.0/16"
+    workload_sdlc_stg_failover = "10.19.0.0/16"
+    workload_sdlc_tst_primary  = "10.20.0.0/16"
+    workload_sdlc_tst_failover = "10.21.0.0/16"
+    workload_sdlc_dev_primary  = "10.22.0.0/16"
+    workload_sdlc_dev_failover = "10.23.0.0/16"
+
+    workload_wsu_prd_primary  = "10.24.0.0/16"
+    workload_wsu_prd_failover = "10.25.0.0/16"
+    workload_wsu_stg_primary  = "10.26.0.0/16"
+    workload_wsu_stg_failover = "10.27.0.0/16"
+    workload_wsu_tst_primary  = "10.28.0.0/16"
+    workload_wsu_tst_failover = "10.29.0.0/16"
+    workload_wsu_dev_primary  = "10.30.0.0/16"
+    workload_wsu_dev_failover = "10.31.0.0/16"
   }
 }
 
 variable "org_owner_email_prefix" {
-  description = "the 'billg+aws' in 'billg+aws@microsoft.com'"
-  type        = string
-  default     = "workjeremyb+newtestbed"
+  description = "the 'jeremybankstech' in 'jeremybankstech+aws@gmail.com'"
+  default     = "jeremybankstech"
+}
+
+variable "org_owner_email_plus_address" {
+  description = "the 'aws' in 'jeremybankstech+aws@gmail.com'"
+  default     = "aws"
 }
 
 variable "org_owner_email_domain_tld" {
-  description = "the 'microsoft.com' in 'billg+aws@microsoft.com'"
-  type        = string
+  description = "the 'gmail.com' in 'jeremybankstech+aws@gmail.com'"
   default     = "gmail.com"
 }
 
 variable "company_name" {
-  description = "name of the company"
-  type        = string
-  default     = "Photon Craze"
+  default = "Genovus Labs"
 }
 
 variable "company_name_abbr" {
-  type    = string
-  default = "pc"
-}
+  default = "gn"
 
-variable "team_name" {
-  description = "name of the team"
-  type        = string
-  default     = "devops"
-}
-
-variable "team_name_abbr" {
-  type    = string
-  default = "devops"
-}
-
-variable "project_name" {
-  description = "name of the project"
-  type        = string
-  default     = "newtestbed"
-}
-
-variable "project_name_abbr" {
-  type    = string
-  default = "ntb"
-}
-
-variable "cost_center" {
-  description = "for billing"
-  type        = string
-  default     = "1-EU"
-}
-
-variable "deployment_environment" {
-  description = "name of the deployment environment, eg dev, tst, stg, prd"
-  type        = string
-  default     = "dev"
-}
-
-variable "resource_owner_email" {
-  description = "point of escalation for ownership"
-  type        = string
-  default     = ""
-}
-
-variable "cli_profile_name" {
-  description = "aws profile name to be used"
-  type        = string
-  default     = "admin"
-}
-
-variable "admin_user_names" {
-  type = map(string)
-  default = {
-    superadmin = "superadmin"
-    admin      = "admin"
-    breakglass = "breakglass"
+  validation {
+    condition = (
+      var.company_name_abbr != null &&      # not undefined
+      var.company_name_abbr != "" &&        # not empty
+      length(var.company_name_abbr) >= 1 && # between 1-6 characters
+      length(var.company_name_abbr) <= 6 &&
+      can(regex("^[a-z0-9]+$", var.company_name_abbr)) # only lowercase letters and numbers
+    )
+    error_message = "variable 'company_name_abbr' must be defined, consist only of lowercase letters and numbers, and 1-6 characters in length"
   }
 }
 
-variable "account_role_name" {
-  default = "superadmin"
+variable "team_name" {
+  default = "devops"
 }
 
-variable "admin_role_name" {
-  default = "admin"
+variable "team_name_abbr" {
+  default = "devops"
+
+  validation {
+    condition = (
+      var.team_name_abbr != null &&      # not undefined
+      var.team_name_abbr != "" &&        # not empty
+      length(var.team_name_abbr) >= 1 && # between 1-6 characters
+      length(var.team_name_abbr) <= 6 &&
+      can(regex("^[a-z0-9]+$", var.team_name_abbr)) # only lowercase letters and numbers
+    )
+    error_message = "variable 'team_name_abbr' must be defined, consist only of lowercase letters and numbers, and 1-6 characters in length"
+  }
 }
 
-variable "provider_role_name" {
-  default = "admin"
+variable "project_name" {
+  default = "Another Final Test Bed"
 }
 
-variable "iam_immutable_tag_key" {
-  description = "key used to prevent users from editing IaC"
-  type        = string
-  default     = "immutable"
+variable "project_name_abbr" {
+  default = "aftb"
+
+  validation {
+    condition = (
+      var.project_name_abbr != null &&      # not undefined
+      var.project_name_abbr != "" &&        # not empty
+      length(var.project_name_abbr) >= 1 && # between 1-6 characters
+      length(var.project_name_abbr) <= 6 &&
+      can(regex("^[a-z0-9]+$", var.project_name_abbr)) # only lowercase letters and numbers
+    )
+    error_message = "variable 'project_name_abbr' must be defined, consist only of lowercase letters and numbers, and 1-6 characters in length"
+  }
+}
+
+variable "cost_center" {
+  default = "1-EU"
+}
+
+variable "resource_owner_email" { default = null }
+
+variable "cli_profile_name" { default = "admin" }
+
+variable "provider_role_name" { default = "admin" }
+
+variable "account_role_name" { default = "superadmin" }
+
+variable "admin_role_name" { default = "admin" }
+
+variable "breakglass_user_name" { default = "breakglass" }
+
+variable "billing_user_name" { default = "billing" }
+
+variable "this_slug" {
+  default = null
+
+  validation {
+    condition = (
+      var.this_slug != null &&                  # not undefined
+      var.this_slug != "" &&                    # not empty
+      can(regex("^[a-z0-9-]+$", var.this_slug)) # only lowercase letters, numbers, and dashes
+    )
+    error_message = "variable 'this_slug' must be defined, and consist only of lowercase letters, numbers, and dashes"
+  }
+}
+
+variable "environment" {
+  default = "dev"
+
+  validation {
+    condition     = contains(["dev", "tst", "stg", "prd"], var.environment)
+    error_message = "variable 'environment' must be one of: 'dev', 'tst', 'stg', or 'prd'"
+  }
 }
 
 variable "org_service_access_principals" {
   type = list(string)
   default = [
-    "account.amazonaws.com",                  #account management
-    "cloudtrail.amazonaws.com",               #cloudtrail
-    "config-multiaccountsetup.amazonaws.com", #config
-    "config.amazonaws.com",                   #config
-    "ds.amazonaws.com",                       #enterprise active directory
-    "ram.amazonaws.com",                      #resource access manager
+    "account.amazonaws.com",                  # account management
+    "cloudtrail.amazonaws.com",               # cloudtrail
+    "config-multiaccountsetup.amazonaws.com", # config
+    "config.amazonaws.com",                   # config
+    "ds.amazonaws.com",                       # enterprise active directory
+    "ram.amazonaws.com",                      # resource access manager
   ]
 }
 
-variable "this_slug" {
-  description = "used to programatically declare resource names"
-  type        = string
-  default     = "YOU-FORGOT-TO-DECLARE-VARIABLE-this_slug-AND-AS-A-RESULT-THIS-STRING-IS-SO-LONG-IT-WILL-HOPEFULLY-FAIL-ANY-RESOURCE-CREATE-THUS-PROMPTING-YOU-TO-DEFINE-IT-IN-terraform.tfvars"
-}
-
-variable "region" {
-  description = "regions for the infrastructure"
-  type        = map(string)
+variable "region_primary" {
+  type = map(string)
   default = {
-    primary        = "us-west-2"
-    failover       = "us-east-1"
-    primary_short  = "usw2"
-    failover_short = "use1"
+    full  = "us-west-2"
+    short = "usw2"
   }
 }
 
-variable "create_failover_region" {
-  type    = bool
-  default = false
-}
-
-variable "azs_primary" {
-  description = "availability zones to use"
-  default = [
-    "usw2-az1",
-    "usw2-az2",
-    "usw2-az3",
-    # "usw2-az4", firewall-fips not supported
-  ]
-}
-
-variable "azs_failover" {
-  default = [
-    "use1-az1",
-    "use1-az2",
-    # "use1-az3", firewall-fips not supported
-    # "use1-az4", firewall-fips not supported
-    # "use1-az5", firewall-fips not supported
-    "use1-az6",
-  ]
-}
-
-variable "azs_used" {
-  description = "this codebase supports 2, 3, or 4 availability zones"
-  type        = number
-  default     = 2
-}
-
-# variable "network_tgw_share_enabled" {
-#   type    = bool
-#   default = false
-# }
-
-variable "vpc_cidr_substitute" {
-  description = "Primary Region VPC CIDR. Use the full network address and subnet mask, eg 10.31.0.0/16"
-  type        = string
-  default     = ""
-}
-
-variable "vpc_cidr_substitute_failover" {
-  description = "Failover Region VPC CIDR. Use the full network address and subnet mask, eg 10.32.0.0/16"
-  type        = string
-  default     = ""
-}
-
-variable "vpc_cidr_network_primary" {
+variable "region_failover" {
+  type = map(string)
   default = {
-    inbound    = "10.0.0.0/16"
-    outbound   = "10.1.0.0/16"
-    inspection = "10.2.0.0/16"
+    full  = "us-east-1"
+    short = "use1"
   }
 }
 
-variable "vpc_cidr_network_failover" {
+variable "create_failover_region_network" { default = true }
+
+variable "create_failover_region" { default = true }
+
+variable "ttl" {
   default = {
-    inbound    = "10.3.0.0/16"
-    outbound   = "10.4.0.0/16"
-    inspection = "10.5.0.0/16"
+    cname = 300
+    ns    = 86400
   }
-}
-
-# variable "vpc_endpoint_services_enabled" {
-#   type = list(string)
-#   default = [
-#     # "dynamodb",
-#     # "ec2",
-#     # "kms",
-#     # "s3",
-#   ]
-# }
-
-# variable "network_vpc_share_enabled" {
-#   type    = bool
-#   default = false
-# }
-
-# variable "vpc_cidr_clientvpn" {
-#   default = {
-#     primary  = "10.43.0.0/16"
-#     failover = "10.44.0.0/16"
-#   }
-# }
-
-variable "ntp_servers" {
-  type    = list(string)
-  default = ["169.254.169.123"]
 }
 
 variable "tgw_asn" {
@@ -235,186 +255,142 @@ variable "tgw_asn" {
   }
 }
 
-# variable "ad_directory_admin_password" {
-#   type    = string
-#   default = "tempSuperSecretPassword123"
-# }
+variable "vpc_azs_number_used_network" {
+  default = 3
 
-# variable "ad_directory_id_connector_network" {
-#   type    = string
-#   default = ""
-# }
-
-# variable "ad_directory_id_connector_network_failover" {
-#   type    = string
-#   default = ""
-# }
-
-# variable "r53_zones" {
-#   type    = list(string)
-#   default = []
-# }
-
-variable "account_email_slug" {
-  type = map(string)
-  default = {
-    identity_prd         = "identity-prd"
-    log_archive_prd      = "log_archive_prd"
-    networking_prd       = "network-prd"
-    security_tooling_prd = "security_tooling_prd"
-    workload_spoke_a_prd = "workload-spoke-a-prd"
-    workload_spoke_b_prd = "workload-spoke-b-prd"
+  validation {
+    condition     = var.vpc_azs_number_used_network >= 2 && var.vpc_azs_number_used_network <= 4
+    error_message = "variable 'vpc_azs_number_used_network' must be 2, 3, or 4"
   }
 }
 
-variable "account_email_substitute" {
-  type = map(string)
-  default = {
-    identity_prd         = ""
-    log_archive_prd      = ""
-    networking_prd       = ""
-    security_tooling_prd = ""
-    workload_spoke_a_prd = ""
-    workload_spoke_b_prd = ""
+variable "vpc_azs_number_used" {
+  default = 3
+
+  validation {
+    condition     = var.vpc_azs_number_used >= 2 && var.vpc_azs_number_used <= 4
+    error_message = "variable 'vpc_azs_number_used' must be 2, 3, or 4"
   }
 }
 
-variable "vpc_cidr_infrastructure" {
-  type = map(string)
-  default = {
-    transit_gateway = "10.0.0.0/8"
+variable "vpc_azs_primary" {
+  type = list(string)
+  default = [
+    "az1",
+    "az2",
+    "az3",
+    # "az4", # firewall not supported
+    # "az5", # zone does not exist
+    # "az6", # zone does not exist
+  ]
 
-    inbound_failover    = "10.3.0.0/16"
-    inbound_primary     = "10.0.0.0/16"
-    inspection_failover = "10.4.0.0/16"
-    inspection_primary  = "10.1.0.0/16"
-    outbound_failover   = "10.5.0.0/16"
-    outbound_primary    = "10.2.0.0/16"
-
-    workload_spoke_a_prd_failover = "10.7.0.0/16"
-    workload_spoke_a_prd_primary  = "10.6.0.0/16"
-    workload_spoke_b_prd_failover = "10.9.0.0/16"
-    workload_spoke_b_prd_primary  = "10.8.0.0/16"
-
+  validation {
+    condition     = alltrue([for az in var.vpc_azs_primary : can(regex("^az[1-6]$", az))])
+    error_message = "variable 'vpc_azs_primary' must be a list of strings matching 'azN' where N is the number 1 through 6"
   }
 }
+
+variable "vpc_azs_failover" {
+  type = list(string)
+  default = [
+    "az1",
+    "az2",
+    # "az3", # firewall not supported
+    "az4",
+    "az5",
+    "az6",
+  ]
+
+  validation {
+    condition     = alltrue([for az in var.vpc_azs_failover : can(regex("^az[1-6]$", az))])
+    error_message = "variable 'vpc_azs_failover' must be a list of strings matching 'azN' where N is the number 1 through 6"
+  }
+}
+
+variable "vpc_cidr_primary" { default = null }
+
+variable "vpc_cidr_failover" { default = null }
+
+variable "create_vpc_public_subnets" { default = false }
+
+variable "dns_servers" { default = ["AmazonProvidedDNS"] }
+
+variable "ntp_servers" { default = ["169.254.169.123"] } # local Amazon Time Sync Service
+
+variable "vpc_tags" {
+  default = {
+    "k8s.io/cluster-autoscaler/enabled" = true
+    "kubernetes.io/cluster/blue"        = "owned"
+    "kubernetes.io/cluster/green"       = "owned"
+  }
+}
+
+variable "public_subnet_tags" {
+  default = {
+    "kubernetes.io/cluster/blue"     = "shared"
+    "kubernetes.io/cluster/green"    = "shared"
+    "kubernetes.io/role/alb-ingress" = 1
+    "kubernetes.io/role/elb"         = 1
+  }
+}
+
+variable "private_subnet_tags" {
+  default = {
+    "kubernetes.io/cluster/blue"      = "shared"
+    "kubernetes.io/cluster/green"     = "shared"
+    "kubernetes.io/role/alb-ingress"  = 1
+    "kubernetes.io/role/internal-elb" = 1
+  }
+}
+
+variable "log_retention_days" { default = 2192 } # six years per HIPAA NIST SP 800-66 section 4.22
+
+variable "unique_id_seed" { default = "barFooWorldHello" }
 
 locals {
-  org_owner_email = "${var.org_owner_email_prefix}@${var.org_owner_email_domain_tld}"
-
-  account_owner_email = {
-    identity_prd         = var.account_email_substitute.identity_prd != "" ? var.account_email_substitute.identity_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.identity_prd}@${var.org_owner_email_domain_tld}"
-    log_archive_prd      = var.account_email_substitute.log_archive_prd != "" ? var.account_email_substitute.log_archive_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.log_archive_prd}@${var.org_owner_email_domain_tld}"
-    networking_prd       = var.account_email_substitute.networking_prd != "" ? var.account_email_substitute.networking_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.networking_prd}@${var.org_owner_email_domain_tld}"
-    security_tooling_prd = var.account_email_substitute.security_tooling_prd != "" ? var.account_email_substitute.security_tooling_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.security_tooling_prd}@${var.org_owner_email_domain_tld}"
-    workload_spoke_a_prd = var.account_email_substitute.workload_spoke_a_prd != "" ? var.account_email_substitute.workload_spoke_a_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.workload_spoke_a_prd}@${var.org_owner_email_domain_tld}"
-    workload_spoke_b_prd = var.account_email_substitute.workload_spoke_b_prd != "" ? var.account_email_substitute.workload_spoke_b_prd : "${var.org_owner_email_prefix}-${var.account_email_slug.workload_spoke_b_prd}@${var.org_owner_email_domain_tld}"
+  # project-env-region-slug
+  resource_name = {
+    primary  = "${var.project_name_abbr}-${var.environment}-${var.region_primary.short}-${var.this_slug}"
+    failover = "${var.project_name_abbr}-${var.environment}-${var.region_failover.short}-${var.this_slug}"
+    global   = "${var.project_name_abbr}-${var.environment}-${var.this_slug}"
   }
 
-  resource_name_stub          = lower("${var.company_name_abbr}-${var.team_name_abbr}-${var.project_name_abbr}") #company - team - project - env
-  resource_name_stub_primary  = lower("${local.resource_name_stub}-${var.region.primary_short}")                 #company - team - project - env - primary
-  resource_name_stub_failover = lower("${local.resource_name_stub}-${var.region.failover_short}")                #company - team - project - env - failover
+  # project-env-region-slug-unique
+  resource_name_unique = {
+    primary  = "${local.resource_name.primary}-${local.unique_id}"
+    failover = "${local.resource_name.failover}-${local.unique_id}"
+    global   = "${local.resource_name.global}-${local.unique_id}"
+  }
 
-  azs_primary  = slice(var.azs_primary, 0, var.azs_used)
-  azs_failover = slice(var.azs_failover, 0, var.azs_used)
+  # company-team-project-env-region-slug
+  resource_name_full = {
+    primary  = "${var.company_name_abbr}-${var.team_name_abbr}-${local.resource_name.primary}"
+    failover = "${var.company_name_abbr}-${var.team_name_abbr}-${local.resource_name.failover}"
+    global   = "${var.company_name_abbr}-${var.team_name_abbr}-${local.resource_name.global}"
+  }
 
+  # company-team-project-env-region-slug-unique
+  resource_name_full_unique = {
+    primary  = "${local.resource_name_full.primary}-${local.unique_id}"
+    failover = "${local.resource_name_full.failover}-${local.unique_id}"
+    global   = "${local.resource_name_full.global}-${local.unique_id}"
+  }
 
-  # #build lists of availability zones for each region based on number of availabiliy zones
-  # # azs_used_list_primary  = [for az in range(var.availability_zones_num_used) : var.availability_zones.primary[az]]
-  # azs_used_list_failover = [for az in range(var.availability_zones_num_used) : var.availability_zones.failover[az]]
+  vpc_az_ids_primary  = [for az in var.vpc_azs_primary : "${var.region_primary.short}-${az}"]
+  vpc_az_ids_failover = [for az in var.vpc_azs_failover : "${var.region_failover.short}-${az}"]
 
-  # #dynamically generate subnet cidrs based on number of availability zones
-  # vpc_subnet_cidrs_primary = local.vpc_cidr_primary != "" ? (
-  #   var.availability_zones_num_used == 6 ? cidrsubnets(local.vpc_cidr_primary, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5) :
-  #   var.availability_zones_num_used == 5 ? cidrsubnets(local.vpc_cidr_primary, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5) :
-  #   var.availability_zones_num_used == 4 ? cidrsubnets(local.vpc_cidr_primary, 3, 3, 3, 3, 5, 5, 5, 5) :
-  #   var.availability_zones_num_used == 3 ? cidrsubnets(local.vpc_cidr_primary, 2, 2, 2, 4, 4, 4) :
-  #   cidrsubnets(local.vpc_cidr_primary, 2, 2, 4, 4)
-  # ) : []
-  # vpc_subnet_cidrs_failover = local.vpc_cidr_failover != "" ? (
-  #   var.availability_zones_num_used == 6 ? cidrsubnets(local.vpc_cidr_failover, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5) :
-  #   var.availability_zones_num_used == 5 ? cidrsubnets(local.vpc_cidr_failover, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5) :
-  #   var.availability_zones_num_used == 4 ? cidrsubnets(local.vpc_cidr_failover, 3, 3, 3, 3, 5, 5, 5, 5) :
-  #   var.availability_zones_num_used == 3 ? cidrsubnets(local.vpc_cidr_failover, 2, 2, 2, 4, 4, 4) :
-  #   cidrsubnets(local.vpc_cidr_failover, 2, 2, 4, 4)
-  # ) : []
+  unique_id = substr(sha256("${var.unique_id_seed}${data.aws_caller_identity.this.account_id}"), 0, 6)
 
-  # #slice the subnets in 'half', first slice goes to pvt, second slice goes to pub
-  # vpc_subnet_cidrs_pvt_primary  = slice(local.vpc_subnet_cidrs_primary, 0, length(local.vpc_subnet_cidrs_primary) / 2)
-  # vpc_subnet_cidrs_pub_primary  = slice(local.vpc_subnet_cidrs_primary, length(local.vpc_subnet_cidrs_primary) / 2, length(local.vpc_subnet_cidrs_primary))
-  # vpc_subnet_cidrs_pvt_failover = slice(local.vpc_subnet_cidrs_failover, 0, length(local.vpc_subnet_cidrs_failover) / 2)
-  # vpc_subnet_cidrs_pub_failover = slice(local.vpc_subnet_cidrs_failover, length(local.vpc_subnet_cidrs_failover) / 2, length(local.vpc_subnet_cidrs_failover))
+  number_words = { 1 = "one", 2 = "two", 3 = "three", 4 = "four", 5 = "five", 6 = "six", 7 = "seven", 8 = "eight", 9 = "nine", 10 = "ten", }
 
-  # #create addresses for VPC DNS
-  # vpc_dns_primary = local.vpc_cidr_primary != "" ? join(".", [
-  #   split(".", cidrhost(local.vpc_cidr_primary, 0))[0],
-  #   split(".", cidrhost(local.vpc_cidr_primary, 0))[1],
-  #   split(".", cidrhost(local.vpc_cidr_primary, 0))[2],
-  #   "2"
-  # ]) : local.vpc_cidr_primary
-  # vpc_dns_failover = local.vpc_cidr_failover != "" ? join(".", [
-  #   split(".", cidrhost(local.vpc_cidr_failover, 0))[0],
-  #   split(".", cidrhost(local.vpc_cidr_failover, 0))[1],
-  #   split(".", cidrhost(local.vpc_cidr_failover, 0))[2],
-  #   "2"
-  # ]) : local.vpc_cidr_failover
-
-  # vpc_tags_primary = merge(local.eks_tags_primary, {
-  #   "${local.resource_name_stub_primary}-blue"                            = "shared"
-  #   "${local.resource_name_stub_primary}-green"                           = "shared"
-  #   "k8s.io/cluster-autoscaler/${local.resource_name_stub_primary}-blue"  = "shared"
-  #   "k8s.io/cluster-autoscaler/${local.resource_name_stub_primary}-green" = "shared"
-  #   "k8s.io/cluster-autoscaler/enabled"                                   = "true"
-  # })
-  # vpc_tags_failover = merge(local.eks_tags_failover, {
-  #   "${local.resource_name_stub_failover}-blue"                            = "shared"
-  #   "${local.resource_name_stub_failover}-green"                           = "shared"
-  #   "k8s.io/cluster-autoscaler/${local.resource_name_stub_failover}-blue"  = "shared"
-  #   "k8s.io/cluster-autoscaler/${local.resource_name_stub_failover}-green" = "shared"
-  #   "k8s.io/cluster-autoscaler/enabled"                                    = "true"
-  # })
-
-  # subnet_pvt_tags_primary  = merge(local.eks_tags_primary, local.eks_tags_subnet_pvt)
-  # subnet_pub_tags_primary  = merge(local.eks_tags_primary, local.eks_tags_subnet_pub)
-  # subnet_pvt_tags_failover = merge(local.eks_tags_failover, local.eks_tags_subnet_pvt)
-  # subnet_pub_tags_failover = merge(local.eks_tags_failover, local.eks_tags_subnet_pub)
-
-  # eks_tags_primary = {
-  #   "kubernetes.io/cluster/${local.resource_name_stub_primary}-blue"  = "shared"
-  #   "kubernetes.io/cluster/${local.resource_name_stub_primary}-green" = "shared"
-  # }
-  # eks_tags_failover = {
-  #   "kubernetes.io/cluster/${local.resource_name_stub_failover}-blue"  = "shared"
-  #   "kubernetes.io/cluster/${local.resource_name_stub_failover}-green" = "shared"
-  # }
-
-  # eks_tags_subnet_pvt = {
-  #   "kubernetes.io/role/alb-ingress"  = 1
-  #   "kubernetes.io/role/internal-elb" = 1
-  # }
-  # eks_tags_subnet_pub = {
-  #   "kubernetes.io/role/alb-ingress" = 1
-  #   "kubernetes.io/role/elb"         = 1
-  # }
-
-  # acm_san_names = concat(
-  #   [
-  #     for zone in var.r53_zones :
-  #     (var.deployment_environment != "prd" ? "${var.deployment_environment}.${zone}" : zone)
-  #   ],
-  #   [
-  #     for zone in var.r53_zones :
-  #     (var.deployment_environment != "prd" ? "*.${var.deployment_environment}.${zone}" : "*.${zone}")
-  #   ]
-  # )
+  org_owner_email = "${var.org_owner_email_prefix}+${var.org_owner_email_plus_address}@${var.org_owner_email_domain_tld}"
 
   default_tags_map = {
-    "company"                      = "${var.company_name}" #Microsoft
-    "team"                         = "${var.team_name}"    #Blue
-    "cost_center"                  = "${var.cost_center}"
-    "project"                      = "${var.project_name}"           #Windows
-    "environment"                  = "${var.deployment_environment}" #dev|tst|stg|prd
-    "resource_owner"               = var.resource_owner_email != "" ? "${var.resource_owner_email}" : "${local.org_owner_email}"
-    "${var.iam_immutable_tag_key}" = "true"
+    "${var.company_name_abbr}:company"        = "${var.company_name}"
+    "${var.company_name_abbr}:cost_center"    = "${var.cost_center}"
+    "${var.company_name_abbr}:environment"    = "${var.environment}"
+    "${var.company_name_abbr}:project"        = "${var.project_name}"
+    "${var.company_name_abbr}:resource_owner" = var.resource_owner_email != null ? "${var.resource_owner_email}" : "${local.org_owner_email}"
+    "${var.company_name_abbr}:team"           = "${var.team_name}"
   }
 }

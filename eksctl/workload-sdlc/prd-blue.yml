@@ -1,0 +1,141 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: &clusterName blue
+  region: us-west-2
+  version: "1.33"
+
+vpc:
+  id: "vpc-00000000000000000"
+  securityGroup: "sg-00000000000000000"
+  subnets:
+    public:
+      one:    { id: subnet-11111111111111111 }
+      two:    { id: subnet-22222222222222222 }
+    #   three:  { id: subnet-33333333333333333 }
+    #   four:   { id: subnet-44444444444444444 }
+    private:
+      one:    { id: subnet-11111111111111111 }
+      two:    { id: subnet-22222222222222222 }
+      # three:  { id: subnet-33333333333333333 }
+      # four:   { id: subnet-44444444444444444 }
+
+secretsEncryption:
+  keyARN: kms_arn_primary
+
+# cloudWatch:
+#   clusterLogging:
+#     enableTypes: ["all"]
+#     logRetentionInDays: 1
+
+iam:
+  podIdentityAssociations:
+    # - namespace: kube-system
+    #   serviceAccountName: image-builder
+    #   createServiceAccount: true
+    #   wellKnownPolicies:
+    #     imageBuilder: true
+
+    - namespace: kube-system
+      serviceAccountName: aws-cluster-autoscaler
+      createServiceAccount: true
+      wellKnownPolicies:
+        autoScaler: true
+
+    - namespace: kube-system
+      serviceAccountName: aws-load-balancer-controller
+      createServiceAccount: true
+      wellKnownPolicies:
+        awsLoadBalancerController: true
+      permissionPolicyARNs: ["arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess"]
+
+    - namespace: kube-system
+      serviceAccountName: external-dns
+      createServiceAccount: true
+      wellKnownPolicies:
+        externalDNS: true
+
+    - namespace: kube-system
+      serviceAccountName: cert-manager
+      createServiceAccount: true
+      wellKnownPolicies:
+        certManager: true
+
+    - namespace: kube-system
+      serviceAccountName: ebs-csi-controller-sa
+      createServiceAccount: true
+      wellKnownPolicies:
+        ebsCSIController: true
+
+    # - namespace: kube-system
+    #   serviceAccountName: aws-efs-csi
+    #   createServiceAccount: true
+    #   wellKnownPolicies:
+    #     efsCSIController: true
+
+addonsConfig:
+  disableDefaultAddons: true
+  autoApplyPodIdentityAssociations: true
+addons:
+  - name: coredns
+    version: "1.12.3"
+    useDefaultPodIdentityAssociations: true
+    configurationValues: |
+      replicaCount: 3
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: eks.amazonaws.com/component
+                operator: In
+                values:
+                - coredns
+            topologyKey: "topology.kubernetes.io/zone"
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: node.kubernetes.io/taint
+                operator: DoesNotExist
+      nodeSelector: {}
+      tolerations:
+        - operator: "Exists"
+          effect: "NoSchedule"
+      topologySpreadConstraints: []
+
+  - name: eks-pod-identity-agent
+    version: "1.3.8"
+    useDefaultPodIdentityAssociations: true
+
+  - name: kube-proxy
+    useDefaultPodIdentityAssociations: true
+    version: "1.33.3"
+
+  - name: vpc-cni
+    version: "1.20.1"
+    useDefaultPodIdentityAssociations: true
+
+managedNodeGroups:
+  - name: &awsClusterAutoscaler aws-cluster-autoscaler
+    labels:
+      role: *awsClusterAutoscaler
+    taints:
+      - key: "role"
+        value: *awsClusterAutoscaler
+        effect: "NoSchedule"
+    instanceType: t4g.medium
+    minSize: 3
+    maxSize: 10
+    privateNetworking: true
+    volumeSize: 20
+    ebsOptimized: true
+
+  - name: general
+    instanceType: t4g.medium
+    minSize: 3
+    maxSize: 25
+    privateNetworking: true
+    ebsOptimized: true
