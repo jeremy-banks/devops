@@ -101,8 +101,8 @@ Make an email, update relevant files with your unique information, and begin dep
       ```sh
       # replace 012345678912 with the account_id
       AWS_PROFILE=superadmin aws sts assume-role \
-         --role-arn arn:aws:iam::825442073177:role/superadmin \
-         --role-session-name workload-product-a-prd \
+         --role-arn arn:aws:iam::975705621738:role/superadmin \
+         --role-session-name workload-sdlc \
          --duration-seconds 36000
       # replace foo, bar, and helloworld with matching outputs
       export AWS_ACCESS_KEY_ID=foo
@@ -112,19 +112,24 @@ Make an email, update relevant files with your unique information, and begin dep
       ```
    1. Deploy Cluster
       ```sh
-      eksctl create cluster -f blue.yml &
+      eksctl create cluster -f prd-blue.yml &
       eksctl delete cluster --name blue --region us-west-2 &
-      eksctl create nodegroup -f blue.yml &
+      eksctl create nodegroup -f prd-blue.yml &
       eksctl delete nodegroup --cluster blue --name general --region us-west-2 &
       ```
    1. Deploy cluster-services
       ```sh
-      helm upgrade --install cluster-services . --namespace kube-system --force &
+      helm upgrade --install cluster-services . --namespace kube-system --force
+      helm uninstall cluster-services --namespace kube-system &
+      ```
+   1. Deploy shared-services
+      ```sh
+      helm upgrade --install shared-services . --force
       helm uninstall cluster-services --namespace kube-system &
       ```
    1. Deploy nginx welcome page
       ```sh
-      helm upgrade --install nginx-welcome bitnami/nginx -f values.yaml --force &
+      helm upgrade --install nginx-welcome bitnami/nginx -f values.yaml --force
       helm uninstall nginx-welcome &
       ```
       1. Great for troubleshooting deployments

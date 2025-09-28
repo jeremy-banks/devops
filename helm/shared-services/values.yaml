@@ -1,0 +1,89 @@
+.anchors:
+  clusterName: &clusterName blue
+  region: &region us-west-2
+  podReplicaCount: &podReplicaCount 1
+  # acmArnPrimary: &acmArnPrimary "arn:aws:acm:us-west-2:825442073177:certificate/e7f6af2d-0efa-494f-acda-07dfe3cc4cdd"
+  # acmArnFailover: &acmArnFailover "arn:aws:acm:us-east-1:825442073177:certificate/84f4d502-35d8-49bd-ac74-e77b1f6bd1ac"
+
+gitlab:
+  global.edition: ce
+  global.hosts.domain: cockydevops.com
+
+  nginx-ingress:
+    enabled: false
+
+  ingress:
+    annotations:
+      alb.ingress.kubernetes.io/load-balancer-name: shared
+      alb.ingress.kubernetes.io/group.name: shared
+      alb.ingress.kubernetes.io/scheme: internet-facing
+      alb.ingress.kubernetes.io/target-type: ip
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443},{"HTTP":80}]'
+      alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-west-2:975705621738:certificate/b23a3ab3-c7f1-4868-a975-8b865fcc6420
+      alb.ingress.kubernetes.io/ssl-redirect: '443'
+      alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS13-1-2-Res-2021-06
+    class: none
+    enabled: true
+    configureCertmanager: false
+    path: /*
+    pathType: ImplementationSpecific
+    provider: aws
+    tls:
+      enabled: false
+
+  gitlab:
+    kas:
+      enabled: true
+      ingress:
+        # Specific annotations needed for kas service to support websockets
+        annotations:
+          alb.ingress.kubernetes.io/healthcheck-path: /liveness
+          alb.ingress.kubernetes.io/healthcheck-port: "8151"
+          alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+          alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=4000,routing.http2.enabled=false
+          alb.ingress.kubernetes.io/target-group-attributes: stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=86400
+          alb.ingress.kubernetes.io/target-type: ip
+          kubernetes.io/tls-acme: "true"
+          nginx.ingress.kubernetes.io/connection-proxy-header: "keep-alive"
+          nginx.ingress.kubernetes.io/x-forwarded-prefix: "/path"
+      # k8s services exposed via an ingress rule to an ELB need to be of type NodePort
+      service:
+        type: NodePort
+    webservice:
+      enabled: true
+      service:
+        type: NodePort
+  # gitlab-shell (ssh) needs an NLB
+    gitlab-shell:
+      enabled: false
+      # enabled: true
+      # service:
+      #   annotations:
+      #     external-dns.alpha.kubernetes.io/hostname: "gitlab-shell.example.com"
+      #     service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
+      #     service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
+      #     service.beta.kubernetes.io/aws-load-balancer-type: "external"
+      #   type: LoadBalancer
+    registry:
+      enabled: false
+      # enabled: true
+      # service:
+      #   type: NodePort
+
+
+
+
+  # global.hosts.externalIP=10.10.10.10
+  # certmanager-issuer.email=me@example.com
+
+# artifactory:
+#   foo: bar
+
+# grafana:
+#   foo: bar
+
+# prometheus:
+#   foo: bar
+
+
+

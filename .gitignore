@@ -39,3 +39,6 @@ backend.tf
 
 # Mac OS
 .DS_Store
+
+#helm
+*.tar.gz
