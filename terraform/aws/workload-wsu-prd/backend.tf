@@ -1,12 +1,12 @@
 terraform {
   backend "s3" {
+    bucket       = "tfstate_s3_bucket_name"
+    region       = "tfstate_region"
+    kms_key_id   = "tfstate_kms_arn"
     profile      = "superadmin"
-    region       = "us-west-2"
-    bucket       = "gn-devops-aftb-prd-usw2-tfstate-e78b50"
-    key          = "superadmin/workload-product-a-prd"
+    key          = "superadmin/workload-wsu-prd"
     use_lockfile = true
     insecure     = false
     encrypt      = true
-    kms_key_id   = "arn:aws:kms:us-west-2:134857759269:key/mrk-43d0394bc5a64c538f3f7c2bb5f879e6"
   }
 }

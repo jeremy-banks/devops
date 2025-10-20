@@ -2,8 +2,6 @@
   clusterName: &clusterName blue
   region: &region us-west-2
   podReplicaCount: &podReplicaCount 1
-  acmArnPrimary: &acmArnPrimary "acm_arn_primary"
-  acmArnFailover: &acmArnFailover "acm_arn_primary"
 
 cluster-autoscaler:
   fullnameOverride: &awsClusterAutoscaler aws-cluster-autoscaler

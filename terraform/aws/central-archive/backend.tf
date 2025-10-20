@@ -1,12 +1,12 @@
 terraform {
   backend "s3" {
+    bucket       = "tfstate_s3_bucket_name"
+    region       = "tfstate_region"
+    kms_key_id   = "tfstate_kms_arn"
     profile      = "superadmin"
-    region       = "TFSTATEBACKENDREGION"
-    bucket       = "TFSTATEBACKENDS3BUCKETNAME"
     key          = "superadmin/central-archive"
     use_lockfile = true
     insecure     = false
     encrypt      = true
-    kms_key_id   = "TFSTATEBACKENDKMSARN"
   }
 }
