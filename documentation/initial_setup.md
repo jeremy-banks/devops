@@ -51,9 +51,9 @@ Make an email, update relevant files with your unique information, and begin dep
 1. Enable Terraform State Backend
    1. Use the `terraform output` to update the backend.tf files in `terraform/aws/` and subdirectories
       ```sh
-      find . -name 'backend.tf' -exec sed -i '' 's,tfstate_kms_arn,output,g' {} + &&\
+      find . -name 'backend.tf' -exec sed -i '' 's,tfstate_s3_bucket_name,output,g' {} + &&\
       find . -name 'backend.tf' -exec sed -i '' 's,tfstate_region,output,g' {} + &&\
-      find . -name 'backend.tf' -exec sed -i '' 's,tfstate_s3_bucket_name,output,g' {} +
+      find . -name 'backend.tf' -exec sed -i '' 's,tfstate_kms_arn,output,g' {} +
       ```
    1. Uncomment `terraform/aws/management-account/backend.tf` and migrate state with `terraform init -force-copy`
 1. Save `breakglass` user information
@@ -82,16 +82,22 @@ Make an email, update relevant files with your unique information, and begin dep
 ### Deploy IAM Resources
 1. Deploy `terraform/aws/iam`
 
-### Deploy Central Backup
+### Deploy Central Archive
 1. Deploy `terraform/aws/central-archive`
 
-### Deploy Workload Product A
+### Deploy Workload SDLC
 1. `create_failover_region` used to declare whether this deployment should have a failover region
 1. `azs_number_used` 2-4
 1. `create_vpc_public_subnets`
-1. Deploy `terraform/aws/workload-product-a-prd`
+1. Deploy `terraform/aws/workload-sdlc-prd`
 
-### Deploy EKS in Workload Product A
+### Deploy Workload WSU
+1. `create_failover_region` used to declare whether this deployment should have a failover region
+1. `azs_number_used` 2-4
+1. `create_vpc_public_subnets`
+1. Deploy `terraform/aws/workload-sdlc-prd`
+
+### Deploy EKS in Workload SDLC
 1. Update deployment files with relevant outputs
    1. `eksctl/blue.yaml` and `eksctl/green.yaml` with `kms_arn_primary`, `vpc_id_primary`, `vpc_private_subnets_ids_primary`, `vpc_security_group_id_ingress_primary`, and `vpc_security_group_id_main_primary`
    1. `helm/cluster-services/values.yaml` with `acm_arn_primary`
@@ -99,11 +105,10 @@ Make an email, update relevant files with your unique information, and begin dep
 1. Deploy `eksctl/blue.yaml`
    1. Assume admin role in account
       ```sh
-      # replace 012345678912 with the account_id
+      # replace 012345678901 with the account_id
       AWS_PROFILE=superadmin aws sts assume-role \
-         --role-arn arn:aws:iam::975705621738:role/superadmin \
-         --role-session-name workload-sdlc \
-         --duration-seconds 36000
+         --role-arn arn:aws:iam::012345678901:role/superadmin \
+         --role-session-name SESSION
       # replace foo, bar, and helloworld with matching outputs
       export AWS_ACCESS_KEY_ID=foo
       export AWS_SECRET_ACCESS_KEY=bar
@@ -141,6 +146,3 @@ Make an email, update relevant files with your unique information, and begin dep
       ```sh
       curl workload_fqdn
       ```
-
-### Deploy Workload Product B (Optional)
-1. Deploy `terraform/aws/workload-product-a-prd`

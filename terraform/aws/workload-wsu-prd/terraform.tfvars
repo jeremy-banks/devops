@@ -10,8 +10,8 @@ this_slug = "wsu"
 
 # vpc_azs_number_used_network = 2
 
-# create_failover_region = false
+create_failover_region = false
+
+vpc_azs_number_used = 2
 
 create_vpc_public_subnets = true
-
-# vpc_azs_number_used = 2
