@@ -13,28 +13,46 @@ The goal of this repo is to provide a comprehensive codebase to lift-and-shift a
 - [Initial Setup](./documentation/initial_setup.md)
 - [Processes](./documentation/processes.md) -->
 
-## Reference Material
-- [Whitepaper: Genomics Data Transfer, Analytics, and Machine Learning using AWS Services](https://aws.amazon.com/blogs/industries/whitepaper-genomics-data-transfer-analytics-and-machine-learning-using-aws-services/)
-- [Prescriptive Guidance Security Reference Architecture](https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture/org-management.html)
-- [Well-Architected Framework](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html)
-- [Best practices for a multi-account environment](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_best-practices.html)
-- [Best practices for OUs](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_ous_best_practices.html)
-- [Inspection Deployment Models with AWS Network Firewall](https://d1.awsstatic.com/architecture-diagrams/ArchitectureDiagrams/inspection-deployment-models-with-AWS-network-firewall-ra.pdf)
-- [Centralized Inspection Architecture](https://aws.amazon.com/blogs/networking-and-content-delivery/centralized-central-inspection-architecture-with-aws-gateway-load-balancer-and-aws-transit-gateway/)
-- [Transit Gateway Design Best Practices](https://docs.aws.amazon.com/vpc/latest/tgw/tgw-best-design-practices.html)
-- [How Transit Gateways Work in Appliance Mode](https://docs.aws.amazon.com/vpc/latest/tgw/how-transit-gateways-work.html#transit-gateway-appliance-scenario)
-- [Automating Domain Delegation for Public Applications](https://aws.amazon.com/blogs/networking-and-content-delivery/automating-domain-delegation-for-public-applications-in-aws/)
-- [Guidance to Render Unsecured PHI Unusable](https://www.hhs.gov/hipaa/for-professionals/breach-notification/guidance/index.html)
-
 ## Details
 
-### Org and Accounts
+### Org and Account Layout
 The organization, organization units, and accounts layout is designed in accordance to the documented [Best practices for a multi-account environment](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_best-practices.html) and [Best practices for managing organizational units (OUs) with AWS Organizations](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_ous_best_practices.html). Specifically, the [Separating business units with significantly different policies](https://docs.aws.amazon.com/whitepapers/latest/organizing-your-aws-environment/advanced-ous.html#extended-workload-oriented-ou-structure) is utilized for maximum security granularity and scaleability.
 
 <p align="center"><img src="./drawings/org-and-account-layout.drawio.png" width="55%"/></p>
 
-### VPC Central Inspection Model
-This repo follows the documented guide for North-South Inspection with AWS Network Firewall as [documented by AWS](https://d1.awsstatic.com/architecture-diagrams/ArchitectureDiagrams/inspection-deployment-models-with-AWS-network-firewall-ra.pdf). Behold, the Central Inspection Cephalopod (resemblence unintended):
+### Tenancy
+
+Posture 1 represents a layout for complete workload separation which provides the most protection and may be required by contract or law. Posture 2 represents an opposing layout where every resource is shared which is not ideal for security or scalability. Posture 3 represents a hybrid layout that this repo is designed.
+
+| Service | Posture 1 | Posture 2 | Posture 3 |
+| --- | --- | --- | --- |
+| org | share | share | share |
+| account | silo | share | silo* |
+| central vpc | share | share | share |
+| iam | silo | share | silo |
+| vpc | silo | share | silo* |
+| r53 | silo | share | silo |
+| alb | silo | share | share |
+| cpu | silo | share | silo* |
+| db | silo | share | silo |
+| s3 | silo | share | silo |
+| efs | silo | share | silo |
+| kms | silo | share | silo |
+
+Posture 3 is optimal for many reasons:
+
+- Accounts are silo with the exception of SDLC and Shared Services whose purpose is to host apps which do not require separation from other workloads, eg marketing website or devops tooling.
+- IAM controls access to all resources, meaning if a vulnerability is introducted at the application level the data is still only accessible to the intended tenant.
+- VPCs are added to each account and connected to Central VPC via Transit Gateway allowing for maximum network scalability. When configured this way additional VPCs automatically use endpoints and NATs in the Central VPC.
+- R53 is also a silo using delegation, which is detailed below.
+- ALBs will be shared to take advantage of AWS' massive scalability in that service and reduce costs. New services will simply be another config on the single ALB.
+- CPU is technically shared as multiple pods from different tenants will exist on the same EC2, however those pods are effectively a silo when using RBAC.
+- No noisy neighbors because all resources for each tenant are unique from other tenants, and those resources can be scaled to fit their need and our cost.
+- Siloing resources also limit the blast radius of a potential upgrade, and enabled effective deployments to customers who are comfortable being a 'canary'.
+- With silo KMS that also means the keys used to encrypt a tenant's resources at rest are unique to each tenant.
+
+### Central VPC Inspection Model
+This repo follows the documented guide for North-South Inspection with AWS Network Firewall. Behold, the Central Inspection Cephalopod (resemblence unintended):
 
 <p align="center"><img src="./drawings/central-inspection.drawio.png" width="55%"/></p>
 
@@ -44,12 +62,12 @@ This repo follows the documented guide for North-South Inspection with AWS Netwo
 1. Workload to Inspection to Internet
 1. Workload to Inspection to VPC Peer / NAT / VPN (bi-directional)
 
-Because everything deployed is a "workload", this setup enables maximum scalability and cost savings. Each additional account benefits from the same Central Inspection model, Logging, Central Service Endpoints, and Central Egress to Internet, without any additional configuration requirements.
+Because everything deployed is a "workload", this setup enables maximum scalability and cost savings. Each additional account benefits from the same Central Inspection model, Logging and Log Archiving, Central Service Endpoints, and Central Egress to Internet, without any additional configuration requirements.
 
 ### Delegated DNS
 To align with best practices for DNS and service isolation DNS delegation is featured. The table below represents an example featuring GitLab being hosted in the shared services account.
 
-|   | type | account | direct |
+|  | type | account | direct |
 | ---: | :--- | :--- | :--- |
 | domain.tld | zone |  | |
 | ${\color{green}www .domain.tld}$ | CNAME | network | `www.‌sdlc.aws.domain.tld` |
@@ -63,7 +81,7 @@ To align with best practices for DNS and service isolation DNS delegation is fea
 | ${\color{blue}gitlab.svc.aws.domain.tld}$ | A | shared-services | load balancers |
 | ${\color{red}wsu.wsu.aws.domain.tld}$ | A | workload-wsu | load balancers |
 
-${\color{green}www .domain.tld‌}$ is the marketing website hosted in the sdlc account. The sdlc account also hosts multi-tenant deployments and pooled resources like api and ftp.
+${\color{green}www .domain.tld‌}$ is the marketing website hosted in the SDLC account. The SDLC account also hosts multi-tenant deployments and pooled resources like API and FTP.
 
 ${\color{blue}gitlab .domain.tld}$ is the private source code management hosted in the shared services account. The shared services account also hosts applications like artifactory, jenkins, nagios, etc.
 
@@ -75,27 +93,18 @@ When changes to subdomain configuration need to be tested they can be done on `d
 
 AWS documentation and white papers are explicit that ***all*** services which can be designed this way should be.
 
-## To Do
-- central endpoints
-- Centralized logging with compression and glacier archive
-   - DNS logs sent to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
-   - ALB logs send to CloudWatch Log Group and S3 (with cross-regional replication and glacier)
-- monitoring (open source)
-- central egress of NAT and endpoints for services
-- immutable log archiving with N-day retention
-- cVPN with Federated Access using Active Directory
-- test Site-to-Site VPN connection between my home hardware and AWS
-- implement r53 resolver
-- Create a faux DR event by creating terraform code that blocks traffic in ACL of one AZs subnets
-- Add multi-region active-active Postgres to EKS deployments
-- Mozilla Secrets OPerationS (SOPS) implementation to keep secrets protected
-- Implement StackSet Deployments
-   - Disable unlimited burstable instance credits
-   - delete all default VPCs in all regions of every account
-   - AWS config for hipaa, CIS, NIST
-      - aggregate to security account probably
-   - AWS Backup with Multi-AZ and glacier
-   - MFA enforced organization-wide
+## Reference Material
+- [Whitepaper: Genomics Data Transfer, Analytics, and Machine Learning using AWS Services](https://aws.amazon.com/blogs/industries/whitepaper-genomics-data-transfer-analytics-and-machine-learning-using-aws-services/)
+- [Prescriptive Guidance Security Reference Architecture](https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture/org-management.html)
+- [Well-Architected Framework](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html)
+- [Best practices for a multi-account environment](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_best-practices.html)
+- [Best practices for OUs](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_ous_best_practices.html)
+- [Inspection Deployment Models with AWS Network Firewall](https://d1.awsstatic.com/architecture-diagrams/ArchitectureDiagrams/inspection-deployment-models-with-AWS-network-firewall-ra.pdf)
+- [Centralized Inspection Architecture](https://aws.amazon.com/blogs/networking-and-content-delivery/centralized-central-inspection-architecture-with-aws-gateway-load-balancer-and-aws-transit-gateway/)
+- [Transit Gateway Design Best Practices](https://docs.aws.amazon.com/vpc/latest/tgw/tgw-best-design-practices.html)
+- [How Transit Gateways Work in Appliance Mode](https://docs.aws.amazon.com/vpc/latest/tgw/how-transit-gateways-work.html#transit-gateway-appliance-scenario)
+- [Automating Domain Delegation for Public Applications](https://aws.amazon.com/blogs/networking-and-content-delivery/automating-domain-delegation-for-public-applications-in-aws/)
+- [Guidance to Render Unsecured PHI Unusable](https://www.hhs.gov/hipaa/for-professionals/breach-notification/guidance/index.html)
 
 ## License
 This project is licensed under the [Creative Commons Attribution-NonCommercial 4.0 International License](https://creativecommons.org/licenses/by-nc/4.0/).

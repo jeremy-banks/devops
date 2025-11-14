@@ -1,130 +1,130 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:141.0) Gecko/20100101 Firefox/141.0" version="28.0.7">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0" version="29.0.2">
   <diagram name="Page-1" id="s8bUbqmI-ez_2oZm3hSs">
-    <mxGraphModel dx="2514" dy="1760" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1318" dy="764" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-91" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=-0.003;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=none;endFill=0;curved=0;strokeWidth=2;" edge="1" parent="1" source="JzUaVsV2Zrz4U57TL4If-20" target="JzUaVsV2Zrz4U57TL4If-4">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-91" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=-0.003;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=none;endFill=0;curved=0;strokeWidth=2;" parent="1" source="JzUaVsV2Zrz4U57TL4If-20" target="JzUaVsV2Zrz4U57TL4If-4" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="80" y="240" />
+              <mxPoint x="80" y="220" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-92" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=-0.003;entryY=0.485;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=none;endFill=0;curved=0;strokeWidth=2;" edge="1" parent="1" source="JzUaVsV2Zrz4U57TL4If-20" target="JzUaVsV2Zrz4U57TL4If-7">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-92" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=-0.003;entryY=0.485;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=none;endFill=0;curved=0;strokeWidth=2;" parent="1" source="JzUaVsV2Zrz4U57TL4If-20" target="JzUaVsV2Zrz4U57TL4If-7" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="80" y="559" />
+              <mxPoint x="80" y="499" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-94" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;curved=0;labelBackgroundColor=default;strokeWidth=2;" edge="1" parent="1" source="JzUaVsV2Zrz4U57TL4If-20" target="JzUaVsV2Zrz4U57TL4If-12">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-94" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;curved=0;labelBackgroundColor=default;strokeWidth=2;" parent="1" source="JzUaVsV2Zrz4U57TL4If-20" target="JzUaVsV2Zrz4U57TL4If-12" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="140" y="1040" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="80" y="1040" />
+              <mxPoint x="80" y="920" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-89" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeWidth=2;" edge="1" parent="1" source="JzUaVsV2Zrz4U57TL4If-1" target="JzUaVsV2Zrz4U57TL4If-20">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-89" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeWidth=2;" parent="1" source="JzUaVsV2Zrz4U57TL4If-1" target="JzUaVsV2Zrz4U57TL4If-20" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="JzUaVsV2Zrz4U57TL4If-1" value="Management Account" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_management_account2;labelBackgroundColor=default;fontFamily=Lucida Console;" parent="1" vertex="1">
           <mxGeometry x="160" y="40" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-96" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeWidth=2;" edge="1" parent="1" source="JzUaVsV2Zrz4U57TL4If-4" target="JzUaVsV2Zrz4U57TL4If-40">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-96" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeWidth=2;" parent="1" source="JzUaVsV2Zrz4U57TL4If-4" target="JzUaVsV2Zrz4U57TL4If-40" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="JzUaVsV2Zrz4U57TL4If-4" value="Security OU" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;fontFamily=Lucida Console;" parent="1" vertex="1">
-          <mxGeometry x="160" y="200" width="80" height="80" as="geometry" />
+          <mxGeometry x="160" y="180" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-98" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeWidth=2;" edge="1" parent="1" source="JzUaVsV2Zrz4U57TL4If-7" target="JzUaVsV2Zrz4U57TL4If-42">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-98" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeWidth=2;" parent="1" source="JzUaVsV2Zrz4U57TL4If-7" target="JzUaVsV2Zrz4U57TL4If-42" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-99" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;curved=0;strokeWidth=2;" edge="1" parent="1" source="JzUaVsV2Zrz4U57TL4If-7" target="JzUaVsV2Zrz4U57TL4If-43">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-99" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;curved=0;strokeWidth=2;" parent="1" source="JzUaVsV2Zrz4U57TL4If-7" target="JzUaVsV2Zrz4U57TL4If-43" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="200" y="720" />
+              <mxPoint x="200" y="640" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-100" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;curved=0;strokeWidth=2;" edge="1" parent="1" source="JzUaVsV2Zrz4U57TL4If-7" target="JzUaVsV2Zrz4U57TL4If-44">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-100" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;curved=0;strokeWidth=2;" parent="1" source="JzUaVsV2Zrz4U57TL4If-7" target="JzUaVsV2Zrz4U57TL4If-44" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="200" y="880" />
+              <mxPoint x="200" y="780" />
             </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="JzUaVsV2Zrz4U57TL4If-7" value="Infrastructure OU" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;fontFamily=Lucida Console;" parent="1" vertex="1">
-          <mxGeometry x="160" y="520" width="80" height="80" as="geometry" />
+          <mxGeometry x="160" y="460" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-102" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeWidth=2;" edge="1" parent="1" source="JzUaVsV2Zrz4U57TL4If-12" target="Du_dBiRHnJMabGxFBM2_-65">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-102" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeWidth=2;" parent="1" source="JzUaVsV2Zrz4U57TL4If-12" target="Du_dBiRHnJMabGxFBM2_-65" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-103" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;curved=0;strokeWidth=2;" edge="1" parent="1" source="JzUaVsV2Zrz4U57TL4If-12" target="Du_dBiRHnJMabGxFBM2_-66">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-103" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;curved=0;strokeWidth=2;" parent="1" source="JzUaVsV2Zrz4U57TL4If-12" target="Du_dBiRHnJMabGxFBM2_-66" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="200" y="1200" />
+              <mxPoint x="200" y="1060" />
             </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="JzUaVsV2Zrz4U57TL4If-12" value="&lt;div&gt;Workloads OU&lt;/div&gt;" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;fontFamily=Lucida Console;" parent="1" vertex="1">
-          <mxGeometry x="160" y="1000" width="80" height="80" as="geometry" />
+          <mxGeometry x="160" y="880" width="80" height="80" as="geometry" />
         </mxCell>
         <mxCell id="JzUaVsV2Zrz4U57TL4If-20" value="Root" style="sketch=0;outlineConnect=0;fontColor=default;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;fontFamily=Lucida Console;labelBorderColor=none;textShadow=0;" parent="1" vertex="1">
           <mxGeometry x="40" y="40" width="80" height="80" as="geometry" />
         </mxCell>
         <mxCell id="JzUaVsV2Zrz4U57TL4If-21" value="Log Archive prd Account" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_account2;labelBackgroundColor=default;fontFamily=Lucida Console;" parent="1" vertex="1">
-          <mxGeometry x="640" y="200" width="80" height="80" as="geometry" />
+          <mxGeometry x="640" y="180" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="JzUaVsV2Zrz4U57TL4If-34" value="stg OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" parent="1" vertex="1">
-          <mxGeometry x="480" y="200" width="20" height="20" as="geometry" />
+        <mxCell id="JzUaVsV2Zrz4U57TL4If-34" value="dev OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" parent="1" vertex="1">
+          <mxGeometry x="480" y="180" width="20" height="20" as="geometry" />
         </mxCell>
         <mxCell id="JzUaVsV2Zrz4U57TL4If-36" value="tst OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;shadow=0;" parent="1" vertex="1">
-          <mxGeometry x="510" y="200" width="20" height="20" as="geometry" />
+          <mxGeometry x="510" y="180" width="20" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="JzUaVsV2Zrz4U57TL4If-37" value="dev OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" parent="1" vertex="1">
-          <mxGeometry x="540" y="200" width="20" height="20" as="geometry" />
+        <mxCell id="JzUaVsV2Zrz4U57TL4If-37" value="stg OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" parent="1" vertex="1">
+          <mxGeometry x="540" y="180" width="20" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;curved=0;strokeWidth=2;" edge="1" parent="1" source="JzUaVsV2Zrz4U57TL4If-39" target="JzUaVsV2Zrz4U57TL4If-21">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;curved=0;strokeWidth=2;" parent="1" source="JzUaVsV2Zrz4U57TL4If-39" target="JzUaVsV2Zrz4U57TL4If-21" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="580" y="260" />
               <mxPoint x="580" y="240" />
+              <mxPoint x="580" y="220" />
             </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="JzUaVsV2Zrz4U57TL4If-39" value="prd OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" parent="1" vertex="1">
-          <mxGeometry x="500" y="240" width="40" height="40" as="geometry" />
+          <mxGeometry x="500" y="220" width="40" height="40" as="geometry" />
         </mxCell>
         <mxCell id="JzUaVsV2Zrz4U57TL4If-45" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;curved=0;endArrow=none;endFill=0;strokeWidth=2;" parent="1" source="JzUaVsV2Zrz4U57TL4If-40" target="JzUaVsV2Zrz4U57TL4If-39" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
+              <mxPoint x="460" y="220" />
               <mxPoint x="460" y="240" />
-              <mxPoint x="460" y="260" />
             </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="JzUaVsV2Zrz4U57TL4If-40" value="Log Archive OU" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;fontFamily=Lucida Console;" parent="1" vertex="1">
-          <mxGeometry x="320" y="200" width="80" height="80" as="geometry" />
+          <mxGeometry x="320" y="180" width="80" height="80" as="geometry" />
         </mxCell>
         <mxCell id="JzUaVsV2Zrz4U57TL4If-41" value="Security Tooling OU" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;fontFamily=Lucida Console;" parent="1" vertex="1">
-          <mxGeometry x="320" y="360" width="80" height="80" as="geometry" />
+          <mxGeometry x="320" y="320" width="80" height="80" as="geometry" />
         </mxCell>
         <mxCell id="JzUaVsV2Zrz4U57TL4If-42" value="Identity OU" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;fontFamily=Lucida Console;" parent="1" vertex="1">
-          <mxGeometry x="320" y="520" width="80" height="80" as="geometry" />
+          <mxGeometry x="320" y="460" width="80" height="80" as="geometry" />
         </mxCell>
         <mxCell id="JzUaVsV2Zrz4U57TL4If-43" value="Network OU" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;fontFamily=Lucida Console;" parent="1" vertex="1">
-          <mxGeometry x="320" y="680" width="80" height="80" as="geometry" />
+          <mxGeometry x="320" y="600" width="80" height="80" as="geometry" />
         </mxCell>
         <mxCell id="JzUaVsV2Zrz4U57TL4If-44" value="Shared Services OU" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;fontFamily=Lucida Console;" parent="1" vertex="1">
-          <mxGeometry x="320" y="840" width="80" height="80" as="geometry" />
+          <mxGeometry x="320" y="740" width="80" height="80" as="geometry" />
         </mxCell>
         <mxCell id="JzUaVsV2Zrz4U57TL4If-47" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.497;entryY=-0.003;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" parent="1" source="JzUaVsV2Zrz4U57TL4If-40" target="JzUaVsV2Zrz4U57TL4If-36" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="510" y="190" as="targetPoint" />
+            <mxPoint x="510" y="170" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="440" y="240" />
+              <mxPoint x="440" y="220" />
               <mxPoint x="440" y="170" />
               <mxPoint x="520" y="170" />
             </Array>
@@ -133,406 +133,399 @@
         <mxCell id="JzUaVsV2Zrz4U57TL4If-48" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.502;entryY=-0.009;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" parent="1" source="JzUaVsV2Zrz4U57TL4If-40" target="JzUaVsV2Zrz4U57TL4If-37" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="430" y="240" />
+              <mxPoint x="430" y="220" />
               <mxPoint x="430" y="160" />
               <mxPoint x="550" y="160" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=-0.003;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" edge="1" parent="1" source="JzUaVsV2Zrz4U57TL4If-40" target="JzUaVsV2Zrz4U57TL4If-34">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;curved=0;endArrow=none;endFill=0;" parent="1" source="JzUaVsV2Zrz4U57TL4If-40" target="JzUaVsV2Zrz4U57TL4If-34" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="450" y="240" />
-              <mxPoint x="450" y="180" />
-              <mxPoint x="490" y="180" />
+              <mxPoint x="450" y="220" />
+              <mxPoint x="450" y="190" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-15" value="Security Tooling prd Account" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_account2;labelBackgroundColor=default;fontFamily=Lucida Console;" vertex="1" parent="1">
-          <mxGeometry x="640" y="360" width="80" height="80" as="geometry" />
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-15" value="Security Tooling prd Account" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_account2;labelBackgroundColor=default;fontFamily=Lucida Console;" parent="1" vertex="1">
+          <mxGeometry x="640" y="320" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-16" value="stg OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" vertex="1" parent="1">
-          <mxGeometry x="480" y="360" width="20" height="20" as="geometry" />
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-16" value="dev OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" parent="1" vertex="1">
+          <mxGeometry x="480" y="320" width="20" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-17" value="tst OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" vertex="1" parent="1">
-          <mxGeometry x="510" y="360" width="20" height="20" as="geometry" />
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-17" value="tst OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" parent="1" vertex="1">
+          <mxGeometry x="510" y="320" width="20" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-18" value="dev OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" vertex="1" parent="1">
-          <mxGeometry x="540" y="360" width="20" height="20" as="geometry" />
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-18" value="stg OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" parent="1" vertex="1">
+          <mxGeometry x="540" y="320" width="20" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-19" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;curved=0;strokeWidth=2;" edge="1" parent="1" source="Du_dBiRHnJMabGxFBM2_-20" target="Du_dBiRHnJMabGxFBM2_-15">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-19" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;curved=0;strokeWidth=2;" parent="1" source="Du_dBiRHnJMabGxFBM2_-20" target="Du_dBiRHnJMabGxFBM2_-15" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="580" y="420" />
-              <mxPoint x="580" y="400" />
+              <mxPoint x="580" y="380" />
+              <mxPoint x="580" y="360" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-20" value="prd OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" vertex="1" parent="1">
-          <mxGeometry x="500" y="400" width="40" height="40" as="geometry" />
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-20" value="prd OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" parent="1" vertex="1">
+          <mxGeometry x="500" y="360" width="40" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-21" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;curved=0;endArrow=none;endFill=0;strokeWidth=2;" edge="1" parent="1" target="Du_dBiRHnJMabGxFBM2_-20">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-21" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;curved=0;endArrow=none;endFill=0;strokeWidth=2;" parent="1" target="Du_dBiRHnJMabGxFBM2_-20" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="400" y="400" as="sourcePoint" />
+            <mxPoint x="400" y="360" as="sourcePoint" />
             <Array as="points">
-              <mxPoint x="460" y="400" />
-              <mxPoint x="460" y="420" />
+              <mxPoint x="460" y="360" />
+              <mxPoint x="460" y="380" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-22" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.497;entryY=-0.003;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" edge="1" parent="1" target="Du_dBiRHnJMabGxFBM2_-17">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-22" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.497;entryY=-0.003;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" parent="1" target="Du_dBiRHnJMabGxFBM2_-17" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="510" y="350" as="targetPoint" />
-            <mxPoint x="400" y="400" as="sourcePoint" />
+            <mxPoint x="510" y="310" as="targetPoint" />
+            <mxPoint x="400" y="360" as="sourcePoint" />
             <Array as="points">
-              <mxPoint x="440" y="400" />
-              <mxPoint x="440" y="330" />
-              <mxPoint x="520" y="330" />
+              <mxPoint x="440" y="360" />
+              <mxPoint x="440" y="310" />
+              <mxPoint x="520" y="310" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-23" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.502;entryY=-0.009;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" edge="1" parent="1" target="Du_dBiRHnJMabGxFBM2_-18">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-23" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.502;entryY=-0.009;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" parent="1" target="Du_dBiRHnJMabGxFBM2_-18" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="400" y="400" as="sourcePoint" />
+            <mxPoint x="400" y="360" as="sourcePoint" />
             <Array as="points">
-              <mxPoint x="430" y="400" />
-              <mxPoint x="430" y="320" />
-              <mxPoint x="550" y="320" />
+              <mxPoint x="430" y="360" />
+              <mxPoint x="430" y="300" />
+              <mxPoint x="550" y="300" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-24" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=-0.003;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" edge="1" parent="1" target="Du_dBiRHnJMabGxFBM2_-16">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-24" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;curved=0;endArrow=none;endFill=0;" parent="1" target="Du_dBiRHnJMabGxFBM2_-16" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="400" y="400" as="sourcePoint" />
+            <mxPoint x="400" y="360" as="sourcePoint" />
             <Array as="points">
-              <mxPoint x="450" y="400" />
-              <mxPoint x="450" y="340" />
-              <mxPoint x="490" y="340" />
+              <mxPoint x="450" y="360" />
+              <mxPoint x="450" y="330" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-25" value="Identity prd Account" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_account2;labelBackgroundColor=default;fontFamily=Lucida Console;" vertex="1" parent="1">
-          <mxGeometry x="640" y="520" width="80" height="80" as="geometry" />
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-25" value="Identity prd Account" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_account2;labelBackgroundColor=default;fontFamily=Lucida Console;" parent="1" vertex="1">
+          <mxGeometry x="640" y="460" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-26" value="stg OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" vertex="1" parent="1">
-          <mxGeometry x="480" y="520" width="20" height="20" as="geometry" />
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-26" value="dev OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" parent="1" vertex="1">
+          <mxGeometry x="480" y="460" width="20" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-27" value="tst OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" vertex="1" parent="1">
-          <mxGeometry x="510" y="520" width="20" height="20" as="geometry" />
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-27" value="tst OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" parent="1" vertex="1">
+          <mxGeometry x="510" y="460" width="20" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-28" value="dev OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" vertex="1" parent="1">
-          <mxGeometry x="540" y="520" width="20" height="20" as="geometry" />
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-28" value="stg OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" parent="1" vertex="1">
+          <mxGeometry x="540" y="460" width="20" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-29" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;curved=0;strokeWidth=2;" edge="1" parent="1" source="Du_dBiRHnJMabGxFBM2_-30" target="Du_dBiRHnJMabGxFBM2_-25">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-29" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;curved=0;strokeWidth=2;" parent="1" source="Du_dBiRHnJMabGxFBM2_-30" target="Du_dBiRHnJMabGxFBM2_-25" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="580" y="580" />
-              <mxPoint x="580" y="560" />
+              <mxPoint x="580" y="520" />
+              <mxPoint x="580" y="500" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-30" value="prd OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" vertex="1" parent="1">
-          <mxGeometry x="500" y="560" width="40" height="40" as="geometry" />
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-30" value="prd OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" parent="1" vertex="1">
+          <mxGeometry x="500" y="500" width="40" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-31" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;curved=0;endArrow=none;endFill=0;strokeWidth=2;" edge="1" parent="1" target="Du_dBiRHnJMabGxFBM2_-30">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-31" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;curved=0;endArrow=none;endFill=0;strokeWidth=2;" parent="1" target="Du_dBiRHnJMabGxFBM2_-30" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="400" y="560" as="sourcePoint" />
+            <mxPoint x="400" y="500" as="sourcePoint" />
             <Array as="points">
-              <mxPoint x="460" y="560" />
-              <mxPoint x="460" y="580" />
+              <mxPoint x="460" y="500" />
+              <mxPoint x="460" y="520" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-32" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.497;entryY=-0.003;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" edge="1" parent="1" target="Du_dBiRHnJMabGxFBM2_-27">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-32" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.497;entryY=-0.003;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" parent="1" target="Du_dBiRHnJMabGxFBM2_-27" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="510" y="510" as="targetPoint" />
-            <mxPoint x="400" y="560" as="sourcePoint" />
+            <mxPoint x="510" y="450" as="targetPoint" />
+            <mxPoint x="400" y="500" as="sourcePoint" />
             <Array as="points">
-              <mxPoint x="440" y="560" />
-              <mxPoint x="440" y="490" />
-              <mxPoint x="520" y="490" />
+              <mxPoint x="440" y="500" />
+              <mxPoint x="440" y="450" />
+              <mxPoint x="520" y="450" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-33" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.502;entryY=-0.009;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" edge="1" parent="1" target="Du_dBiRHnJMabGxFBM2_-28">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-33" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.502;entryY=-0.009;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" parent="1" target="Du_dBiRHnJMabGxFBM2_-28" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="400" y="560" as="sourcePoint" />
+            <mxPoint x="400" y="500" as="sourcePoint" />
             <Array as="points">
-              <mxPoint x="430" y="560" />
-              <mxPoint x="430" y="480" />
-              <mxPoint x="550" y="480" />
+              <mxPoint x="430" y="500" />
+              <mxPoint x="430" y="440" />
+              <mxPoint x="550" y="440" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-34" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=-0.003;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" edge="1" parent="1" target="Du_dBiRHnJMabGxFBM2_-26">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-34" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;curved=0;endArrow=none;endFill=0;" parent="1" target="Du_dBiRHnJMabGxFBM2_-26" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="400" y="560" as="sourcePoint" />
+            <mxPoint x="400" y="500" as="sourcePoint" />
             <Array as="points">
-              <mxPoint x="450" y="560" />
               <mxPoint x="450" y="500" />
-              <mxPoint x="490" y="500" />
+              <mxPoint x="450" y="470" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-35" value="Network prd Account" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_account2;labelBackgroundColor=default;fontFamily=Lucida Console;" vertex="1" parent="1">
-          <mxGeometry x="640" y="680" width="80" height="80" as="geometry" />
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-35" value="Network prd Account" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_account2;labelBackgroundColor=default;fontFamily=Lucida Console;" parent="1" vertex="1">
+          <mxGeometry x="640" y="600" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-36" value="stg OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" vertex="1" parent="1">
-          <mxGeometry x="480" y="680" width="20" height="20" as="geometry" />
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-36" value="dev OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" parent="1" vertex="1">
+          <mxGeometry x="480" y="600" width="20" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-37" value="tst OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" vertex="1" parent="1">
-          <mxGeometry x="510" y="680" width="20" height="20" as="geometry" />
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-37" value="tst OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" parent="1" vertex="1">
+          <mxGeometry x="510" y="600" width="20" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-38" value="dev OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" vertex="1" parent="1">
-          <mxGeometry x="540" y="680" width="20" height="20" as="geometry" />
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-38" value="stg OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" parent="1" vertex="1">
+          <mxGeometry x="540" y="600" width="20" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-39" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;curved=0;strokeWidth=2;" edge="1" parent="1" source="Du_dBiRHnJMabGxFBM2_-40" target="Du_dBiRHnJMabGxFBM2_-35">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-39" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;curved=0;strokeWidth=2;" parent="1" source="Du_dBiRHnJMabGxFBM2_-40" target="Du_dBiRHnJMabGxFBM2_-35" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="580" y="740" />
-              <mxPoint x="580" y="720" />
+              <mxPoint x="580" y="660" />
+              <mxPoint x="580" y="640" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-40" value="prd OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" vertex="1" parent="1">
-          <mxGeometry x="500" y="720" width="40" height="40" as="geometry" />
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-40" value="prd OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" parent="1" vertex="1">
+          <mxGeometry x="500" y="640" width="40" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-41" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;curved=0;endArrow=none;endFill=0;strokeWidth=2;" edge="1" parent="1" target="Du_dBiRHnJMabGxFBM2_-40">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-41" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;curved=0;endArrow=none;endFill=0;strokeWidth=2;" parent="1" target="Du_dBiRHnJMabGxFBM2_-40" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="400" y="720" as="sourcePoint" />
+            <mxPoint x="400" y="640" as="sourcePoint" />
             <Array as="points">
-              <mxPoint x="460" y="720" />
-              <mxPoint x="460" y="740" />
+              <mxPoint x="460" y="640" />
+              <mxPoint x="460" y="660" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-42" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.497;entryY=-0.003;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" edge="1" parent="1" target="Du_dBiRHnJMabGxFBM2_-37">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-42" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.497;entryY=-0.003;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" parent="1" target="Du_dBiRHnJMabGxFBM2_-37" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="510" y="670" as="targetPoint" />
-            <mxPoint x="400" y="720" as="sourcePoint" />
+            <mxPoint x="510" y="590" as="targetPoint" />
+            <mxPoint x="400" y="640" as="sourcePoint" />
             <Array as="points">
-              <mxPoint x="440" y="720" />
-              <mxPoint x="440" y="650" />
-              <mxPoint x="520" y="650" />
+              <mxPoint x="440" y="640" />
+              <mxPoint x="440" y="590" />
+              <mxPoint x="520" y="590" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-43" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.502;entryY=-0.009;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" edge="1" parent="1" target="Du_dBiRHnJMabGxFBM2_-38">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-43" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.502;entryY=-0.009;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" parent="1" target="Du_dBiRHnJMabGxFBM2_-38" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="400" y="720" as="sourcePoint" />
+            <mxPoint x="400" y="640" as="sourcePoint" />
             <Array as="points">
-              <mxPoint x="430" y="720" />
               <mxPoint x="430" y="640" />
-              <mxPoint x="550" y="640" />
+              <mxPoint x="430" y="580" />
+              <mxPoint x="550" y="580" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-44" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=-0.003;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" edge="1" parent="1" target="Du_dBiRHnJMabGxFBM2_-36">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-44" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;curved=0;endArrow=none;endFill=0;" parent="1" target="Du_dBiRHnJMabGxFBM2_-36" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="400" y="720" as="sourcePoint" />
+            <mxPoint x="400" y="640" as="sourcePoint" />
             <Array as="points">
-              <mxPoint x="450" y="720" />
-              <mxPoint x="450" y="660" />
-              <mxPoint x="490" y="660" />
+              <mxPoint x="450" y="640" />
+              <mxPoint x="450" y="610" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-45" value="Shared Services prd Account" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_account2;labelBackgroundColor=default;fontFamily=Lucida Console;" vertex="1" parent="1">
-          <mxGeometry x="640" y="840" width="80" height="80" as="geometry" />
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-45" value="Shared Services prd Account" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_account2;labelBackgroundColor=default;fontFamily=Lucida Console;" parent="1" vertex="1">
+          <mxGeometry x="640" y="740" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-46" value="stg OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" vertex="1" parent="1">
-          <mxGeometry x="480" y="840" width="20" height="20" as="geometry" />
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-46" value="dev OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" parent="1" vertex="1">
+          <mxGeometry x="480" y="740" width="20" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-47" value="tst OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" vertex="1" parent="1">
-          <mxGeometry x="510" y="840" width="20" height="20" as="geometry" />
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-47" value="tst OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" parent="1" vertex="1">
+          <mxGeometry x="510" y="740" width="20" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-48" value="dev OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" vertex="1" parent="1">
-          <mxGeometry x="540" y="840" width="20" height="20" as="geometry" />
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-48" value="stg OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" parent="1" vertex="1">
+          <mxGeometry x="540" y="740" width="20" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-49" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;curved=0;strokeWidth=2;" edge="1" parent="1" source="Du_dBiRHnJMabGxFBM2_-50" target="Du_dBiRHnJMabGxFBM2_-45">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-49" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;curved=0;strokeWidth=2;" parent="1" source="Du_dBiRHnJMabGxFBM2_-50" target="Du_dBiRHnJMabGxFBM2_-45" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="580" y="900" />
-              <mxPoint x="580" y="880" />
+              <mxPoint x="580" y="800" />
+              <mxPoint x="580" y="780" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-50" value="prd OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" vertex="1" parent="1">
-          <mxGeometry x="500" y="880" width="40" height="40" as="geometry" />
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-50" value="prd OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" parent="1" vertex="1">
+          <mxGeometry x="500" y="780" width="40" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-51" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;curved=0;endArrow=none;endFill=0;strokeWidth=2;" edge="1" parent="1" target="Du_dBiRHnJMabGxFBM2_-50">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-51" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;curved=0;endArrow=none;endFill=0;strokeWidth=2;" parent="1" target="Du_dBiRHnJMabGxFBM2_-50" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="400" y="880" as="sourcePoint" />
+            <mxPoint x="400" y="780" as="sourcePoint" />
             <Array as="points">
-              <mxPoint x="460" y="880" />
-              <mxPoint x="460" y="900" />
+              <mxPoint x="460" y="780" />
+              <mxPoint x="460" y="800" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-52" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.497;entryY=-0.003;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" edge="1" parent="1" target="Du_dBiRHnJMabGxFBM2_-47">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-52" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.497;entryY=-0.003;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" parent="1" target="Du_dBiRHnJMabGxFBM2_-47" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="510" y="830" as="targetPoint" />
-            <mxPoint x="400" y="880" as="sourcePoint" />
+            <mxPoint x="510" y="730" as="targetPoint" />
+            <mxPoint x="400" y="780" as="sourcePoint" />
             <Array as="points">
-              <mxPoint x="440" y="880" />
-              <mxPoint x="440" y="810" />
-              <mxPoint x="520" y="810" />
+              <mxPoint x="440" y="780" />
+              <mxPoint x="440" y="730" />
+              <mxPoint x="520" y="730" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-53" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.502;entryY=-0.009;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" edge="1" parent="1" target="Du_dBiRHnJMabGxFBM2_-48">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-53" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.502;entryY=-0.009;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" parent="1" target="Du_dBiRHnJMabGxFBM2_-48" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="400" y="880" as="sourcePoint" />
+            <mxPoint x="400" y="780" as="sourcePoint" />
             <Array as="points">
-              <mxPoint x="430" y="880" />
-              <mxPoint x="430" y="800" />
-              <mxPoint x="550" y="800" />
+              <mxPoint x="430" y="780" />
+              <mxPoint x="430" y="720" />
+              <mxPoint x="550" y="720" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-54" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=-0.003;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" edge="1" parent="1" target="Du_dBiRHnJMabGxFBM2_-46">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-54" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;curved=0;endArrow=none;endFill=0;" parent="1" target="Du_dBiRHnJMabGxFBM2_-46" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="400" y="880" as="sourcePoint" />
+            <mxPoint x="400" y="780" as="sourcePoint" />
             <Array as="points">
-              <mxPoint x="450" y="880" />
-              <mxPoint x="450" y="820" />
-              <mxPoint x="490" y="820" />
+              <mxPoint x="450" y="780" />
+              <mxPoint x="450" y="750" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-55" value="Workload A prd Account" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_account2;labelBackgroundColor=default;fontFamily=Lucida Console;" vertex="1" parent="1">
-          <mxGeometry x="640" y="1000" width="80" height="80" as="geometry" />
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-55" value="SDLC prd Account" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_account2;labelBackgroundColor=default;fontFamily=Lucida Console;" parent="1" vertex="1">
+          <mxGeometry x="640" y="880" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-56" value="stg OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" vertex="1" parent="1">
-          <mxGeometry x="480" y="1000" width="20" height="20" as="geometry" />
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-56" value="dev OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" parent="1" vertex="1">
+          <mxGeometry x="480" y="880" width="20" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-57" value="tst OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" vertex="1" parent="1">
-          <mxGeometry x="510" y="1000" width="20" height="20" as="geometry" />
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-57" value="tst OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" parent="1" vertex="1">
+          <mxGeometry x="510" y="880" width="20" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-58" value="dev OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" vertex="1" parent="1">
-          <mxGeometry x="540" y="1000" width="20" height="20" as="geometry" />
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-58" value="stg OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" parent="1" vertex="1">
+          <mxGeometry x="540" y="880" width="20" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-59" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;curved=0;strokeWidth=2;" edge="1" parent="1" source="Du_dBiRHnJMabGxFBM2_-60" target="Du_dBiRHnJMabGxFBM2_-55">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-59" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;curved=0;strokeWidth=2;" parent="1" source="Du_dBiRHnJMabGxFBM2_-60" target="Du_dBiRHnJMabGxFBM2_-55" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
+              <mxPoint x="580" y="940" />
+              <mxPoint x="580" y="920" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-60" value="prd OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" parent="1" vertex="1">
+          <mxGeometry x="500" y="920" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-61" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;curved=0;endArrow=none;endFill=0;strokeWidth=2;" parent="1" target="Du_dBiRHnJMabGxFBM2_-60" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="400" y="920" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="460" y="920" />
+              <mxPoint x="460" y="940" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-62" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.497;entryY=-0.003;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" parent="1" target="Du_dBiRHnJMabGxFBM2_-57" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="510" y="870" as="targetPoint" />
+            <mxPoint x="400" y="920" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="440" y="920" />
+              <mxPoint x="440" y="870" />
+              <mxPoint x="520" y="870" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-63" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.502;entryY=-0.009;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" parent="1" target="Du_dBiRHnJMabGxFBM2_-58" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="400" y="920" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="430" y="920" />
+              <mxPoint x="430" y="860" />
+              <mxPoint x="550" y="860" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-64" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;curved=0;endArrow=none;endFill=0;" parent="1" target="Du_dBiRHnJMabGxFBM2_-56" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="400" y="920" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="450" y="920" />
+              <mxPoint x="450" y="890" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-65" value="SDLC" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;fontFamily=Lucida Console;" parent="1" vertex="1">
+          <mxGeometry x="320" y="880" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-66" value="Workload &lt;i&gt;n&lt;/i&gt;" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;fontFamily=Lucida Console;" parent="1" vertex="1">
+          <mxGeometry x="320" y="1020" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-79" value="Workload &lt;i&gt;n&lt;/i&gt; prd Account" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_account2;labelBackgroundColor=default;fontFamily=Lucida Console;" parent="1" vertex="1">
+          <mxGeometry x="640" y="1020" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-80" value="dev OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" parent="1" vertex="1">
+          <mxGeometry x="480" y="1020" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-81" value="tst OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" parent="1" vertex="1">
+          <mxGeometry x="510" y="1020" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-82" value="stg OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" parent="1" vertex="1">
+          <mxGeometry x="540" y="1020" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-83" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;curved=0;strokeWidth=2;" parent="1" source="Du_dBiRHnJMabGxFBM2_-84" target="Du_dBiRHnJMabGxFBM2_-79" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="580" y="1080" />
               <mxPoint x="580" y="1060" />
-              <mxPoint x="580" y="1040" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-60" value="prd OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" vertex="1" parent="1">
-          <mxGeometry x="500" y="1040" width="40" height="40" as="geometry" />
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-84" value="prd OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" parent="1" vertex="1">
+          <mxGeometry x="500" y="1060" width="40" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-61" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;curved=0;endArrow=none;endFill=0;strokeWidth=2;" edge="1" parent="1" target="Du_dBiRHnJMabGxFBM2_-60">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-85" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;curved=0;endArrow=none;endFill=0;strokeWidth=2;" parent="1" target="Du_dBiRHnJMabGxFBM2_-84" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="400" y="1040" as="sourcePoint" />
+            <mxPoint x="400" y="1060" as="sourcePoint" />
             <Array as="points">
-              <mxPoint x="460" y="1040" />
               <mxPoint x="460" y="1060" />
+              <mxPoint x="460" y="1080" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-62" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.497;entryY=-0.003;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" edge="1" parent="1" target="Du_dBiRHnJMabGxFBM2_-57">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-86" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.497;entryY=-0.003;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" parent="1" target="Du_dBiRHnJMabGxFBM2_-81" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="510" y="990" as="targetPoint" />
-            <mxPoint x="400" y="1040" as="sourcePoint" />
+            <mxPoint x="510" y="1010" as="targetPoint" />
+            <mxPoint x="400" y="1060" as="sourcePoint" />
             <Array as="points">
-              <mxPoint x="440" y="1040" />
-              <mxPoint x="440" y="970" />
-              <mxPoint x="520" y="970" />
+              <mxPoint x="440" y="1060" />
+              <mxPoint x="440" y="1010" />
+              <mxPoint x="520" y="1010" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-63" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.502;entryY=-0.009;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" edge="1" parent="1" target="Du_dBiRHnJMabGxFBM2_-58">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-87" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.502;entryY=-0.009;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" parent="1" target="Du_dBiRHnJMabGxFBM2_-82" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="400" y="1040" as="sourcePoint" />
+            <mxPoint x="400" y="1060" as="sourcePoint" />
             <Array as="points">
-              <mxPoint x="430" y="1040" />
-              <mxPoint x="430" y="960" />
-              <mxPoint x="550" y="960" />
+              <mxPoint x="430" y="1060" />
+              <mxPoint x="430" y="1000" />
+              <mxPoint x="550" y="1000" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-64" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=-0.003;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" edge="1" parent="1" target="Du_dBiRHnJMabGxFBM2_-56">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-88" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;curved=0;endArrow=none;endFill=0;" parent="1" target="Du_dBiRHnJMabGxFBM2_-80" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="400" y="1040" as="sourcePoint" />
+            <mxPoint x="400" y="1060" as="sourcePoint" />
             <Array as="points">
-              <mxPoint x="450" y="1040" />
-              <mxPoint x="450" y="980" />
-              <mxPoint x="490" y="980" />
+              <mxPoint x="450" y="1060" />
+              <mxPoint x="450" y="1030" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-65" value="Workload A" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;fontFamily=Lucida Console;" vertex="1" parent="1">
-          <mxGeometry x="320" y="1000" width="80" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-66" value="Workload B" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;labelBackgroundColor=default;fontFamily=Lucida Console;" vertex="1" parent="1">
-          <mxGeometry x="320" y="1160" width="80" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-79" value="Workload B prd account" style="sketch=0;outlineConnect=0;fontColor=#000000;gradientColor=none;fillColor=#E7157B;strokeColor=#F0F6FC;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_account2;labelBackgroundColor=default;fontFamily=Lucida Console;" vertex="1" parent="1">
-          <mxGeometry x="640" y="1160" width="80" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-80" value="stg OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" vertex="1" parent="1">
-          <mxGeometry x="480" y="1160" width="20" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-81" value="tst OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" vertex="1" parent="1">
-          <mxGeometry x="510" y="1160" width="20" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-82" value="dev OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=6;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" vertex="1" parent="1">
-          <mxGeometry x="540" y="1160" width="20" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-83" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;curved=0;strokeWidth=2;" edge="1" parent="1" source="Du_dBiRHnJMabGxFBM2_-84" target="Du_dBiRHnJMabGxFBM2_-79">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="580" y="1220" />
-              <mxPoint x="580" y="1200" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-84" value="prd OU" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.organizations_organizational_unit2;" vertex="1" parent="1">
-          <mxGeometry x="500" y="1200" width="40" height="40" as="geometry" />
-        </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-85" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;curved=0;endArrow=none;endFill=0;strokeWidth=2;" edge="1" parent="1" target="Du_dBiRHnJMabGxFBM2_-84">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="400" y="1200" as="sourcePoint" />
-            <Array as="points">
-              <mxPoint x="460" y="1200" />
-              <mxPoint x="460" y="1220" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-86" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.497;entryY=-0.003;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" edge="1" parent="1" target="Du_dBiRHnJMabGxFBM2_-81">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="510" y="1150" as="targetPoint" />
-            <mxPoint x="400" y="1200" as="sourcePoint" />
-            <Array as="points">
-              <mxPoint x="440" y="1200" />
-              <mxPoint x="440" y="1130" />
-              <mxPoint x="520" y="1130" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-87" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.502;entryY=-0.009;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" edge="1" parent="1" target="Du_dBiRHnJMabGxFBM2_-82">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="400" y="1200" as="sourcePoint" />
-            <Array as="points">
-              <mxPoint x="430" y="1200" />
-              <mxPoint x="430" y="1120" />
-              <mxPoint x="550" y="1120" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-88" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=-0.003;entryDx=0;entryDy=0;entryPerimeter=0;curved=0;endArrow=none;endFill=0;" edge="1" parent="1" target="Du_dBiRHnJMabGxFBM2_-80">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="400" y="1200" as="sourcePoint" />
-            <Array as="points">
-              <mxPoint x="450" y="1200" />
-              <mxPoint x="450" y="1140" />
-              <mxPoint x="490" y="1140" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="Du_dBiRHnJMabGxFBM2_-97" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.002;entryY=0.491;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=none;endFill=0;curved=0;strokeWidth=2;" edge="1" parent="1" source="JzUaVsV2Zrz4U57TL4If-4" target="JzUaVsV2Zrz4U57TL4If-41">
+        <mxCell id="Du_dBiRHnJMabGxFBM2_-97" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.002;entryY=0.491;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=none;endFill=0;curved=0;strokeWidth=2;" parent="1" source="JzUaVsV2Zrz4U57TL4If-4" target="JzUaVsV2Zrz4U57TL4If-41" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
